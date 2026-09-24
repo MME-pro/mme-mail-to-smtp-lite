@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MME-Mail to SMTP
  * Description:       Sends WordPress email through Gmail, Google Workspace, SendGrid, Mailgun, Brevo, Postmark, Resend, SMTP2GO or any SMTP server, instead of the server mail function. A Google service account needs no refresh token and has nothing that expires. A persistent retry queue means a transient fault delays an email rather than losing it.
- * Version:           0.15.0
+ * Version:           0.16.0
  * Requires at least: 6.5
  * Requires PHP:      8.0
  * Author:            MME-pro
@@ -18,7 +18,7 @@ namespace ModernMailer;
 
 defined( 'ABSPATH' ) || exit;
 
-const VERSION     = '0.15.0';
+const VERSION     = '0.16.0';
 const PLUGIN_FILE = __FILE__;
 
 define( 'ModernMailer\PLUGIN_DIR', plugin_dir_path( __FILE__ ) );

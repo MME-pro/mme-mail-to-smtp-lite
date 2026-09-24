@@ -4,6 +4,11 @@ One-click setup needs a service you run. This document is its specification: the
 plugin side is finished and calls exactly these four routes, so a service that
 implements them makes one-click work with no further changes here.
 
+> **Scope note.** The broker serves two provider families, Google and Microsoft.
+> This plugin only ever asks it for Google — the Microsoft family belongs to the
+> paid add-on. The routes below are documented for both because one service
+> answers both plugins.
+
 ## Why a service is unavoidable
 
 An OAuth client secret cannot ship inside a plugin — anyone who installs it can

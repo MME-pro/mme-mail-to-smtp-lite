@@ -1,6 +1,6 @@
 {
   "name": "mme-mail-to-smtp",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "private": true,
   "description": "Admin app for MME-Mail to SMTP.",
   "license": "GPL-2.0-or-later",

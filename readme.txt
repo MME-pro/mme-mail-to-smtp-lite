@@ -16,6 +16,17 @@ WordPress sends its email with `wp_mail()`, which hands the message to the web s
 
 This plugin does two things about that. It routes your mail through a real mail service, and it makes failure visible.
 
+= Why this one and not one of the others =
+
+There are a great many SMTP plugins. Four things here are deliberate choices the others mostly do not make.
+
+* **No email log, on purpose.** A table of every message this site has sent - recipients, subjects, often the body - is a standing liability sitting in your database waiting for the next breach, and it is the first thing most mailer plugins turn on. This one keeps no copy of what it sent. It tells you instead whether sending is working right now, what the last error was, and what is queued.
+* **A retry queue, in the free plugin.** A message lost to a five-minute network fault is lost for good in most free mailers, because a failed send is simply a failed send. Here it is persisted and retried over the following hours, and a failure no retry can fix - an oversized attachment, a rejected recipient - is reported straight away rather than queued behind hope.
+* **Errors that name the misconfiguration.** "The service account is not authorized to impersonate this mailbox, so authorize its client ID in Google Workspace Admin" - not "HTTP 401". Every provider's responses are mapped to the thing you actually have to go and change.
+* **Nothing is sent to the plugin's author.** No registration, no activation check-in, no usage statistics, no telemetry of any kind, no account to create. The only servers contacted are the mail service you configured. The list is in **External services** below, and it is the whole list.
+
+Google Workspace is also handled with a service account and domain-wide delegation, which means no consent screen, no refresh token, and nothing that quietly expires in seven days.
+
 = Connections =
 
 * **Google Workspace**, with a service account and domain-wide delegation. No consent screen, no refresh token, nothing that expires: the site signs a short-lived assertion whenever it needs a token.
@@ -61,13 +72,26 @@ This plugin sends your outgoing email through whichever third-party service you 
 
 **Resend** - `https://api.resend.com`. Terms: https://resend.com/legal/terms-of-service - Privacy: https://resend.com/legal/privacy-policy
 
-**SMTP2GO** - `https://api.smtp2go.com`. Terms: https://www.smtp2go.com/terms-of-service/ - Privacy: https://www.smtp2go.com/privacy/
+**SMTP2GO** - `https://api.smtp2go.com`. Terms: https://www.smtp2go.com/terms/ - Privacy: https://www.smtp2go.com/privacy/
 
 Each of those receives your API key and the complete outgoing email: sender, recipients, subject, body and any attachments. Each has its own terms and privacy policy, and you are choosing to send your mail through them, so read the policy of whichever you pick.
 
 **Your own SMTP server** - used when Other SMTP is selected. The message goes to the host and port you enter, and nowhere else.
 
 **Nothing else.** The plugin contacts no service of its author's: no registration, no check-in, no usage figures, no update server. The list above is the whole of it.
+
+== Source code ==
+
+Everything is here. The full, unminified source lives in a public repository: https://github.com/MME-pro/mme-mail-to-smtp-lite
+
+All PHP in this plugin is plain, readable source. The one built asset is the admin interface, `build/index.js` and `build/index.css`, compiled by the standard WordPress toolchain from the React sources in `src/`, which ship inside this plugin as well as in the repository. No minifier, obfuscator or bundler other than `@wordpress/scripts` is involved, and there is no step that is not in the repository.
+
+To build it yourself, from the plugin directory:
+
+`npm ci`
+`npm run build`
+
+That reads `src/` and writes `build/`. `npm start` does the same in watch mode for development. The build requires Node 18 or newer; `package.json` and `package-lock.json` pin every dependency.
 
 == Installation ==
 

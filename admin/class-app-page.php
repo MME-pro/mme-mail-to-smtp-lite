@@ -91,38 +91,21 @@ class App_Page {
 			true
 		);
 
-		// Inter, and only Inter - it is what mme-pro.de uses for everything, so a
-		// second display face here would be this screen inventing a brand the
-		// brand does not have. The headings separate on size and tracking instead,
-		// which is why the weights run up to 700.
-		//
-		// Registered as a dependency of the app stylesheet so the faces are
-		// requested before the rules that use them rather than after the first
-		// paint, and display=swap so a slow font never shows an admin a blank
-		// screen.
-		wp_enqueue_style(
-			'mmoa-fonts',
-			'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
-			[],
-			null
-		);
-
+		// No webfont. The stylesheet asks for Inter first and falls back to the
+		// system UI face, so a machine that has Inter installed gets it and
+		// every other machine gets what the rest of wp-admin is set in. Loading
+		// it from fonts.googleapis.com instead would make every admin page view
+		// a request to Google carrying the viewer's IP, for a typeface - which
+		// is not a thing to do to somebody without asking, and is not something
+		// a mail plugin should have to disclose as a third-party service.
 		wp_enqueue_style(
 			'mmoa-app',
 			PLUGIN_URL . 'build/index.css',
-			[ 'mmoa-fonts' ],
+			[],
 			$asset['version']
 		);
 
-		// The third argument is not optional in practice. Without it WordPress
-		// looks only in wp-content/languages/plugins/, so a translation shipped
-		// with the plugin is never found and the admin app stays in English
-		// while every PHP string around it is translated.
-		wp_set_script_translations(
-			'mmoa-app',
-			'mme-mail-to-smtp',
-			PLUGIN_DIR . 'languages'
-		);
+		wp_set_script_translations( 'mmoa-app', 'mme-mail-to-smtp' );
 
 		wp_localize_script(
 			'mmoa-app',

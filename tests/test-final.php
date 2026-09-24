@@ -48,33 +48,30 @@ unset( $GLOBALS['phpmailer'] );
 $plugin->install_mailer();
 check( 'does not hijack PHPMailer when unconfigured', ! isset( $GLOBALS['phpmailer'] ) );
 
-echo "\n=== Admin screen renders ===\n";
+echo "\n=== Admin surface ===\n";
 $admin_id = $wpdb->get_var( "SELECT user_id FROM {$wpdb->usermeta} WHERE meta_key = '{$wpdb->prefix}capabilities' AND meta_value LIKE '%administrator%' LIMIT 1" );
 wp_set_current_user( (int) $admin_id );
 check( 'test user is an administrator', current_user_can( 'manage_options' ) );
 
-$page = new ModernMailer\Admin\Admin_Page( $plugin );
+// Every screen belongs to the admin app. The one piece of server-rendered
+// admin left is the Google handshake, because it navigates the browser away
+// and comes back as a top-level GET. What the app needs from it is two
+// nonce-signed URLs it can use as an href.
+$urls = ModernMailer\Admin\Admin_Page::google_urls( ModernMailer\Settings::SLOT_PRIMARY );
+check( 'connect URL posts to admin-post.php', false !== strpos( $urls['connect'], 'admin-post.php' ), $urls['connect'] );
+check( 'connect URL names the connect action', false !== strpos( $urls['connect'], 'action=mmoa_connect_google' ) );
+check( 'disconnect URL names the disconnect action', false !== strpos( $urls['disconnect'], 'action=mmoa_disconnect_google' ) );
+check( 'both URLs are nonce-signed', false !== strpos( $urls['connect'], '_wpnonce=' ) && false !== strpos( $urls['disconnect'], '_wpnonce=' ) );
 
-/** Capture one screen's markup. */
-function render_screen( ModernMailer\Admin\Admin_Page $page, string $method ): string {
-	ob_start();
-	$page->$method();
-	return (string) ob_get_clean();
-}
+// These are serialised into JSON and assigned as an href by React, which
+// decodes no entities - so an HTML-escaped separator would arrive verbatim and
+// the nonce would be parsed under the name "amp;_wpnonce".
+check( 'URLs are not HTML-escaped', false === strpos( $urls['connect'], '&amp;' ), $urls['connect'] );
 
-$html   = render_screen( $page, 'render_settings' );
-
-check( 'Settings renders without fatal', strlen( $html ) > 1000, strlen( $html ) . ' bytes' );
-
-check( 'provider selector present', false !== strpos( $html, 'id="provider"' ) );
-check( 'Gmail Testing-mode trap warned about', false !== strpos( $html, 'seven days' ) );
-check( 'nonce fields emitted', substr_count( $html, '_wpnonce' ) >= 3, substr_count( $html, '_wpnonce' ) . ' found' );
-check( 'no credential echoed into the form', false === strpos( $html, 'SuperSecretValue123' ) );
-check( 'constant-pinned field marked as such', false !== strpos( $html, 'wp-config.php' ) );
-
-// The form has to say which screen to return to, or an action taken on it
-// would bounce the admin somewhere else.
-check( 'Settings forms carry a return page', false !== strpos( $html, 'name="return_page" value="mme-mail-to-smtp"' ) );
+// The notice raised while sending is broken has to link somewhere that exists.
+check( 'the settings link points at the registered page',
+	ModernMailer\Admin\Admin_Page::url() === admin_url( 'admin.php?page=' . ModernMailer\Admin\App_Page::SLUG ),
+	ModernMailer\Admin\Admin_Page::url() );
 
 // The redirect URI must not depend on where the menu lives, or reorganising the
 // admin breaks every existing Google connection.

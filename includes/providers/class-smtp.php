@@ -282,7 +282,7 @@ class Smtp extends Abstract_Provider {
 	 * Four one-line readers rather than four reads inline in connect(), because
 	 * a provider for one named service knows its own server and should not have
 	 * to ask an administrator to type it in. Overriding these is the whole of
-	 * what a branded SMTP preset - Zoho, say - has to do: the conversation,
+	 * what a branded SMTP preset has to do: the conversation,
 	 * the error mapping and the transcript are already right.
 	 *
 	 * The credentials stay where they are. A username and a password are the

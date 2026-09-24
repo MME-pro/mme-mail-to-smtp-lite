@@ -51,7 +51,7 @@ function fill( string $slot ): void {
 			'ms_sender'       => "shared-{$label}@example.com",
 			'msoauth_account' => "signed-in-{$label}@example.com",
 			'smtp_host'       => 'smtp.example.com',
-			'zoho_region'     => 'eu',
+			'mailgun_region'  => 'eu',
 		]
 	);
 
@@ -120,8 +120,8 @@ check(
 );
 check(
 	'a provider field with a declared default returns to it',
-	'com' === (string) $plugin->settings->get( 'zoho_region' ),
-	(string) $plugin->settings->get( 'zoho_region' )
+	'us' === (string) $plugin->settings->get( 'mailgun_region' ),
+	(string) $plugin->settings->get( 'mailgun_region' )
 );
 check(
 	'the Microsoft setup mode is back at its default',

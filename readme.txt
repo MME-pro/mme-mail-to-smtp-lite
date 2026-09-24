@@ -1,5 +1,5 @@
 === MME-Mail to SMTP ===
-Contributors: builtwithmtw
+Contributors: mmeprowp
 Tags: smtp, wp_mail, gmail, sendgrid, mailgun
 Requires at least: 6.5
 Tested up to: 7.1

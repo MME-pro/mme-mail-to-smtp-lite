@@ -134,7 +134,7 @@ class Admin_Page {
 		// Site-wide settings first; these exist once regardless of slot.
 		$global = [];
 
-		foreach ( [ 'from_email', 'from_name', 'log_retention', 'alert_threshold', 'alert_email' ] as $key ) {
+		foreach ( [ 'from_email', 'from_name', 'log_retention', 'alert_threshold' ] as $key ) {
 			if ( isset( $posted[ $key ] ) ) {
 				$global[ $key ] = $posted[ $key ];
 			}

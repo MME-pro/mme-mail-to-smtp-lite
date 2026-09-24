@@ -112,7 +112,6 @@ class Settings {
 		'log_enabled'     => [ true, null, 'bool' ],
 		'log_retention'   => [ 30, null, 'int' ],
 		'alert_threshold' => [ 3, null, 'int' ],
-		'alert_email'     => [ '', 'MMOA_ALERT_EMAIL', 'email' ],
 
 		'queue_enabled'   => [ true, null, 'bool' ],
 

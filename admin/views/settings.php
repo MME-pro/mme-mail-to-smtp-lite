@@ -70,7 +70,7 @@ defined( 'ABSPATH' ) || exit;
 			</tr>
 		</table>
 
-		<h2><?php esc_html_e( 'Logging and alerts', 'modern-mailer-oauth' ); ?></h2>
+		<h2><?php esc_html_e( 'Logging and failure detection', 'modern-mailer-oauth' ); ?></h2>
 		<table class="form-table" role="presentation">
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Send log', 'modern-mailer-oauth' ); ?></th>
@@ -84,8 +84,7 @@ defined( 'ABSPATH' ) || exit;
 			</tr>
 			<?php
 			$this->field( 'log_retention', __( 'Keep entries for (days)', 'modern-mailer-oauth' ), '', 'number' );
-			$this->field( 'alert_threshold', __( 'Alert after N failures', 'modern-mailer-oauth' ), __( 'Consecutive failures before raising an alert.', 'modern-mailer-oauth' ), 'number' );
-			$this->field( 'alert_email', __( 'Alert address', 'modern-mailer-oauth' ), __( 'Sent using the server mail function rather than the API, since the API is what has failed.', 'modern-mailer-oauth' ), 'email' );
+			$this->field( 'alert_threshold', __( 'Report broken after N failures', 'modern-mailer-oauth' ), __( 'Consecutive failures before the plugin reports sending as broken, in the admin notice and under Site Health.', 'modern-mailer-oauth' ), 'number' );
 			?>
 		</table>
 

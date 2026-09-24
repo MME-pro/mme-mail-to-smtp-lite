@@ -108,20 +108,6 @@ export const setSetupStep = ( step ) => setupAction( 'step', { step } );
 export const completeSetup = () => setupAction( 'complete' );
 export const skipSetup = () => setupAction( 'skip' );
 
-export const getAlerts = () => request( '/alerts' );
-
-export const saveAlerts = ( data ) => request( '/alerts', { method: 'POST', data } );
-
-/**
- * Send a test alert down one channel.
- *
- * Deliberately its own route rather than a flag on the save: an administrator
- * testing a channel wants to know whether the credentials work right now, not
- * whether they worked at the moment the form was last submitted.
- */
-export const testAlert = ( channel ) =>
-	request( '/alerts/test', { method: 'POST', data: { channel } } );
-
 export const getRouting = () => request( '/routing' );
 
 export const saveRouting = ( enabled, rules ) =>

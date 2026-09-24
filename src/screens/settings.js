@@ -109,7 +109,7 @@ const Settings = () => {
 						</FormField>
 
 						<FormField
-							label={ __( 'Alert after N failures', 'modern-mailer-oauth' ) }
+							label={ __( 'Report broken after N failures', 'modern-mailer-oauth' ) }
 							help={ __(
 								'Consecutive failures, not failures in total. One success resets the count, so a single bad address never triggers it.',
 								'modern-mailer-oauth'
@@ -125,31 +125,11 @@ const Settings = () => {
 								onChange={ ( e ) => set( 'alert_threshold', e.target.value ) }
 							/>
 						</FormField>
-
-						<FormField
-							label={ __( 'Alert address', 'modern-mailer-oauth' ) }
-							help={ __(
-								'Sent by the web server, not through this plugin. Use a mailbox on another domain - and test it on the Alerts tab.',
-								'modern-mailer-oauth'
-							) }
-							locked={ locked.alert_email }
-							htmlFor="mmoa-alert-email"
-						>
-							<input
-								id="mmoa-alert-email"
-								type="email"
-								disabled={ locked.alert_email }
-								className={ inputClass }
-								value={ values.alert_email || '' }
-								onChange={ ( e ) => set( 'alert_email', e.target.value ) }
-							/>
-						</FormField>
 					</div>
 
-					{ /* The two things people conflate, said once, in the
-					     place they are configuring. The support questions are
-					     always some version of "I set an alert address, why do
-					     I get nothing" - and the answer is nearly always that
+					{ /* What the threshold on the left actually does. The
+					     support question is always some version of "sending
+					     broke and nothing told me" - and the answer is that
 					     one send failing is not an outage. */ }
 					<div className="p-3 rounded-lg bg-muted/40 text-[13px] text-muted-foreground grid gap-1.5">
 						<p className="m-0 font-medium text-foreground">
@@ -163,7 +143,7 @@ const Settings = () => {
 						</p>
 						<p className="m-0">
 							{ __(
-								'An alert is sent once the failures above happen in a row - that is the threshold on the left - and once more when sending recovers. Choose "on every failed message" on the Alerts tab if you would rather hear about each one.',
+								'Once that many sends fail in a row, the plugin reports sending as broken: an admin notice appears and the Email delivery check under Tools, Site Health turns red. One success clears it.',
 								'modern-mailer-oauth'
 							) }
 						</p>

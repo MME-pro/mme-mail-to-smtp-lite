@@ -12,7 +12,6 @@ import Logs from './screens/logs';
 import Routing from './screens/routing';
 import Settings from './screens/settings';
 import Setup from './screens/setup';
-import Alerts from './screens/alerts';
 
 const queryClient = new QueryClient( {
 	defaultOptions: {
@@ -93,7 +92,6 @@ const Shell = () => {
 						<Route path="/dashboard" element={ <Dashboard /> } />
 						<Route path="/connections" element={ <Connections /> } />
 						<Route path="/routing" element={ <Routing /> } />
-						<Route path="/alerts" element={ <Alerts /> } />
 						<Route path="/logs" element={ <Logs /> } />
 						<Route path="/settings" element={ <Settings /> } />
 						<Route

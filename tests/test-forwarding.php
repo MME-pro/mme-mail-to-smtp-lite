@@ -62,7 +62,6 @@ function configure_primary( Plugin $plugin ): void {
 			'ms_sender'     => 'noreply@contoso.com',
 			'log_enabled'   => true,
 			'queue_enabled' => true,
-			'alert_email'   => '',
 			'routing_enabled' => false,
 			'routing_rules'   => [],
 		]
@@ -515,53 +514,6 @@ $result = $plugin->dispatcher->without_fallbacks(
 check( 'the test fails when the primary fails', false === $result, var_export( $result, true ) );
 check( 'the backup was not consulted', 0 === $hit['gmail'], wp_json_encode( $hit ) );
 check( 'and nothing was queued behind it', 0 === (int) $plugin->queue->stats()['pending'] );
-
-/* ================= 11. the alert knows what actually failed =============== */
-
-section( 'the failure alert carries the message it is about' );
-
-reset_state( $plugin );
-configure_backup( $plugin, false );
-$errors = 0;
-
-$seen = null;
-add_action(
-	'mmoa_alert_sent',
-	static function ( $alert ) use ( &$seen ) {
-		$seen = $alert;
-	}
-);
-
-$plugin->alerts->save(
-	[
-		'enabled'  => true,
-		'when'     => ModernMailer\Alerts::WHEN_EVERY,
-		'quiet'    => 0,
-		'channels' => [ 'email' => [ 'enabled' => false ] ],
-	]
-);
-
-$script = static function ( $url ) {
-	if ( is_token_url( $url ) ) {
-		return ok_token();
-	}
-
-	return json_response( 400, [ 'error' => [ 'code' => 'ErrorInvalidRecipients', 'message' => 'Not valid.' ] ] );
-};
-
-wp_mail( 'someone@example.com', 'Alerting subject', 'body' );
-
-check( 'an alert was raised', null !== $seen, 'no mmoa_alert_sent' );
-check( 'it names the recipient', null !== $seen && false !== strpos( $seen->recipients, 'someone@example.com' ), (string) ( $seen->recipients ?? '' ) );
-check( 'it names the subject', null !== $seen && 'Alerting subject' === $seen->subject, (string) ( $seen->subject ?? '' ) );
-check( 'it names the connection', null !== $seen && '' !== $seen->mailer, (string) ( $seen->mailer ?? '' ) );
-check( 'it carries an error code', null !== $seen && '' !== $seen->code, (string) ( $seen->code ?? '' ) );
-check( 'and a timestamp', null !== $seen && $seen->time > 0 );
-
-// The alert is a notification, not an export of the mail.
-check( 'the body is nowhere in the payload', null !== $seen && ! in_array( 'body', array_keys( $seen->to_array() ), true ) );
-
-delete_option( ModernMailer\Alerts::OPTION );
 
 /* ----------------------------------------------------------- teardown ---- */
 

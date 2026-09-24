@@ -36,9 +36,6 @@ foreach (
 		'mmoa_setup',
 		'mmoa_setup_redirect',
 
-		// The alert channels. Their secrets live under the 'alerts' slot in
-		// Secrets and are removed with the rest of the credentials below.
-		'mmoa_alerts',
 	] as $option
 ) {
 	delete_option( $option );

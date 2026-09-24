@@ -1,36 +1,34 @@
 <?php
 /**
- * Failure detection and alerting.
+ * Failure detection.
  *
  * @package ModernMailer
  */
 
 namespace ModernMailer;
 
-use ModernMailer\Alerts\Alert;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Watches for repeated send failures and makes sure somebody hears about it.
+ * Watches for repeated send failures and records that sending is broken.
  *
  * This is the piece that addresses the actual reported symptom. The underlying
  * cause of "our site stopped sending email" is rarely that a send failed once;
  * it is that nothing surfaced the failure, because almost no WordPress code
  * checks what wp_mail() returned. Weeks pass before a customer mentions they
  * never got their receipt.
+ *
+ * This class only counts and records. What surfaces the result is the admin
+ * notice, the Site Health test, and the two actions below - which is how an
+ * add-on delivers the same news to Slack, Teams, an SMS or a webhook.
  */
 class Health_Monitor {
 
 	private const OPTION = 'mmoa_health';
 
-	/**
-	 * @param Alerts|null $alerts Optional so the monitor can still be built on
-	 *                            its own - it counts perfectly well without
-	 *                            anywhere to send the result.
-	 */
-	public function __construct( private Settings $settings, private ?Alerts $alerts = null ) {}
+	public function __construct( private Settings $settings ) {}
 
 	/**
 	 * @return array{streak:int,alerted:bool,last_error:array,last_success:int}
@@ -52,11 +50,18 @@ class Health_Monitor {
 	public function record_success(): void {
 		$state = $this->state();
 
-		// The message that ends the silence. Only sent if an alert went out in
-		// the first place - a site that never broke does not need telling it
-		// is working.
+		// The event that ends the silence. Only fired if the site had actually
+		// been recorded as failing - one that never broke does not need telling
+		// it is working.
 		if ( $state['alerted'] ) {
-			$this->fire( new Alert( Alert::RECOVERED, time: time() ) );
+			/**
+			 * Fires once when sending starts working again after an outage.
+			 *
+			 * The counterpart to `mmoa_send_failing`. Anything that announced
+			 * the outage wants to announce the recovery, and firing only on the
+			 * way down leaves whoever was told holding a stale warning.
+			 */
+			do_action( 'mmoa_send_recovered' );
 		}
 
 		if ( 0 === $state['streak'] && ! $state['alerted'] ) {
@@ -87,7 +92,7 @@ class Health_Monitor {
 	public function record_failure( WP_Error $error, array $context = [] ): void {
 		$state = $this->state();
 
-		$state['streak']    = (int) $state['streak'] + 1;
+		$state['streak']     = (int) $state['streak'] + 1;
 		$state['last_error'] = [
 			'code'    => $error->get_error_code(),
 			'message' => $error->get_error_message(),
@@ -105,16 +110,35 @@ class Health_Monitor {
 
 		$context['streak'] = (int) $state['streak'];
 
-		// Per-message alerting, for sites that want to hear about each one.
-		// Alerts decides whether this mode is on; the monitor does not need to
-		// know, and asking it to would put the same rule in two places.
-		if ( null !== $this->alerts && Alerts::WHEN_EVERY === $this->alerts->settings()['when'] ) {
-			$this->fire( Alert::from_failure( Alert::SEND_FAILED, $error, $context ) );
+		/**
+		 * Fires on every failed send, whatever the streak.
+		 *
+		 * Use this to hear about each individual failure. For "tell me once
+		 * when sending is actually broken" use `mmoa_send_failing` instead -
+		 * one failed message is not an outage, and wiring a notifier here on a
+		 * busy site produces a great deal of noise.
+		 *
+		 * @param WP_Error             $error   The failure.
+		 * @param array<string,mixed>  $context Recipients, subject, mailer,
+		 *                                      slot and the current streak.
+		 */
+		do_action( 'mmoa_send_failed', $error, $context );
+
+		if ( ! $crossed ) {
+			return;
 		}
 
-		if ( $crossed ) {
-			$this->alert( $error, (int) $state['streak'], $context );
-		}
+		/**
+		 * Fires once when sending has failed enough times in a row to count as
+		 * an outage. Wire this to Slack, PagerDuty, or an uptime monitor.
+		 *
+		 * Fired once per outage rather than per message, and paired with
+		 * `mmoa_send_recovered`.
+		 *
+		 * @param WP_Error $error  The most recent failure.
+		 * @param int      $streak Consecutive failures.
+		 */
+		do_action( 'mmoa_send_failing', $error, (int) $state['streak'] );
 	}
 
 	public function is_failing(): bool {
@@ -123,44 +147,5 @@ class Health_Monitor {
 
 	public function reset(): void {
 		delete_option( self::OPTION );
-	}
-
-	/**
-	 * @param array<string,mixed> $context
-	 */
-	private function alert( WP_Error $error, int $streak, array $context = [] ): void {
-		/**
-		 * Fires once when sending has failed enough times in a row to count as
-		 * an outage. Wire this to Slack, PagerDuty, or an uptime monitor.
-		 *
-		 * Still here, and still the documented integration point, although the
-		 * Alerts tab now covers the same ground with a form. Somebody has this
-		 * in a mu-plugin.
-		 *
-		 * @param WP_Error $error  The most recent failure.
-		 * @param int      $streak Consecutive failures.
-		 */
-		do_action( 'mmoa_send_failing', $error, $streak );
-
-		$this->fire( Alert::from_failure( Alert::NOW_FAILING, $error, $context ) );
-	}
-
-	/**
-	 * Hand an alert over, if there is anywhere to hand it.
-	 *
-	 * Nothing here may throw. This runs inside a failed send, which is already
-	 * inside somebody's checkout, and an exception raised while reporting a
-	 * problem would replace a failed email with a fatal error.
-	 */
-	private function fire( Alert $alert ): void {
-		if ( null === $this->alerts ) {
-			return;
-		}
-
-		try {
-			$this->alerts->fire( $alert );
-		} catch ( \Throwable $e ) {
-			unset( $e );
-		}
 	}
 }

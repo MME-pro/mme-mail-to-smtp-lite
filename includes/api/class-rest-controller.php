@@ -263,40 +263,6 @@ class Rest_Controller {
 
 		register_rest_route(
 			self::NAMESPACE,
-			'/alerts',
-			[
-				[
-					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => [ $this, 'get_alerts' ],
-					'permission_callback' => $auth,
-				],
-				[
-					'methods'             => WP_REST_Server::EDITABLE,
-					'callback'            => [ $this, 'update_alerts' ],
-					'permission_callback' => $auth,
-				],
-			]
-		);
-
-		register_rest_route(
-			self::NAMESPACE,
-			'/alerts/test',
-			[
-				'methods'             => WP_REST_Server::CREATABLE,
-				'callback'            => [ $this, 'test_alert' ],
-				'permission_callback' => $auth,
-				'args'                => [
-					'channel' => [
-						'type'              => 'string',
-						'required'          => true,
-						'sanitize_callback' => 'sanitize_key',
-					],
-				],
-			]
-		);
-
-		register_rest_route(
-			self::NAMESPACE,
 			'/setup',
 			[
 				[
@@ -385,7 +351,7 @@ class Rest_Controller {
 
 	public function update_settings( WP_REST_Request $request ): WP_REST_Response {
 		$body   = (array) $request->get_json_params();
-		$allow  = [ 'log_enabled', 'log_retention', 'alert_threshold', 'alert_email', 'queue_enabled', 'queue_retention' ];
+		$allow  = [ 'log_enabled', 'log_retention', 'alert_threshold', 'queue_enabled', 'queue_retention' ];
 		$values = array_intersect_key( $body, array_flip( $allow ) );
 
 		$this->plugin->settings->update( $values );
@@ -576,47 +542,6 @@ class Rest_Controller {
 				'message' => $sent
 					? __( 'Accepted for delivery. If it does not arrive, check the log for what the provider said.', 'modern-mailer-oauth' )
 					: ( $captured instanceof WP_Error ? $captured->get_error_message() : __( 'The test message could not be sent.', 'modern-mailer-oauth' ) ),
-			]
-		);
-	}
-
-	public function get_alerts(): WP_REST_Response {
-		return new WP_REST_Response( $this->plugin->alerts->payload() );
-	}
-
-	public function update_alerts( WP_REST_Request $request ): WP_REST_Response {
-		$this->plugin->alerts->save( (array) $request->get_json_params() );
-
-		return new WP_REST_Response( $this->plugin->alerts->payload() );
-	}
-
-	/**
-	 * Send a test alert down one channel and say exactly what happened.
-	 *
-	 * The response distinguishes "the service accepted it" from "it arrived",
-	 * because for the email channel those are genuinely different things and
-	 * conflating them is how an administrator ends up trusting a channel that
-	 * has never worked.
-	 */
-	public function test_alert( WP_REST_Request $request ): WP_REST_Response {
-		$channel = (string) $request->get_param( 'channel' );
-		$result  = $this->plugin->alerts->test( $channel );
-
-		if ( is_wp_error( $result ) ) {
-			return new WP_REST_Response(
-				[
-					'ok'      => false,
-					'message' => $result->get_error_message(),
-				]
-			);
-		}
-
-		return new WP_REST_Response(
-			[
-				'ok'      => true,
-				'message' => \ModernMailer\Alerts\Email::slug() === $channel
-					? __( 'The server accepted the test message. If it does not arrive, the problem is your host\'s mail function, not this plugin - use a second channel.', 'modern-mailer-oauth' )
-					: __( 'Delivered. Check the channel.', 'modern-mailer-oauth' ),
 			]
 		);
 	}
@@ -980,7 +905,7 @@ class Rest_Controller {
 	 */
 	private function settings_payload(): array {
 		$settings = $this->plugin->settings;
-		$keys     = [ 'log_enabled', 'log_retention', 'alert_threshold', 'alert_email', 'queue_enabled', 'queue_retention' ];
+		$keys     = [ 'log_enabled', 'log_retention', 'alert_threshold', 'queue_enabled', 'queue_retention' ];
 
 		$out    = [];
 		$locked = [];

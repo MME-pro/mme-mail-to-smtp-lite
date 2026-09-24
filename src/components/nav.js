@@ -12,7 +12,6 @@ import {
 	Clock,
 	Sun,
 	Moon,
-	Bell,
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useTheme } from '../lib/use-theme';
@@ -23,7 +22,6 @@ const TABS = [
 	{ to: '/connections', label: __( 'Connections', 'modern-mailer-oauth' ), icon: Plug },
 	{ to: '/routing', label: __( 'Routing', 'modern-mailer-oauth' ), icon: RouteIcon },
 	{ to: '/logs', label: __( 'Email Logs', 'modern-mailer-oauth' ), icon: ScrollText },
-	{ to: '/alerts', label: __( 'Alerts', 'modern-mailer-oauth' ), icon: Bell },
 	{ to: '/settings', label: __( 'Settings', 'modern-mailer-oauth' ), icon: Settings2 },
 ];
 

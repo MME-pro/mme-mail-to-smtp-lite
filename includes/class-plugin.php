@@ -8,7 +8,6 @@
 namespace ModernMailer;
 
 use ModernMailer\Admin\Admin_Page;
-use ModernMailer\Alerts\Alert;
 use ModernMailer\Admin\App_Page;
 use ModernMailer\Admin\Site_Health;
 use ModernMailer\Api\Rest_Controller;
@@ -41,7 +40,6 @@ class Plugin {
 	public Token_Store $tokens;
 	public Http $http;
 	public Logger $logger;
-	public Alerts $alerts;
 	public Health_Monitor $health;
 	public Queue $queue;
 	public Connections $connections;
@@ -69,8 +67,7 @@ class Plugin {
 		$this->tokens     = new Token_Store();
 		$this->http       = new Http();
 		$this->logger     = new Logger( $this->settings );
-		$this->alerts     = new Alerts( $this->settings, $this->secrets );
-		$this->health     = new Health_Monitor( $this->settings, $this->alerts );
+		$this->health     = new Health_Monitor( $this->settings );
 		$this->queue      = new Queue( $this->settings );
 		$this->connections = new Connections( $this->settings );
 		$this->router      = new Router( $this->settings, $this->connections );
@@ -97,11 +94,6 @@ class Plugin {
 		add_action( 'plugins_loaded', [ $this, 'install_mailer' ], 20 );
 		add_action( Logger::CRON_HOOK, [ $this->logger, 'prune' ] );
 
-		// Falling back to the backup is a success for the message and a
-		// warning for the site: sending works, but only on the spare. Hooked
-		// here rather than called from the dispatcher, which has no business
-		// knowing that alerts exist.
-		add_action( 'mmoa_backup_used', [ $this, 'alert_backup_used' ], 10, 2 );
 		add_action( Queue::CRON_HOOK, [ $this, 'drain_queue' ] );
 
 		add_filter( 'cron_schedules', [ $this, 'register_schedule' ] );
@@ -232,19 +224,6 @@ class Plugin {
 	 * installers no-op once their version option matches, so this costs one
 	 * option read per admin request.
 	 */
-	/**
-	 * @param array<string,mixed> $context
-	 */
-	public function alert_backup_used( \WP_Error $error, array $context = [] ): void {
-		try {
-			$this->alerts->fire( Alert::from_failure( Alert::BACKUP_USED, $error, $context ) );
-		} catch ( \Throwable $e ) {
-			// A message was just delivered. Nothing about reporting that is
-			// worth turning into a fatal.
-			unset( $e );
-		}
-	}
-
 	public function maybe_upgrade(): void {
 		Logger::install();
 		Queue::install();

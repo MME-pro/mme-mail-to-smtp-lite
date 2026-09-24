@@ -19,7 +19,6 @@ class Settings {
 	public const OPTION = 'mmoa_settings';
 
 	public const PROVIDER_NONE         = '';
-	public const PROVIDER_GRAPH        = 'graph';
 	public const PROVIDER_GMAIL_SA     = 'gmail_sa';
 	public const PROVIDER_GMAIL_OAUTH  = 'gmail_oauth';
 
@@ -37,8 +36,8 @@ class Settings {
 	 *
 	 * Setting key => [ default, constant, sanitizer ]. For the backup slot the
 	 * storage key and the constant both gain a prefix, so
-	 * `ms_tenant_id` / MMOA_MS_TENANT_ID becomes
-	 * `backup_ms_tenant_id` / MMOA_BACKUP_MS_TENANT_ID.
+	 * `google_sa_email` / MMOA_GOOGLE_SA_CLIENT_EMAIL becomes
+	 * `backup_google_sa_email` / MMOA_BACKUP_GOOGLE_SA_CLIENT_EMAIL.
 	 */
 	/**
 	 * Credentials written by an authorization flow rather than typed.
@@ -48,7 +47,7 @@ class Settings {
 	 * them here is what lets a disconnect clear them: the previous one
 	 * walked the declared fields and left every refresh token behind.
 	 */
-	private const FLOW_SECRETS = [ 'google_refresh', 'ms_refresh', 'msoauth_refresh' ];
+	private const FLOW_SECRETS = [ 'google_refresh' ];
 
 	private const CONNECTION_SCHEMA = [
 		'provider'          => [ self::PROVIDER_NONE, 'MMOA_PROVIDER', 'provider' ],
@@ -66,11 +65,6 @@ class Settings {
 		'from_name'         => [ '', 'MMOA_FROM_NAME', 'text' ],
 		'force_from'        => [ true, null, 'bool' ],
 
-		'ms_tenant_id'      => [ '', 'MMOA_MS_TENANT_ID', 'text' ],
-		'ms_client_id'      => [ '', 'MMOA_MS_CLIENT_ID', 'text' ],
-		'ms_sender'         => [ '', 'MMOA_MS_SENDER', 'email' ],
-		'ms_secret_expires' => [ 0, null, 'int' ],
-		'ms_policy_ack'     => [ false, null, 'bool' ],
 
 		'google_sa_email'   => [ '', 'MMOA_GOOGLE_SA_CLIENT_EMAIL', 'text' ],
 		'google_sender'     => [ '', 'MMOA_GOOGLE_SENDER', 'email' ],
@@ -86,17 +80,13 @@ class Settings {
 		// cannot silently move an existing connection onto a service it was
 		// never told about.
 		'google_setup_mode' => [ 'own_client', null, 'text' ],
+
+		// Written by the sign-in rather than typed. It is here rather than
+		// declared as a field because it is not one: the connection screen
+		// already shows which mailbox signed in, and a second read-only copy
+		// of it on the form asks the reader to work out whether the two can
+		// disagree.
 		'google_account'    => [ '', null, 'text' ],
-
-		'ms_setup_mode'     => [ 'own_signin', null, 'text' ],
-
-		// Written by the sign-in rather than typed, exactly like
-		// google_account above. It is here rather than declared as a field
-		// because it is not one: the connection screen already shows which
-		// mailbox signed in, and a second read-only copy of it on the form
-		// asks the reader to work out whether the two can disagree.
-		'msoauth_account'   => [ '', null, 'text' ],
-		'ms_account'        => [ '', null, 'text' ],
 	];
 
 	/**
@@ -143,9 +133,9 @@ class Settings {
 	 * A view of these settings scoped to one connection slot.
 	 *
 	 * Providers are handed one of these and never learn which slot they are.
-	 * That is the point: Graph reading `ms_tenant_id` resolves to the primary
-	 * or the backup credential purely by which view it was constructed with,
-	 * so the backup connection needed no provider changes at all.
+	 * That is the point: Gmail reading `google_sa_email` resolves to whichever
+	 * connection it was constructed with, so introducing a second connection
+	 * needs no provider changes at all.
 	 */
 	public function for_slot( string $slot ): Settings {
 		if ( $slot === $this->slot ) {

@@ -42,7 +42,6 @@ import ProviderLogo from '../components/provider-logo';
 import RedirectUri from '../components/redirect-uri';
 import GoogleConnect from '../components/google-connect';
 import GoogleSetupGuide from '../components/google-setup-guide';
-import MicrosoftConnect from '../components/microsoft-connect';
 import OneClickConnect from '../components/one-click-connect';
 
 /**
@@ -61,7 +60,7 @@ import OneClickConnect from '../components/one-click-connect';
  * not already understand. Leaving halfway keeps whatever was saved.
  *
  * The step is recorded on the server as it changes. Connecting a mailbox hands
- * the browser to Google or Microsoft and gets it back as a fresh page load with
+ * the browser to Google and gets it back as a fresh page load with
  * no memory of what was happening, and the callbacks return here rather than to
  * the connections screen for as long as the wizard is open.
  */
@@ -228,7 +227,7 @@ const Welcome = ( { onStart, onSkip } ) => (
 					icon: Plug,
 					title: __( 'Pick a provider', 'modern-mailer-oauth' ),
 					body: __(
-						'Microsoft and Google sign in with a single click. Everything else takes an API key.',
+						'Google signs in with a single click. Everything else takes an API key.',
 						'modern-mailer-oauth'
 					),
 				},
@@ -316,9 +315,7 @@ const Setup = () => {
 		'own_client';
 
 	const googleMode = modeOf( 'google_setup_mode' );
-	const microsoftMode = modeOf( 'ms_setup_mode' );
 	const isGoogle = provider === 'google' || provider === 'gmail_oauth';
-	const isMicrosoft = provider === 'microsoft' || provider === 'outlook';
 
 	/**
 	 * Move, and tell the server where we got to.
@@ -444,7 +441,7 @@ const Setup = () => {
 						) }
 						title={ __( 'How should this site send its email?', 'modern-mailer-oauth' ) }
 						lead={ __(
-							'Microsoft and Google can be connected without registering anything, by signing in. The rest need an API key from the service, which takes a minute in their console.',
+							'Google can be connected without registering anything, by signing in. The rest need an API key from the service, which takes a minute in their console.',
 							'modern-mailer-oauth'
 						) }
 						back={ () => go( 'welcome' ) }
@@ -517,7 +514,7 @@ const Setup = () => {
 							STEPS.length
 						) }
 						title={ sprintf(
-							/* translators: %s: provider name, e.g. Microsoft. */
+							/* translators: %s: provider name, e.g. Brevo. */
 							__( 'Connect %s', 'modern-mailer-oauth' ),
 							current?.label || __( 'the provider', 'modern-mailer-oauth' )
 						) }
@@ -568,20 +565,6 @@ const Setup = () => {
 							<RedirectUri value={ data.oauth.redirect_uri } />
 						) }
 
-						{ isMicrosoft && microsoftMode === 'own_signin' && data.ms_oauth?.redirect_uri && (
-							<RedirectUri
-								value={ data.ms_oauth.redirect_uri }
-								warning={
-									data.ms_oauth.clean_redirect
-										? null
-										: __(
-												'Plain permalinks put a query string in this address, which Entra rejects unless the app excludes personal accounts. Any other permalink setting fixes it.',
-												'modern-mailer-oauth'
-										  )
-								}
-							/>
-						) }
-
 						<ProviderForm
 							provider={ current }
 							values={ values }
@@ -602,22 +585,6 @@ const Setup = () => {
 						{ isGoogle && googleMode === 'own_client' && (
 							<GoogleConnect
 								oauth={ data.oauth }
-								dirty={ dirty || data.provider !== provider }
-							/>
-						) }
-
-						{ isMicrosoft && microsoftMode === 'one_click' && (
-							<OneClickConnect
-								family="microsoft"
-								oneClick={ data.one_click }
-								dirty={ dirty || data.provider !== provider }
-								heading={ __( 'Mailbox', 'modern-mailer-oauth' ) }
-							/>
-						) }
-
-						{ isMicrosoft && microsoftMode === 'own_signin' && (
-							<MicrosoftConnect
-								oauth={ data.ms_oauth }
 								dirty={ dirty || data.provider !== provider }
 							/>
 						) }

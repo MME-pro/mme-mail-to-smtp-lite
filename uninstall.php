@@ -27,7 +27,6 @@ foreach (
 		'mmoa_site_id',
 		'mmoa_merged_providers',
 		'mmoa_per_connection_from',
-		'mmoa_pinned_ms_mode',
 		'mmoa_setup',
 		'mmoa_setup_redirect',
 	] as $option

@@ -28,8 +28,6 @@ class Secrets {
 	 * Settings key => wp-config.php constant.
 	 */
 	private const CONSTANTS = [
-		'ms_client_secret'  => 'MMOA_MS_CLIENT_SECRET',
-		'ms_certificate'    => 'MMOA_MS_CERTIFICATE',
 		'google_sa_key'     => 'MMOA_GOOGLE_SA_PRIVATE_KEY',
 		'google_client_sec' => 'MMOA_GOOGLE_CLIENT_SECRET',
 		'google_refresh'    => 'MMOA_GOOGLE_REFRESH_TOKEN',
@@ -41,7 +39,7 @@ class Secrets {
 	 * Which connection's credentials this instance reads and writes.
 	 *
 	 * Mirrors Settings::$slot exactly, and for the same reason: providers ask
-	 * for `ms_client_secret` and the slot decides which one that is.
+	 * for `google_sa_key` and the slot decides which one that is.
 	 */
 	public function __construct( private string $slot = '' ) {}
 

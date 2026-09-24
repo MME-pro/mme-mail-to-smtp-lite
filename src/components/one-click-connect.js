@@ -2,7 +2,6 @@ import { __, sprintf } from '@wordpress/i18n';
 import { CheckCircle2, TriangleAlert } from 'lucide-react';
 import { Button, Separator, Alert, AlertDescription } from './ui';
 import { GoogleButton } from './google-button';
-import { MicrosoftButton } from './microsoft-button';
 
 /**
  * Connect a mailbox without anyone opening a cloud console.
@@ -12,18 +11,14 @@ import { MicrosoftButton } from './microsoft-button';
  * getting it back as a fresh page load, which XHR cannot do. The link is a
  * nonce-signed admin-post URL that the server turns into a redirect.
  *
- * The setup service performs the OAuth exchange and hands back a real Google or
- * Microsoft credential. It never relays mail: every message afterwards goes
- * straight from this site to Gmail or Graph.
+ * The setup service performs the OAuth exchange and hands back a real Google
+ * credential. It never relays mail: every message afterwards goes straight
+ * from this site to Gmail.
  */
 const FAMILY = {
 	google: {
 		Button: GoogleButton,
 		name: __( 'Google', 'modern-mailer-oauth' ),
-	},
-	microsoft: {
-		Button: MicrosoftButton,
-		name: __( 'Microsoft', 'modern-mailer-oauth' ),
 	},
 };
 

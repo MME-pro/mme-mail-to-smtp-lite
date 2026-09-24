@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) || exit;
  * What is given up by choosing it over a native API: per-service error mapping.
  * SMTP hands back a three-digit code and a line of text the operator wrote, so
  * "550 5.7.1 Unauthenticated senders not allowed" is as specific as this can
- * get, where the Graph provider would name the Exchange policy. Delivery is
+ * get, where an API provider can name the exact misconfiguration. Delivery is
  * identical; diagnosis is worse. Worth saying on the settings screen rather
  * than letting someone discover it during an incident.
  *

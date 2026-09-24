@@ -1,6 +1,6 @@
 <?php
 /**
- * One-click connection flow, for Google and Microsoft.
+ * One-click connection flow.
  *
  * @package ModernMailer
  */
@@ -25,7 +25,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * This replaces it with: choose the account, approve, done. The site never sees
  * an OAuth client secret because it never has one - the broker holds ours - and
- * what comes back is a real Google or Microsoft refresh token that the ordinary
+ * what comes back is a real Google refresh token that the ordinary
  * provider code then uses exactly as though it had been obtained by hand.
  *
  * That last property is the design constraint worth keeping. One-click changes

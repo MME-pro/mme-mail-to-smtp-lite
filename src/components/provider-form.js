@@ -223,9 +223,10 @@ const SecretInput = ( { id, field, value, disabled, placeholder, onChange } ) =>
 };
 
 const ProviderForm = ( { provider, values, onChange } ) => {
-	// A provider can genuinely have nothing to fill in - Outlook chooses its
-	// mailbox at Microsoft's own prompt. Rendering the grid anyway leaves an
-	// empty gap above the buttons that reads as a form that failed to load.
+	// A provider can genuinely have nothing to fill in - a brokered sign-in
+	// chooses its mailbox at the provider's own prompt. Rendering the grid
+	// anyway leaves an empty gap above the buttons that reads as a form that
+	// failed to load.
 	if ( ! provider.fields?.length ) {
 		return null;
 	}

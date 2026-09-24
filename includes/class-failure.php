@@ -47,7 +47,7 @@ class Failure {
 	 * Provider-level codes that mean "not now" rather than "not ever".
 	 */
 	private const BACKPRESSURE_CODES = [
-		'mmoa_graph_throttled',
+
 		'mmoa_gmail_rate_limited',
 
 		// SMTP inverts the convention the HTTP providers use: a 4xx reply is the

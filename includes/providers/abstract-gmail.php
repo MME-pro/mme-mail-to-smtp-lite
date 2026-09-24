@@ -195,7 +195,7 @@ abstract class Abstract_Gmail extends Abstract_Provider {
 				$status,
 				'' !== $message ? $message : __( 'no details supplied', 'modern-mailer-oauth' )
 			),
-			// See the note in Graph::map_error() - Failure needs the status to
+			// Failure needs the status to
 			// tell a transient 503 apart from a permanent 400.
 			[
 				'reason' => $reason,

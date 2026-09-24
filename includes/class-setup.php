@@ -26,7 +26,7 @@ defined( 'ABSPATH' ) || exit;
  * written down here and acted on at the next admin screen.
  *
  * The second is the OAuth round trip. Connecting a mailbox hands the browser to
- * Google or Microsoft and gets it back as a fresh page load with no memory of
+ * Google and gets it back as a fresh page load with no memory of
  * what was happening, which would otherwise drop somebody out of step three of
  * six. The step is recorded before they leave, and `is_in_progress()` is what
  * tells the callback handlers to return to the wizard rather than to the

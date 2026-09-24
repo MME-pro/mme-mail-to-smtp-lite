@@ -15,11 +15,11 @@ defined( 'ABSPATH' ) || exit;
 /**
  * A transport that can put an RFC 822 message on the wire.
  *
- * The interface is deliberately narrow. Because both Microsoft Graph and the
- * Gmail API accept a raw MIME message, providers never need to know anything
- * about headers, attachments, or encoding - PHPMailer has already done that
- * work by the time send() is called. Adding a third transport means
- * implementing three methods, not re-solving MIME.
+ * The interface is deliberately narrow. Because the
+ * Gmail API and the other API services accept a raw MIME message, providers
+ * never need to know anything about headers, attachments, or encoding -
+ * PHPMailer has already done that work by the time send() is called. Adding
+ * a transport means implementing three methods, not re-solving MIME.
  */
 interface Provider_Interface {
 

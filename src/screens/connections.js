@@ -15,7 +15,6 @@ import { cn } from '../lib/utils';
 import GoogleConnect from '../components/google-connect';
 import GoogleSetupGuide from '../components/google-setup-guide';
 import RedirectUri from '../components/redirect-uri';
-import MicrosoftConnect from '../components/microsoft-connect';
 import OneClickConnect from '../components/one-click-connect';
 import ProviderForm, { missingRequired } from '../components/provider-form';
 import ProviderPicker from '../components/provider-picker';
@@ -75,13 +74,11 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 		'own_client';
 
 	const googleMode = modeOf( 'google_setup_mode' );
-	const microsoftMode = modeOf( 'ms_setup_mode' );
 
-	// Which sign-in block belongs under this provider. Both merged tiles and
-	// the legacy slugs are handled, because a connection keeps its stored slug
-	// until the migration runs and must stay editable in the meantime.
+	// Which sign-in block belongs under this provider. The merged tile and
+	// the legacy slug are both handled, because a connection keeps its stored
+	// slug until the migration runs and must stay editable in the meantime.
 	const isGoogle = provider === 'google' || provider === 'gmail_oauth';
-	const isMicrosoft = provider === 'microsoft' || provider === 'outlook';
 
 	const save = useMutation( {
 		mutationFn: () => saveConnection( slot, { provider, ...values } ),
@@ -212,23 +209,6 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 							<RedirectUri value={ data.oauth.redirect_uri } />
 						</div>
 					) }
-
-					{ isMicrosoft && microsoftMode === 'own_signin' && data.ms_oauth?.redirect_uri && (
-						<div className="mb-5">
-							<RedirectUri
-								value={ data.ms_oauth.redirect_uri }
-								warning={
-									data.ms_oauth.clean_redirect
-										? null
-										: __(
-												'Plain permalinks put a query string in this address, which Entra rejects unless the app excludes personal accounts. Any other permalink setting fixes it.',
-												'modern-mailer-oauth'
-										  )
-								}
-							/>
-						</div>
-					) }
-
 					<ProviderForm
 						provider={ current }
 						values={ values }						onChange={ ( key, value ) =>
@@ -306,29 +286,6 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 							dirty={ dirty || data.provider !== provider }
 						/>
 					) }
-
-					{ isMicrosoft && microsoftMode === 'one_click' && (
-						<OneClickConnect
-							family="microsoft"
-							oneClick={ data.one_click }
-							dirty={ dirty || data.provider !== provider }
-							heading={ __( 'Mailbox', 'modern-mailer-oauth' ) }
-						/>
-					) }
-
-					{ /* The delegated Azure app. Like the Gmail block above it
-					     follows the mode being edited rather than the stored
-					     one, so flipping the radio swaps the sign-in panel in
-					     straight away instead of after a save. The app-only
-					     mode shows nothing here on purpose: it mints its own
-					     tokens and there is no sign-in to offer. */ }
-					{ isMicrosoft && microsoftMode === 'own_signin' && (
-						<MicrosoftConnect
-							oauth={ data.ms_oauth }
-							dirty={ dirty || data.provider !== provider }
-						/>
-					) }
-
 					{ verifyResult && (
 						<div
 							className={ `flex items-start gap-2 mt-3 p-3 rounded-lg text-[13px] ${

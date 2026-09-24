@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 	/**
  * Sends via Gmail using a service account with domain-wide delegation.
  *
- * This is the Google equivalent of app-only auth on the Microsoft side, and it
+ * This is the Google equivalent of app-only authentication, and it
  * has the same property that makes it worth preferring: no consent screen, no
  * refresh token, nothing that expires. The site signs a short-lived assertion
  * with a key it holds and exchanges it for an access token on demand.

@@ -24,14 +24,14 @@ defined( 'ABSPATH' ) || exit;
  * through the Google Cloud or Azure console.
  *
  * What it deliberately is NOT is a mail relay. The broker brokers tokens and
- * nothing else: it returns real Google and Microsoft credentials to the site,
- * and every message afterwards goes straight from the site to Gmail or Graph.
+ * nothing else: it returns real Google credentials to the site, and every
+ * message afterwards goes straight from the site to Gmail.
  * WP Mail SMTP's Gmail integration takes the other road - `send_email()` there
  * POSTs the message body to `api.wpmailsmtp.com` and their servers send it -
  * which makes the vendor a processor of every customer's email, puts message
  * content on a third-party host, and means an outage of that service stops all
- * mail rather than merely stopping new connections. Their own Outlook
- * integration is the token-broker shape, and it is the better one.
+ * mail rather than merely stopping new connections. The token-broker shape
+ * avoids all three.
  *
  * The practical consequence for us: if the broker is unreachable, nobody can
  * connect a new account and tokens cannot be refreshed - but a site with a
@@ -43,8 +43,6 @@ class Broker {
 	/** Google, for Gmail. */
 	public const GOOGLE = 'google';
 
-	/** Microsoft, for Outlook and Microsoft 365. */
-	public const MICROSOFT = 'microsoft';
 
 	/**
 	 * Where the broker lives.
@@ -110,7 +108,7 @@ class Broker {
 	 * Whether a family name is one we broker.
 	 */
 	public static function is_family( string $family ): bool {
-		return in_array( $family, [ self::GOOGLE, self::MICROSOFT ], true );
+		return in_array( $family, [ self::GOOGLE ], true );
 	}
 
 	/**
@@ -123,9 +121,9 @@ class Broker {
 	 * @return array{refresh:string,account:string,mode:string}
 	 */
 	public static function keys( string $family ): array {
-		return self::MICROSOFT === $family
-			? [ 'refresh' => 'ms_refresh', 'account' => 'ms_account', 'mode' => 'ms_setup_mode' ]
-			: [ 'refresh' => 'google_refresh', 'account' => 'google_account', 'mode' => 'google_setup_mode' ];
+		unset( $family );
+
+		return [ 'refresh' => 'google_refresh', 'account' => 'google_account', 'mode' => 'google_setup_mode' ];
 	}
 
 	/**
@@ -156,10 +154,10 @@ class Broker {
 			return $result;
 		}
 
-		// Microsoft issues a replacement refresh token on every use and retires
-		// the old one. Failing to store it means the connection keeps working
-		// until the current token's window closes and then dies with nothing to
-		// explain it, so this is not an optimisation.
+		// An identity provider may issue a replacement refresh token on every
+		// use and retire the old one. Failing to store it means the connection
+		// keeps working until the current token's window closes and then dies
+		// with nothing to explain it, so this is not an optimisation.
 		if ( '' !== $result['refresh_token'] && $result['refresh_token'] !== $refresh ) {
 			$scoped->secrets()->set( $key, $result['refresh_token'] );
 		}
@@ -173,11 +171,11 @@ class Broker {
 	/**
 	 * Where to send the browser to begin a one-click connection.
 	 *
-	 * The broker redirects on to Google or Microsoft using its own client and
-	 * its own registered redirect URI, which is what spares every site from
+	 * The broker redirects on to Google using its own client and its own
+	 * registered redirect URI, which is what spares every site from
 	 * registering one of its own.
 	 *
-	 * @param string $family   GOOGLE or MICROSOFT.
+	 * @param string $family   The provider family, currently GOOGLE.
 	 * @param string $state    Opaque value echoed back to us, which we verify.
 	 * @param string $callback Where the broker should return the browser.
 	 */
@@ -257,10 +255,10 @@ class Broker {
 			'access_token'  => (string) $data['access_token'],
 			'expires_in'    => (int) ( $data['expires_in'] ?? 3600 ),
 
-			// Microsoft rotates the refresh token on every use, so a response
-			// may carry a replacement. Returning '' when it does not lets the
-			// caller keep the one it already has without having to know which
-			// provider rotates and which does not.
+			// Some identity providers rotate the refresh token on every use, so
+			// a response may carry a replacement. Returning '' when it does not
+			// lets the caller keep the one it already has without having to know
+			// which rotates and which does not.
 			'refresh_token' => (string) ( $data['refresh_token'] ?? '' ),
 		];
 	}

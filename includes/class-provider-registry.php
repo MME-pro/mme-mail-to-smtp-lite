@@ -55,16 +55,13 @@ class Provider_Registry {
 		}
 
 		$classes = [
-			// The two merged tiles, and behind them the transports they
-			// delegate to. Those stay registered but unlisted, so a stored slug
-			// remains constructible even before the migration has run.
-			Providers\Microsoft::class,
+			// The merged Google tile, and behind it the transports it delegates
+			// to. Those stay registered but unlisted, so a stored slug remains
+			// constructible even before the migration has run.
 			Providers\Google::class,
 
 			// The order here is the order of the chooser, so it is a display
-			// decision rather than an implementation one: the two finished
-			// providers first, then the rest in the order they are being
-			// worked through.
+			// decision rather than an implementation one.
 			Providers\Sendgrid::class,
 			Providers\Resend::class,
 			Providers\Brevo::class,
@@ -76,9 +73,6 @@ class Provider_Registry {
 
 			// Unlisted, so their position never shows. They sit last so that
 			// reordering the tiles above cannot accidentally disturb them.
-			Providers\Graph::class,
-			Providers\Outlook::class,
-			Providers\Microsoft_OAuth::class,
 			Providers\Gmail_Service_Account::class,
 			Providers\Gmail_OAuth::class,
 		];
@@ -106,10 +100,10 @@ class Provider_Registry {
 				continue;
 			}
 
-			// A provider may declare itself unavailable on this site. Outlook
-			// does, when the setup service it depends on has been filtered
-			// away: listing a transport that cannot obtain a credential would
-			// let someone select it and then discover it never works.
+			// A provider may declare itself unavailable on this site. A brokered
+			// transport does, when the setup service it depends on has been
+			// filtered away: listing a transport that cannot obtain a credential
+			// would let someone select it and then discover it never works.
 			//
 			// Not part of Provider_Interface, because the answer is yes for
 			// every provider that does not say otherwise, and adding a method

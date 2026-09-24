@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       MME-Mail to SMTP Lite
- * Description:       Sends WordPress email through the Microsoft Graph and Gmail APIs using OAuth 2.0. App-only and service-account authentication mean there is no refresh token to expire and no periodic reauthorization. A backup connection and a retry queue mean a transient fault delays an email rather than losing it.
+ * Description:       Sends WordPress email through Gmail, Google Workspace, SendGrid, Mailgun, Brevo, Postmark, Resend, SMTP2GO or any SMTP server, instead of the server mail function. A Google service account needs no refresh token and has nothing that expires. A persistent retry queue means a transient fault delays an email rather than losing it.
  * Version:           0.15.0
  * Requires at least: 6.5
  * Requires PHP:      8.0
@@ -28,7 +28,7 @@ define( 'ModernMailer\PLUGIN_URL', plugin_dir_url( __FILE__ ) );
  * Map a namespaced class to its file and load it.
  *
  * ModernMailer\Token_Store            => includes/class-token-store.php
- * ModernMailer\Providers\Graph        => includes/providers/class-graph.php
+ * ModernMailer\Providers\Brevo        => includes/providers/class-brevo.php
  * ModernMailer\Providers\Provider_Interface => includes/providers/interface-provider.php
  * ModernMailer\Providers\Abstract_Provider  => includes/providers/abstract-provider.php
  */

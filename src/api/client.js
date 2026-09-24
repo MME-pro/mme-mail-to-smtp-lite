@@ -53,7 +53,7 @@ export const queueAction = ( action ) =>
  * Wizard bookkeeping.
  *
  * The step is recorded server-side rather than kept in the URL, because
- * connecting a mailbox hands the browser to Google or Microsoft and gets it
+ * connecting a mailbox hands the browser to Google and gets it
  * back as a fresh page load - and the wizard has to resume where it was rather
  * than at the beginning.
  *

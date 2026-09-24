@@ -196,25 +196,6 @@ class Site_Health {
 			return $result;
 		}
 
-		// An Entra client secret that quietly expires is a scheduled outage.
-		// Warning ahead of time is the difference between a two-minute job and
-		// an incident.
-		$expires = (int) $settings->get( 'ms_secret_expires' );
-
-		if ( $expires > 0 && $expires < ( time() + 30 * DAY_IN_SECONDS ) ) {
-			$result['status'] = $expires < time() ? 'critical' : 'recommended';
-			$result['badge']['color'] = 'orange';
-			$result['label']  = $expires < time()
-				? __( 'The Microsoft client secret has expired', 'modern-mailer-oauth' )
-				: __( 'The Microsoft client secret expires soon', 'modern-mailer-oauth' );
-			$result['description'] = '<p>' . sprintf(
-				/* translators: %s: human-readable date. */
-				esc_html__( 'The client secret expires on %s. Generate a replacement in Entra before then, or consider switching to a certificate credential, which does not expire on a fixed schedule.', 'modern-mailer-oauth' ),
-				esc_html( wp_date( get_option( 'date_format' ), $expires ) )
-			) . '</p>';
-			$result['actions'] = $this->settings_link();
-		}
-
 		return $result;
 	}
 
@@ -232,19 +213,18 @@ class Site_Health {
 	private function settings_link(): string {
 		return sprintf(
 			'<p><a href="%s">%s</a></p>',
-			esc_url( Admin_Page::url() ),
+			esc_url( admin_url( 'admin.php?page=' . App_Page::SLUG ) ),
 			esc_html__( 'Open mail settings', 'modern-mailer-oauth' )
 		);
 	}
 
 	/**
-	 * Queue problems are acted on from the Logs screen, not from Settings -
-	 * that is where the affected messages and the retry controls are.
+	 * Queue problems are acted on in the app, where the queue controls are.
 	 */
 	private function logs_link(): string {
 		return sprintf(
 			'<p><a href="%s">%s</a></p>',
-			esc_url( Admin_Page::url( 'modern-mailer-logs' ) ),
+			esc_url( admin_url( 'admin.php?page=' . App_Page::SLUG ) ),
 			esc_html__( 'Review queued mail', 'modern-mailer-oauth' )
 		);
 	}

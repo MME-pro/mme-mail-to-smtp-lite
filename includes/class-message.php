@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * Providers split into two families and there is no avoiding it:
  *
- * - Microsoft Graph, Gmail, Mailgun's /messages.mime, Amazon SES SendRawEmail
+ * - Gmail, Mailgun's /messages.mime and the other raw-MIME endpoints
  *   and plain SMTP all accept a complete RFC 822 message. Handing them the
  *   bytes PHPMailer produced is exactly right, and is why attachments, inline
  *   cid: images and custom headers work here without any provider

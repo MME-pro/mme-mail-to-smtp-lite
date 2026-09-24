@@ -1,7 +1,8 @@
 <?php
 /**
  * Regression tests for the failure reported against WP Mail SMTP 4.9.0's
- * Outlook mailer:
+ * Outlook mailer (the guard is exercised here through Gmail, because the
+ * property under test is not provider-specific):
  *
  *   http_request_failed: ["No valid URL was specified."]
  *

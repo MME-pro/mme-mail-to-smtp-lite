@@ -11,7 +11,7 @@ import { Button, Alert, AlertDescription } from './ui';
  * client ID and secret only exist once that registration has been made. Sitting
  * under the form it was something to scroll back up past after the fact.
  *
- * Shared by the Google and Microsoft panels, which each had their own copy of
+ * Shared by the panels that need it, which each had their own copy of
  * this block and their own copy of the copy button.
  */
 const RedirectUri = ( { value, warning } ) => {

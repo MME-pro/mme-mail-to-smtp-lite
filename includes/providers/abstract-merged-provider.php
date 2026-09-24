@@ -17,8 +17,8 @@ defined( 'ABSPATH' ) || exit;
  * Presents a mail service as one choice, then asks how to connect to it.
  *
  * The chooser used to list authentication methods rather than services:
- * "Microsoft 365" and "Outlook" were two tiles, as were "Google Workspace" and
- * "Gmail". That asks the wrong question first. Somebody arriving at this screen
+ * "Google Workspace" and "Gmail" were two tiles. That asks the wrong
+ * question first. Somebody arriving at this screen
  * knows they want to send through Google; what they do not yet know is whether
  * their situation calls for a service account, their own OAuth client, or the
  * one-click path - and four tiles offering no way to tell them apart is a worse
@@ -45,7 +45,7 @@ abstract class Abstract_Merged_Provider implements Provider_Interface {
 	) {}
 
 	/**
-	 * The setting holding the chosen mode, e.g. `ms_setup_mode`.
+	 * The setting holding the chosen mode, e.g. `google_setup_mode`.
 	 */
 	abstract protected static function mode_key(): string;
 
@@ -98,9 +98,9 @@ abstract class Abstract_Merged_Provider implements Provider_Interface {
 	}
 
 	public function get_label(): string {
-		// The transport's label, not the tile's: a log line saying "Microsoft
-		// 365 (Graph)" tells you which credential was used, where "Microsoft"
-		// would leave you unable to tell two connections apart.
+		// The transport's label, not the tile's: a record saying "Google
+		// Workspace (service account)" tells you which credential was used,
+		// where "Google" would leave you unable to tell two apart.
 		return $this->delegate()->get_label();
 	}
 
@@ -127,20 +127,20 @@ abstract class Abstract_Merged_Provider implements Provider_Interface {
 		$mode_field = static::mode_field();
 
 		// A choice of one is not a choice. With the setup service switched off
-		// Microsoft has a single way in, and offering it as a radio button
+		// a family can have a single way in, and offering it as a radio button
 		// invites someone to look for the alternative that is not there.
 		//
 		// Dropping the selector means dropping the gates with it. A field that
 		// depends on a field the form is not rendering resolves against nothing
 		// and hides itself - which is how removing one radio button silently
-		// emptied the entire Microsoft form.
+		// emptied the entire form.
 		$gated  = count( $mode_field->options ) > 1;
 		$fields = $gated ? [ $mode_field ] : [];
 		$seen   = [ static::mode_key() => true ];
 
 		foreach ( static::transports() as $mode => $class ) {
-			// A transport can stay reachable without being offered. Microsoft
-			// keeps the app-only Graph mode in transports so that a connection
+			// A transport can stay reachable without being offered: a family may
+			// keep a retired mode in transports so that a connection
 			// already set to it goes on sending, while no longer listing it as
 			// a choice - and a mode nobody can select must not put its fields
 			// on the form. Gated, they would be inert; ungated, which is what

@@ -39,43 +39,6 @@ $panel_class = 'mmoa-panel-' . ( '' === $slot ? 'primary' : $slot );
 	</tr>
 </table>
 
-<div class="<?php echo esc_attr( $panel_class ); ?>" data-provider="graph">
-	<h3><?php esc_html_e( 'Microsoft 365', 'modern-mailer-oauth' ); ?></h3>
-	<p><?php esc_html_e( 'Uses app-only authentication, so there is no sign-in prompt and no token that expires and needs reauthorizing. Requires a Microsoft 365 work or school account; personal outlook.com addresses cannot use this method.', 'modern-mailer-oauth' ); ?></p>
-	<table class="form-table" role="presentation">
-		<?php
-		$this->field( 'ms_tenant_id', __( 'Directory (tenant) ID', 'modern-mailer-oauth' ), __( 'From the Overview page of your Entra app registration.', 'modern-mailer-oauth' ), 'text', $slot );
-		$this->field( 'ms_client_id', __( 'Application (client) ID', 'modern-mailer-oauth' ), '', 'text', $slot );
-		$this->secret_field( 'ms_client_secret', __( 'Client secret', 'modern-mailer-oauth' ), __( 'Copy the secret Value, not the Secret ID. Entra shows the Value only once.', 'modern-mailer-oauth' ), false, $slot );
-		$this->field( 'ms_sender', __( 'Send through a different mailbox', 'modern-mailer-oauth' ), __( 'Leave empty to send through the From address above. Fill it in only to send through a licensed or shared mailbox that holds Send As permission for it.', 'modern-mailer-oauth' ), 'email', $slot );
-		?>
-		<tr>
-			<th scope="row"><label for="<?php echo esc_attr( $field_name( 'ms_secret_expires' ) ); ?>"><?php esc_html_e( 'Secret expires', 'modern-mailer-oauth' ); ?></label></th>
-			<td>
-				<input type="date" id="<?php echo esc_attr( $field_name( 'ms_secret_expires' ) ); ?>"
-					name="<?php echo esc_attr( $field_name( 'ms_secret_expires' ) ); ?>"
-					value="<?php echo esc_attr( $slot_settings->get( 'ms_secret_expires' ) ? gmdate( 'Y-m-d', (int) $slot_settings->get( 'ms_secret_expires' ) ) : '' ); ?>" />
-				<p class="description"><?php esc_html_e( 'Entra secrets last at most 24 months. Record the expiry date and you will be warned before it lapses instead of finding out when mail stops.', 'modern-mailer-oauth' ); ?></p>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row"><?php esc_html_e( 'Access scoping', 'modern-mailer-oauth' ); ?></th>
-			<td>
-				<label>
-					<input type="checkbox" name="<?php echo esc_attr( $field_name( 'ms_policy_ack' ) ); ?>" value="1" <?php checked( (bool) $slot_settings->get( 'ms_policy_ack' ) ); ?> />
-					<?php esc_html_e( 'I have restricted this application to specific mailboxes', 'modern-mailer-oauth' ); ?>
-				</label>
-				<p class="description">
-					<?php esc_html_e( 'Important: the Mail.Send application permission lets this app send as any mailbox in the tenant until you scope it. Restrict it in Exchange Online PowerShell:', 'modern-mailer-oauth' ); ?>
-				</p>
-				<pre class="code" style="white-space:pre-wrap"><code>New-ApplicationAccessPolicy -AppId &lt;client-id&gt; `
-  -PolicyScopeGroupId wp-senders@yourdomain.com `
-  -AccessRight RestrictAccess</code></pre>
-			</td>
-		</tr>
-	</table>
-</div>
-
 <div class="<?php echo esc_attr( $panel_class ); ?>" data-provider="gmail_sa">
 	<h3><?php esc_html_e( 'Google Workspace service account', 'modern-mailer-oauth' ); ?></h3>
 	<p><?php esc_html_e( 'The Google equivalent of app-only auth: no consent screen and no refresh token to expire. Workspace domains only.', 'modern-mailer-oauth' ); ?></p>

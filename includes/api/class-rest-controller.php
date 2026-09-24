@@ -335,7 +335,7 @@ class Rest_Controller {
 		// Revoked at the provider where we can, not merely forgotten here. A
 		// grant left live at Google is one an admin cannot see and cannot
 		// withdraw from this screen.
-		foreach ( [ Broker::GOOGLE, Broker::MICROSOFT ] as $family ) {
+		foreach ( [ Broker::GOOGLE ] as $family ) {
 			if ( $this->plugin->one_click->is_connected( $family, $slot ) ) {
 				$this->plugin->one_click->disconnect( $family, $slot );
 			}
@@ -343,13 +343,6 @@ class Rest_Controller {
 
 		if ( $this->plugin->consent->is_connected( $slot ) ) {
 			$this->plugin->consent->disconnect( $slot );
-		}
-
-		// Microsoft as well as Google. This was missing when the delegated
-		// Microsoft path arrived, so disconnecting cleared the Google grant
-		// and left a live Microsoft refresh token in the database.
-		if ( $this->plugin->ms_consent->is_connected( $slot ) ) {
-			$this->plugin->ms_consent->disconnect( $slot );
 		}
 
 		// Then everything the connection ever stored - every provider field,
@@ -581,7 +574,6 @@ class Rest_Controller {
 			'provider'  => (string) $scoped->get( 'provider' ),
 			'providers' => Provider_Registry::to_array( $scoped ),
 			'oauth'     => $this->oauth_payload( $slot ),
-			'ms_oauth'  => $this->ms_oauth_payload( $slot ),
 			'one_click' => $this->one_click_payload( $slot ),
 		];
 	}
@@ -621,44 +613,6 @@ class Rest_Controller {
 	}
 
 	/**
-	 * The same block for the delegated Microsoft connection.
-	 *
-	 * Returned for every connection rather than only one already set to
-	 * Microsoft, for the reason the Google block is: this is what tells an admin
-	 * the redirect URI to register in Entra and why they cannot sign in yet,
-	 * which they need while setting it up - that is, before the provider has
-	 * ever been saved.
-	 *
-	 * It carries the signed-in address as well, which the Google block has no
-	 * equivalent of. A delegated Microsoft connection can only send as that one
-	 * mailbox, so which mailbox it is happens to be the single most useful fact
-	 * about the connection.
-	 *
-	 * @return array<string,mixed>
-	 */
-	private function ms_oauth_payload( string $slot ): array {
-		$scoped = $this->plugin->settings->for_slot( $slot );
-		$urls   = \ModernMailer\Admin\Admin_Page::microsoft_urls( $slot );
-
-		return [
-			'connected'       => $this->plugin->ms_consent->is_connected( $slot ),
-			'account'         => $this->plugin->ms_consent->account( $slot ),
-			'has_credentials' => '' !== trim( (string) $scoped->get( 'msoauth_client_id' ) )
-				&& '' !== $scoped->secrets()->get( 'msoauth_client_sec' ),
-			'connect_url'     => $urls['connect'],
-			'disconnect_url'  => $urls['disconnect'],
-			'redirect_uri'    => \ModernMailer\Auth\Microsoft_Consent::redirect_uri(),
-
-			// Whether that URI is the path-shaped one. It is not, on a site
-			// with permalinks set to Plain, and the difference decides which
-			// app registrations can accept it - so the screen has to be able
-			// to say which of the two it just handed over.
-			'clean_redirect'  => \ModernMailer\Auth\Microsoft_Consent::has_clean_route(),
-			'revoke_help_url' => \ModernMailer\Auth\Microsoft_Consent::REVOKE_HELP_URL,
-		];
-	}
-
-	/**
 	 * One-click state for each provider family this connection could use.
 	 *
 	 * Returned for every connection rather than only for one already set to a
@@ -671,7 +625,7 @@ class Rest_Controller {
 	private function one_click_payload( string $slot ): array {
 		$families = [];
 
-		foreach ( [ Broker::GOOGLE, Broker::MICROSOFT ] as $family ) {
+		foreach ( [ Broker::GOOGLE ] as $family ) {
 			$urls = \ModernMailer\Admin\Admin_Page::one_click_urls( $family, $slot );
 
 			$families[ $family ] = [

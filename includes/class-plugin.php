@@ -13,7 +13,6 @@ use ModernMailer\Admin\Site_Health;
 use ModernMailer\Api\Rest_Controller;
 use ModernMailer\Auth\Broker;
 use ModernMailer\Auth\Google_Consent;
-use ModernMailer\Auth\Microsoft_Consent;
 use ModernMailer\Auth\One_Click;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -30,9 +29,6 @@ class Plugin {
 	/** Set once the From address has been copied onto each connection. */
 	private const PER_CONNECTION_FROM_OPTION = 'mmoa_per_connection_from';
 
-	/** Guards the one-shot that pins ms_setup_mode before its default moved. */
-	private const PINNED_MS_MODE_OPTION = 'mmoa_pinned_ms_mode';
-
 	private static ?Plugin $instance = null;
 
 	public Secrets $secrets;
@@ -45,7 +41,6 @@ class Plugin {
 	public Site_Identity $identity;
 	public Broker $broker;
 	public Google_Consent $consent;
-	public Microsoft_Consent $ms_consent;
 	public One_Click $one_click;
 	public Dispatcher $dispatcher;
 	public Setup $setup;
@@ -70,7 +65,6 @@ class Plugin {
 		$this->identity   = new Site_Identity();
 		$this->broker     = new Broker( $this->http, $this->identity );
 		$this->consent    = new Google_Consent( $this->settings, $this->http, $this->connections );
-		$this->ms_consent = new Microsoft_Consent( $this->settings, $this->http, $this->connections );
 		$this->one_click  = new One_Click( $this->settings, $this->broker, $this->connections, $this->tokens );
 
 		$this->dispatcher = new Dispatcher(
@@ -107,14 +101,6 @@ class Plugin {
 			// before this one is set up as well as after.
 			$this->conflicts->register();
 		}
-
-		// The delegated Microsoft callback is served from a path rather than
-		// from admin-post.php, because Entra refuses a redirect URI with a
-		// query string whenever the app registration admits personal Microsoft
-		// accounts. Registered unconditionally: the request arrives on the
-		// front end, where is_admin() is false and the admin classes below are
-		// not loaded at all.
-		Microsoft_Consent::register_routes();
 
 		// Registered on every request, not only in the admin. The exporter
 		// and eraser callbacks run from WordPress's own privacy request
@@ -226,7 +212,6 @@ class Plugin {
 
 		$this->migrate_merged_providers();
 		$this->migrate_per_connection_from();
-		$this->migrate_pinned_microsoft_mode();
 	}
 
 	/**
@@ -279,61 +264,19 @@ class Plugin {
 	}
 
 	/**
-	 * Move connections onto the merged Microsoft and Google providers.
+	 * Move connections onto the merged Google provider.
 	 *
-	 * Those two tiles used to be four - Microsoft 365 and Outlook, Google
-	 * Workspace and Gmail - which asked an admin to choose an authentication
-	 * method before choosing a mail service. The methods survive unchanged as
-	 * the setup modes behind each tile, so this only has to restate an existing
-	 * choice in the new vocabulary: no credential is touched and no connection
-	 * changes how it sends.
+	 * That tile used to be two - Google Workspace and Gmail - which asked an
+	 * admin to choose an authentication method before choosing a mail service.
+	 * The methods survive unchanged as the setup modes behind the tile, so this
+	 * only has to restate an existing choice in the new vocabulary: no
+	 * credential is touched and no connection changes how it sends.
 	 *
 	 * Nothing here is strictly required for a site to keep working - the old
 	 * slugs are still registered and still constructible, which is deliberate,
 	 * because an upgrade must not be able to stop mail. Without the migration a
 	 * connection would simply keep its old tile until someone edited it.
 	 */
-	/**
-	 * Write down which Microsoft mode each connection is already using.
-	 *
-	 * The Graph API mode is no longer offered in the selector, and the
-	 * default moved off it. Both are safe for a connection that stored its
-	 * mode explicitly - the migration from the old `graph` slug did exactly
-	 * that, and so did anyone who touched the radio.
-	 *
-	 * What is not safe is a connection created after the tiles merged, which
-	 * took Graph because Graph was the default and therefore never stored
-	 * anything. Moving the default underneath it would silently re-point it
-	 * at a different transport, and the first anyone would know is mail no
-	 * longer going out. So the current answer is written down before the
-	 * default changes meaning.
-	 *
-	 * Only fills a blank, and only for Microsoft. A connection that chose
-	 * its mode is left exactly as it chose.
-	 */
-	private function migrate_pinned_microsoft_mode(): void {
-		if ( get_option( self::PINNED_MS_MODE_OPTION ) ) {
-			return;
-		}
-
-		foreach ( $this->connections->all() as $connection ) {
-			$scoped = $this->settings->for_slot( (string) $connection['slot'] );
-
-			if ( 'microsoft' !== (string) $scoped->get( 'provider' ) ) {
-				continue;
-			}
-
-			if ( $scoped->is_stored( 'ms_setup_mode' ) ) {
-				continue;
-			}
-
-			$scoped->update( [ 'ms_setup_mode' => Auth\One_Click::MODE_OWN_CLIENT ] );
-		}
-
-		Settings::flush_cache();
-		update_option( self::PINNED_MS_MODE_OPTION, time(), false );
-	}
-
 	private function migrate_merged_providers(): void {
 		if ( get_option( self::MERGED_PROVIDERS_OPTION ) ) {
 			return;
@@ -344,8 +287,6 @@ class Plugin {
 		// google_setup_mode to record whether its token was brokered, and that
 		// answer is still the right one.
 		$map = [
-			'graph'       => [ 'microsoft', 'ms_setup_mode', Auth\One_Click::MODE_OWN_CLIENT ],
-			'outlook'     => [ 'microsoft', 'ms_setup_mode', Auth\One_Click::MODE_ONE_CLICK ],
 			'gmail_sa'    => [ 'google', 'google_setup_mode', Providers\Google::MODE_SERVICE_ACCOUNT ],
 			'gmail_oauth' => [ 'google', 'google_setup_mode', null ],
 		];
@@ -391,13 +332,6 @@ class Plugin {
 		// from here: this runs inside the activation request, which WordPress
 		// is still in the middle of reporting on.
 		Setup::on_activate();
-
-		// The rule has to exist before the table is rebuilt, so it is added
-		// here rather than left to the init hook that will not run again
-		// before the flush.
-		Microsoft_Consent::add_rewrite();
-		flush_rewrite_rules( false );
-
 		if ( ! wp_next_scheduled( Queue::CRON_HOOK ) ) {
 			wp_schedule_event( time() + ( 5 * MINUTE_IN_SECONDS ), Queue::SCHEDULE_NAME, Queue::CRON_HOOK );
 		}

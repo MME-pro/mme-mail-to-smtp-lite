@@ -15,15 +15,6 @@ import { cn } from '../lib/utils';
  * the point of showing a logo at all.
  */
 
-const Microsoft = () => (
-	<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-		<path fill="#F25022" d="M2 2h9.5v9.5H2z" />
-		<path fill="#7FBA00" d="M12.5 2H22v9.5h-9.5z" />
-		<path fill="#00A4EF" d="M2 12.5h9.5V22H2z" />
-		<path fill="#FFB900" d="M12.5 12.5H22V22h-9.5z" />
-	</svg>
-);
-
 const Google = () => (
 	<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
 		<path
@@ -51,18 +42,6 @@ const Gmail = () => (
 		<path fill="#34A853" d="M2 18.5v-13L12 13l10-7.5v13a1.5 1.5 0 0 1-1.5 1.5H18V8.9l-6 4.5-6-4.5V20H3.5A1.5 1.5 0 0 1 2 18.5z" opacity="0" />
 		<path fill="#EA4335" d="M2 5.5A1.5 1.5 0 0 1 3.5 4h.7L12 9.8 19.8 4h.7A1.5 1.5 0 0 1 22 5.5L12 13 2 5.5z" />
 		<path fill="#34A853" d="M2 5.5 12 13 2 20.5z" opacity="0" />
-	</svg>
-);
-
-const Outlook = () => (
-	<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-		<rect x="9" y="4" width="13" height="16" rx="1.6" fill="#0F6CBD" />
-		<path fill="#fff" d="M11 7.4h9v1.5h-9zm0 3.9h9v1.5h-9zm0 3.9h6v1.5h-6z" opacity=".85" />
-		<rect x="2" y="5.6" width="11" height="12.8" rx="2" fill="#0364B8" />
-		<path
-			fill="#fff"
-			d="M7.5 8.3c-1.9 0-3.2 1.5-3.2 3.7s1.3 3.7 3.2 3.7 3.2-1.5 3.2-3.7-1.3-3.7-3.2-3.7zm0 1.6c1 0 1.6.8 1.6 2.1s-.6 2.1-1.6 2.1-1.6-.8-1.6-2.1.6-2.1 1.6-2.1z"
-		/>
 	</svg>
 );
 
@@ -128,13 +107,9 @@ const Resend = () => (
 );
 
 const MARKS = {
-	// The merged tiles, and the legacy slugs a connection may still
+	// The merged tile, and the legacy slugs a connection may still
 	// store until the migration runs.
-	microsoft: Microsoft,
 	google: Google,
-
-	graph: Microsoft,
-	outlook: Outlook,
 	gmail_sa: Google,
 	gmail_oauth: Gmail,
 	sendgrid: SendGrid,

@@ -9,7 +9,6 @@ namespace ModernMailer\Admin;
 
 use ModernMailer\Auth\Broker;
 use ModernMailer\Auth\Google_Consent;
-use ModernMailer\Auth\Microsoft_Consent;
 use ModernMailer\Auth\One_Click;
 use ModernMailer\Plugin;
 use ModernMailer\Settings;
@@ -40,7 +39,6 @@ class Admin_Page {
 	 * Credential fields: form name => Secrets key.
 	 */
 	private const SECRET_FIELDS = [
-		'ms_client_secret'  => 'ms_client_secret',
 		'google_sa_key'     => 'google_sa_key',
 		'google_client_sec' => 'google_client_sec',
 	];
@@ -75,16 +73,7 @@ class Admin_Page {
 		// otherwise silently break every existing connection.
 		add_action( 'admin_post_' . Google_Consent::CALLBACK_ACTION, [ $this, 'handle_google_callback' ] );
 
-		// The delegated Microsoft path, which is the same shape as Google's and
-		// for the same reason: an OAuth handshake is a full page navigation, so
-		// it cannot be an XHR. Its redirect lands on admin-post.php too, because
-		// the URI is registered by hand in Entra and must not move when a menu
-		// does.
-		add_action( 'admin_post_mmoa_connect_microsoft', [ $this, 'handle_connect_microsoft' ] );
-		add_action( 'admin_post_mmoa_disconnect_microsoft', [ $this, 'handle_disconnect_microsoft' ] );
-		add_action( 'admin_post_' . Microsoft_Consent::CALLBACK_ACTION, [ $this, 'handle_microsoft_callback' ] );
-
-		// One-click uses the same shape for Google and Microsoft, because the
+		// One-click keeps the same shape as the own-client path, because the
 		// difference between them lives entirely inside the broker.
 		add_action( 'admin_post_mmoa_one_click_connect', [ $this, 'handle_one_click_connect' ] );
 		add_action( 'admin_post_mmoa_one_click_disconnect', [ $this, 'handle_one_click_disconnect' ] );
@@ -122,7 +111,7 @@ class Admin_Page {
 	/**
 	 * Connection-scoped setting keys, by sanitizer shape.
 	 */
-	private const CONNECTION_TEXT_FIELDS = [ 'provider', 'ms_tenant_id', 'ms_client_id', 'ms_sender', 'google_sa_email', 'google_sender', 'google_client_id' ];
+	private const CONNECTION_TEXT_FIELDS = [ 'provider', 'google_sa_email', 'google_sender', 'google_client_id' ];
 
 	public function handle_save(): void {
 		$this->guard( 'mmoa_save' );
@@ -170,14 +159,6 @@ class Admin_Page {
 			if ( isset( $posted[ $name ] ) ) {
 				$values[ $key ] = $posted[ $name ];
 			}
-		}
-
-		$values['ms_policy_ack'] = ! empty( $posted[ $this->name( 'ms_policy_ack', $slot ) ] );
-
-		$expires = $posted[ $this->name( 'ms_secret_expires', $slot ) ] ?? '';
-
-		if ( '' !== $expires ) {
-			$values['ms_secret_expires'] = (int) strtotime( sanitize_text_field( (string) $expires ) );
 		}
 
 		$settings->update( $values );
@@ -350,82 +331,6 @@ class Admin_Page {
 		}
 
 		$this->redirect_to_app( 'saved', __( 'Google account disconnected.', 'modern-mailer-oauth' ) );
-	}
-
-	/**
-	 * Hand the browser to Microsoft's sign-in prompt.
-	 */
-	public function handle_connect_microsoft(): void {
-		$this->guard( 'mmoa_connect_microsoft' );
-
-		$slot = $this->posted_slot();
-		$url  = $this->plugin->ms_consent->authorization_url( $slot );
-
-		if ( is_wp_error( $url ) ) {
-			$this->redirect_to_app( 'error', $url->get_error_message() );
-		}
-
-		// Not wp_safe_redirect(): login.microsoftonline.com is deliberately
-		// off-host, so the local-host allowlist would refuse it.
-		wp_redirect( $url ); // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
-		exit;
-	}
-
-	/**
-	 * Forget the stored Microsoft grant.
-	 */
-	public function handle_disconnect_microsoft(): void {
-		$this->guard( 'mmoa_disconnect_microsoft' );
-
-		$slot   = $this->posted_slot();
-		$result = $this->plugin->ms_consent->disconnect( $slot );
-
-		// Flushed either way: the cached access token was minted from a grant
-		// that no longer exists here.
-		$this->plugin->tokens->flush();
-
-		if ( is_wp_error( $result ) ) {
-			$this->redirect_to_app( 'error', $result->get_error_message() );
-		}
-
-		// Says where the other half of the job is, because Microsoft has no
-		// endpoint that revokes one grant - only the account owner can, from the
-		// portal. Claiming the access had been revoked would be untrue.
-		$this->redirect_to_app(
-			'saved',
-			__( 'Microsoft account disconnected here. Microsoft cannot revoke a single sign-in remotely, so remove this app under My Applications in your Microsoft account if you want the grant withdrawn as well.', 'modern-mailer-oauth' )
-		);
-	}
-
-	/**
-	 * Microsoft's redirect back, carrying the authorization code.
-	 */
-	public function handle_microsoft_callback(): void {
-		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'You are not allowed to change these settings.', 'modern-mailer-oauth' ) );
-		}
-
-		// No nonce, by necessity: this request comes from Microsoft rather than
-		// from a form of ours. The state parameter is the CSRF defence, checked
-		// against a transient written before leaving and binned on arrival so a
-		// replay cannot reuse it.
-		$result = $this->plugin->ms_consent->handle_callback( wp_unslash( $_GET ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-
-		$this->plugin->tokens->flush();
-		$this->plugin->health->reset();
-
-		if ( is_wp_error( $result ) ) {
-			$this->redirect_to_app( 'error', $result->get_error_message() );
-		}
-
-		$this->redirect_to_app(
-			'saved',
-			sprintf(
-				/* translators: %s: connection name, e.g. Primary. */
-				__( 'Microsoft account connected to %s. Send a test email to confirm delivery.', 'modern-mailer-oauth' ),
-				$this->plugin->connections->name_for( $result )
-			)
-		);
 	}
 
 	/**
@@ -603,21 +508,6 @@ class Admin_Page {
 		$out = [];
 
 		foreach ( [ 'connect' => 'mmoa_connect_google', 'disconnect' => 'mmoa_disconnect_google' ] as $key => $action ) {
-			$out[ $key ] = self::signed_url( $action, [ 'slot' => $slot ] );
-		}
-
-		return $out;
-	}
-
-	/**
-	 * The same pair for the delegated Microsoft connection.
-	 *
-	 * @return array{connect:string,disconnect:string}
-	 */
-	public static function microsoft_urls( string $slot ): array {
-		$out = [];
-
-		foreach ( [ 'connect' => 'mmoa_connect_microsoft', 'disconnect' => 'mmoa_disconnect_microsoft' ] as $key => $action ) {
 			$out[ $key ] = self::signed_url( $action, [ 'slot' => $slot ] );
 		}
 

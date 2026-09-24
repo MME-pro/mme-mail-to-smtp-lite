@@ -186,7 +186,7 @@ class Http {
 	}
 
 	/**
-	 * Honour a Retry-After header, which Microsoft Graph and Google both send
+	 * Honour a Retry-After header, which Google and most API services send
 	 * on 429. Falls back to plain backoff when absent or unparseable.
 	 *
 	 * @param array|\WP_HTTP_Requests_Response $response Raw wp_remote response.

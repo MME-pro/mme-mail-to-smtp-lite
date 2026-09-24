@@ -55,10 +55,6 @@ class Plugin {
 	public Dispatcher $dispatcher;
 	public Setup $setup;
 	public Conflicts $conflicts;
-	public Portal $portal;
-	public Licence $licence;
-	public Usage $usage;
-	public Install_Report $install_report;
 
 	public static function instance(): Plugin {
 		if ( null === self::$instance ) {
@@ -85,14 +81,6 @@ class Plugin {
 		$this->ms_consent = new Microsoft_Consent( $this->settings, $this->http, $this->connections );
 		$this->one_click  = new One_Click( $this->settings, $this->broker, $this->connections, $this->tokens );
 
-		// The licensing side. None of it is on the path a message takes: the
-		// dispatcher is handed the meter and nothing else, and a portal that is
-		// unreachable or switched off cannot stop a send.
-		$this->portal         = new Portal( $this->http, $this->identity, $this->settings, $this->connections );
-		$this->licence        = new Licence();
-		$this->usage          = new Usage();
-		$this->install_report = new Install_Report( $this->portal, $this->usage );
-
 		$this->dispatcher = new Dispatcher(
 			$this->settings,
 			$this->tokens,
@@ -100,8 +88,7 @@ class Plugin {
 			$this->logger,
 			$this->health,
 			$this->queue,
-			$this->router,
-			$this->usage
+			$this->router
 		);
 		$this->setup      = new Setup( $this->settings );
 		$this->conflicts  = new Conflicts( $this->settings );
@@ -119,10 +106,6 @@ class Plugin {
 		add_action( 'mmoa_backup_used', [ $this, 'alert_backup_used' ], 10, 2 );
 		add_action( Queue::CRON_HOOK, [ $this, 'drain_queue' ] );
 
-		// Registered on every request rather than only in the admin: the daily
-		// check-in runs on cron, which is not an admin request, and the
-		// one-shot registration hooks admin_init itself.
-		$this->install_report->register_hooks();
 		$this->report->register();
 		add_filter( 'cron_schedules', [ $this, 'register_schedule' ] );
 		add_action( 'admin_init', [ $this, 'maybe_upgrade' ] );
@@ -276,7 +259,6 @@ class Plugin {
 	public function maybe_upgrade(): void {
 		Logger::install();
 		Queue::install();
-		Usage::install();
 
 		if ( ! wp_next_scheduled( Queue::CRON_HOOK ) ) {
 			wp_schedule_event( time() + ( 5 * MINUTE_IN_SECONDS ), Queue::SCHEDULE_NAME, Queue::CRON_HOOK );
@@ -445,14 +427,6 @@ class Plugin {
 	public static function activate(): void {
 		Logger::install();
 		Queue::install();
-		Usage::install();
-
-		// Asks the portal to be told about this site. Like the wizard below it
-		// cannot happen here - a network call inside the activation request
-		// would make activating the plugin feel slow on a host with a poor
-		// route, and would fail in a way WordPress reports as a plugin error.
-		Install_Report::on_activate();
-
 		// Asks for the wizard on the next admin screen. It cannot redirect
 		// from here: this runs inside the activation request, which WordPress
 		// is still in the middle of reporting on.
@@ -474,7 +448,7 @@ class Plugin {
 	}
 
 	public static function deactivate(): void {
-		foreach ( [ Logger::CRON_HOOK, Queue::CRON_HOOK, Install_Report::CRON_HOOK ] as $hook ) {
+		foreach ( [ Logger::CRON_HOOK, Queue::CRON_HOOK ] as $hook ) {
 			$timestamp = wp_next_scheduled( $hook );
 
 			if ( $timestamp ) {

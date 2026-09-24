@@ -47,16 +47,6 @@ class Dispatcher {
 	 */
 	private bool $testing = false;
 
-	/**
-	 * Whether this message has already been counted against the meter.
-	 *
-	 * One message counts once. dispatch() may call attempt() twice - primary,
-	 * then backup - and both are the same message as far as anybody paying for
-	 * it is concerned. A retry off the queue is the same message again, so it
-	 * starts already counted.
-	 */
-	private bool $counted = false;
-
 	public function __construct(
 		private Settings $settings,
 		private Token_Store $tokens,
@@ -64,8 +54,7 @@ class Dispatcher {
 		private Logger $logger,
 		private Health_Monitor $health,
 		private Queue $queue,
-		private Router $router,
-		private ?Usage $usage = null
+		private Router $router
 	) {}
 
 	/**
@@ -153,12 +142,6 @@ class Dispatcher {
 		$slot = $this->testing
 			? Settings::SLOT_PRIMARY
 			: ( $forced_slot ?? $this->route( $raw_mime, $mailer ) );
-
-		// A message arriving with a slot already chosen came off the queue,
-		// which means it was counted when it was first attempted. Everything
-		// else starts uncounted and is counted once, whichever connection ends
-		// up carrying it.
-		$this->counted = null !== $forced_slot;
 
 		$result = $this->attempt( $slot, $raw_mime, $mailer );
 
@@ -391,18 +374,6 @@ class Dispatcher {
 
 			$result = $provider->send( $raw_mime, $mailer );
 
-			// Counted on the attempt rather than on success, and only when the
-			// provider is metered. A message that reached the provider and was
-			// refused still consumed the thing being metered - the convenience
-			// of this connection - and counting only successes would understate
-			// what the connection actually carried.
-			//
-			// A retry off the queue arrives here again, so the queue marks a
-			// message as already counted before it stores it.
-			if ( null !== $this->usage && ! $this->counted ) {
-				$this->usage->record( Usage::is_metered( $provider ) );
-				$this->counted = true;
-			}
 		}
 
 		// Every attempt is logged, including one the backup went on to rescue -

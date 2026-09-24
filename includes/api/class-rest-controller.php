@@ -261,35 +261,6 @@ class Rest_Controller {
 			]
 		);
 
-		/**
-		 * The one public route in the plugin.
-		 *
-		 * The portal calls it to prove this site controls the domain it
-		 * registered under: registration is necessarily unauthenticated, so
-		 * without this anybody could POST somebody else's domain and have it
-		 * recorded as theirs.
-		 *
-		 * It returns the challenge and nothing else - no version, no settings,
-		 * no site data - so it tells a scanner nothing it did not already know
-		 * from the fact that a URL exists. The challenge is single-purpose,
-		 * issued by the portal, and only meaningful to whoever issued it.
-		 */
-		register_rest_route(
-			self::NAMESPACE,
-			'/handshake',
-			[
-				'methods'             => WP_REST_Server::READABLE,
-				'callback'            => [ $this, 'handshake' ],
-				'permission_callback' => '__return_true',
-				'args'                => [
-					'c' => [
-						'required'          => true,
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-				],
-			]
-		);
-
 		register_rest_route(
 			self::NAMESPACE,
 			'/alerts',
@@ -320,23 +291,6 @@ class Rest_Controller {
 						'required'          => true,
 						'sanitize_callback' => 'sanitize_key',
 					],
-				],
-			]
-		);
-
-		register_rest_route(
-			self::NAMESPACE,
-			'/licence',
-			[
-				[
-					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => [ $this, 'get_licence' ],
-					'permission_callback' => $auth,
-				],
-				[
-					'methods'             => WP_REST_Server::EDITABLE,
-					'callback'            => [ $this, 'update_licence' ],
-					'permission_callback' => $auth,
 				],
 			]
 		);
@@ -389,145 +343,8 @@ class Rest_Controller {
 				// wizard exists: whether an admin arriving at the app should
 				// be shown the dashboard or taken into setup.
 				'setup'       => $this->plugin->setup->state(),
-
-				// Carried on the first request for the same reason `setup` is:
-				// the header and the dashboard both read the licence and the
-				// month's count before any screen renders.
-				'licence'     => $this->plugin->licence->state(),
-				'usage'       => $this->plugin->usage->state(),
 			]
 		);
-	}
-
-	/**
-	 * Echo the challenge the portal issued, and only if it is the right one.
-	 *
-	 * Compared in constant time, and against the value this site was given at
-	 * registration. Answering any challenge would prove nothing; answering only
-	 * the issued one proves the caller is talking to the site that registered.
-	 */
-	public function handshake( WP_REST_Request $request ): WP_REST_Response {
-		$offered  = (string) $request->get_param( 'c' );
-		$expected = (string) ( \ModernMailer\Portal::state()['challenge'] ?? '' );
-
-		if ( '' === $expected || '' === $offered || ! hash_equals( $expected, $offered ) ) {
-			return new WP_REST_Response( [ 'error' => 'no_challenge' ], 404 );
-		}
-
-		return new WP_REST_Response( [ 'challenge' => $expected ] );
-	}
-
-	public function get_licence(): WP_REST_Response {
-		return new WP_REST_Response( $this->licence_payload() );
-	}
-
-	/**
-	 * Activate, release, or re-check a licence key.
-	 *
-	 * Every branch answers with the same payload the GET returns, so the screen
-	 * replaces its state from the response rather than guessing what changed.
-	 */
-	public function update_licence( WP_REST_Request $request ): WP_REST_Response {
-		$body   = (array) $request->get_json_params();
-		$action = isset( $body['action'] ) ? sanitize_key( (string) $body['action'] ) : 'activate';
-
-		$portal  = $this->plugin->portal;
-		$licence = $this->plugin->licence;
-
-		if ( 'deactivate' === $action ) {
-			$result = $portal->call( 'POST', 'v1/licences/deactivate' );
-
-			$licence->forget();
-
-			return new WP_REST_Response(
-				array_merge(
-					[
-						'ok'      => ! is_wp_error( $result ),
-						'message' => is_wp_error( $result )
-							? $result->get_error_message()
-							: __( 'Licence released. This site is on the free tier, and the key can be used elsewhere.', 'modern-mailer-oauth' ),
-					],
-					$this->licence_payload()
-				)
-			);
-		}
-
-		if ( 'verify' === $action ) {
-			$result = $this->plugin->install_report->reverify();
-
-			return new WP_REST_Response(
-				array_merge(
-					[
-						'ok'      => ! is_wp_error( $result ),
-						'message' => is_wp_error( $result )
-							? $result->get_error_message()
-							: ( ! empty( $result['install']['verified'] )
-								? __( 'Verified. This site can hold a licence now.', 'modern-mailer-oauth' )
-								: sprintf(
-									/* translators: %s: the reason the callback failed, e.g. http_403. */
-									__( 'Still not verified: %s. The portal has to reach this site over HTTPS at its own address.', 'modern-mailer-oauth' ),
-									(string) ( $result['install']['verify_error'] ?? 'unknown' )
-								) ),
-					],
-					$this->licence_payload()
-				)
-			);
-		}
-
-		// Activation. The key is stored first, so a portal that is slow or down
-		// does not lose what the administrator typed - they can press the
-		// button again rather than finding the field empty.
-		$key = isset( $body['key'] ) ? sanitize_text_field( (string) $body['key'] ) : '';
-
-		if ( '' !== $key ) {
-			$licence->set_key( $key );
-		}
-
-		$result = $portal->call( 'POST', 'v1/licences/activate', [ 'key' => $licence->key() ] );
-
-		if ( is_wp_error( $result ) ) {
-			return new WP_REST_Response(
-				array_merge(
-					[ 'ok' => false, 'message' => $result->get_error_message() ],
-					$this->licence_payload()
-				)
-			);
-		}
-
-		if ( empty( $result['ok'] ) ) {
-			return new WP_REST_Response(
-				array_merge(
-					[
-						'ok'      => false,
-						'code'    => (string) ( $result['code'] ?? '' ),
-						'message' => (string) ( $result['message'] ?? __( 'The licence could not be activated.', 'modern-mailer-oauth' ) ),
-					],
-					$this->licence_payload()
-				)
-			);
-		}
-
-		$licence->store( $result );
-
-		return new WP_REST_Response(
-			array_merge(
-				[
-					'ok'      => true,
-					'message' => (string) ( $result['message'] ?? __( 'Licence activated.', 'modern-mailer-oauth' ) ),
-				],
-				$this->licence_payload()
-			)
-		);
-	}
-
-	/**
-	 * @return array<string,mixed>
-	 */
-	private function licence_payload(): array {
-		return [
-			'licence' => $this->plugin->licence->state(),
-			'usage'   => $this->plugin->usage->state(),
-		];
 	}
 
 	public function get_setup(): WP_REST_Response {

@@ -12,7 +12,6 @@ import Logs from './screens/logs';
 import Routing from './screens/routing';
 import Settings from './screens/settings';
 import Setup from './screens/setup';
-import Licence from './screens/licence';
 import Alerts from './screens/alerts';
 
 const queryClient = new QueryClient( {
@@ -97,7 +96,6 @@ const Shell = () => {
 						<Route path="/alerts" element={ <Alerts /> } />
 						<Route path="/logs" element={ <Logs /> } />
 						<Route path="/settings" element={ <Settings /> } />
-						<Route path="/licence" element={ <Licence /> } />
 						<Route
 							path="*"
 							element={ <Navigate to="/dashboard" replace /> }

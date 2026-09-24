@@ -23,16 +23,14 @@ defined( 'ABSPATH' ) || exit;
 /**
  * The alert system: which channels exist, whether to fire, and firing.
  *
- * ## Three things are easy to confuse, so they are named here once
+ * ## Two things are easy to confuse, so they are named here once
  *
- * The plugin has three unrelated pieces of periodic behaviour, and support
- * questions constantly conflate them:
+ * The plugin has two unrelated pieces of failure-handling behaviour, and
+ * support questions constantly conflate them:
  *
- * 1. **The portal check-in** (Install_Report) runs daily and is about
- *    licensing. It never emails anybody and has nothing to do with alerts.
- * 2. **The health monitor** (Health_Monitor) counts consecutive failures. It
+ * 1. **The health monitor** (Health_Monitor) counts consecutive failures. It
  *    is a counter, not a notifier.
- * 3. **Alerts** - this class - is the only thing that contacts a human, and it
+ * 2. **Alerts** - this class - is the only thing that contacts a human, and it
  *    does so in response to an event, never on a timer.
  *
  * ## When an alert fires

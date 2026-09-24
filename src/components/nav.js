@@ -7,7 +7,6 @@ import {
 	ScrollText,
 	Settings2,
 	Route as RouteIcon,
-	KeyRound,
 	TriangleAlert,
 	CircleCheck,
 	Clock,
@@ -25,7 +24,6 @@ const TABS = [
 	{ to: '/routing', label: __( 'Routing', 'modern-mailer-oauth' ), icon: RouteIcon },
 	{ to: '/logs', label: __( 'Email Logs', 'modern-mailer-oauth' ), icon: ScrollText },
 	{ to: '/alerts', label: __( 'Alerts', 'modern-mailer-oauth' ), icon: Bell },
-	{ to: '/licence', label: __( 'Licence', 'modern-mailer-oauth' ), icon: KeyRound },
 	{ to: '/settings', label: __( 'Settings', 'modern-mailer-oauth' ), icon: Settings2 },
 ];
 

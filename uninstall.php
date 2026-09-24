@@ -9,13 +9,8 @@ defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
 require_once __DIR__ . '/includes/class-logger.php';
 require_once __DIR__ . '/includes/class-queue.php';
-require_once __DIR__ . '/includes/class-usage.php';
 
 ModernMailer\Logger::uninstall();
-
-// The month's send counts. Nothing in them is personal - they are two integers
-// a month - but they are ours and they go with everything else.
-ModernMailer\Usage::uninstall();
 
 // The queue can hold message bodies, so dropping it is the one step here that
 // removes actual content rather than configuration.
@@ -40,10 +35,6 @@ foreach (
 		'mmoa_pinned_ms_mode',
 		'mmoa_setup',
 		'mmoa_setup_redirect',
-		'mmoa_portal',
-		'mmoa_licence',
-		'mmoa_portal_register',
-		'mmoa_usage_db_version',
 
 		// The alert channels. Their secrets live under the 'alerts' slot in
 		// Secrets and are removed with the rest of the credentials below.

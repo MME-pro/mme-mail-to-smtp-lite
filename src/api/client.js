@@ -122,23 +122,6 @@ export const saveAlerts = ( data ) => request( '/alerts', { method: 'POST', data
 export const testAlert = ( channel ) =>
 	request( '/alerts/test', { method: 'POST', data: { channel } } );
 
-export const getLicence = () => request( '/licence' );
-
-/**
- * Licence actions.
- *
- * One route rather than three, because every one of them answers with the same
- * state and the screen replaces what it holds from the response. Guessing what
- * changed is how a licence screen ends up disagreeing with the server about
- * whether a site is licensed.
- */
-const licenceAction = ( action, extra = {} ) =>
-	request( '/licence', { method: 'POST', data: { action, ...extra } } );
-
-export const activateLicence = ( key ) => licenceAction( 'activate', { key } );
-export const deactivateLicence = () => licenceAction( 'deactivate' );
-export const verifyDomain = () => licenceAction( 'verify' );
-
 export const getRouting = () => request( '/routing' );
 
 export const saveRouting = ( enabled, rules ) =>

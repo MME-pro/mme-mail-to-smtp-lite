@@ -1,0 +1,145 @@
+import apiFetch from '@wordpress/api-fetch';
+
+const NS = 'modern-mailer/v1';
+
+/**
+ * One place that talks to the REST API.
+ *
+ * Every call goes through here so the nonce, the namespace and error handling
+ * are decided once. WordPress's apiFetch rejects with the decoded body rather
+ * than an Error, which reads as an empty message if you let it through - so
+ * failures are normalised into something with a `message` a component can show.
+ */
+const request = async ( path, options = {} ) => {
+	try {
+		return await apiFetch( { path: `/${ NS }${ path }`, ...options } );
+	} catch ( error ) {
+		throw {
+			message:
+				error?.message ||
+				'The request failed. Check that you are still signed in.',
+			code: error?.code || 'unknown',
+		};
+	}
+};
+
+export const getBootstrap = () => request( '/bootstrap' );
+export const getSettings = () => request( '/settings' );
+export const getDashboard = () => request( '/dashboard' );
+/**
+ * One page of the send log.
+ *
+ * Status and search are sent to the server rather than applied here, because
+ * a filter that only sees the current page is not a filter.
+ */
+export const getLogs = ( { page = 1, perPage = 25, status = '', search = '' } = {} ) => {
+	const query = new URLSearchParams( {
+		page: String( page ),
+		per_page: String( perPage ),
+	} );
+
+	if ( status ) {
+		query.set( 'status', status );
+	}
+
+	if ( search ) {
+		query.set( 'search', search );
+	}
+
+	return request( `/logs?${ query.toString() }` );
+};
+
+/**
+ * One entry with its diagnostic report.
+ *
+ * Its own request, because a report runs to kilobytes and a page of fifty
+ * failures would otherwise carry a megabyte nobody has asked to read.
+ */
+export const getLogEntry = ( id ) => request( `/logs/${ id }` );
+export const getQueue = () => request( '/queue' );
+export const getConnection = ( slot ) => request( `/connections/${ slot }` );
+
+export const saveSettings = ( data ) =>
+	request( '/settings', { method: 'POST', data } );
+
+export const saveConnection = ( slot, data ) =>
+	request( `/connections/${ slot }`, { method: 'POST', data } );
+
+export const verifyConnection = ( slot ) =>
+	request( `/connections/${ slot }/verify`, { method: 'POST' } );
+
+/** Clear a connection: its provider, credentials and any grant it holds. */
+export const disconnectConnection = ( slot ) =>
+	request( `/connections/${ slot }/disconnect`, { method: 'POST' } );
+
+export const sendTestEmail = ( to ) =>
+	request( '/test-email', { method: 'POST', data: { to } } );
+
+export const queueAction = ( action ) =>
+	request( `/queue/${ action }`, { method: 'POST' } );
+
+export const listConnections = () => request( '/connections' );
+
+export const addConnection = ( name ) =>
+	request( '/connections', { method: 'POST', data: { name } } );
+
+export const renameConnection = ( id, name ) =>
+	request( `/connections/${ id }/manage`, { method: 'POST', data: { name } } );
+
+export const deleteConnection = ( id ) =>
+	request( `/connections/${ id }/manage`, { method: 'DELETE' } );
+
+/**
+ * Wizard bookkeeping.
+ *
+ * The step is recorded server-side rather than kept in the URL, because
+ * connecting a mailbox hands the browser to Google or Microsoft and gets it
+ * back as a fresh page load - and the wizard has to resume where it was rather
+ * than at the beginning.
+ *
+ * There is no getter here. The state is small and the shell needs it on the
+ * first paint anyway, so it rides along on /bootstrap rather than costing a
+ * second request.
+ */
+const setupAction = ( action, extra = {} ) =>
+	request( '/setup', { method: 'POST', data: { action, ...extra } } );
+
+export const setSetupStep = ( step ) => setupAction( 'step', { step } );
+export const completeSetup = () => setupAction( 'complete' );
+export const skipSetup = () => setupAction( 'skip' );
+
+export const getAlerts = () => request( '/alerts' );
+
+export const saveAlerts = ( data ) => request( '/alerts', { method: 'POST', data } );
+
+/**
+ * Send a test alert down one channel.
+ *
+ * Deliberately its own route rather than a flag on the save: an administrator
+ * testing a channel wants to know whether the credentials work right now, not
+ * whether they worked at the moment the form was last submitted.
+ */
+export const testAlert = ( channel ) =>
+	request( '/alerts/test', { method: 'POST', data: { channel } } );
+
+export const getLicence = () => request( '/licence' );
+
+/**
+ * Licence actions.
+ *
+ * One route rather than three, because every one of them answers with the same
+ * state and the screen replaces what it holds from the response. Guessing what
+ * changed is how a licence screen ends up disagreeing with the server about
+ * whether a site is licensed.
+ */
+const licenceAction = ( action, extra = {} ) =>
+	request( '/licence', { method: 'POST', data: { action, ...extra } } );
+
+export const activateLicence = ( key ) => licenceAction( 'activate', { key } );
+export const deactivateLicence = () => licenceAction( 'deactivate' );
+export const verifyDomain = () => licenceAction( 'verify' );
+
+export const getRouting = () => request( '/routing' );
+
+export const saveRouting = ( enabled, rules ) =>
+	request( '/routing', { method: 'POST', data: { enabled, rules } } );

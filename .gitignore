@@ -1,0 +1,19 @@
+# Generated on demand by tests/run.sh — never commit a private key.
+tests/*.pem
+
+.DS_Store
+*.log
+
+# Node toolchain for the admin app. build/ IS committed, so the plugin can be
+# installed from the repo without anyone needing to run npm.
+node_modules/
+
+# The broker's live configuration holds the OAuth client secrets that are the
+# whole reason it exists. The example file is committed; this one never is.
+.env.broker
+broker/.env.broker
+
+# The licensing portal is its own repository (MME-pro/mme-portal). Ignored
+# here so it is never committed twice, and so that git does not record it as
+# a gitlink the moment somebody runs `git add .` in this directory.
+portal/

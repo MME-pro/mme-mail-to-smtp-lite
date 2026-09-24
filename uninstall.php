@@ -1,0 +1,71 @@
+<?php
+/**
+ * Removes everything the plugin created.
+ *
+ * @package ModernMailer
+ */
+
+defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
+
+require_once __DIR__ . '/includes/class-logger.php';
+require_once __DIR__ . '/includes/class-queue.php';
+require_once __DIR__ . '/includes/class-usage.php';
+
+ModernMailer\Logger::uninstall();
+
+// The month's send counts. Nothing in them is personal - they are two integers
+// a month - but they are ours and they go with everything else.
+ModernMailer\Usage::uninstall();
+
+// The queue can hold message bodies, so dropping it is the one step here that
+// removes actual content rather than configuration.
+ModernMailer\Queue::uninstall();
+
+// Every option the plugin writes, including the migration flags and the
+// site identifier. Four of these were missed as they were added, so an
+// uninstall left rows behind that nothing would ever read again - and one
+// of them, the site identifier, is what the setup service knows this site
+// by. Uninstall should mean uninstalled.
+foreach (
+	[
+		'mmoa_settings',
+		'mmoa_secrets',
+		'mmoa_tokens',
+		'mmoa_health',
+		'mmoa_db_version',
+		'mmoa_queue_db_version',
+		'mmoa_site_id',
+		'mmoa_merged_providers',
+		'mmoa_per_connection_from',
+		'mmoa_pinned_ms_mode',
+		'mmoa_setup',
+		'mmoa_setup_redirect',
+		'mmoa_portal',
+		'mmoa_licence',
+		'mmoa_portal_register',
+		'mmoa_usage_db_version',
+
+		// The alert channels. Their secrets live under the 'alerts' slot in
+		// Secrets and are removed with the rest of the credentials below.
+		'mmoa_alerts',
+	] as $option
+) {
+	delete_option( $option );
+}
+
+// Per-user state: which administrators dismissed the notice about another
+// mailer being installed. Stored against the user rather than the site, so it
+// is deleted for everybody rather than for whoever runs the uninstall.
+delete_metadata( 'user', 0, 'mmoa_dismissed_mailers', '', true );
+
+// Refresh locks are transient by nature but are stored as options, so a crash
+// during uninstall of an earlier version could leave one behind.
+global $wpdb;
+
+$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+	"DELETE FROM {$wpdb->options} WHERE option_name LIKE 'mmoa\_lock\_%'"
+);
+
+wp_clear_scheduled_hook( 'mmoa_prune_log' );
+wp_clear_scheduled_hook( 'mmoa_drain_queue' );
+wp_clear_scheduled_hook( 'mmoa_weekly_report' );

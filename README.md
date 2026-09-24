@@ -1,0 +1,293 @@
+# MME-Mail to SMTP Lite
+
+A WordPress plugin that sends mail through the **Microsoft Graph** and **Gmail** APIs
+using OAuth 2.0 — no mailbox password, and nothing that quietly expires.
+
+> **Status: early.** All three providers, the backup connection, the retry queue and the
+> Gmail sign-in flow are built and covered by 195 passing assertions — but **none of it has
+> been run against a live Microsoft or Google endpoint yet**, and large attachments are
+> still capped at ~2 MB. See [Status](#status) and [docs/STATUS.md](docs/STATUS.md).
+
+## Why
+
+Two separate things break WordPress email on Microsoft 365, and they need different fixes.
+
+**1. Basic authentication is going away.** Pointing WordPress at `smtp.office365.com`
+with a mailbox password is on a terminal path — disabled by default for existing tenants
+at the end of 2026, unavailable for new tenants after that.
+
+**2. The usual OAuth replacement introduces its own failure.** Signing in interactively
+stores a *refresh token*, and refresh tokens die: after ~90 days idle, on a password
+change, on an MFA enrolment, on any Conditional Access change. When one dies, sending
+stops **silently**, because almost no WordPress code checks what `wp_mail()` returned.
+
+This plugin removes the refresh token from the design. Microsoft 365 uses **app-only**
+authentication (client credentials): the site holds a credential, mints a short-lived
+token whenever it needs one, and there is nothing left to expire. Google Workspace uses a
+**service account** with domain-wide delegation, which has the same property.
+
+### A third failure, found in real logs
+
+Diagnosing a live site turned up something neither of the above fixes: a **brief network
+blip** — the server unreachable for a millisecond or two — caused the token request to
+fail. The mailer didn't check, carried on to the send step with an empty URL, and
+WordPress rejected it with *"A valid URL was not provided."* The email was marked failed
+and discarded. Over a year that cost the site 89 emails, including customer enquiries,
+at a 4% loss rate.
+
+The error message named the wrong thing entirely, which is what made it so hard to chase.
+
+Follow-up log analysis on that site sharpened the picture. The token request was failing
+with `cURL error 7 ... after 1 ms` — refused instantly, not timed out — recurring for
+minutes at a stretch while the credentials were entirely correct. So the fault was the
+host's outbound DNS, and every one of the lost emails was deliverable moments later.
+
+Four defences against that are now in place:
+
+1. **No URL is ever derived from a response body**, and a URL that would be empty is
+   rejected by name rather than becoming a misleading transport error.
+2. **Tokens are cached for their full lifetime**, so most sends never touch the identity
+   endpoint at all — and if a refresh fails while the previous token is still valid, that
+   token is used rather than losing the message.
+3. **A backup connection** is tried immediately when the primary fails. Separate
+   credentials and a separate endpoint, so it survives faults that are permanent for the
+   primary.
+4. **A persistent retry queue** holds anything that failed for a transient reason and
+   retries it across later requests, backing off from five minutes over roughly two days.
+   In-request retries span seconds; this is the only layer that outlives the outage that
+   actually loses mail.
+
+Failures that cannot be helped by any of that — an oversized attachment, a wrong client
+secret — are never queued and never retried on the backup, because the answer would be the
+same every time.
+
+## How it works
+
+Both target APIs accept a complete RFC 822 message:
+
+| Transport | Endpoint | Field |
+|---|---|---|
+| Microsoft Graph | `POST /v1.0/users/{upn}/sendMail`, `Content-Type: text/plain` | base64 of the MIME |
+| Gmail | `POST /gmail/v1/users/{sub}/messages/send` | `{"raw": "<base64url MIME>"}` |
+
+So PHPMailer builds the message **once** and the same bytes go to either transport.
+Attachments, inline `cid:` images, `Reply-To`, `Cc`/`Bcc`, custom headers and encoding are
+all handled by WordPress core code rather than reassembled by hand into a JSON object —
+which is where mailers that do reassemble them accumulate a long tail of "the attachment
+vanished" reports.
+
+Adding a transport means implementing three methods, not re-solving MIME.
+
+## Requirements
+
+- WordPress 6.5+, PHP 8.0+
+- Microsoft path: a Microsoft 365 / Entra **work or school** tenant. Personal
+  `outlook.com` accounts have no tenant and cannot use app-only auth.
+- Google service-account path: a Google Workspace domain.
+
+## Setup
+
+Everything lives under a top-level **MME-Mail to SMTP** menu: **Settings** (site options and
+the primary connection), **Backup** (the fallback connection), **Logs** (the retry queue
+and the send log).
+
+Credentials belong in `wp-config.php`, which keeps them out of database dumps:
+
+```php
+define( 'MMOA_MS_TENANT_ID',     '...' );
+define( 'MMOA_MS_CLIENT_ID',     '...' );
+define( 'MMOA_MS_CLIENT_SECRET', '...' );
+define( 'MMOA_MS_SENDER',        'noreply@yourdomain.com' );
+```
+
+The backup connection takes the same constants with a `BACKUP` infix, so a Google fallback
+behind a Microsoft primary is:
+
+```php
+define( 'MMOA_BACKUP_PROVIDER',                    'gmail_sa' );
+define( 'MMOA_BACKUP_GOOGLE_SA_CLIENT_EMAIL',      '...' );
+define( 'MMOA_BACKUP_GOOGLE_SA_PRIVATE_KEY',       '...' );
+define( 'MMOA_BACKUP_GOOGLE_SENDER',               'noreply@yourdomain.com' );
+```
+
+Pair *different* providers. A second Microsoft app registration in the same tenant shares
+the identity endpoint, so it fails at the same moment as the primary and buys you nothing.
+
+Anything stored through the admin screens instead is encrypted with libsodium.
+
+### Alerts
+
+When sending starts failing, the **Alerts** screen can tell you somewhere you
+will actually see it: email, Slack, Discord, Microsoft Teams, Bitrix24, WhatsApp
+or SMS through Twilio, or a plain JSON webhook. Switch on as many as you like.
+
+Most take a webhook URL and nothing else. Bitrix24 needs a scope and an ID as
+well, so it has its own page: [docs/BITRIX24.md](docs/BITRIX24.md).
+
+### Connecting a consumer Gmail account
+
+The Gmail path uses **your own** OAuth client — nothing is proxied through a shared
+application, so the tokens are only ever seen by your site.
+
+1. In your Google Cloud project, create a **Web application** OAuth client.
+2. Add this exact redirect URI, which is the same for both connections:
+   `https://yoursite.com/wp-admin/admin-post.php?action=mmoa_google_callback`
+3. Publish the consent screen to **In production**. Left in Testing, Google expires the
+   refresh token every seven days and sending stops without warning.
+4. Paste the client ID and secret into MME-Mail to SMTP, **save**, then press *Sign in with
+   Google*.
+
+Google refuses non-HTTPS redirect URIs except for `localhost`, so this cannot be completed
+on a plain-HTTP staging domain.
+
+> **Scope the Entra app before using it.** The `Mail.Send` *application* permission lets
+> the app send as **any** mailbox in the tenant until you restrict it:
+>
+> ```powershell
+> New-ApplicationAccessPolicy -AppId <client-id> `
+>   -PolicyScopeGroupId wp-senders@yourdomain.com -AccessRight RestrictAccess
+> ```
+
+## Privacy and GDPR
+
+This plugin is a **transport**. WordPress hands it a finished message and it
+delivers that message to a provider. It has no forms, no subscribers, no
+cookies and no tracking pixels, it sets nothing in a visitor's browser, and it
+records **no IP addresses** anywhere. There is nothing in it for a visitor to
+consent to, and the lawful basis for any given email belongs to whatever
+produced that email - the shop, the form plugin, WordPress itself - not to the
+thing that carried it.
+
+It does check in with its own vendor, and that is worth stating plainly rather
+than burying. Once a day the site reports to `portal.techyza.com`: its domain,
+the versions of WordPress, PHP and this plugin, which provider slugs are
+configured, and two numbers - how many messages were sent this month and how
+many of those went through a connection this plugin authenticates rather than
+an SMTP host of your own. That is the complete list.
+
+**No recipient, subject, message body or credential is ever sent there, and the
+administrator's own address is not sent either.** The check-in also carries the
+licence key when there is one, because that is what a licence check is.
+
+It is not on the path a message takes. If that service is unreachable, or you
+filter it away entirely, mail is completely unaffected:
+
+```php
+add_filter( 'mmoa_portal_url', '__return_empty_string' );
+```
+
+That turns off registration, the check-in and licensing together. Sending
+carries on exactly as before.
+
+What it does hold is other people's email addresses, in two places:
+
+| Where | What | How long |
+|---|---|---|
+| `wp_mmoa_logs` | recipients, subject, outcome, and for a failure a diagnostic report whose SMTP transcript names the recipients again | `log_retention` days, pruned daily |
+| `wp_mmoa_queue` | the **complete message** - body, headers, attachments - held for retry | `queue_retention` days, applied to waiting and abandoned messages alike |
+
+### What the plugin does for you
+
+- Registers with WordPress's own privacy tools, so **Tools → Export Personal
+  Data** and **Tools → Erase Personal Data** return this plugin's records for
+  any address. No separate screen to learn.
+- On erasure: a queued message is **deleted outright** - it has not been sent,
+  and delivering it after somebody asked to be forgotten would be the opposite
+  of honouring that. A log entry is **anonymised** instead, keeping the date,
+  provider and outcome so the operational record survives, and dropping the
+  address, subject and diagnostics. WordPress reports which happened.
+- Offers suggested text for your privacy policy, on the policy editor. It is a
+  suggestion; read it and edit it.
+- Deletes everything it created on uninstall, both tables included.
+
+### What you still have to do yourself
+
+1. **Write the privacy policy.** Accept or rewrite the suggested text, and
+   **name the mail provider you actually use** with a link to its privacy
+   policy - the plugin cannot know which one you chose, or why you send.
+2. **Sign a DPA with that provider.** Microsoft, Google, Zoho, SendGrid and the
+   rest are your processors. Sending customer mail through them without a data
+   processing agreement is the gap no amount of code here closes.
+3. **If you use One-click**, the setup service is a further processor. It never
+   receives message content - it holds an OAuth token for under an hour and
+   stores no grants at all - but it is in the chain and belongs in your record
+   of processing.
+4. **Set the retention periods deliberately.** They default to 30 days for the
+   log and 7 for the queue. Shorter is usually better; the queue one decides how
+   long a complete message can sit in your database undelivered.
+5. **Decide whether to log at all.** Logging can be switched off. A site that
+   does not need delivery history should not keep one.
+
+> These are technical measures, not legal advice. Whether your retention
+> periods, your lawful basis and your processor agreements are adequate is a
+> question for a lawyer or your DPO, not for a plugin.
+
+## Tests
+
+195 assertions across 7 files. Every outbound call is stubbed through WordPress's
+`pre_http_request` filter, so the suite needs no credentials and sends nothing.
+
+```bash
+cd tests && ./run.sh
+```
+
+| File | Covers |
+|---|---|
+| `test-graph.php` | Microsoft Graph: token flow, send shape, AADSTS error mapping |
+| `test-failures.php` | Mid-life 401 recovery, error message quality, alerting |
+| `test-gmail.php` | Both Google paths, JWT signing, base64url correctness |
+| `test-resilience.php` | Stale-token grace, backup connection, retry queue |
+| `test-google-consent.php` | Gmail sign-in: authorization URL, callback, state replay, disconnect |
+| `test-regression-wpms.php` | The WP Mail SMTP "no valid URL" failure, and that throttled mail is kept |
+| `test-final.php` | End-to-end wp_mail() behaviour, all three admin screens, redirect-URI stability |
+
+The plugin must sit in `wp-content/plugins/` of a working WordPress install. For LocalWP
+or MAMP, point it at the right binary and socket:
+
+```bash
+PHP="/path/to/php" MYSQL_SOCK="/path/to/mysqld.sock" MMOA_TEST_HOST="mysite.local" ./run.sh
+```
+
+On **Windows** LocalWP there is no socket, and the CLI binary loads no extensions by
+default, so pass the port and the extensions explicitly. Find the port in
+`%APPDATA%\Local\sites.json` under `services.mysql.ports.MYSQL`:
+
+```bash
+PHPDIR="$APPDATA/Local/lightning-services/php-8.2.29+0/bin/win64"
+MMOA_TEST_HOST=mysite.local "$PHPDIR/php.exe" \
+  -d extension_dir="$PHPDIR/ext" \
+  -d extension=php_mysqli.dll -d extension=php_openssl.dll -d extension=php_sodium.dll \
+  -d mysqli.default_port=10013 \
+  test-resilience.php
+```
+
+## Status
+
+Full detail, including known gaps and what is deliberately out of scope, is in
+[docs/STATUS.md](docs/STATUS.md).
+
+| | |
+|---|---|
+| Microsoft Graph, app-only | works, tested |
+| Google Workspace service account | works, tested |
+| Gmail consumer OAuth | works, tested — sign-in prompt, own OAuth client, revocable |
+| Backup connection | works, tested |
+| Retry queue | works, tested |
+| Large attachments | ~2 MB ceiling, enforced before sending. Messages are base64-encoded twice on this path, so the usable payload is about half the API limit. Chunked upload not built |
+| Microsoft certificate credential | not built — `MMOA_MS_CERTIFICATE` is reserved but unread |
+| Setup wizard, i18n, Plugin Check | not done |
+
+## Releasing
+
+The lite build is distributed through the WordPress.org plugin directory, so
+sites are offered updates by WordPress itself. There is no update checker inside
+the plugin and no credential shipped with it - core does that check centrally,
+which also means a deactivated copy is still offered updates.
+
+A release is therefore a version bump, a changelog entry in `readme.txt`, and a
+publish to the directory. The exact commands are in
+[docs/RELEASING.md](docs/RELEASING.md).
+
+## Licence
+
+GPL-2.0-or-later. See [LICENSE](LICENSE).

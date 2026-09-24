@@ -1,0 +1,2392 @@
+# Copyright (C) Modern Mailer
+# This file is distributed under the same licence as the plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Modern Mailer\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: modern-mailer-oauth\n"
+
+#: includes/api/class-rest-controller.php:387
+msgid "Disconnected. Every setting and credential for this connection has been deleted, the From address included."
+msgstr ""
+
+#: includes/api/class-rest-controller.php:400
+msgid "Choose a provider for this connection first."
+msgstr ""
+
+#: includes/api/class-rest-controller.php:417
+msgid "Verified. The credentials are valid and the mailbox is reachable."
+msgstr ""
+
+#: includes/api/class-rest-controller.php:430 admin/class-admin-page.php:289
+msgid "Enter a valid recipient address."
+msgstr ""
+
+#: includes/api/class-rest-controller.php:452 admin/class-admin-page.php:307
+msgid "MME-Mail to SMTP test from %s"
+msgstr ""
+
+#: includes/api/class-rest-controller.php:455
+msgid "This is a test message.\n\nIf you are reading it, the connection is working."
+msgstr ""
+
+#: includes/api/class-rest-controller.php:465
+msgid "Accepted for delivery. If it does not arrive, check the log for what the provider said."
+msgstr ""
+
+#: includes/api/class-rest-controller.php:466 admin/class-admin-page.php:324
+msgid "The test message could not be sent."
+msgstr ""
+
+#: includes/api/class-rest-controller.php:493
+msgid "No such log entry."
+msgstr ""
+
+#: includes/api/class-rest-controller.php:551
+msgid "Attempted %1$d: %2$d delivered, %3$d still queued, %4$d abandoned."
+msgstr ""
+
+#: includes/api/class-rest-controller.php:580 admin/class-admin-page.php:276
+msgid "Queue emptied. Anything it held is gone."
+msgstr ""
+
+#: includes/api/class-rest-controller.php:621
+msgid "Connection renamed."
+msgstr ""
+
+#: includes/api/class-rest-controller.php:622
+msgid "That connection cannot be renamed."
+msgstr ""
+
+#: includes/api/class-rest-controller.php:648
+msgid "Connection removed, along with its stored credentials."
+msgstr ""
+
+#: includes/api/class-rest-controller.php:649
+msgid "That connection cannot be removed."
+msgstr ""
+
+#: includes/api/class-rest-controller.php:568 admin/class-admin-page.php:268
+msgid "%d abandoned message returned to the queue."
+msgid_plural "%d abandoned messages returned to the queue."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/auth/class-broker.php:149
+msgid "No account is connected. Use Connect on the settings screen."
+msgstr ""
+
+#: includes/auth/class-broker.php:225
+msgid "The setup service did not return a lasting credential, so the connection would have stopped working within the hour. Try connecting again, and if it repeats, use your own OAuth client instead."
+msgstr ""
+
+#: includes/auth/class-broker.php:252
+msgid "The setup service did not return an access token."
+msgstr ""
+
+#: includes/auth/class-broker.php:289 includes/auth/class-one-click.php:73 src/components/one-click-connect.js:46
+msgid "One-click setup is switched off on this site. Connect using your own OAuth client instead."
+msgstr ""
+
+#: includes/auth/class-broker.php:296 includes/auth/class-one-click.php:84
+msgid "One-click setup has no setup service to talk to yet. Define MMOA_BROKER_URL with the address of yours, or connect using your own OAuth client, which needs no service at all."
+msgstr ""
+
+#: includes/auth/class-broker.php:353
+msgid "That sign-in has already been used or has expired. Start the connection again."
+msgstr ""
+
+#: includes/auth/class-broker.php:355
+msgid "The setup service refused this site. If the account was disconnected from the provider, connect it again; otherwise use your own OAuth client."
+msgstr ""
+
+#: includes/auth/class-broker.php:357
+msgid "The setup service is rate limiting this site. Wait a few minutes and try again."
+msgstr ""
+
+#: includes/auth/class-broker.php:359
+msgid "The setup service is unavailable. Existing connections keep sending; only connecting a new account is affected. Try again shortly, or use your own OAuth client, which does not depend on this service."
+msgstr ""
+
+#: includes/auth/class-broker.php:362
+msgid "The setup service returned an unexpected response (HTTP %d)."
+msgstr ""
+
+#: includes/auth/class-google-consent.php:82
+msgid "Enter and save the OAuth client ID and client secret before connecting."
+msgstr ""
+
+#: includes/auth/class-google-consent.php:146 includes/auth/class-microsoft-consent.php:320
+msgid "This authorization link has expired or did not originate here. Start the connection again."
+msgstr ""
+
+#: includes/auth/class-google-consent.php:153 includes/auth/class-microsoft-consent.php:327
+msgid "This authorization was started by a different user account."
+msgstr ""
+
+#: includes/auth/class-google-consent.php:164
+msgid "Google did not grant access: %s"
+msgstr ""
+
+#: includes/auth/class-google-consent.php:175
+msgid "Google did not return an authorization code."
+msgstr ""
+
+#: includes/auth/class-google-consent.php:193 includes/auth/class-microsoft-consent.php:362 includes/auth/class-one-click.php:177
+msgid "That connection no longer exists, so the sign-in could not be saved. Start again from the connection you want to use."
+msgstr ""
+
+#: includes/auth/class-google-consent.php:261
+msgid "The account was disconnected here, but Google could not be reached to revoke the grant. Remove it manually under your Google account permissions."
+msgstr ""
+
+#: includes/auth/class-google-consent.php:285
+msgid "Google authorized the connection but withheld a refresh token, so sending would stop within the hour. This happens when the account has already granted this client access. Remove this app under your Google account permissions, then connect again."
+msgstr ""
+
+#: includes/auth/class-google-consent.php:293
+msgid "The redirect URI does not match the one registered on your OAuth client. Copy the exact value shown on this screen into the Google Cloud console, including the scheme and any trailing parameters."
+msgstr ""
+
+#: includes/auth/class-google-consent.php:294
+msgid "Google rejected the OAuth client ID or client secret. Check both, and confirm they belong to a Web application client rather than a Desktop one."
+msgstr ""
+
+#: includes/auth/class-google-consent.php:295
+msgid "The authorization code was already used or has expired. Start the connection again."
+msgstr ""
+
+#: includes/auth/class-google-consent.php:296
+msgid "Access was declined at the consent screen."
+msgstr ""
+
+#: includes/auth/class-google-consent.php:307
+msgid "Google refused the authorization: %s"
+msgstr ""
+
+#: includes/auth/class-google-consent.php:308 includes/auth/class-microsoft-consent.php:525 includes/providers/abstract-gmail.php:183 includes/providers/class-graph.php:510 includes/providers/class-mailgun.php:256 includes/providers/class-microsoft-oauth.php:356 includes/providers/class-microsoft-oauth.php:401
+msgid "no details supplied"
+msgstr ""
+
+#: includes/auth/class-jwt-signer.php:43
+msgid "The OpenSSL PHP extension is required to authenticate with a Google service account."
+msgstr ""
+
+#: includes/auth/class-jwt-signer.php:54
+msgid "The service account private key could not be read. Paste the whole private_key value from the downloaded JSON, including the BEGIN and END lines."
+msgstr ""
+
+#: includes/auth/class-jwt-signer.php:66
+msgid "The authentication assertion could not be signed."
+msgstr ""
+
+#: includes/auth/class-microsoft-consent.php:258
+msgid "Enter and save the application ID and client secret before signing in."
+msgstr ""
+
+#: includes/auth/class-microsoft-consent.php:336
+msgid "Microsoft did not grant access: %1$s %2$s"
+msgstr ""
+
+#: includes/auth/class-microsoft-consent.php:348
+msgid "Microsoft did not return an authorization code."
+msgstr ""
+
+#: includes/auth/class-microsoft-consent.php:497
+msgid "Microsoft authorized the connection but returned no refresh token, so sending would stop within the hour. Confirm that offline_access is among the delegated permissions on the app registration."
+msgstr ""
+
+#: includes/auth/class-microsoft-consent.php:505
+msgid "The redirect URI does not match the app registration. Copy the exact value shown on this screen into the Entra app under Authentication, as a Web platform - not a Single-page application."
+msgstr ""
+
+#: includes/auth/class-microsoft-consent.php:506
+msgid "Microsoft rejected the client secret. Copy the secret Value rather than the Secret ID - Entra shows the Value only once, immediately after you create it."
+msgstr ""
+
+#: includes/auth/class-microsoft-consent.php:507
+msgid "Microsoft could not find that application. Check the Application (client) ID, and confirm the app registration allows accounts outside its own tenant if you are signing in with a personal account."
+msgstr ""
+
+#: includes/auth/class-microsoft-consent.php:508
+msgid "The account declined to grant the permissions requested, or an administrator has restricted user consent in this tenant. An administrator can grant it on the app registration instead."
+msgstr ""
+
+#: includes/auth/class-microsoft-consent.php:509
+msgid "The app registration has no reply URL. Add the redirect URI shown on this screen under Authentication in Entra."
+msgstr ""
+
+#: includes/auth/class-microsoft-consent.php:510
+msgid "The authorization code was already used. Start the connection again."
+msgstr ""
+
+#: includes/auth/class-microsoft-consent.php:511
+msgid "The authorization code expired before it could be exchanged. Start the connection again."
+msgstr ""
+
+#: includes/auth/class-microsoft-consent.php:524
+msgid "Microsoft refused the authorization: %s"
+msgstr ""
+
+#: includes/auth/class-one-click.php:67 includes/auth/class-one-click.php:230 includes/auth/class-one-click.php:268
+msgid "Unknown provider."
+msgstr ""
+
+#: includes/auth/class-one-click.php:133
+msgid "This setup link has expired or did not originate here. Start the connection again."
+msgstr ""
+
+#: includes/auth/class-one-click.php:140
+msgid "This setup was started by a different user account."
+msgstr ""
+
+#: includes/auth/class-one-click.php:153
+msgid "The account was not connected: %s"
+msgstr ""
+
+#: includes/auth/class-one-click.php:165
+msgid "The setup service did not return a usable result. Start the connection again."
+msgstr ""
+
+#: includes/class-connections.php:55 includes/class-connections.php:118
+msgid "Primary"
+msgstr ""
+
+#: includes/class-connections.php:56 includes/class-connections.php:122 admin/views/settings.php:124
+msgid "Backup"
+msgstr ""
+
+#: includes/class-connections.php:141
+msgid "A site can hold at most %d additional connections."
+msgstr ""
+
+#: includes/class-connections.php:150
+msgid "New connection"
+msgstr ""
+
+#: includes/class-dispatcher.php:317
+msgid "No mail provider is configured."
+msgstr ""
+
+#: includes/class-dispatcher.php:392
+msgid "The message is %1$s, which is over the %2$s that %3$s accepts in one request. Attachments are encoded twice on this path, so the usable attachment size is roughly half the limit."
+msgstr ""
+
+#: includes/class-health-monitor.php:140
+msgid "[%s] Email sending is failing"
+msgstr ""
+
+#: includes/class-health-monitor.php:145
+msgid "%1$d consecutive emails have failed to send.\n\nMost recent error:\n%2$s\n\nSettings: %3$s"
+msgstr ""
+
+#: includes/class-http.php:62
+msgid "Internal error: tried to contact the mail API using an invalid address. This means an earlier API call failed without being handled. Check the send log for the preceding error."
+msgstr ""
+
+#: includes/class-http.php:138
+msgid "The request to the mail API could not be completed."
+msgstr ""
+
+#: includes/class-plugin.php:201
+msgid "Every five minutes (MME-Mail to SMTP retry queue)"
+msgstr ""
+
+#: includes/class-privacy.php:82 includes/class-privacy.php:95 includes/class-privacy.php:376 admin/class-app-page.php:53 admin/class-app-page.php:54 admin/class-app-page.php:200 admin/views/settings.php:17 src/components/footer.js:30 src/components/nav.js:242
+msgid "MME-Mail to SMTP"
+msgstr ""
+
+#: includes/class-privacy.php:116
+msgid "Email delivery log"
+msgstr ""
+
+#: includes/class-privacy.php:117
+msgid "Messages this site sent to this address, and what the mail provider said about each one."
+msgstr ""
+
+#: includes/class-privacy.php:121 admin/views/logs.php:175 src/components/log-detail.js:138 src/screens/dashboard.js:298 src/screens/logs.js:293 src/screens/logs.js:344
+msgid "Sent"
+msgstr ""
+
+#: includes/class-privacy.php:125 includes/class-privacy.php:167
+msgid "Recipients"
+msgstr ""
+
+#: includes/class-privacy.php:129 includes/class-privacy.php:171 includes/class-router.php:335 admin/views/logs.php:104 admin/views/logs.php:162 src/screens/logs.js:127 src/screens/logs.js:336
+msgid "Subject"
+msgstr ""
+
+#: includes/class-privacy.php:133
+msgid "Sent through"
+msgstr ""
+
+#: includes/class-privacy.php:137 admin/views/logs.php:163 src/screens/logs.js:333
+msgid "Result"
+msgstr ""
+
+#: includes/class-privacy.php:141
+msgid "Failure reason"
+msgstr ""
+
+#: includes/class-privacy.php:158
+msgid "Email waiting to be sent"
+msgstr ""
+
+#: includes/class-privacy.php:159
+msgid "Messages held for retry after a delivery failure. The message itself is stored but is not included here."
+msgstr ""
+
+#: includes/class-privacy.php:163 admin/views/logs.php:102 src/screens/logs.js:125
+msgid "Queued"
+msgstr ""
+
+#: includes/class-privacy.php:175
+msgid "State"
+msgstr ""
+
+#: includes/class-privacy.php:179
+msgid "Delivery attempts"
+msgstr ""
+
+#: includes/class-privacy.php:369
+msgid "This site sends its email through a third-party mail provider rather than through the web server. The complete message - recipients, subject, body and any attachments - is transmitted to that provider in order to be delivered."
+msgstr ""
+
+#: includes/class-privacy.php:370
+msgid "A record of each message sent is kept: the recipients, the subject, the time, and whether delivery succeeded. Where a delivery fails, a diagnostic report is kept with it. These records are deleted automatically after the retention period set by the site administrator."
+msgstr ""
+
+#: includes/class-privacy.php:371
+msgid "A message that cannot be delivered immediately is held, in full, until it can be retried or until it is discarded as undeliverable."
+msgstr ""
+
+#: includes/class-privacy.php:372
+msgid "This plugin sets no cookies, records no IP addresses, and performs no tracking or analytics."
+msgstr ""
+
+#: includes/class-privacy.php:373
+msgid "The administrator should name the mail provider in use here, and link to that provider&#8217;s own privacy policy."
+msgstr ""
+
+#: includes/class-privacy.php:224
+msgid "%d message waiting to be sent to this address was deleted and will not be delivered."
+msgid_plural "%d messages waiting to be sent to this address were deleted and will not be delivered."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-privacy.php:261
+msgid "%d delivery log entry was anonymised. The date and outcome were kept as a record that a message was sent; the address, subject and diagnostics were removed."
+msgid_plural "%d delivery log entries were anonymised. The dates and outcomes were kept as a record that messages were sent; the addresses, subjects and diagnostics were removed."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-provider-registry.php:151
+msgid "Not configured (WordPress default)"
+msgstr ""
+
+#: includes/class-provider-registry.php:176 includes/class-router.php:338 admin/views/settings.php:30
+msgid "From address"
+msgstr ""
+
+#: includes/class-provider-registry.php:184 admin/views/settings.php:31
+msgid "From name"
+msgstr ""
+
+#: includes/class-provider-registry.php:190
+msgid "Override what other plugins set"
+msgstr ""
+
+#: includes/class-router.php:336
+msgid "To address"
+msgstr ""
+
+#: includes/class-router.php:337
+msgid "Recipient domain"
+msgstr ""
+
+#: includes/class-router.php:339
+msgid "Cc address"
+msgstr ""
+
+#: includes/class-router.php:340
+msgid "Bcc address"
+msgstr ""
+
+#: includes/class-router.php:343
+msgid "Contains"
+msgstr ""
+
+#: includes/class-router.php:344
+msgid "Does not contain"
+msgstr ""
+
+#: includes/class-router.php:345
+msgid "Is exactly"
+msgstr ""
+
+#: includes/class-router.php:346
+msgid "Is not"
+msgstr ""
+
+#: includes/class-router.php:347
+msgid "Starts with"
+msgstr ""
+
+#: includes/class-router.php:348
+msgid "Ends with"
+msgstr ""
+
+#: includes/providers/abstract-api-provider.php:76
+msgid "This provider authenticates with an API key and mints no tokens."
+msgstr ""
+
+#: includes/providers/abstract-api-provider.php:202
+msgid "%1$s is missing: %2$s."
+msgstr ""
+
+#: includes/providers/abstract-api-provider.php:225
+msgid "%1$s rejected the API key. %2$s"
+msgstr ""
+
+#: includes/providers/abstract-api-provider.php:238
+msgid "%s is rate limiting this account. The message was not sent; it will be retried."
+msgstr ""
+
+#: includes/providers/abstract-api-provider.php:249
+msgid "%1$s returned HTTP %2$d. %3$s"
+msgstr ""
+
+#: includes/providers/abstract-gmail.php:145
+msgid "Google rejected the credentials. For a service account, confirm domain-wide delegation is authorized for this client ID and the gmail.send scope. For a user connection, the refresh token has been revoked and the account must be reconnected."
+msgstr ""
+
+#: includes/providers/abstract-gmail.php:152
+msgid "The service account is not authorized to impersonate this mailbox. Add its client ID to Google Workspace Admin under Security, API Controls, Domain-wide Delegation, with the gmail.send scope."
+msgstr ""
+
+#: includes/providers/abstract-gmail.php:159
+msgid "The Gmail API is not enabled on this Google Cloud project. Enable it, then wait a minute for the change to propagate."
+msgstr ""
+
+#: includes/providers/abstract-gmail.php:166
+msgid "Google is rate limiting this account. The message was not sent; try again shortly."
+msgstr ""
+
+#: includes/providers/abstract-gmail.php:173
+msgid "Gmail rejected the message because it had no recipient."
+msgstr ""
+
+#: includes/providers/abstract-gmail.php:181
+msgid "The Gmail API returned HTTP %1$d: %2$s"
+msgstr ""
+
+#: includes/providers/class-brevo.php:31 includes/providers/class-brevo.php:44
+msgid "Brevo"
+msgstr ""
+
+#: includes/providers/class-brevo.php:45
+msgid "Formerly Sendinblue. The From address must be a verified sender."
+msgstr ""
+
+#: includes/providers/class-brevo.php:56 includes/providers/class-resend.php:55 includes/providers/class-sendgrid.php:60 includes/providers/class-smtp2go.php:60
+msgid "API key"
+msgstr ""
+
+#: includes/providers/class-brevo.php:57
+msgid "From SMTP & API, API keys in your Brevo account. A v3 API key, not an SMTP password."
+msgstr ""
+
+#: includes/providers/class-gmail-oauth.php:36
+msgid "Gmail (OAuth)"
+msgstr ""
+
+#: includes/providers/class-gmail-oauth.php:56 admin/views/connection.php:95
+msgid "Gmail"
+msgstr ""
+
+#: includes/providers/class-gmail-oauth.php:57
+msgid "Consumer @gmail.com, using your own OAuth client and a one-time sign-in."
+msgstr ""
+
+#: includes/providers/class-gmail-oauth.php:73
+msgid "Setup"
+msgstr ""
+
+#: includes/providers/class-gmail-oauth.php:76 includes/providers/class-google.php:86 includes/providers/class-microsoft.php:98 src/components/google-setup-guide.js:118
+msgid "One-click"
+msgstr ""
+
+#: includes/providers/class-gmail-oauth.php:77 includes/providers/class-google.php:89 src/components/google-setup-guide.js:128
+msgid "My own OAuth client"
+msgstr ""
+
+#: includes/providers/class-gmail-oauth.php:93 admin/views/connection.php:103
+msgid "OAuth client ID"
+msgstr ""
+
+#: includes/providers/class-gmail-oauth.php:95
+msgid "Must be a Web application client, not Desktop."
+msgstr ""
+
+#: includes/providers/class-gmail-oauth.php:101 admin/views/connection.php:104
+msgid "OAuth client secret"
+msgstr ""
+
+#: includes/providers/class-gmail-oauth.php:154
+msgid "The Google OAuth client ID or client secret is missing."
+msgstr ""
+
+#: includes/providers/class-gmail-oauth.php:161
+msgid "No Google account is connected. Use the Connect button on the settings screen."
+msgstr ""
+
+#: includes/providers/class-gmail-service-account.php:30
+msgid "Google Workspace (service account)"
+msgstr ""
+
+#: includes/providers/class-gmail-service-account.php:50
+msgid "Google Workspace"
+msgstr ""
+
+#: includes/providers/class-gmail-service-account.php:51
+msgid "Service account with domain-wide delegation. No sign-in, and nothing expires. Workspace only."
+msgstr ""
+
+#: includes/providers/class-gmail-service-account.php:60 admin/views/connection.php:84
+msgid "Service account email"
+msgstr ""
+
+#: includes/providers/class-gmail-service-account.php:60 admin/views/connection.php:84
+msgid "The client_email value from the downloaded JSON key."
+msgstr ""
+
+#: includes/providers/class-gmail-service-account.php:63 admin/views/connection.php:85
+msgid "Private key"
+msgstr ""
+
+#: includes/providers/class-gmail-service-account.php:67
+msgid "Include the BEGIN and END lines."
+msgstr ""
+
+#: includes/providers/class-gmail-service-account.php:71 admin/views/connection.php:86
+msgid "Send as mailbox"
+msgstr ""
+
+#: includes/providers/class-gmail-service-account.php:100
+msgid "The Google service account is missing its client email, private key, or the mailbox to send as."
+msgstr ""
+
+#: includes/providers/class-google.php:46 src/components/one-click-connect.js:22
+msgid "Google"
+msgstr ""
+
+#: includes/providers/class-google.php:47
+msgid "Gmail and Google Workspace."
+msgstr ""
+
+#: includes/providers/class-google.php:90 src/components/google-setup-guide.js:138
+msgid "Service account"
+msgstr ""
+
+#: includes/providers/class-google.php:94 includes/providers/class-microsoft.php:110
+msgid "How to connect"
+msgstr ""
+
+#: includes/providers/class-graph.php:56
+msgid "Microsoft 365 (Graph)"
+msgstr ""
+
+#: includes/providers/class-graph.php:76 admin/views/connection.php:43
+msgid "Microsoft 365"
+msgstr ""
+
+#: includes/providers/class-graph.php:77
+msgid "App-only through Microsoft Graph. Nothing expires but the client secret."
+msgstr ""
+
+#: includes/providers/class-graph.php:86 admin/views/connection.php:47
+msgid "Directory (tenant) ID"
+msgstr ""
+
+#: includes/providers/class-graph.php:86 admin/views/connection.php:47
+msgid "From the Overview page of your Entra app registration."
+msgstr ""
+
+#: includes/providers/class-graph.php:87 includes/providers/class-microsoft-oauth.php:111 admin/views/connection.php:48
+msgid "Application (client) ID"
+msgstr ""
+
+#: includes/providers/class-graph.php:88 includes/providers/class-microsoft-oauth.php:116 admin/views/connection.php:49
+msgid "Client secret"
+msgstr ""
+
+#: includes/providers/class-graph.php:88 includes/providers/class-microsoft-oauth.php:120
+msgid "Copy the Value, not the Secret ID. Shown once."
+msgstr ""
+
+#: includes/providers/class-graph.php:101 admin/views/connection.php:50
+msgid "Send through a different mailbox"
+msgstr ""
+
+#: includes/providers/class-graph.php:106 admin/views/connection.php:53
+msgid "Secret expires"
+msgstr ""
+
+#: includes/providers/class-graph.php:111
+msgid "Access is scoped to specific mailboxes"
+msgstr ""
+
+#: includes/providers/class-graph.php:127 includes/providers/class-graph.php:186
+msgid "No sending mailbox is configured for Microsoft 365."
+msgstr ""
+
+#: includes/providers/class-graph.php:302
+msgid "This app registration has no Microsoft Graph application permissions at all. In Entra, open the app, go to API permissions, choose Add a permission, then Microsoft Graph, then Application permissions - not Delegated - and add Mail.Send. It only takes effect once you click Grant admin consent."
+msgstr ""
+
+#: includes/providers/class-graph.php:305
+msgid "This app registration has admin consent for %s, but not for Mail.Send. Add Mail.Send under API permissions as an Application permission, then grant admin consent again."
+msgstr ""
+
+#: includes/providers/class-graph.php:312
+msgid "Credentials are valid and Mail.Send is granted, so this connection can send. The mailbox itself was not checked - that needs the User.Read.All permission, which sending does not require and this plugin does not ask for."
+msgstr ""
+
+#: includes/providers/class-graph.php:331
+msgid "Microsoft 365 is missing a tenant ID, application ID, or client secret."
+msgstr ""
+
+#: includes/providers/class-graph.php:413
+msgid "The client secret is wrong. Note that Entra shows the secret Value and the secret ID side by side, and only the Value works here."
+msgstr ""
+
+#: includes/providers/class-graph.php:414
+msgid "The client secret has expired. Create a new one in Entra and update it here."
+msgstr ""
+
+#: includes/providers/class-graph.php:415
+msgid "No application with this ID exists in this tenant. Check the Application (client) ID and that you are pointing at the right tenant."
+msgstr ""
+
+#: includes/providers/class-graph.php:416
+msgid "The tenant ID is not valid. Use the Directory (tenant) ID from your app registration overview."
+msgstr ""
+
+#: includes/providers/class-graph.php:417
+msgid "The tenant was not found. Check the Directory (tenant) ID."
+msgstr ""
+
+#: includes/providers/class-graph.php:418
+msgid "The requested scope was rejected. Confirm the app has the Mail.Send application permission with admin consent granted."
+msgstr ""
+
+#: includes/providers/class-graph.php:431
+msgid "Microsoft rejected the credentials: %s"
+msgstr ""
+
+#: includes/providers/class-graph.php:453
+msgid "The application is not allowed to send as %s. This almost always means the Exchange access policy has not been applied, or was scoped to a group this mailbox is not in."
+msgstr ""
+
+#: includes/providers/class-graph.php:465
+msgid "Microsoft 365 has no mailbox for %s. Check the address, and note that it must be a licensed mailbox or a shared mailbox - not a distribution list or an alias on its own."
+msgstr ""
+
+#: includes/providers/class-graph.php:473
+msgid "This mailbox cannot be used with the Graph API. That usually means it is on-premises or in a dedicated or hybrid deployment."
+msgstr ""
+
+#: includes/providers/class-graph.php:479
+msgid "The message is larger than Microsoft 365 accepts in a single request. Reduce the attachment size."
+msgstr ""
+
+#: includes/providers/class-graph.php:486
+msgid "Microsoft 365 is throttling this application. The message was not sent; try again shortly."
+msgstr ""
+
+#: includes/providers/class-graph.php:493
+msgid "Microsoft rejected the access token. Confirm the Mail.Send application permission is present and that admin consent has been granted."
+msgstr ""
+
+#: includes/providers/class-graph.php:500
+msgid "The message is too large for a single Graph request. Reduce the attachment size."
+msgstr ""
+
+#: includes/providers/class-graph.php:508
+msgid "Microsoft Graph returned HTTP %1$d: %2$s"
+msgstr ""
+
+#: includes/providers/class-mailgun.php:42 includes/providers/class-mailgun.php:55
+msgid "Mailgun"
+msgstr ""
+
+#: includes/providers/class-mailgun.php:56
+msgid "Accepts the complete message, so attachments and inline images pass through untouched."
+msgstr ""
+
+#: includes/providers/class-mailgun.php:73
+msgid "Sending API key"
+msgstr ""
+
+#: includes/providers/class-mailgun.php:74
+msgid "From Send, Sending, Domain settings. A sending key, not the account API key."
+msgstr ""
+
+#: includes/providers/class-mailgun.php:78
+msgid "Sending domain"
+msgstr ""
+
+#: includes/providers/class-mailgun.php:79
+msgid "The verified domain in Mailgun, for example mg.yourdomain.com."
+msgstr ""
+
+#: includes/providers/class-mailgun.php:84 includes/providers/class-zoho.php:101
+msgid "Region"
+msgstr ""
+
+#: includes/providers/class-mailgun.php:103 includes/providers/class-mailgun.php:150
+msgid "Mailgun is missing its sending API key or domain."
+msgstr ""
+
+#: includes/providers/class-mailgun.php:114 includes/providers/class-smtp.php:194
+msgid "The message has no recipient."
+msgstr ""
+
+#: includes/providers/class-mailgun.php:220
+msgid "Mailgun authenticates with an API key and mints no tokens."
+msgstr ""
+
+#: includes/providers/class-mailgun.php:232
+msgid "Mailgun rejected the API key. Note that a sending key and the account API key are different things, and only a sending key works here."
+msgstr ""
+
+#: includes/providers/class-mailgun.php:242
+msgid "Mailgun has no domain %1$s in the %2$s region. This is almost always the region setting rather than the domain name - a domain created in one region does not exist in the other."
+msgstr ""
+
+#: includes/providers/class-mailgun.php:254
+msgid "Mailgun returned HTTP %1$d: %2$s"
+msgstr ""
+
+#: includes/providers/class-microsoft-oauth.php:64 includes/providers/class-microsoft-oauth.php:84
+msgid "Microsoft (own auth app)"
+msgstr ""
+
+#: includes/providers/class-microsoft-oauth.php:85
+msgid "Your own Entra app plus a one-time sign-in. No tenant ID and no administrator needed."
+msgstr ""
+
+#: includes/providers/class-microsoft-oauth.php:217
+msgid "Signed in as %2$s, but this connection sends from %1$s. Microsoft will refuse that unless %2$s has Send As permission for it."
+msgstr ""
+
+#: includes/providers/class-microsoft-oauth.php:277
+msgid "The Microsoft application ID or client secret is missing."
+msgstr ""
+
+#: includes/providers/class-microsoft-oauth.php:284
+msgid "No Microsoft account is connected. Use the sign-in button on the connection screen."
+msgstr ""
+
+#: includes/providers/class-microsoft-oauth.php:339
+msgid "The Microsoft sign-in for this connection is no longer valid, so nothing can be sent through it. This happens when the account password changed, multi-factor authentication was enrolled, a Conditional Access policy changed, or the connection went unused for about ninety days. Sign in again on the connection screen."
+msgstr ""
+
+#: includes/providers/class-microsoft-oauth.php:347
+msgid "Microsoft rejected the client secret. If it was rotated in Entra, paste the new Value here and save."
+msgstr ""
+
+#: includes/providers/class-microsoft-oauth.php:355
+msgid "Microsoft would not issue an access token: %s"
+msgstr ""
+
+#: includes/providers/class-microsoft-oauth.php:374
+msgid "Microsoft refused to send as %s. A signed-in connection may only send as its own mailbox, or as an address that mailbox holds Send As permission for."
+msgstr ""
+
+#: includes/providers/class-microsoft-oauth.php:383
+msgid "That account has no Exchange Online mailbox, so Graph cannot send from it. It needs a licence that includes Exchange."
+msgstr ""
+
+#: includes/providers/class-microsoft-oauth.php:390
+msgid "Microsoft is throttling this mailbox. The message stays in the queue and will be retried."
+msgstr ""
+
+#: includes/providers/class-microsoft-oauth.php:399
+msgid "Microsoft refused the message (HTTP %1$d): %2$s"
+msgstr ""
+
+#: includes/providers/class-microsoft.php:47 src/components/one-click-connect.js:26
+msgid "Microsoft"
+msgstr ""
+
+#: includes/providers/class-microsoft.php:48
+msgid "Microsoft 365 and Outlook."
+msgstr ""
+
+#: includes/providers/class-microsoft.php:106
+msgid "Own Auth App"
+msgstr ""
+
+#: includes/providers/class-outlook.php:53 includes/providers/class-outlook.php:73
+msgid "Outlook"
+msgstr ""
+
+#: includes/providers/class-outlook.php:74
+msgid "Sign in with a Microsoft account and send as that mailbox."
+msgstr ""
+
+#: includes/providers/class-outlook.php:191
+msgid "Connected to %2$s, but the From address is %1$s. This connection can only send as the mailbox that signed in, so Microsoft will refuse every message. Set the From address to %2$s, or use Microsoft 365 with an Azure application, which can send as any address in the tenant."
+msgstr ""
+
+#: includes/providers/class-outlook.php:205
+msgid "Connected to %s. The credential is valid and the mailbox is reachable; only a test message can confirm delivery."
+msgstr ""
+
+#: includes/providers/class-outlook.php:241
+msgid "Microsoft rejected the credential. The account may have revoked access, or its password may have changed. Sign in again to reconnect."
+msgstr ""
+
+#: includes/providers/class-outlook.php:262
+msgid "This connection sends as the mailbox that signed in, and the From address does not match it: mail is being sent from %1$s but the connected account is %2$s. Set the From address to %2$s, or use Microsoft 365 with an Azure application, which can send as any address in the tenant."
+msgstr ""
+
+#: includes/providers/class-outlook.php:266
+msgid "The From address does not belong to the signed-in mailbox, and this connection can only send as itself. Set the From address to the connected account, or use Microsoft 365 with an application registration to send as another address."
+msgstr ""
+
+#: includes/providers/class-outlook.php:275
+msgid "Microsoft refused to send as the signed-in account: %s Check that the mailbox has an Exchange Online licence, and that a work or school administrator has not restricted it."
+msgstr ""
+
+#: includes/providers/class-outlook.php:276
+msgid "no reason given."
+msgstr ""
+
+#: includes/providers/class-outlook.php:284
+msgid "The message is larger than Microsoft accepts in a single request. Send large files as a link rather than an attachment."
+msgstr ""
+
+#: includes/providers/class-outlook.php:291
+msgid "Microsoft is throttling this mailbox. The message will be retried."
+msgstr ""
+
+#: includes/providers/class-outlook.php:299
+msgid "Microsoft Graph refused the message (HTTP %1$d): %2$s"
+msgstr ""
+
+#: includes/providers/class-outlook.php:301
+msgid "no reason given"
+msgstr ""
+
+#: includes/providers/class-postmark.php:32 includes/providers/class-postmark.php:45
+msgid "Postmark"
+msgstr ""
+
+#: includes/providers/class-postmark.php:46
+msgid "Transactional only. The From address must be a verified Sender Signature."
+msgstr ""
+
+#: includes/providers/class-postmark.php:63
+msgid "Server API token"
+msgstr ""
+
+#: includes/providers/class-postmark.php:64
+msgid "The Server token, not the Account token. Found under API Tokens on the server you want to send from."
+msgstr ""
+
+#: includes/providers/class-postmark.php:68
+msgid "Message stream"
+msgstr ""
+
+#: includes/providers/class-postmark.php:207
+msgid "Postmark rejected the server API token. Check that it is the Server token and not the Account token."
+msgstr ""
+
+#: includes/providers/class-postmark.php:208
+msgid "Postmark rejected the message as invalid. Most often the From address is not a verified Sender Signature."
+msgstr ""
+
+#: includes/providers/class-postmark.php:209
+msgid "This Postmark server is not activated for sending. Approve the account or request production access."
+msgstr ""
+
+#: includes/providers/class-postmark.php:210
+msgid "The Postmark account is pending approval and can only send to verified addresses."
+msgstr ""
+
+#: includes/providers/class-postmark.php:211
+msgid "The From address is not a verified Sender Signature in Postmark."
+msgstr ""
+
+#: includes/providers/class-postmark.php:212
+msgid "The recipient is on this Postmark server's suppression list, so it refused to send. Remove the suppression if the address is genuinely valid."
+msgstr ""
+
+#: includes/providers/class-postmark.php:213
+msgid "Postmark is rate limiting this account. The message was not sent; it will be retried."
+msgstr ""
+
+#: includes/providers/class-postmark.php:214
+msgid "The message stream named here does not exist on this Postmark server."
+msgstr ""
+
+#: includes/providers/class-resend.php:30 includes/providers/class-resend.php:43
+msgid "Resend"
+msgstr ""
+
+#: includes/providers/class-resend.php:44
+msgid "One API key and a verified sending domain."
+msgstr ""
+
+#: includes/providers/class-resend.php:56
+msgid "From API Keys in your Resend dashboard. Sending access is enough."
+msgstr ""
+
+#: includes/providers/class-sendgrid.php:35 includes/providers/class-sendgrid.php:48
+msgid "SendGrid"
+msgstr ""
+
+#: includes/providers/class-sendgrid.php:49
+msgid "Twilio SendGrid. Create an API key with Mail Send permission only."
+msgstr ""
+
+#: includes/providers/class-sendgrid.php:61
+msgid "Settings, API Keys in SendGrid. Restricted Access with Mail Send is enough; SendGrid shows the key only once."
+msgstr ""
+
+#: includes/providers/class-smtp.php:80
+msgid "SMTP"
+msgstr ""
+
+#: includes/providers/class-smtp.php:93
+msgid "Other SMTP"
+msgstr ""
+
+#: includes/providers/class-smtp.php:94
+msgid "Any server that speaks SMTP. Widest compatibility, least specific errors."
+msgstr ""
+
+#: includes/providers/class-smtp.php:108 src/components/log-detail.js:86 src/components/log-detail.js:177
+msgid "Server"
+msgstr ""
+
+#: includes/providers/class-smtp.php:115
+msgid "SMTP username"
+msgstr ""
+
+#: includes/providers/class-smtp.php:125
+msgid "SMTP password"
+msgstr ""
+
+#: includes/providers/class-smtp.php:141 includes/providers/class-zoho.php:149
+msgid "Encryption"
+msgstr ""
+
+#: includes/providers/class-smtp.php:144
+msgid "None sends the password in the clear."
+msgstr ""
+
+#: includes/providers/class-smtp.php:146
+msgid "TLS"
+msgstr ""
+
+#: includes/providers/class-smtp.php:147
+msgid "SSL"
+msgstr ""
+
+#: includes/providers/class-smtp.php:148
+msgid "None"
+msgstr ""
+
+#: includes/providers/class-smtp.php:160
+msgid "SMTP port"
+msgstr ""
+
+#: includes/providers/class-smtp.php:170
+msgid "Authentication"
+msgstr ""
+
+#: includes/providers/class-smtp.php:174
+msgid "On"
+msgstr ""
+
+#: includes/providers/class-smtp.php:175
+msgid "Off"
+msgstr ""
+
+#: includes/providers/class-smtp.php:206
+msgid "The server rejected the sender address."
+msgstr ""
+
+#: includes/providers/class-smtp.php:218
+msgid "The server rejected the recipient %s."
+msgstr ""
+
+#: includes/providers/class-smtp.php:226
+msgid "The server rejected the message."
+msgstr ""
+
+#: includes/providers/class-smtp.php:308
+msgid "No SMTP server is configured."
+msgstr ""
+
+#: includes/providers/class-smtp.php:325
+msgid "Authentication is switched on but no SMTP username is set."
+msgstr ""
+
+#: includes/providers/class-smtp.php:364
+msgid "Could not connect to %1$s on port %2$d. %3$s"
+msgstr ""
+
+#: includes/providers/class-smtp.php:388
+msgid "The server refused to start TLS. If it only offers implicit TLS, choose that and use port 465. %s"
+msgstr ""
+
+#: includes/providers/class-smtp.php:413
+msgid "The server rejected the username or password. If the account has two-factor authentication, you need an app password rather than the account password. %s"
+msgstr ""
+
+#: includes/providers/class-smtp.php:487
+msgid "SMTP authenticates with a username and password and mints no tokens."
+msgstr ""
+
+#: includes/providers/class-smtp2go.php:29 includes/providers/class-smtp2go.php:42
+msgid "SMTP2GO"
+msgstr ""
+
+#: includes/providers/class-smtp2go.php:43
+msgid "Used over HTTPS rather than SMTP, which matters where outbound mail ports are blocked."
+msgstr ""
+
+#: includes/providers/class-smtp2go.php:61
+msgid "From Settings, API Keys in SMTP2GO. It needs the Email Send permission."
+msgstr ""
+
+#: includes/providers/class-zoho.php:69 includes/providers/class-zoho.php:82
+msgid "Zoho Mail"
+msgstr ""
+
+#: includes/providers/class-zoho.php:83
+msgid "A Zoho mailbox. Needs an app password and the region the account was created in."
+msgstr ""
+
+#: includes/providers/class-zoho.php:105
+msgid "United States (zoho.com)"
+msgstr ""
+
+#: includes/providers/class-zoho.php:106
+msgid "Europe (zoho.eu)"
+msgstr ""
+
+#: includes/providers/class-zoho.php:107
+msgid "India (zoho.in)"
+msgstr ""
+
+#: includes/providers/class-zoho.php:108
+msgid "Australia (zoho.com.au)"
+msgstr ""
+
+#: includes/providers/class-zoho.php:109
+msgid "Japan (zoho.jp)"
+msgstr ""
+
+#: includes/providers/class-zoho.php:110
+msgid "Canada (zohocloud.ca)"
+msgstr ""
+
+#: includes/providers/class-zoho.php:111
+msgid "Saudi Arabia (zoho.sa)"
+msgstr ""
+
+#: includes/providers/class-zoho.php:122
+msgid "Zoho address"
+msgstr ""
+
+#: includes/providers/class-zoho.php:130
+msgid "App password"
+msgstr ""
+
+#: includes/providers/class-zoho.php:153
+msgid "SSL (port 465)"
+msgstr ""
+
+#: includes/providers/class-zoho.php:154
+msgid "TLS (port 587)"
+msgstr ""
+
+#: admin/class-admin-page.php:117
+msgid "Email is not being delivered."
+msgstr ""
+
+#: admin/class-admin-page.php:120
+msgid "Review mail settings"
+msgstr ""
+
+#: admin/class-admin-page.php:159 src/screens/settings.js:29
+msgid "Settings saved."
+msgstr ""
+
+#: admin/class-admin-page.php:212
+msgid "Choose a provider first."
+msgstr ""
+
+#: admin/class-admin-page.php:230
+msgid "Backup connection verified. Credentials are valid and the mailbox is reachable."
+msgstr ""
+
+#: admin/class-admin-page.php:231
+msgid "Connection verified. Credentials are valid and the mailbox is reachable."
+msgstr ""
+
+#: admin/class-admin-page.php:252
+msgid "Attempted %1$d queued message(s): %2$d delivered, %3$d still queued, %4$d abandoned."
+msgstr ""
+
+#: admin/class-admin-page.php:280
+msgid "Unknown queue action."
+msgstr ""
+
+#: admin/class-admin-page.php:310
+msgid "This is a test message.\n\nIf you are reading it, the API connection is working."
+msgstr ""
+
+#: admin/class-admin-page.php:317
+msgid "Test message accepted by the provider."
+msgstr ""
+
+#: admin/class-admin-page.php:361
+msgid "Google account disconnected."
+msgstr ""
+
+#: admin/class-admin-page.php:405
+msgid "Microsoft account disconnected here. Microsoft cannot revoke a single sign-in remotely, so remove this app under My Applications in your Microsoft account if you want the grant withdrawn as well."
+msgstr ""
+
+#: admin/class-admin-page.php:414 admin/class-admin-page.php:445 admin/class-admin-page.php:523 admin/class-admin-page.php:870
+msgid "You are not allowed to change these settings."
+msgstr ""
+
+#: admin/class-admin-page.php:434
+msgid "Microsoft account connected to %s. Send a test email to confirm delivery."
+msgstr ""
+
+#: admin/class-admin-page.php:468
+msgid "Google account connected to %s. Send a test email to confirm delivery."
+msgstr ""
+
+#: admin/class-admin-page.php:509
+msgid "Disconnected here, but the setup service could not be told: %s"
+msgstr ""
+
+#: admin/class-admin-page.php:515
+msgid "Account disconnected."
+msgstr ""
+
+#: admin/class-admin-page.php:547
+msgid "Connected %1$s to %2$s. Send a test email to confirm delivery."
+msgstr ""
+
+#: admin/class-admin-page.php:553
+msgid "Account connected to %s. Send a test email to confirm delivery."
+msgstr ""
+
+#: admin/class-admin-page.php:670 src/components/google-connect.js:39 src/components/one-click-connect.js:70
+msgid "Account"
+msgstr ""
+
+#: admin/class-admin-page.php:675 src/components/google-connect.js:46 src/components/microsoft-connect.js:71
+msgid "Connected. A refresh token is stored for this connection."
+msgstr ""
+
+#: admin/class-admin-page.php:680
+msgid "Not connected. Save the client ID and secret first, then sign in to grant access."
+msgstr ""
+
+#: admin/class-admin-page.php:705
+msgid "Disconnect Google account"
+msgstr ""
+
+#: admin/class-admin-page.php:706 src/components/google-button.js:63
+msgid "Sign in with Google"
+msgstr ""
+
+#: admin/class-admin-page.php:806
+msgid "Set in wp-config.php, so it cannot be edited here."
+msgstr ""
+
+#: admin/class-admin-page.php:829
+msgid "defined in wp-config.php"
+msgstr ""
+
+#: admin/class-admin-page.php:830
+msgid "This is the recommended place to keep it."
+msgstr ""
+
+#: admin/class-admin-page.php:837 src/components/provider-form.js:272
+msgid "Stored. Leave blank to keep it."
+msgstr ""
+
+#: admin/class-admin-page.php:838
+msgid "Not set"
+msgstr ""
+
+#: admin/class-admin-page.php:861
+msgid "Libsodium is unavailable, so this will be stored unencrypted. Put it in wp-config.php instead."
+msgstr ""
+
+#: admin/class-app-page.php:90
+msgid "Another plugin has taken over email sending."
+msgstr ""
+
+#: admin/class-app-page.php:91
+msgid "It defined wp_mail() before WordPress could, so MME-Mail to SMTP is configured but not sending anything. Deactivate one of the two."
+msgstr ""
+
+#: admin/class-app-page.php:206
+msgid "MME-Mail to SMTP needs JavaScript to show its settings."
+msgstr ""
+
+#: admin/class-site-health.php:35
+msgid "MME-Mail to SMTP updates"
+msgstr ""
+
+#: admin/class-site-health.php:40
+msgid "Email delivery"
+msgstr ""
+
+#: admin/class-site-health.php:54
+msgid "Email is sending normally"
+msgstr ""
+
+#: admin/class-site-health.php:57 admin/class-site-health.php:165
+msgid "Email"
+msgstr ""
+
+#: admin/class-site-health.php:60
+msgid "Outgoing email is being delivered through an authenticated API connection."
+msgstr ""
+
+#: admin/class-site-health.php:67
+msgid "No mail provider is configured"
+msgstr ""
+
+#: admin/class-site-health.php:68
+msgid "WordPress is falling back to the server mail function, which most hosts either block or deliver straight to spam."
+msgstr ""
+
+#: admin/class-site-health.php:79
+msgid "Email is failing to send"
+msgstr ""
+
+#: admin/class-site-health.php:82
+msgid "%1$d messages in a row have failed. Most recent error: %2$s"
+msgstr ""
+
+#: admin/class-site-health.php:100
+msgid "Some email was never delivered"
+msgstr ""
+
+#: admin/class-site-health.php:114
+msgid "Email is queued for retry"
+msgstr ""
+
+#: admin/class-site-health.php:134
+msgid "The Microsoft client secret has expired"
+msgstr ""
+
+#: admin/class-site-health.php:135
+msgid "The Microsoft client secret expires soon"
+msgstr ""
+
+#: admin/class-site-health.php:138
+msgid "The client secret expires on %s. Generate a replacement in Entra before then, or consider switching to a certificate credential, which does not expire on a fixed schedule."
+msgstr ""
+
+#: admin/class-site-health.php:162
+msgid "The plugin is up to date"
+msgstr ""
+
+#: admin/class-site-health.php:170
+msgid "Version %s is installed, and it is the newest release."
+msgstr ""
+
+#: admin/class-site-health.php:180
+msgid "Update checks are not getting through"
+msgstr ""
+
+#: admin/class-site-health.php:183
+msgid "This site could not reach the GitHub API to ask whether a newer version of MME-Mail to SMTP exists, so it will not offer updates for it. Usually that means outbound HTTPS requests are blocked, a security plugin is filtering them, or the API is rate limiting this server. The plugin keeps working; it simply cannot tell you when a fix is available. It checks %s."
+msgstr ""
+
+#: admin/class-site-health.php:193
+msgid "A newer version of MME-Mail to SMTP is available"
+msgstr ""
+
+#: admin/class-site-health.php:196
+msgid "Version %1$s is installed and %2$s has been released. Update from the Plugins screen."
+msgstr ""
+
+#: admin/class-site-health.php:203
+msgid "Open the Plugins screen"
+msgstr ""
+
+#: admin/class-site-health.php:214
+msgid "Open mail settings"
+msgstr ""
+
+#: admin/class-site-health.php:226
+msgid "Review queued mail"
+msgstr ""
+
+#: admin/class-site-health.php:103
+msgid "%d message exhausted every retry and has been abandoned."
+msgid_plural "%d messages exhausted every retry and have been abandoned."
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/class-site-health.php:117
+msgid "%d message could not be sent on the first attempt and is waiting to be retried. Nothing has been lost, but sending is not healthy."
+msgid_plural "%d messages could not be sent on the first attempt and are waiting to be retried. Nothing has been lost, but sending is not healthy."
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/views/backup.php:22
+msgid "Backup Connection"
+msgstr ""
+
+#: admin/views/backup.php:27
+msgid "Optional. When the primary connection fails, the message is immediately retried here before anything else is attempted. Because it has its own credentials and its own endpoint, it survives failures that are permanent for the primary - an expired client secret, a revoked consent, a tenant-wide outage."
+msgstr ""
+
+#: admin/views/backup.php:33
+msgid "There is no primary connection yet."
+msgstr ""
+
+#: admin/views/backup.php:37
+msgid "A backup is only reached when the primary fails, so configure the primary on the %s screen first."
+msgstr ""
+
+#: admin/views/backup.php:38 admin/views/logs.php:38 admin/views/logs.php:140 src/components/nav.js:25
+msgid "Settings"
+msgstr ""
+
+#: admin/views/backup.php:48
+msgid "Primary connection: %s"
+msgstr ""
+
+#: admin/views/backup.php:62
+msgid "Both connections use the same provider."
+msgstr ""
+
+#: admin/views/backup.php:63
+msgid "They share an identity endpoint, so the outage that stops the primary will almost always stop the backup at the same moment. Pair Microsoft 365 with Google, or the reverse, for a fallback that actually holds."
+msgstr ""
+
+#: admin/views/backup.php:84
+msgid "Check the backup"
+msgstr ""
+
+#: admin/views/backup.php:91
+msgid "Verify backup credentials"
+msgstr ""
+
+#: admin/views/backup.php:95
+msgid "This checks the credentials and the mailbox without sending anything. There is deliberately no \"test through the backup\" button: the backup is only reached when the primary fails, and forcing that would mean breaking the primary."
+msgstr ""
+
+#: admin/views/connection.php:27
+msgid "Provider"
+msgstr ""
+
+#: admin/views/connection.php:44
+msgid "Uses app-only authentication, so there is no sign-in prompt and no token that expires and needs reauthorizing. Requires a Microsoft 365 work or school account; personal outlook.com addresses cannot use this method."
+msgstr ""
+
+#: admin/views/connection.php:49
+msgid "Copy the secret Value, not the Secret ID. Entra shows the Value only once."
+msgstr ""
+
+#: admin/views/connection.php:50
+msgid "Leave empty to send through the From address above. Fill it in only to send through a licensed or shared mailbox that holds Send As permission for it."
+msgstr ""
+
+#: admin/views/connection.php:58
+msgid "Entra secrets last at most 24 months. Record the expiry date and you will be warned before it lapses instead of finding out when mail stops."
+msgstr ""
+
+#: admin/views/connection.php:62
+msgid "Access scoping"
+msgstr ""
+
+#: admin/views/connection.php:66
+msgid "I have restricted this application to specific mailboxes"
+msgstr ""
+
+#: admin/views/connection.php:69
+msgid "Important: the Mail.Send application permission lets this app send as any mailbox in the tenant until you scope it. Restrict it in Exchange Online PowerShell:"
+msgstr ""
+
+#: admin/views/connection.php:80
+msgid "Google Workspace service account"
+msgstr ""
+
+#: admin/views/connection.php:81
+msgid "The Google equivalent of app-only auth: no consent screen and no refresh token to expire. Workspace domains only."
+msgstr ""
+
+#: admin/views/connection.php:85
+msgid "The private_key value from the same JSON, including the BEGIN and END lines."
+msgstr ""
+
+#: admin/views/connection.php:86
+msgid "The Workspace user this service account impersonates."
+msgstr ""
+
+#: admin/views/connection.php:90
+msgid "Authorize the service account client ID for the https://www.googleapis.com/auth/gmail.send scope in Admin console, Security, Access and data control, API controls, Domain-wide delegation."
+msgstr ""
+
+#: admin/views/connection.php:96
+msgid "Set your Google Cloud consent screen to In production before connecting."
+msgstr ""
+
+#: admin/views/connection.php:97
+msgid "While it is left in Testing, Google expires the refresh token every seven days and sending stops without warning. This is the most common cause of a Gmail connection that works for a week and then quietly dies."
+msgstr ""
+
+#: admin/views/connection.php:99
+msgid "This uses your own OAuth client, created in your own Google Cloud project. Nothing is routed through a shared or third-party application, so the tokens Google issues are only ever seen by this site."
+msgstr ""
+
+#: admin/views/connection.php:103
+msgid "From Credentials in your Google Cloud project. It must be a Web application client."
+msgstr ""
+
+#: admin/views/connection.php:107 src/components/redirect-uri.js:34
+msgid "Redirect URI"
+msgstr ""
+
+#: admin/views/connection.php:110
+msgid "Add this exact value to the authorized redirect URIs of your OAuth client. Google matches it character for character, and requires HTTPS for anything other than localhost."
+msgstr ""
+
+#: admin/views/connection.php:111
+msgid "Both connections share this one URI, so it only needs registering once."
+msgstr ""
+
+#: admin/views/connection.php:117
+msgid "The prompt asks only for permission to send mail. This plugin never requests read access to the mailbox."
+msgstr ""
+
+#: admin/views/logs.php:24
+msgid "Mail Logs"
+msgstr ""
+
+#: admin/views/logs.php:28 admin/views/settings.php:54 src/screens/logs.js:43
+msgid "Retry queue"
+msgstr ""
+
+#: admin/views/logs.php:33
+msgid "The retry queue is switched off."
+msgstr ""
+
+#: admin/views/logs.php:37
+msgid "A send that fails for a temporary reason is reported and discarded rather than retried. Turn it on under %s."
+msgstr ""
+
+#: admin/views/logs.php:44
+msgid "Nothing waiting. Every message has been delivered or reported."
+msgstr ""
+
+#: admin/views/logs.php:60 src/screens/logs.js:116
+msgid "These ran out of retries. Fix the cause, then return them to the queue."
+msgstr ""
+
+#: admin/views/logs.php:77
+msgid "Next attempt at %s."
+msgstr ""
+
+#: admin/views/logs.php:85 src/screens/logs.js:60
+msgid "Retry now"
+msgstr ""
+
+#: admin/views/logs.php:85
+msgid "Return abandoned to queue"
+msgstr ""
+
+#: admin/views/logs.php:85
+msgid "Discard everything queued"
+msgstr ""
+
+#: admin/views/logs.php:87 src/screens/logs.js:78
+msgid "This permanently deletes every queued message, including any still waiting to be delivered. Continue?"
+msgstr ""
+
+#: admin/views/logs.php:103 admin/views/logs.php:161 src/screens/logs.js:126 src/screens/logs.js:335
+msgid "To"
+msgstr ""
+
+#: admin/views/logs.php:105 src/screens/logs.js:128
+msgid "Tries"
+msgstr ""
+
+#: admin/views/logs.php:106 src/screens/logs.js:129
+msgid "Next attempt"
+msgstr ""
+
+#: admin/views/logs.php:107 src/screens/logs.js:130
+msgid "Last error"
+msgstr ""
+
+#: admin/views/logs.php:120 src/screens/logs.js:143
+msgid "Abandoned"
+msgstr ""
+
+#: admin/views/logs.php:132 admin/views/settings.php:76 src/screens/logs.js:257 src/screens/logs.js:270
+msgid "Send log"
+msgstr ""
+
+#: admin/views/logs.php:139
+msgid "Logging is switched off. Turn it on under %s."
+msgstr ""
+
+#: admin/views/logs.php:145
+msgid "Nothing recorded yet."
+msgstr ""
+
+#: admin/views/logs.php:151
+msgid "Envelope details and errors only - message bodies are never stored here. Entries are kept for %d days."
+msgstr ""
+
+#: admin/views/logs.php:159 src/screens/logs.js:332
+msgid "When"
+msgstr ""
+
+#: admin/views/logs.php:160 src/screens/connections.js:258 src/screens/logs.js:334 src/screens/routing.js:141
+msgid "Connection"
+msgstr ""
+
+#: admin/views/logs.php:185
+msgid "A failed row followed by a successful one for the same message is the backup connection or the retry queue doing its job."
+msgstr ""
+
+#: admin/views/logs.php:55
+msgid "%d message was never delivered."
+msgid_plural "%d messages were never delivered."
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/views/logs.php:69
+msgid "%d message waiting."
+msgid_plural "%d messages waiting."
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/views/settings.php:30
+msgid "Must be a mailbox the connected identity is permitted to send as."
+msgstr ""
+
+#: admin/views/settings.php:34
+msgid "Force sender"
+msgstr ""
+
+#: admin/views/settings.php:38
+msgid "Override the From address set by other plugins"
+msgstr ""
+
+#: admin/views/settings.php:40
+msgid "Recommended. Both APIs reject or rewrite a From address the authenticated identity may not use."
+msgstr ""
+
+#: admin/views/settings.php:46
+msgid "Primary connection"
+msgstr ""
+
+#: admin/views/settings.php:57
+msgid "Queue failed sends"
+msgstr ""
+
+#: admin/views/settings.php:61 src/screens/settings.js:49
+msgid "Hold on to messages that failed for a temporary reason and retry them"
+msgstr ""
+
+#: admin/views/settings.php:64
+msgid "Strongly recommended. The failure that actually loses mail is a brief network or DNS fault at your host, which clears in minutes - far longer than the few seconds a single page request can wait. Retrying across later requests is the only thing that survives it. Attempts back off from five minutes and give up after about two days."
+msgstr ""
+
+#: admin/views/settings.php:67
+msgid "Note that a queued message is stored complete, body included, until it is delivered - unlike the send log, which never stores content. Delivered messages are deleted immediately; abandoned ones are kept for seven days so you can see what was lost, then removed."
+msgstr ""
+
+#: admin/views/settings.php:73 src/screens/settings.js:80
+msgid "Logging and alerts"
+msgstr ""
+
+#: admin/views/settings.php:80 src/screens/settings.js:91
+msgid "Record the outcome of every send"
+msgstr ""
+
+#: admin/views/settings.php:82
+msgid "Envelope details and errors only. Message bodies are never stored."
+msgstr ""
+
+#: admin/views/settings.php:86 src/screens/settings.js:96
+msgid "Keep entries for (days)"
+msgstr ""
+
+#: admin/views/settings.php:87 src/screens/settings.js:110
+msgid "Alert after N failures"
+msgstr ""
+
+#: admin/views/settings.php:87
+msgid "Consecutive failures before raising an alert."
+msgstr ""
+
+#: admin/views/settings.php:88 src/screens/settings.js:124
+msgid "Alert address"
+msgstr ""
+
+#: admin/views/settings.php:88
+msgid "Sent using the server mail function rather than the API, since the API is what has failed."
+msgstr ""
+
+#: admin/views/settings.php:96
+msgid "Check the connection"
+msgstr ""
+
+#: admin/views/settings.php:103
+msgid "Verify credentials"
+msgstr ""
+
+#: admin/views/settings.php:115
+msgid "Send test email"
+msgstr ""
+
+#: admin/views/settings.php:123
+msgid "A test message goes out over the primary connection. Configure a fallback on the %1$s screen, and see what was actually sent on the %2$s screen."
+msgstr ""
+
+#: admin/views/settings.php:125
+msgid "Logs"
+msgstr ""
+
+#: src/components/error-boundary.js:54
+msgid "This screen stopped responding."
+msgstr ""
+
+#: src/components/error-boundary.js:58
+msgid "Your change was most likely saved - the failure happens after the save was sent. Reload to check."
+msgstr ""
+
+#: src/components/error-boundary.js:65
+msgid "A browser translation is the usual cause. Turning it off for this screen avoids it."
+msgstr ""
+
+#: src/components/error-boundary.js:76
+msgid "Reload this screen"
+msgstr ""
+
+#: src/components/error-boundary.js:82
+msgid "Technical detail"
+msgstr ""
+
+#: src/components/footer.js:35
+msgid "Version %s"
+msgstr ""
+
+#: src/components/footer.js:39
+msgid "GPL-2.0-or-later"
+msgstr ""
+
+#: src/components/footer.js:48
+msgid "Built and maintained by <a>MME-pro</a>"
+msgstr ""
+
+#: src/components/google-connect.js:63
+msgid "This revokes the grant at Google and forgets it here. Sending stops. Continue?"
+msgstr ""
+
+#: src/components/google-connect.js:73 src/components/microsoft-connect.js:98 src/components/one-click-connect.js:107 src/screens/connections.js:372
+msgid "Disconnect"
+msgstr ""
+
+#: src/components/google-connect.js:83
+msgid "Enter the client ID and secret above and save them before signing in."
+msgstr ""
+
+#: src/components/google-connect.js:95 src/components/microsoft-connect.js:120 src/components/one-click-connect.js:117
+msgid "You have unsaved changes. Signing in leaves this page and they will be lost."
+msgstr ""
+
+#: src/components/google-setup-guide.js:98 src/screens/connections.js:296
+msgid "Documentation"
+msgstr ""
+
+#: src/components/google-setup-guide.js:104
+msgid "Connecting Google"
+msgstr ""
+
+#: src/components/google-setup-guide.js:106
+msgid "Three ways in, depending on the mailbox and who can authorise it."
+msgstr ""
+
+#: src/components/google-setup-guide.js:121
+msgid "nothing to set up. Sign in and send as that mailbox."
+msgstr ""
+
+#: src/components/google-setup-guide.js:131
+msgid "an OAuth client you create in your own Google Cloud project, so nothing passes through anybody else."
+msgstr ""
+
+#: src/components/google-setup-guide.js:141
+msgid "Workspace only, and the best where available: no sign-in and nothing expires. Needs a domain administrator."
+msgstr ""
+
+#: src/components/google-setup-guide.js:150
+msgid "My own OAuth client, step by step"
+msgstr ""
+
+#: src/components/google-setup-guide.js:154
+msgid "Create or choose a Google Cloud project"
+msgstr ""
+
+#: src/components/google-setup-guide.js:156
+msgid "Any project will do. The Gmail API is free at this volume."
+msgstr ""
+
+#: src/components/google-setup-guide.js:163
+msgid "Enable the Gmail API"
+msgstr ""
+
+#: src/components/google-setup-guide.js:165
+msgid "APIs & Services, then Library, then Gmail API, then Enable."
+msgstr ""
+
+#: src/components/google-setup-guide.js:172
+msgid "Configure the OAuth consent screen"
+msgstr ""
+
+#: src/components/google-setup-guide.js:174
+msgid "On a Workspace domain choose Internal: no test users, no verification, no seven-day expiry. Consumer accounts can only choose External."
+msgstr ""
+
+#: src/components/google-setup-guide.js:180
+msgid "Add one scope and no others:"
+msgstr ""
+
+#: src/components/google-setup-guide.js:187
+msgid "Copy the scope"
+msgstr ""
+
+#: src/components/google-setup-guide.js:191
+msgid "Publish the app"
+msgstr ""
+
+#: src/components/google-setup-guide.js:193
+msgid "Press Publish app so the status reads In production."
+msgstr ""
+
+#: src/components/google-setup-guide.js:199
+msgid "Google shows an unverified-app notice until verification completes; choose Advanced, then continue. It is the ordinary review, not the paid assessment."
+msgstr ""
+
+#: src/components/google-setup-guide.js:206
+msgid "Create the OAuth client"
+msgstr ""
+
+#: src/components/google-setup-guide.js:208
+msgid "Credentials, then Create credentials, then OAuth client ID. Choose Web application, not Desktop."
+msgstr ""
+
+#: src/components/google-setup-guide.js:214
+msgid "Under Authorised redirect URIs, add this exact address:"
+msgstr ""
+
+#: src/components/google-setup-guide.js:221 src/components/redirect-uri.js:52
+msgid "Copy redirect URI"
+msgstr ""
+
+#: src/components/google-setup-guide.js:225
+msgid "Paste, save, sign in"
+msgstr ""
+
+#: src/components/google-setup-guide.js:227
+msgid "Paste the client ID and secret into the fields on this screen and save. The sign-in button stays disabled until you do."
+msgstr ""
+
+#: src/components/google-setup-guide.js:242
+msgid "Publish the app, or it stops sending every seven days"
+msgstr ""
+
+#: src/components/google-setup-guide.js:246
+msgid "In Testing, Google expires every refresh token after seven days, and only listed Test users can sign in."
+msgstr ""
+
+#: src/components/google-setup-guide.js:252
+msgid "Publishing removes both. It is step 4 above, and it is the one people skip."
+msgstr ""
+
+#: src/components/google-setup-guide.js:263
+msgid "It worked, then stopped a week later"
+msgstr ""
+
+#: src/components/google-setup-guide.js:266
+msgid "The consent screen is still in Testing. Publish it, then sign in again here."
+msgstr ""
+
+#: src/components/google-setup-guide.js:275
+msgid "Service account, in short"
+msgstr ""
+
+#: src/components/google-setup-guide.js:278
+msgid "Create a service account, download its JSON key, and paste it here with the mailbox to send as. A domain administrator authorises it once."
+msgstr ""
+
+#: src/components/google-setup-guide.js:284
+msgid "No sign-in and no refresh token, so nothing expires. Not available for a consumer gmail.com address."
+msgstr ""
+
+#: src/components/google-setup-guide.js:301
+msgid "Consent screen"
+msgstr ""
+
+#: src/components/google-setup-guide.js:311
+msgid "Credentials"
+msgstr ""
+
+#: src/components/google-setup-guide.js:322
+msgid "Google's own documentation"
+msgstr ""
+
+#: src/components/google-setup-guide.js:328 src/components/log-detail.js:220
+msgid "Close"
+msgstr ""
+
+#: src/components/log-detail.js:84 src/components/log-detail.js:165
+msgid "Versions"
+msgstr ""
+
+#: src/components/log-detail.js:85 src/components/log-detail.js:171
+msgid "Params"
+msgstr ""
+
+#: src/components/log-detail.js:87 src/components/log-detail.js:183
+msgid "Error"
+msgstr ""
+
+#: src/components/log-detail.js:89 src/components/log-detail.js:194
+msgid "SMTP Debug"
+msgstr ""
+
+#: src/components/log-detail.js:121
+msgid "Send details"
+msgstr ""
+
+#: src/components/log-detail.js:126
+msgid "Loading…"
+msgstr ""
+
+#: src/components/log-detail.js:142 src/screens/dashboard.js:116 src/screens/dashboard.js:219 src/screens/dashboard.js:299 src/screens/logs.js:294 src/screens/logs.js:348
+msgid "Failed"
+msgstr ""
+
+#: src/components/log-detail.js:153
+msgid "Accepted by the provider, so there is no diagnostic report."
+msgstr ""
+
+#: src/components/log-detail.js:157
+msgid "No diagnostic report was recorded for this failure. Entries from before this feature existed have none."
+msgstr ""
+
+#: src/components/log-detail.js:197
+msgid "The conversation with the mail server. Credentials are replaced before this is stored."
+msgstr ""
+
+#: src/components/log-detail.js:215
+msgid "Copied"
+msgstr ""
+
+#: src/components/log-detail.js:216
+msgid "Copy report"
+msgstr ""
+
+#: src/components/microsoft-button.js:51
+msgid "Sign in with Microsoft"
+msgstr ""
+
+#: src/components/microsoft-connect.js:48 src/screens/connections.js:409
+msgid "Mailbox"
+msgstr ""
+
+#: src/components/microsoft-connect.js:63
+msgid "Signed in as <b>%s</b>. This connection can send as that mailbox."
+msgstr ""
+
+#: src/components/microsoft-connect.js:88
+msgid "This forgets the sign-in and sending stops. Microsoft cannot revoke it remotely - remove the app in your Microsoft account too. Continue?"
+msgstr ""
+
+#: src/components/microsoft-connect.js:108
+msgid "Enter the application ID and client secret above and save them before signing in."
+msgstr ""
+
+#: src/components/microsoft-connect.js:139
+msgid "Sign in as the mailbox that will send, not your administrator account - an admin account with no mailbox fails on the first send."
+msgstr ""
+
+#: src/components/microsoft-connect.js:145
+msgid "If offered, tick \"Consent on behalf of your organization\" so the sending mailbox is not asked separately."
+msgstr ""
+
+#: src/components/nav.js:21
+msgid "Dashboard"
+msgstr ""
+
+#: src/components/nav.js:22
+msgid "Connections"
+msgstr ""
+
+#: src/components/nav.js:23
+msgid "Routing"
+msgstr ""
+
+#: src/components/nav.js:24
+msgid "Email Logs"
+msgstr ""
+
+#: src/components/nav.js:44
+msgid "No provider configured"
+msgstr ""
+
+#: src/components/nav.js:45
+msgid "WordPress is using the server mail function."
+msgstr ""
+
+#: src/components/nav.js:53
+msgid "Not delivering"
+msgstr ""
+
+#: src/components/nav.js:62
+msgid "Mail was lost"
+msgstr ""
+
+#: src/components/nav.js:63
+msgid "Some messages exhausted every retry."
+msgstr ""
+
+#: src/components/nav.js:71 src/screens/dashboard.js:225
+msgid "Queued for retry"
+msgstr ""
+
+#: src/components/nav.js:72
+msgid "Nothing is lost, but sending is not healthy."
+msgstr ""
+
+#: src/components/nav.js:79
+msgid "Sending normally"
+msgstr ""
+
+#: src/components/nav.js:204
+msgid "Switch to light"
+msgstr ""
+
+#: src/components/nav.js:205
+msgid "Switch to dark"
+msgstr ""
+
+#: src/components/nav.js:245
+msgid "Authenticated delivery"
+msgstr ""
+
+#: src/components/one-click-connect.js:80
+msgid "Connected as %s."
+msgstr ""
+
+#: src/components/one-click-connect.js:83
+msgid "Connected."
+msgstr ""
+
+#: src/components/one-click-connect.js:97
+msgid "This revokes the grant and forgets it here. Sending stops. Continue?"
+msgstr ""
+
+#: src/components/one-click-connect.js:133
+msgid "Nothing to register with %s."
+msgstr ""
+
+#: src/components/provider-form.js:214
+msgid "Copy"
+msgstr ""
+
+#: src/components/provider-form.js:215
+msgid "Copy to clipboard"
+msgstr ""
+
+#: src/components/provider-form.js:305
+msgid "Enabled"
+msgstr ""
+
+#: src/screens/connections.js:49 src/screens/connections.js:83
+msgid "Coming soon"
+msgstr ""
+
+#: src/screens/connections.js:107
+msgid "Every message is attempted here first, unless a routing rule sends it elsewhere."
+msgstr ""
+
+#: src/screens/connections.js:114
+msgid "Used when the chosen connection fails. Use a different provider."
+msgstr ""
+
+#: src/screens/connections.js:120
+msgid "Used only for messages a routing rule sends here. Set those up under Routing."
+msgstr ""
+
+#: src/screens/connections.js:193
+msgid "Connection saved."
+msgstr ""
+
+#: src/screens/connections.js:232
+msgid "Fill in %s before verifying."
+msgstr ""
+
+#: src/screens/connections.js:317
+msgid "Plain permalinks put a query string in this address, which Entra rejects unless the app excludes personal accounts. Any other permalink setting fixes it."
+msgstr ""
+
+#: src/screens/connections.js:342
+msgid "Save connection"
+msgstr ""
+
+#: src/screens/connections.js:346
+msgid "Verify"
+msgstr ""
+
+#: src/screens/connections.js:361
+msgid "This clears the provider, every credential and the From address on this connection. Mail routed here stops. Continue?"
+msgstr ""
+
+#: src/screens/connections.js:461
+msgid "Send a test message"
+msgstr ""
+
+#: src/screens/connections.js:462
+msgid "Goes out over the primary connection."
+msgstr ""
+
+#: src/screens/connections.js:470
+msgid "Recipient"
+msgstr ""
+
+#: src/screens/connections.js:484
+msgid "Send test"
+msgstr ""
+
+#: src/screens/connections.js:523
+msgid "Connection added. Choose a provider for it."
+msgstr ""
+
+#: src/screens/connections.js:565
+msgid "Not configured"
+msgstr ""
+
+#: src/screens/connections.js:583
+msgid "Remove %s"
+msgstr ""
+
+#: src/screens/connections.js:595
+msgid "Remove %s and its stored credentials? Any routing rule using it will be deleted too."
+msgstr ""
+
+#: src/screens/connections.js:618
+msgid "Connection name"
+msgstr ""
+
+#: src/screens/connections.js:625
+msgid "Add"
+msgstr ""
+
+#: src/screens/connections.js:628
+msgid "Cancel"
+msgstr ""
+
+#: src/screens/connections.js:641
+msgid "Connection limit reached"
+msgstr ""
+
+#: src/screens/connections.js:642
+msgid "Add connection"
+msgstr ""
+
+#: src/screens/dashboard.js:33
+msgid "No sending activity yet"
+msgstr ""
+
+#: src/screens/dashboard.js:36
+msgid "Fourteen days of deliveries and failures will chart here once WordPress starts sending."
+msgstr ""
+
+#: src/screens/dashboard.js:59
+msgid "Messages sent and failed per day over the last fourteen days"
+msgstr ""
+
+#: src/screens/dashboard.js:112
+msgid "Delivered"
+msgstr ""
+
+#: src/screens/dashboard.js:181
+msgid "Delivered · last 14 days"
+msgstr ""
+
+#: src/screens/dashboard.js:204
+msgid "%d failed over the same period. Every failure is recorded with the reason the provider gave."
+msgstr ""
+
+#: src/screens/dashboard.js:210
+msgid "No provider configured, so WordPress is using the server mail function."
+msgstr ""
+
+#: src/screens/dashboard.js:231
+msgid "Never delivered"
+msgstr ""
+
+#: src/screens/dashboard.js:259
+msgid "Sending activity"
+msgstr ""
+
+#: src/screens/dashboard.js:260
+msgid "Failures are stacked on top of deliveries, so a bad day reads as a dark cap rather than a missing bar."
+msgstr ""
+
+#: src/screens/dashboard.js:269
+msgid "Recent activity"
+msgstr ""
+
+#: src/screens/dashboard.js:275
+msgid "View all"
+msgstr ""
+
+#: src/screens/dashboard.js:280
+msgid "Nothing sent yet"
+msgstr ""
+
+#: src/screens/dashboard.js:281
+msgid "Once WordPress sends its first message it will appear here, with whatever the provider said about it."
+msgstr ""
+
+#: src/screens/dashboard.js:302 src/screens/logs.js:137
+msgid "(no subject)"
+msgstr ""
+
+#: src/screens/logs.js:46
+msgid "Failed for a temporary reason, waiting to be retried."
+msgstr ""
+
+#: src/screens/logs.js:50
+msgid "Switched off. A send that fails for a temporary reason is reported and discarded rather than retried."
+msgstr ""
+
+#: src/screens/logs.js:68
+msgid "Return abandoned"
+msgstr ""
+
+#: src/screens/logs.js:89
+msgid "Discard all"
+msgstr ""
+
+#: src/screens/logs.js:98
+msgid "Nothing waiting"
+msgstr ""
+
+#: src/screens/logs.js:100
+msgid "Every message has been delivered or reported."
+msgstr ""
+
+#: src/screens/logs.js:112
+msgid "%d never delivered."
+msgstr ""
+
+#: src/screens/logs.js:260
+msgid "Logging is switched off"
+msgstr ""
+
+#: src/screens/logs.js:262
+msgid "Turn it on under Settings."
+msgstr ""
+
+#: src/screens/logs.js:271
+msgid "Envelope details and errors only - message bodies are never stored here."
+msgstr ""
+
+#: src/screens/logs.js:286
+msgid "Search"
+msgstr ""
+
+#: src/screens/logs.js:292
+msgid "All"
+msgstr ""
+
+#: src/screens/logs.js:318
+msgid "Nothing matches"
+msgstr ""
+
+#: src/screens/logs.js:319
+msgid "Nothing recorded yet"
+msgstr ""
+
+#: src/screens/logs.js:323
+msgid "Try a different search or filter."
+msgstr ""
+
+#: src/screens/logs.js:324
+msgid "Once WordPress sends its first message it will appear here."
+msgstr ""
+
+#: src/screens/routing.js:55
+msgid "Field"
+msgstr ""
+
+#: src/screens/routing.js:68
+msgid "Operator"
+msgstr ""
+
+#: src/screens/routing.js:81
+msgid "Value"
+msgstr ""
+
+#: src/screens/routing.js:83
+msgid "Value to match"
+msgstr ""
+
+#: src/screens/routing.js:95
+msgid "and"
+msgstr ""
+
+#: src/screens/routing.js:102
+msgid "Remove condition"
+msgstr ""
+
+#: src/screens/routing.js:137
+msgid "Send with"
+msgstr ""
+
+#: src/screens/routing.js:147
+msgid "— Select a connection —"
+msgstr ""
+
+#: src/screens/routing.js:152
+msgid " (not configured)"
+msgstr ""
+
+#: src/screens/routing.js:158
+msgid "if the following conditions are met…"
+msgstr ""
+
+#: src/screens/routing.js:166
+msgid "Move up"
+msgstr ""
+
+#: src/screens/routing.js:175
+msgid "Move down"
+msgstr ""
+
+#: src/screens/routing.js:183
+msgid "Remove rule"
+msgstr ""
+
+#: src/screens/routing.js:196
+msgid "This connection has no provider, so matching messages fall back to the primary."
+msgstr ""
+
+#: src/screens/routing.js:210
+msgid "or"
+msgstr ""
+
+#: src/screens/routing.js:251
+msgid "And"
+msgstr ""
+
+#: src/screens/routing.js:266
+msgid "Add new group"
+msgstr ""
+
+#: src/screens/routing.js:296
+msgid "Routing saved."
+msgstr ""
+
+#: src/screens/routing.js:329
+msgid "Smart routing"
+msgstr ""
+
+#: src/screens/routing.js:330
+msgid "Send some email through a different connection."
+msgstr ""
+
+#: src/screens/routing.js:340 src/screens/routing.js:412
+msgid "Save routing"
+msgstr ""
+
+#: src/screens/routing.js:348
+msgid "Enable smart routing"
+msgstr ""
+
+#: src/screens/routing.js:356
+msgid "No rules yet"
+msgstr ""
+
+#: src/screens/routing.js:360 src/screens/routing.js:389
+msgid "Add rule"
+msgstr ""
+
+#: src/screens/routing.js:364
+msgid "A rule sends matching email through a connection you choose."
+msgstr ""
+
+#: src/screens/routing.js:399
+msgid "Checked from the top down; the first match wins."
+msgstr ""
+
+#: src/screens/routing.js:403
+msgid "Your primary connection is used for every message that matches none of the rules above."
+msgstr ""
+
+#: src/screens/settings.js:43
+msgid "Reliability"
+msgstr ""
+
+#: src/screens/settings.js:61
+msgid "Discard undelivered messages after (days)"
+msgstr ""
+
+#: src/screens/settings.js:81
+msgid "Almost nothing checks what wp_mail() returned, so an alert is how you find out."
+msgstr ""
+
+#: src/screens/settings.js:147
+msgid "Privacy"
+msgstr ""
+
+#: src/screens/settings.js:150
+msgid "The log keeps recipients and subjects. A queued message is kept in full until it is sent or discarded. No cookies, no tracking, no IP addresses."
+msgstr ""
+
+#: src/screens/settings.js:161
+msgid "Export personal data"
+msgstr ""
+
+#: src/screens/settings.js:167
+msgid "Erase personal data"
+msgstr ""
+
+#: src/screens/settings.js:173
+msgid "Privacy policy text"
+msgstr ""
+
+#: src/screens/settings.js:185
+msgid "Save settings"
+msgstr ""

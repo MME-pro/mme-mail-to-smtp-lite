@@ -1,0 +1,459 @@
+/*
+ * Tailwind is imported in pieces so the UTILITIES land unlayered.
+ *
+ * This is the fix for a whole class of bugs rather than one. wp-admin ships
+ * plain element rules - h2, h3 { font-size: 1.3em }, a { color: #2271b1 } - and
+ * they are unlayered. An unlayered rule beats a layered one no matter the
+ * specificity, so with utilities inside @layer utilities every heading size and
+ * link colour in this app silently lost to WordPress.
+ *
+ * Unlayered, a utility class (0,1,0) simply outranks an element selector
+ * (0,0,1) and the cascade does the right thing on its own.
+ */
+@layer theme, base, components;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css";
+@import "tw-animate-css";
+
+/*
+ * Design system.
+ *
+ * The token *contract* is shadcn's - --background, --foreground, --primary,
+ * --muted and so on - so any shadcn component drops in unmodified. The values
+ * are MME-pro's, read out of the Elementor global palette on mme-pro.de rather
+ * than sampled by eye: #121212, #6AA475, #DAFAE4, #313131, #AEAEAE, #F20000.
+ *
+ * The site is dark-first - near-black ground, muted sage accent, mint-tinted
+ * text. That inverts here, and deliberately. wp-admin's own chrome is light,
+ * and a screen that fights it reads as a foreign object bolted into the
+ * dashboard. So daylight is the default and the near-black becomes the
+ * *chrome*: the header band is the site's own ground colour, the workspace
+ * below it is paper. Dark mode is where the palette gets to be itself.
+ *
+ * Sage carries the personality and appears where the site puts it - active
+ * state, focus, links, the primary data series.
+ *
+ * Two things the palette forces, both contrast:
+ *
+ * Sage is a mid-tone. On white it manages 2.9:1 - fine for a fill or a rule,
+ * nowhere near enough for text. So any accent *word* uses --brand-deep, the
+ * same hue taken down to 5.1:1, and the bright value stays on graphics.
+ *
+ * And the semantic trio does not move. With a green brand, a green "delivered"
+ * badge stops reading as a state and starts reading as decoration - so success
+ * keeps its deeper emerald, far enough from sage to separate at a glance and
+ * still the green everyone already understands.
+ */
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+	--radius: 10px;
+
+	/* Paper, pulled a shade toward the site's off-white rather than pure. */
+	--background: #f7f9f7;
+	--foreground: #121212;
+
+	--card: #ffffff;
+	--card-foreground: #121212;
+
+	--popover: #ffffff;
+	--popover-foreground: #121212;
+
+	/* The site's own near-black, so a primary button carries the same weight of
+	   ink the site uses for its own. */
+	--primary: #121212;
+	--primary-foreground: #fcfcfc;
+
+	--secondary: #eef1ee;
+	--secondary-foreground: #121212;
+
+	--muted: #eef1ee;
+	/* Not the site's #AEAEAE: on paper that is 2.2:1 and simply unreadable.
+	   This is the same neutral taken to 4.8:1, which is the least it can be
+	   and still be text. */
+	--muted-foreground: #6c716d;
+
+	--accent: #eef1ee;
+	--accent-foreground: #121212;
+
+	--border: #e2e7e3;
+	--input: #cdd4ce;
+	--ring: #6aa475;
+
+	/* The accent, straight off the site. Fills, rules, focus and the primary
+	   data series - never a word on a light ground. */
+	--brand: #6aa475;
+	--brand-foreground: #121212;
+	--brand-subtle: #dafae4;
+	/* The same sage, dark enough to be read. This is what links use. */
+	--brand-deep: #3f7a50;
+
+	/* Chrome. The site's ground colour and its own text tint, so the header
+	   band is a piece of mme-pro.de sitting inside wp-admin. */
+	--ink: #121212;
+	--ink-raised: #1c1c1c;
+	--ink-line: #313131;
+	--ink-foreground: #dafae4;
+	--ink-muted: #aeaeae;
+
+	/* Semantic only. Never borders, never headings, never decoration.
+	 *
+	 * Four states, four meanings, and each has to be readable as a colour
+	 * before it is read as words: blue tells you something, yellow asks you
+	 * to be careful, red says something is wrong, green says it worked.
+	 *
+	 * Info is its own blue rather than the brand. It borrowed --brand once,
+	 * which was fine while the brand was indigo and became wrong the moment
+	 * the house palette made it sage - every informational notice in the app
+	 * turned green and started reading as a success. A meaning that changes
+	 * when the branding changes was never a meaning.
+	 */
+	--info: #175cd3;
+	--info-subtle: #eff8ff;
+	--success: #067647;
+	--success-subtle: #ecfdf3;
+	--warning: #b54708;
+	--warning-subtle: #fffaeb;
+	--danger: #d92d20;
+	--danger-subtle: #fef3f2;
+
+	--destructive: #d92d20;
+	--destructive-foreground: #ffffff;
+
+	--switch-off: #cdd4ce;
+	--switch-thumb: #ffffff;
+
+	/* Series one is the brand. Series two is the site's own red, which appears
+	   against failure and nowhere else. */
+	--chart-1: #6aa475;
+	--chart-2: #f20000;
+
+	/* The site is Inter throughout, so display and sans are the same face here.
+	   Headings separate on size and tracking rather than on a second family the
+	   brand does not actually use. */
+	--font-display: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+	--font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+/*
+ * Dark: the site as it actually is.
+ *
+ * The easy direction, because mme-pro.de is already a dark design - #121212
+ * ground, #DAFAE4 text, sage on top. The light theme above is the translation;
+ * this is the original.
+ *
+ * Two things still have to be corrected rather than copied.
+ *
+ * Elevation is built from lightness, not shadow. A shadow cast on near-black is
+ * invisible, so every surface separates by its own value - roughly six points
+ * per step, which is what makes a card read as sitting on the canvas rather
+ * than painted onto it. The chrome stays a step *above* the canvas for the same
+ * reason: keeping it darker, the literal inversion, made the band vanish.
+ *
+ * And sage lifts. #6AA475 has just enough contrast on white to be a fill and
+ * not enough on near-black to be anything at all, so the accent moves to the
+ * site's brighter green - which clears 9:1 here and can finally carry text.
+ */
+.dark {
+	--background: #121212;
+	--foreground: #dafae4;
+
+	--card: #1b1b1b;
+	--card-foreground: #dafae4;
+
+	--popover: #232323;
+	--popover-foreground: #dafae4;
+
+	--primary: #dafae4;
+	--primary-foreground: #121212;
+
+	--secondary: #262626;
+	--secondary-foreground: #dafae4;
+
+	--muted: #262626;
+	/* The site's own grey, which needs no correction at night. */
+	--muted-foreground: #aeaeae;
+
+	--accent: #262626;
+	--accent-foreground: #dafae4;
+
+	/* Structure has to stay visible or the layout dissolves into one dark field. */
+	--border: #313131;
+	--input: #3d3d3d;
+	--ring: #86cd94;
+
+	--brand: #86cd94;
+	--brand-foreground: #121212;
+	--brand-subtle: #17281c;
+	/* Inverted on purpose: in daylight "deep" means darker for contrast against
+	   white, at night it must be lighter or every accent link goes unreadable.
+	   Short of the mint, so a link still separates from body text. */
+	--brand-deep: #a9e3b6;
+
+	--ink: #1b1b1b;
+	--ink-raised: #232323;
+	--ink-line: #313131;
+	--ink-foreground: #dafae4;
+	--ink-muted: #aeaeae;
+
+	--info: #53b1fd;
+	--info-subtle: #10243e;
+	--success: #47cd89;
+	--success-subtle: #0d2b1e;
+	--warning: #fdb022;
+	--warning-subtle: #2b1d08;
+	--danger: #f97066;
+	--danger-subtle: #2d1512;
+
+	--destructive: #f97066;
+	/* The destructive fill is light here, so its label must be dark. */
+	--destructive-foreground: #121212;
+
+	--switch-off: #3d3d3d;
+	--switch-thumb: #dafae4;
+
+	--chart-1: #86cd94;
+	--chart-2: #f97066;
+}
+
+@theme inline {
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+
+	--color-ink: var(--ink);
+	--color-ink-raised: var(--ink-raised);
+	--color-ink-line: var(--ink-line);
+	--color-ink-foreground: var(--ink-foreground);
+	--color-ink-muted: var(--ink-muted);
+
+	--color-switch-off: var(--switch-off);
+	--color-switch-thumb: var(--switch-thumb);
+	--color-brand: var(--brand);
+	--color-brand-foreground: var(--brand-foreground);
+	--color-brand-subtle: var(--brand-subtle);
+	--color-brand-deep: var(--brand-deep);
+	--color-info: var(--info);
+	--color-info-subtle: var(--info-subtle);
+	--color-success: var(--success);
+	--color-success-subtle: var(--success-subtle);
+	--color-warning: var(--warning);
+	--color-warning-subtle: var(--warning-subtle);
+	--color-danger: var(--danger);
+	--color-danger-subtle: var(--danger-subtle);
+	--color-chart-1: var(--chart-1);
+	--color-chart-2: var(--chart-2);
+
+	--font-display: var(--font-display);
+	--font-sans: var(--font-sans);
+
+	--radius-sm: calc(var(--radius) - 6px);
+	--radius-md: calc(var(--radius) - 4px);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) + 4px);
+}
+
+/*
+ * Living inside wp-admin.
+ *
+ * Deliberately UNLAYERED. An unlayered rule outranks every layered one whatever
+ * the specificity, and wp-admin is entirely unlayered - so anything parked in
+ * @layer base loses to it. That is why the tabs came out WordPress blue and the
+ * wordmark rendered near-black on the ink band.
+ *
+ * The heading font-family is NOT here. As an element rule it would beat a
+ * font-sans utility at the call site, which is what turned the small category
+ * labels into serif capitals. Headings opt into the display face with a class.
+ */
+#mmoa-app {
+	font-family: var(--font-sans);
+	font-size: 14px;
+	line-height: 1.5;
+	color: var(--foreground);
+	background: var(--background);
+	margin-left: -20px;
+	min-height: calc(100vh - 32px);
+	/* Column, so the credits sit on the bottom edge rather than wherever the
+	   content happened to stop. On the settings screen that difference is most
+	   of the viewport, and a bordered footer floating mid-page reads as content
+	   that failed to load. */
+	display: flex;
+	flex-direction: column;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	/* Every figure here sits in a column that has to align - metrics, table
+	   values, axis labels. Tabular by default is cheaper than remembering it
+	   at each call site. */
+	font-variant-numeric: tabular-nums;
+}
+
+#mmoa-app *,
+#mmoa-app *::before,
+#mmoa-app *::after {
+	box-sizing: border-box;
+	border-color: var(--border);
+}
+
+/*
+ * wp-admin styles  and  with its own colours, and both
+ * outspecify a utility class. Without these two resets the wordmark renders
+ * near-black on the ink band and every tab comes out WordPress blue - which
+ * is precisely what happened.
+ */
+#mmoa-app h1,
+#mmoa-app h2,
+#mmoa-app h3,
+#mmoa-app h4 {
+	color: inherit;
+	margin: 0;
+}
+
+#mmoa-app a {
+	color: inherit;
+	text-decoration: none;
+}
+
+#mmoa-app a:focus,
+#mmoa-app a:hover {
+	color: inherit;
+	box-shadow: none;
+}
+
+/*
+ * Focus is brass, offset, never removed. The accent doubles as the focus
+ * colour on purpose - it is already this interface's one signal of "here is
+ * the live thing", which is what focus means.
+ */
+/*
+ * A ring for keyboard focus, nothing for a mouse click.
+ *
+ * Clicking a tab was drawing a pale 2px outline that lingered while the element
+ * held focus - clearly visible against the dark header as a white border. It
+ * came from plain :focus, which fires on click as well as on Tab, so the fix is
+ * to clear it there and keep the ring only where it earns its place.
+ *
+ * Deliberately NOT a blanket outline:none. Removing focus outright makes the
+ * interface unusable from a keyboard, which is a real cost to real people
+ * rather than a cosmetic one.
+ */
+#mmoa-app :focus:not(:focus-visible) {
+	outline: none;
+	box-shadow: none;
+}
+
+#mmoa-app :focus-visible {
+	outline: 2px solid var(--ring);
+	outline-offset: 2px;
+	border-radius: 3px;
+}
+
+#mmoa-app ::selection {
+	background: color-mix(in oklab, var(--brand) 28%, transparent);
+}
+
+/* WordPress's own input styles are aggressive enough to override ours. */
+#mmoa-app input:not([type="checkbox"]):not([type="radio"]),
+#mmoa-app select,
+#mmoa-app textarea {
+	box-shadow: none;
+	min-height: 0;
+	margin: 0;
+	background-image: none;
+}
+
+#mmoa-app input:focus,
+#mmoa-app select:focus,
+#mmoa-app textarea:focus {
+	box-shadow: none;
+	outline: none;
+}
+
+@layer utilities {
+	/*
+	 * The card treatment: a sheet laid on paper rather than a box drawn on it.
+	 * A 1px border at full strength is heavier than this design wants, so the
+	 * separation comes from a hairline plus a very soft, very wide shadow.
+	 */
+	.sheet {
+		background: var(--card);
+		border: 1px solid var(--border);
+		box-shadow:
+			0 1px 2px rgb(15 27 28 / 0.04),
+			0 8px 24px -16px rgb(15 27 28 / 0.14);
+	}
+
+	.sheet-hover {
+		transition:
+			box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1),
+			transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.sheet-hover:hover {
+		transform: translateY(-1px);
+		box-shadow:
+			0 2px 4px rgb(15 27 28 / 0.05),
+			0 16px 32px -18px rgb(15 27 28 / 0.2);
+	}
+
+	/*
+	 * Page-load stagger, done in CSS rather than with an animation library.
+	 * Framer Motion would add roughly 50KB to a bundle that already ships
+	 * inside every admin page load, to buy an effect that is four lines of
+	 * keyframes - the wrong trade for a plugin.
+	 */
+	.stagger > * {
+		animation: mmoa-rise 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+	}
+
+	.stagger > *:nth-child(1) { animation-delay: 0ms; }
+	.stagger > *:nth-child(2) { animation-delay: 45ms; }
+	.stagger > *:nth-child(3) { animation-delay: 90ms; }
+	.stagger > *:nth-child(4) { animation-delay: 135ms; }
+	.stagger > *:nth-child(5) { animation-delay: 180ms; }
+	.stagger > *:nth-child(n + 6) { animation-delay: 225ms; }
+
+	@keyframes mmoa-rise {
+		from {
+			opacity: 0;
+			transform: translateY(8px);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	/* Ink chrome keeps a dark scrollbar so it gains no bright seam. */
+	.ink-scroll {
+		scrollbar-width: thin;
+		scrollbar-color: var(--ink-line) transparent;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#mmoa-app *,
+	#mmoa-app *::before,
+	#mmoa-app *::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}

@@ -42,7 +42,6 @@ class Plugin {
 	public Http $http;
 	public Logger $logger;
 	public Alerts $alerts;
-	public Weekly_Report $report;
 	public Health_Monitor $health;
 	public Queue $queue;
 	public Connections $connections;
@@ -92,7 +91,6 @@ class Plugin {
 		);
 		$this->setup      = new Setup( $this->settings );
 		$this->conflicts  = new Conflicts( $this->settings );
-		$this->report     = new Weekly_Report( $this->settings, $this->logger, $this->queue );
 	}
 
 	public function boot(): void {
@@ -106,7 +104,6 @@ class Plugin {
 		add_action( 'mmoa_backup_used', [ $this, 'alert_backup_used' ], 10, 2 );
 		add_action( Queue::CRON_HOOK, [ $this, 'drain_queue' ] );
 
-		$this->report->register();
 		add_filter( 'cron_schedules', [ $this, 'register_schedule' ] );
 		add_action( 'admin_init', [ $this, 'maybe_upgrade' ] );
 
@@ -221,14 +218,6 @@ class Plugin {
 		$schedules[ Queue::SCHEDULE_NAME ] = [
 			'interval' => 5 * MINUTE_IN_SECONDS,
 			'display'  => __( 'Every five minutes (MME-Mail to SMTP retry queue)', 'modern-mailer-oauth' ),
-		];
-
-		// WordPress has 'weekly' since 5.4, but registering our own keeps the
-		// report on our schedule rather than sharing a slot with every other
-		// weekly job on the site.
-		$schedules[ Weekly_Report::SCHEDULE ] = [
-			'interval' => WEEK_IN_SECONDS,
-			'display'  => __( 'Weekly (MME-Mail to SMTP summary report)', 'modern-mailer-oauth' ),
 		];
 
 		return $schedules;

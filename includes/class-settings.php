@@ -114,17 +114,6 @@ class Settings {
 		'alert_threshold' => [ 3, null, 'int' ],
 		'alert_email'     => [ '', 'MMOA_ALERT_EMAIL', 'email' ],
 
-		// The weekly summary. Off by default: it is an email the site sends
-		// itself, and a plugin that starts mailing an administrator without
-		// being asked is a plugin people uninstall.
-		'report_enabled'  => [ false, null, 'bool' ],
-
-		// One address or several. Stored as a comma-separated string rather
-		// than a list so that MMOA_REPORT_EMAIL keeps working - a constant is
-		// a string, and an install that set one address before this became a
-		// list needs no migration to keep sending where it always did.
-		'report_email'    => [ '', 'MMOA_REPORT_EMAIL', 'emails' ],
-
 		'queue_enabled'   => [ true, null, 'bool' ],
 
 		// How long a message may sit in the retry queue before it is

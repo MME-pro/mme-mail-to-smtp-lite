@@ -6,7 +6,6 @@ import { Wand2 } from 'lucide-react';
 import { getSettings, saveSettings } from '../api/client';
 import { useToast } from '../components/toast';
 import { Panel, Button, FormField, Spinner, ToggleRow, inputClass } from '../components/ui';
-import EmailChips from '../components/email-chips';
 
 const Settings = () => {
 	const toast = useToast();
@@ -147,7 +146,7 @@ const Settings = () => {
 						</FormField>
 					</div>
 
-					{ /* The three things people conflate, said once, in the
+					{ /* The two things people conflate, said once, in the
 					     place they are configuring. The support questions are
 					     always some version of "I set an alert address, why do
 					     I get nothing" - and the answer is nearly always that
@@ -168,51 +167,6 @@ const Settings = () => {
 								'modern-mailer-oauth'
 							) }
 						</p>
-						<p className="m-0">
-							{ __(
-								'The daily check-in to the licensing service is unrelated and never emails anybody.',
-								'modern-mailer-oauth'
-							) }
-						</p>
-					</div>
-
-					<div className="grid gap-4 sm:grid-cols-2 pt-1">
-						<FormField
-							label={ __( 'Weekly summary', 'modern-mailer-oauth' ) }
-							help={ __(
-								'A plain-text report every Monday: what was delivered, what failed and why. Sent through your configured connection, so it also proves sending still works end to end.',
-								'modern-mailer-oauth'
-							) }
-							htmlFor="mmoa-report-enabled"
-						>
-							<select
-								id="mmoa-report-enabled"
-								className={ inputClass }
-								value={ values.report_enabled ? '1' : '0' }
-								onChange={ ( e ) => set( 'report_enabled', '1' === e.target.value ) }
-							>
-								<option value="0">{ __( 'Off', 'modern-mailer-oauth' ) }</option>
-								<option value="1">{ __( 'Send every Monday', 'modern-mailer-oauth' ) }</option>
-							</select>
-						</FormField>
-
-						<FormField
-							label={ __( 'Send the report to', 'modern-mailer-oauth' ) }
-							help={ __(
-								'Type an address and press Enter to add it; add as many as you like. Leave it empty to use the site administrator address. Everyone listed gets the one message, so they can see who else received it. A week with no mail at all sends nothing, rather than a report saying zero.',
-								'modern-mailer-oauth'
-							) }
-							locked={ locked.report_email }
-							htmlFor="mmoa-report-email"
-						>
-							<EmailChips
-								id="mmoa-report-email"
-								disabled={ locked.report_email }
-								placeholder={ __( 'ops@example.com', 'modern-mailer-oauth' ) }
-								value={ values.report_email || '' }
-								onChange={ ( next ) => set( 'report_email', next ) }
-							/>
-						</FormField>
 					</div>
 				</div>
 			</Panel>

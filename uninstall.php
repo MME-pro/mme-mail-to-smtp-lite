@@ -59,4 +59,3 @@ $wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.Pre
 
 wp_clear_scheduled_hook( 'mmoa_prune_log' );
 wp_clear_scheduled_hook( 'mmoa_drain_queue' );
-wp_clear_scheduled_hook( 'mmoa_weekly_report' );

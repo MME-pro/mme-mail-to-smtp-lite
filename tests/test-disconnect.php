@@ -41,30 +41,28 @@ function fill( string $slot ): void {
 
 	$scoped->update(
 		[
-			'provider'        => 'microsoft',
+			'provider'          => 'google',
 			'from_email'      => "billing-{$label}@example.com",
 			'from_name'       => "Accounts {$label}",
 			'force_from'      => false,
-			'ms_setup_mode'   => 'own_signin',
-			'ms_tenant_id'    => 'tenant-' . $label,
-			'ms_client_id'    => 'client-' . $label,
-			'ms_sender'       => "shared-{$label}@example.com",
-			'msoauth_account' => "signed-in-{$label}@example.com",
-			'smtp_host'       => 'smtp.example.com',
-			'mailgun_region'  => 'eu',
+			'google_setup_mode' => 'own_client',
+			'google_sa_email'   => "sa-{$label}@project.iam.gserviceaccount.com",
+			'google_client_id'  => 'client-' . $label,
+			'google_sender'     => "shared-{$label}@example.com",
+			'google_account'    => "signed-in-{$label}@example.com",
+			'smtp_host'         => 'smtp.example.com',
+			'mailgun_region'    => 'eu',
 		]
 	);
 
 	$secrets = $scoped->secrets();
-	$secrets->set( 'ms_client_secret', 'entra-secret-' . $label );
-	$secrets->set( 'msoauth_client_sec', 'delegated-secret-' . $label );
+	$secrets->set( 'google_sa_key', 'sa-key-' . $label );
+	$secrets->set( 'google_client_sec', 'oauth-secret-' . $label );
 	$secrets->set( 'smtp_password', 'smtp-password-' . $label );
 
 	// The ones no form declares, written by an authorization flow. These are
 	// the values the old disconnect left behind.
 	$secrets->set( 'google_refresh', 'google-refresh-' . $label );
-	$secrets->set( 'ms_refresh', 'ms-refresh-' . $label );
-	$secrets->set( 'msoauth_refresh', 'msoauth-refresh-' . $label );
 
 	Settings::flush_cache();
 }
@@ -72,10 +70,10 @@ function fill( string $slot ): void {
 echo "\n=== 1. A filled connection reads back everything ===\n";
 fill( Settings::SLOT_PRIMARY );
 
-check( 'the provider is set', 'microsoft' === (string) $plugin->settings->get( 'provider' ) );
+check( 'the provider is set', 'google' === (string) $plugin->settings->get( 'provider' ) );
 check( 'the From address is set', 'billing-primary@example.com' === (string) $plugin->settings->get( 'from_email' ) );
-check( 'a credential is stored', 'entra-secret-primary' === $plugin->secrets->get( 'ms_client_secret' ) );
-check( 'and a refresh token is stored', 'msoauth-refresh-primary' === $plugin->secrets->get( 'msoauth_refresh' ) );
+check( 'a credential is stored', 'sa-key-primary' === $plugin->secrets->get( 'google_sa_key' ) );
+check( 'and a refresh token is stored', 'google-refresh-primary' === $plugin->secrets->get( 'google_refresh' ) );
 
 echo "\n=== 2. Disconnecting deletes all of it ===\n";
 $plugin->settings->reset_connection();
@@ -86,10 +84,10 @@ foreach (
 		'provider',
 		'from_email',
 		'from_name',
-		'ms_tenant_id',
-		'ms_client_id',
-		'ms_sender',
-		'msoauth_account',
+		'google_sa_email',
+		'google_client_id',
+		'google_sender',
+		'google_account',
 		'smtp_host',
 	] as $key
 ) {
@@ -98,12 +96,10 @@ foreach (
 
 foreach (
 	[
-		'ms_client_secret',
-		'msoauth_client_sec',
+		'google_sa_key',
+		'google_client_sec',
 		'smtp_password',
 		'google_refresh',
-		'ms_refresh',
-		'msoauth_refresh',
 	] as $key
 ) {
 	check( "the {$key} credential is gone", '' === $plugin->secrets->get( $key ), 'still set' );
@@ -124,9 +120,9 @@ check(
 	(string) $plugin->settings->get( 'mailgun_region' )
 );
 check(
-	'the Microsoft setup mode is back at its default',
-	'own_signin' === (string) $plugin->settings->get( 'ms_setup_mode' ),
-	(string) $plugin->settings->get( 'ms_setup_mode' )
+	'the Google setup mode is back at its default',
+	'own_client' === (string) $plugin->settings->get( 'google_setup_mode' ),
+	(string) $plugin->settings->get( 'google_setup_mode' )
 );
 check( 'and the connection is inactive', ! $plugin->settings->is_active() );
 
@@ -141,15 +137,15 @@ $plugin->settings->for_slot( 'backup' )->reset_connection();
 Settings::flush_cache();
 
 check( 'the backup is empty', '' === (string) $plugin->settings->for_slot( 'backup' )->get( 'from_email' ) );
-check( 'its credentials are gone', '' === $plugin->secrets->for_slot( 'backup' )->get( 'ms_client_secret' ) );
+check( 'its credentials are gone', '' === $plugin->secrets->for_slot( 'backup' )->get( 'google_sa_key' ) );
 
 check(
 	'the primary is untouched',
 	'billing-primary@example.com' === (string) $plugin->settings->get( 'from_email' ),
 	(string) $plugin->settings->get( 'from_email' )
 );
-check( 'and keeps its credentials', 'entra-secret-primary' === $plugin->secrets->get( 'ms_client_secret' ) );
-check( 'and keeps its refresh token', 'msoauth-refresh-primary' === $plugin->secrets->get( 'msoauth_refresh' ) );
+check( 'and keeps its credentials', 'sa-key-primary' === $plugin->secrets->get( 'google_sa_key' ) );
+check( 'and keeps its refresh token', 'google-refresh-primary' === $plugin->secrets->get( 'google_refresh' ) );
 
 echo "\n=== 5. The site's own settings are not connection settings ===\n";
 // Queue retention and the connection list belong to the site.
@@ -181,7 +177,7 @@ $plugin->health->reset();
 Settings::flush_cache();
 
 check( 'left inactive', ! $plugin->settings->is_active() );
-check( 'no credentials remain', '' === $plugin->secrets->get( 'ms_client_secret' ) );
+check( 'no credentials remain', '' === $plugin->secrets->get( 'google_sa_key' ) );
 
 echo "\n{$pass} passed, {$fail} failed\n";
 exit( $fail > 0 ? 1 : 0 );

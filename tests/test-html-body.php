@@ -21,22 +21,21 @@ $plugin = ModernMailer\Plugin::instance();
 
 // --- a raw-MIME provider, so the tests read the actual message --------------
 $plugin->settings->update( [
-	'provider'      => 'graph',
-	'from_email'    => 'noreply@contoso.com',
-	'from_name'     => 'Contoso',
-	'force_from'    => true,
-	'ms_tenant_id'  => 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
-	'ms_client_id'  => '11111111-2222-3333-4444-555555555555',
-	'ms_sender'     => 'noreply@contoso.com',
-	'queue_enabled' => false,
+	'provider'        => 'gmail_sa',
+	'from_email'      => 'noreply@contoso.com',
+	'from_name'       => 'Contoso',
+	'force_from'      => true,
+	'google_sa_email' => 'sa@project.iam.gserviceaccount.com',
+	'google_sender'   => 'noreply@contoso.com',
+	'queue_enabled'   => false,
 ] );
-$plugin->secrets->set( 'ms_client_secret', 'test-secret-value' );
+$plugin->secrets->set( 'google_sa_key', file_get_contents( __DIR__ . '/test-sa-key.pem' ) );
 $plugin->tokens->flush();
 $plugin->health->reset();
 $plugin->install_mailer();
 
 add_filter( 'pre_http_request', function ( $pre, $args, $url ) {
-	if ( false !== strpos( $url, 'login.microsoftonline.com' ) ) {
+	if ( false !== strpos( $url, 'oauth2.googleapis.com' ) ) {
 		return [
 			'headers'  => [],
 			'body'     => wp_json_encode( [ 'access_token' => 'FAKE_TOKEN', 'expires_in' => 3600 ] ),
@@ -225,7 +224,7 @@ check( 'and its text field is the alternative, not the markup',
 
 // --- restore ----------------------------------------------------------------
 $plugin->settings->update( [ 'provider' => '', 'from_email' => '', 'from_name' => '' ] );
-$plugin->secrets->set( 'ms_client_secret', '' );
+$plugin->secrets->set( 'google_sa_key', '' );
 $plugin->secrets->set( 'brevo_api_key', '' );
 $plugin->tokens->flush();
 $plugin->health->reset();

@@ -5,7 +5,7 @@
  * The scenario driving all of this is a real one, taken from a site whose host
  * had intermittently broken outbound DNS:
  *
- *   cURL error 7: Failed to connect to login.microsoftonline.com port 443
+ *   cURL error 7: Failed to connect to oauth2.googleapis.com port 443
  *   after 1 ms: Couldn't connect to server
  *
  * Note the timing. A firewall dropping packets produces a multi-second timeout;
@@ -30,18 +30,16 @@ $plugin = ModernMailer\Plugin::instance();
 
 ModernMailer\Queue::install();
 
-/** Reset to a known primary-only Graph configuration. */
+/** Reset to a known single-connection service-account configuration. */
 function configure_primary_only( ModernMailer\Plugin $plugin ): void {
 	$plugin->settings->update( [
-		'provider'      => 'graph',
-		'from_email'    => 'noreply@contoso.com',
-		'ms_tenant_id'  => 'tid',
-		'ms_client_id'  => 'cid',
-		'ms_sender'     => 'noreply@contoso.com',
-		'queue_enabled' => true,
+		'provider'        => 'gmail_sa',
+		'from_email'      => 'noreply@contoso.com',
+		'google_sa_email' => 'sa@project.iam.gserviceaccount.com',
+		'google_sender'   => 'noreply@contoso.com',
+		'queue_enabled'   => true,
 	] );
-	$plugin->secrets->set( 'ms_client_secret', 'secret' );
-
+	$plugin->secrets->set( 'google_sa_key', file_get_contents( __DIR__ . '/test-sa-key.pem' ) );
 }
 
 function reset_state( ModernMailer\Plugin $plugin ): void {
@@ -72,12 +70,12 @@ function ok_token(): array { return json_response( 200, [ 'access_token' => 'T' 
 function curl7(): WP_Error {
 	return new WP_Error(
 		'http_request_failed',
-		"cURL error 7: Failed to connect to login.microsoftonline.com port 443 after 1 ms: Couldn't connect to server"
+		"cURL error 7: Failed to connect to oauth2.googleapis.com port 443 after 1 ms: Couldn't connect to server"
 	);
 }
 
 function is_token_url( string $url ): bool {
-	return false !== strpos( $url, 'login.microsoftonline' ) || false !== strpos( $url, 'oauth2.googleapis' );
+	return false !== strpos( $url, 'oauth2.googleapis' );
 }
 
 echo "\n=== 1. A token refresh failure spends the token we already hold ===\n";
@@ -89,10 +87,10 @@ reset_state( $plugin );
 // Seed a token that is inside the refresh window but genuinely still valid:
 // expires in 200s, and SKEW is 300s.
 $key = ( function () use ( $plugin ) {
-	$graph = $plugin->dispatcher->provider();
-	$m     = new ReflectionMethod( $graph, 'token_cache_key' );
+	$provider = $plugin->dispatcher->provider();
+	$m     = new ReflectionMethod( $provider, 'token_cache_key' );
 	$m->setAccessible( true );
-	return $m->invoke( $graph );
+	return $m->invoke( $provider );
 } )();
 
 $plugin->tokens->put( $key, 'STALE-BUT-VALID', 200 );
@@ -109,7 +107,7 @@ $script = function ( $url, $args, $n ) use ( &$sent_token ) {
 		return curl7();                       // token endpoint unreachable
 	}
 	$sent_token = $args['headers']['Authorization'] ?? '';
-	return json_response( 202, [] );          // Graph itself is fine
+	return json_response( 200, [ 'id' => 'ok' ] );                // the API itself is fine
 };
 
 $sent = wp_mail( 'a@example.com', 'stale token', 'body' );
@@ -129,7 +127,7 @@ update_option( 'mmoa_tokens', [ $key => [ 'token' => 'LONG-EXPIRED', 'expires_at
 check( 'get_stale() refuses an expired token', null === $plugin->tokens->get_stale( $key ) );
 
 $calls  = 0;
-$script = fn( $url, $args, $n ) => is_token_url( $url ) ? curl7() : json_response( 202, [] );
+$script = fn( $url, $args, $n ) => is_token_url( $url ) ? curl7() : json_response( 200, [ 'id' => 'ok' ] );
 $err    = null;
 $cap    = function ( $e ) use ( &$err ) { $err = $e; };
 add_action( 'wp_mail_failed', $cap );
@@ -158,7 +156,7 @@ echo "\n=== 4. The queue delivers once the network recovers ===\n";
 // point: the 90 lost emails were all deliverable minutes later.
 $plugin->queue->reschedule_all();
 $calls  = 0;
-$script = fn( $url, $args, $n ) => is_token_url( $url ) ? ok_token() : json_response( 202, [] );
+$script = fn( $url, $args, $n ) => is_token_url( $url ) ? ok_token() : json_response( 200, [ 'id' => 'ok' ] );
 
 $drained = $plugin->queue->drain( $plugin->dispatcher );
 
@@ -167,23 +165,24 @@ check( 'and delivered', 1 === $drained['sent'], wp_json_encode( $drained ) );
 check( 'and removed from the queue', 0 === $plugin->queue->stats()['pending'] );
 
 echo "\n=== 5. A permanent failure is never queued ===\n";
-// Retrying a wrong client secret forever would bury real mail behind it.
+// Retrying a credential the provider will always refuse would bury real mail
+// behind it.
 reset_state( $plugin );
 $calls  = 0;
-$script = fn( $url, $args, $n ) => json_response( 400, [
-	'error'             => 'invalid_client',
-	'error_description' => 'AADSTS7000215: Invalid client secret provided.',
+$script = fn( $url, $args, $n ) => json_response( 401, [
+	'error'             => 'unauthorized_client',
+	'error_description' => 'Client is unauthorized to retrieve access tokens using this method.',
 ] );
 
 $err = null;
 $cap = function ( $e ) use ( &$err ) { $err = $e; };
 add_action( 'wp_mail_failed', $cap );
-$sent = wp_mail( 'a@example.com', 'bad secret', 'body' );
+$sent = wp_mail( 'a@example.com', 'unauthorized client', 'body' );
 remove_action( 'wp_mail_failed', $cap );
 
 check( 'the send failed loudly', false === $sent );
 check( 'nothing was queued', 0 === $plugin->queue->stats()['pending'], wp_json_encode( $plugin->queue->stats() ) );
-check( 'and the error still names the real cause', $err instanceof WP_Error && false !== strpos( $err->get_error_message(), 'client secret' ), $err ? $err->get_error_message() : 'none' );
+check( 'and the error still names the real cause', $err instanceof WP_Error && false !== stripos( $err->get_error_message(), 'Domain-wide Delegation' ), $err ? $err->get_error_message() : 'none' );
 
 echo "\n=== 6. An oversized message is not queued ===\n";
 // A property of the message, not the connection: no amount of patience or
@@ -194,7 +193,7 @@ $plugin->dispatcher->reset_providers();
 $plugin->install_mailer();
 
 $calls  = 0;
-$script = fn( $url, $args, $n ) => is_token_url( $url ) ? ok_token() : json_response( 202, [] );
+$script = fn( $url, $args, $n ) => is_token_url( $url ) ? ok_token() : json_response( 200, [ 'id' => 'ok' ] );
 $big    = str_repeat( 'x', 4 * 1024 * 1024 );
 
 $sent = wp_mail( 'a@example.com', 'huge', $big );
@@ -208,14 +207,14 @@ echo "\n=== 7. A test message is never rescued by the queue ===\n";
 // mechanism that makes ordinary sending resilient makes that unanswerable - a
 // test that got queued would report success for a message never sent.
 reset_state( $plugin );
-$hit    = [ 'graph' => 0 ];
+$hit    = [ 'gmail' => 0 ];
 $calls  = 0;
 $script = function ( $url, $args, $n ) use ( &$hit ) {
 	if ( is_token_url( $url ) ) {
 		return ok_token();
 	}
 
-	$hit['graph']++;
+	$hit['gmail']++;
 
 	return curl7();
 };
@@ -225,14 +224,14 @@ $sent = $plugin->dispatcher->without_fallbacks(
 );
 
 check( 'the test reports the failure rather than hiding it', true !== $sent, var_export( $sent, true ) );
-check( 'the connection was tried', $hit['graph'] > 0 );
+check( 'the connection was tried', $hit['gmail'] > 0 );
 check( 'and nothing was queued behind it', 0 === $plugin->queue->stats()['pending'], (string) $plugin->queue->stats()['pending'] );
 
 echo "\n=== 8. Ordinary sending still has its safety net ===\n";
 // The flag must not leak past the callback: the same arrangement that was
 // deliberately not rescued above must be queued now.
 reset_state( $plugin );
-$hit    = [ 'graph' => 0 ];
+$hit    = [ 'gmail' => 0 ];
 $calls  = 0;
 $normal = wp_mail( 'a@example.com', 'ordinary message', 'body' );
 

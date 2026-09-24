@@ -10,11 +10,12 @@ function check( string $label, bool $ok, string $detail = '' ) {
 
 $plugin = ModernMailer\Plugin::instance();
 $plugin->settings->update( [
-	'provider' => 'graph', 'from_email' => 'noreply@contoso.com',
-	'ms_tenant_id' => 'tid', 'ms_client_id' => 'cid', 'ms_sender' => 'noreply@contoso.com',
+	'provider' => 'gmail_sa', 'from_email' => 'noreply@contoso.com',
+	'google_sa_email' => 'sa@project.iam.gserviceaccount.com',
+	'google_sender' => 'noreply@contoso.com',
 	'alert_threshold' => 2,
 ] );
-$plugin->secrets->set( 'ms_client_secret', 'secret' );
+$plugin->secrets->set( 'google_sa_key', file_get_contents( __DIR__ . '/test-sa-key.pem' ) );
 $plugin->install_mailer();
 
 /** Install a scripted HTTP stub. $script is a callable(url,args,callno) => response array. */
@@ -30,6 +31,7 @@ function json_response( int $code, array $body ): array {
 		'response' => [ 'code' => $code, 'message' => '' ], 'cookies' => [], 'filename' => null ];
 }
 function ok_token(): array { return json_response( 200, [ 'access_token' => 'T' . wp_rand(), 'expires_in' => 3600 ] ); }
+function is_token_url( string $url ): bool { return false !== strpos( $url, 'oauth2.googleapis' ); }
 
 function capture_failure( callable $fn ): ?WP_Error {
 	$err = null;
@@ -42,55 +44,57 @@ function capture_failure( callable $fn ): ?WP_Error {
 
 echo "\n=== 1. Mid-life 401 recovers on a fresh token ===\n";
 // This is the credential-rotation case: a token that was valid is suddenly
-// rejected. App-only should silently mint a new one and deliver.
+// rejected. The provider should silently mint a new one and deliver.
 $plugin->tokens->flush(); $plugin->health->reset(); $calls = 0;
 $script = function ( $url, $args, $n ) {
-	if ( false !== strpos( $url, 'login.microsoftonline' ) ) { return ok_token(); }
+	if ( is_token_url( $url ) ) { return ok_token(); }
 	static $sends = 0; $sends++;
 	return 1 === $sends
-		? json_response( 401, [ 'error' => [ 'code' => 'InvalidAuthenticationToken', 'message' => 'Access token has expired.' ] ] )
-		: json_response( 202, [] );
+		? json_response( 401, [ 'error' => [ 'code' => 401, 'message' => 'Invalid Credentials' ] ] )
+		: json_response( 200, [ 'id' => 'ok' ] );
 };
 $sent = wp_mail( 'a@example.com', 'retry test', 'body' );
 check( 'delivered despite an expired token, with no human involved', true === $sent, var_export( $sent, true ) );
 check( 'stale token was discarded and a new one minted', $calls >= 4, "{$calls} HTTP calls" );
 
 echo "\n=== 2. Error messages name the actual misconfiguration ===\n";
+// The point of these is that the plugin answers "what do I do about it",
+// rather than echoing the provider's raw response at an administrator.
 $plugin->tokens->flush(); $plugin->health->reset();
-$script = fn( $url, $args, $n ) => json_response( 400, [
-	'error' => 'invalid_client',
-	'error_description' => 'AADSTS7000215: Invalid client secret provided. Ensure the secret being sent in the request is the client secret value.',
+$script = fn( $url, $args, $n ) => json_response( 401, [
+	'error' => 'unauthorized_client',
+	'error_description' => 'Client is unauthorized to retrieve access tokens using this method.',
 ] );
 $err = capture_failure( fn() => wp_mail( 'a@example.com', 's', 'b' ) );
-check( 'AADSTS7000215 explains the Value-vs-ID trap',
-	$err && false !== stripos( $err->get_error_message(), 'secret Value' ), $err ? $err->get_error_message() : 'no error' );
+check( 'unauthorized_client points at domain-wide delegation',
+	$err && false !== stripos( $err->get_error_message(), 'Domain-wide Delegation' ), $err ? $err->get_error_message() : 'no error' );
 
 $plugin->tokens->flush(); $plugin->health->reset();
 $script = function ( $url, $args, $n ) {
-	return false !== strpos( $url, 'login.microsoftonline' ) ? ok_token()
-		: json_response( 403, [ 'error' => [ 'code' => 'ErrorAccessDenied', 'message' => 'Access denied' ] ] );
+	return is_token_url( $url ) ? ok_token()
+		: json_response( 403, [ 'error' => [ 'code' => 403, 'message' => 'Gmail API has not been used in project 1234 before or it is disabled.', 'errors' => [ [ 'reason' => 'accessNotConfigured' ] ] ] ] );
 };
 $err = capture_failure( fn() => wp_mail( 'a@example.com', 's', 'b' ) );
-check( 'access denied points at the Exchange access policy',
-	$err && false !== stripos( $err->get_error_message(), 'access policy' ), $err ? $err->get_error_message() : 'no error' );
+check( 'a disabled API says to enable it, not "403"',
+	$err && false !== stripos( $err->get_error_message(), 'Gmail API is not enabled' ), $err ? $err->get_error_message() : 'no error' );
 
 $plugin->tokens->flush(); $plugin->health->reset();
 $script = function ( $url, $args, $n ) {
-	return false !== strpos( $url, 'login.microsoftonline' ) ? ok_token()
-		: json_response( 404, [ 'error' => [ 'code' => 'ErrorInvalidUser', 'message' => 'not found' ] ] );
+	return is_token_url( $url ) ? ok_token()
+		: json_response( 400, [ 'error' => [ 'code' => 400, 'message' => 'Recipient address required' ] ] );
 };
 $err = capture_failure( fn() => wp_mail( 'a@example.com', 's', 'b' ) );
-check( 'missing mailbox warns about aliases and distribution lists',
-	$err && false !== stripos( $err->get_error_message(), 'distribution list' ), $err ? $err->get_error_message() : 'no error' );
+check( 'a rejected envelope says the recipient was missing',
+	$err && false !== stripos( $err->get_error_message(), 'no recipient' ), $err ? $err->get_error_message() : 'no error' );
 
 echo "\n=== 3. Failure is never silent ===\n";
 $plugin->tokens->flush(); $plugin->health->reset();
-$script = fn( $url, $args, $n ) => json_response( 400, [ 'error' => 'invalid_client', 'error_description' => 'nope' ] );
+$script = fn( $url, $args, $n ) => json_response( 400, [ 'error' => 'invalid_grant', 'error_description' => 'invalid_grant' ] );
 $sent = wp_mail( 'a@example.com', 's', 'b' );
 check( 'wp_mail() returns false on failure', false === $sent, var_export( $sent, true ) );
 $err = capture_failure( fn() => wp_mail( 'a@example.com', 's', 'b' ) );
 check( 'wp_mail_failed fires with a real WP_Error', $err instanceof WP_Error );
-check( 'streak reached the alert threshold', $plugin->health->is_failing(), 'streak=' . $plugin->health->state()['streak'] );
+check( 'streak reached the reporting threshold', $plugin->health->is_failing(), 'streak=' . $plugin->health->state()['streak'] );
 
 $fired = false;
 add_action( 'mmoa_send_failing', function () use ( &$fired ) { $fired = true; } );
@@ -99,12 +103,21 @@ wp_mail( 'a@example.com', 's', 'b' );
 wp_mail( 'a@example.com', 's', 'b' );
 check( 'mmoa_send_failing action fired for external monitoring', $fired );
 
-$health = new ReflectionClass( ModernMailer\Health_Monitor::class );
+// Every failed send is announced too, not only the streak that crosses the
+// threshold - that is the hook an add-on records individual failures on.
+$each = 0;
+add_action( 'mmoa_send_failed', function () use ( &$each ) { $each++; } );
+$plugin->health->reset();
+wp_mail( 'a@example.com', 's', 'b' );
+check( 'mmoa_send_failed fired for the individual failure', 1 === $each, "fired {$each}x" );
+
 $plugin->health->reset();
 $script = function ( $url, $args, $n ) {
-	return false !== strpos( $url, 'login.microsoftonline' ) ? ok_token() : json_response( 202, [] );
+	return is_token_url( $url ) ? ok_token() : json_response( 200, [ 'id' => 'ok' ] );
 };
 $plugin->tokens->flush();
+$recovered = 0;
+add_action( 'mmoa_send_recovered', function () use ( &$recovered ) { $recovered++; } );
 wp_mail( 'a@example.com', 's', 'b' );
 check( 'a success clears the failing state', ! $plugin->health->is_failing() );
 
@@ -125,12 +138,12 @@ check( 'no send request was made', $calls === $before, "{$calls} vs {$before}" )
 echo "\n=== 5. Throttling is honoured, then reported ===\n";
 $plugin->tokens->flush(); $plugin->health->reset();
 $script = function ( $url, $args, $n ) {
-	if ( false !== strpos( $url, 'login.microsoftonline' ) ) { return ok_token(); }
+	if ( is_token_url( $url ) ) { return ok_token(); }
 	static $s = 0; $s++;
 	return 1 === $s
 		? [ 'headers' => [ 'retry-after' => '1' ], 'body' => '',
 			'response' => [ 'code' => 429, 'message' => '' ], 'cookies' => [], 'filename' => null ]
-		: json_response( 202, [] );
+		: json_response( 200, [ 'id' => 'ok' ] );
 };
 $start = microtime( true );
 $sent  = wp_mail( 'a@example.com', 'throttle', 'b' );

@@ -16,30 +16,30 @@ $plugin = ModernMailer\Plugin::instance();
 echo "\n=== Credential storage ===\n";
 check( 'libsodium available', $plugin->secrets->is_encryption_available() );
 
-$plugin->secrets->set( 'ms_client_secret', 'SuperSecretValue123' );
-check( 'round-trips correctly', 'SuperSecretValue123' === $plugin->secrets->get( 'ms_client_secret' ) );
+$plugin->secrets->set( 'google_sa_key', 'SuperSecretValue123' );
+check( 'round-trips correctly', 'SuperSecretValue123' === $plugin->secrets->get( 'google_sa_key' ) );
 
 global $wpdb;
 $raw = $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM {$wpdb->options} WHERE option_name = %s", 'mmoa_secrets' ) );
 check( 'ciphertext in the database, not the plaintext', false === strpos( (string) $raw, 'SuperSecretValue123' ), substr( (string) $raw, 0, 60 ) );
 check( 'stored value is versioned', false !== strpos( (string) $raw, 'v1:' ) );
 
-$plugin->secrets->set( 'ms_client_secret', 'Different' );
+$plugin->secrets->set( 'google_sa_key', 'Different' );
 check( 'nonce is per-write, so rewriting the same value differs', true );
 $a = $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM {$wpdb->options} WHERE option_name = %s", 'mmoa_secrets' ) );
-$plugin->secrets->set( 'ms_client_secret', 'Different' );
+$plugin->secrets->set( 'google_sa_key', 'Different' );
 $b = $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM {$wpdb->options} WHERE option_name = %s", 'mmoa_secrets' ) );
 check( 'identical plaintext encrypts to different ciphertext', $a !== $b );
 
-$plugin->secrets->set( 'ms_client_secret', '' );
-check( 'empty value clears the credential', '' === $plugin->secrets->get( 'ms_client_secret' ) );
+$plugin->secrets->set( 'google_sa_key', '' );
+check( 'empty value clears the credential', '' === $plugin->secrets->get( 'google_sa_key' ) );
 
 echo "\n=== Constant precedence ===\n";
-define( 'MMOA_MS_TENANT_ID', 'tenant-from-wp-config' );
-$plugin->settings->update( [ 'ms_tenant_id' => 'tenant-from-db' ] );
-check( 'constant wins over the database', 'tenant-from-wp-config' === $plugin->settings->get( 'ms_tenant_id' ),
-	(string) $plugin->settings->get( 'ms_tenant_id' ) );
-check( 'the UI can tell it is pinned', $plugin->settings->is_constant( 'ms_tenant_id' ) );
+define( 'MMOA_GOOGLE_SA_CLIENT_EMAIL', 'sa-from-wp-config@project.iam.gserviceaccount.com' );
+$plugin->settings->update( [ 'google_sa_email' => 'sa-from-db@project.iam.gserviceaccount.com' ] );
+check( 'constant wins over the database', 'sa-from-wp-config@project.iam.gserviceaccount.com' === $plugin->settings->get( 'google_sa_email' ),
+	(string) $plugin->settings->get( 'google_sa_email' ) );
+check( 'the UI can tell it is pinned', $plugin->settings->is_constant( 'google_sa_email' ) );
 
 echo "\n=== Inactive by default ===\n";
 $plugin->settings->update( [ 'provider' => '' ] );
@@ -67,7 +67,6 @@ $html   = render_screen( $page, 'render_settings' );
 check( 'Settings renders without fatal', strlen( $html ) > 1000, strlen( $html ) . ' bytes' );
 
 check( 'provider selector present', false !== strpos( $html, 'id="provider"' ) );
-check( 'access-policy warning shown', false !== strpos( $html, 'New-ApplicationAccessPolicy' ) );
 check( 'Gmail Testing-mode trap warned about', false !== strpos( $html, 'seven days' ) );
 check( 'nonce fields emitted', substr_count( $html, '_wpnonce' ) >= 3, substr_count( $html, '_wpnonce' ) . ' found' );
 check( 'no credential echoed into the form', false === strpos( $html, 'SuperSecretValue123' ) );
@@ -161,7 +160,7 @@ check( 'an unset credential reports nothing stored', false === ( $empty['is_set'
 check( 'and carries an empty value', '' === ( $empty['value'] ?? 'x' ) );
 
 echo "\n=== Restoring a clean state on this site ===\n";
-$plugin->settings->update( [ 'provider' => '', 'ms_tenant_id' => '', 'ms_client_id' => '', 'ms_sender' => '',
+$plugin->settings->update( [ 'provider' => '', 'google_sa_email' => '', 'google_client_id' => '', 'google_sender' => '',
 	'google_sa_email' => '', 'google_sender' => '', 'google_client_id' => '', 'from_email' => '', 'from_name' => '' ] );
 $plugin->secrets->flush();
 $plugin->tokens->flush();

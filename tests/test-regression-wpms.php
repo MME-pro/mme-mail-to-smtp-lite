@@ -29,11 +29,11 @@ function check( string $label, bool $ok, string $detail = '' ) {
 
 $plugin = ModernMailer\Plugin::instance();
 $plugin->settings->update( [
-	'provider' => 'graph', 'from_email' => 'kontakt@example.de', 'from_name' => 'Example Studio',
-	'ms_tenant_id' => 'tid', 'ms_client_id' => 'cid', 'ms_sender' => 'kontakt@example.de',
+	'provider' => 'gmail_sa', 'from_email' => 'kontakt@example.de', 'from_name' => 'Example Studio',
+	'google_sa_email' => 'sa@project.iam.gserviceaccount.com', 'google_sender' => 'kontakt@example.de',
 	'alert_threshold' => 3,
 ] );
-$plugin->secrets->set( 'ms_client_secret', 'secret' );
+$plugin->secrets->set( 'google_sa_key', file_get_contents( __DIR__ . '/test-sa-key.pem' ) );
 $plugin->install_mailer();
 
 $requests = [];
@@ -48,9 +48,9 @@ function resp( int $code, $body = '' ): array {
 		'response' => [ 'code' => $code, 'message' => '' ], 'cookies' => [], 'filename' => null ];
 }
 $ok_all = function ( $url, $args, $n ) {
-	return false !== strpos( $url, 'login.microsoftonline' )
+	return false !== strpos( $url, 'oauth2.googleapis' )
 		? resp( 200, [ 'access_token' => 'T', 'expires_in' => 3600 ] )
-		: resp( 202 );
+		: resp( 200, [ 'id' => 'ok' ] );
 };
 function last_error( callable $fn ): ?WP_Error {
 	$err = null; $cap = function ( $e ) use ( &$err ) { $err = $e; };
@@ -79,11 +79,11 @@ $requests = []; $script = $ok_all;
 $sent = llar_mail();
 check( 'multipart/related message sent', true === $sent, var_export( $sent, true ) );
 
-$sends = array_values( array_filter( $requests, fn( $r ) => false !== strpos( $r['url'], 'graph.microsoft.com' ) ) );
-check( 'exactly ONE Graph request - no draft, no upload session, no send step',
-	1 === count( $sends ), count( $sends ) . ' Graph requests' );
+$sends = array_values( array_filter( $requests, fn( $r ) => false !== strpos( $r['url'], 'gmail.googleapis.com' ) ) );
+check( 'exactly ONE API request - no draft, no upload session, no send step',
+	1 === count( $sends ), count( $sends ) . ' API requests' );
 
-$mime = base64_decode( $sends[0]['args']['body'], true );
+$mime = base64_decode( strtr( (string) ( json_decode( (string) $sends[0]['args']['body'], true )['raw'] ?? '' ), '-_', '+/' ) );
 check( 'the message really is multipart/related',
 	false !== stripos( (string) $mime, 'multipart/related' ) );
 check( 'the inline image is in that single request',
@@ -91,8 +91,8 @@ check( 'the inline image is in that single request',
 
 check( 'every URL was built from configuration, never from a response body',
 	(bool) array_reduce( $requests, fn( $c, $r ) => $c && (
-		0 === strpos( $r['url'], 'https://login.microsoftonline.com/' ) ||
-		0 === strpos( $r['url'], 'https://graph.microsoft.com/v1.0/users/' ) ), true ) );
+		0 === strpos( $r['url'], 'https://oauth2.googleapis.com/' ) ||
+		0 === strpos( $r['url'], 'https://gmail.googleapis.com/gmail/v1/users/' ) ), true ) );
 
 echo "\n=== 2. A burst does not degrade (the '10-15 mails' pattern) ===\n";
 $plugin->tokens->flush(); $plugin->health->reset();
@@ -101,7 +101,7 @@ $results = [];
 for ( $i = 0; $i < 20; $i++ ) { $results[] = llar_mail(); }
 check( 'all 20 sends succeeded', 20 === count( array_filter( $results ) ),
 	count( array_filter( $results ) ) . '/20' );
-$tokens = array_filter( $requests, fn( $r ) => false !== strpos( $r['url'], 'login.microsoftonline' ) );
+$tokens = array_filter( $requests, fn( $r ) => false !== strpos( $r['url'], 'oauth2.googleapis' ) );
 check( 'one token minted for the whole burst', 1 === count( $tokens ), count( $tokens ) . ' token calls' );
 check( 'no request count growth per message', 21 === count( $requests ), count( $requests ) . ' total' );
 
@@ -109,10 +109,10 @@ echo "\n=== 3. Throttling reports throttling, not a URL problem ===\n";
 $plugin->tokens->flush(); $plugin->health->reset();
 $requests = [];
 $script = function ( $url, $args, $n ) {
-	if ( false !== strpos( $url, 'login.microsoftonline' ) ) {
+	if ( false !== strpos( $url, 'oauth2.googleapis' ) ) {
 		return resp( 200, [ 'access_token' => 'T', 'expires_in' => 3600 ] );
 	}
-	return resp( 429, [ 'error' => [ 'code' => 'ApplicationThrottled', 'message' => 'Too many requests' ] ] );
+	return resp( 429, [ 'error' => [ 'code' => 429, 'message' => 'Too many requests', 'errors' => [ [ 'reason' => 'rateLimitExceeded' ] ] ] ] );
 };
 
 // Queue off for this section. A throttle is retryable, so with the queue on the
@@ -124,7 +124,7 @@ $plugin->settings->update( [ 'queue_enabled' => false ] );
 ModernMailer\Settings::flush_cache();
 
 $err = last_error( 'llar_mail' );
-check( 'error names throttling', $err && false !== stripos( $err->get_error_message(), 'throttl' ),
+check( 'error names rate limiting', $err && false !== stripos( $err->get_error_message(), 'rate limiting' ),
 	$err ? $err->get_error_message() : 'no error' );
 check( 'error does NOT mention a URL', $err && false === stripos( $err->get_error_message(), 'url' ),
 	$err ? $err->get_error_message() : '' );
@@ -154,8 +154,8 @@ echo "\n=== 4. A failed upstream call can never become a request URL ===\n";
 // check, which only requires a scheme.
 $http = new ModernMailer\Http();
 foreach ( [ '' => 'empty string', 'https://' => 'scheme but no host',
-            '/v1.0/me/sendMail' => 'path only', 'ftp://x/y' => 'wrong scheme',
-            'graph.microsoft.com/v1.0' => 'no scheme' ] as $bad => $desc ) {
+            '/gmail/v1/users/me/messages/send' => 'path only', 'ftp://x/y' => 'wrong scheme',
+            'gmail.googleapis.com/gmail/v1' => 'no scheme' ] as $bad => $desc ) {
 	$r = $http->request( (string) $bad, [] );
 	check( "rejected before the wire: {$desc}",
 		is_wp_error( $r ) && 'mmoa_invalid_url' === $r->get_error_code(),
@@ -173,14 +173,13 @@ check( 'repeated failures raise the alarm', $plugin->health->is_failing(),
 	'streak=' . $plugin->health->state()['streak'] );
 $last = $plugin->health->state()['last_error'];
 check( 'the real error is what got recorded',
-	false !== stripos( (string) ( $last['message'] ?? '' ), 'throttl' ),
+	false !== stripos( (string) ( $last['message'] ?? '' ), 'rate limiting' ),
 	(string) ( $last['message'] ?? 'nothing recorded' ) );
 
 // Leave the site unconfigured.
-$plugin->settings->update( [ 'provider' => '', 'ms_tenant_id' => '', 'ms_client_id' => '',
-	'ms_sender' => '', 'from_email' => '', 'from_name' => '' ] );
+$plugin->settings->update( [ 'provider' => '', 'google_sa_email' => '', 'google_client_id' => '',
+	'google_sender' => '', 'from_email' => '', 'from_name' => '' ] );
 $plugin->secrets->flush(); $plugin->tokens->flush(); $plugin->health->reset();
-global $wpdb; $wpdb->query( "TRUNCATE TABLE {$wpdb->prefix}mmoa_log" );
 
 echo "\n{$pass} passed, {$fail} failed\n";
 exit( $fail > 0 ? 1 : 0 );

@@ -3,7 +3,7 @@
 What is built, what works, what is not here, and what is left. Updated at 0.16.0,
 after the free/Pro split.
 
-**285 assertions, all passing**, plus a runtime smoke pass over activation,
+**284 assertions, all passing**, plus a runtime smoke pass over activation,
 upgrade, the provider registry, the REST payloads, Site Health and the privacy
 exporters. Nothing here has been exercised against a live Google endpoint yet —
 see [Built but not verified](#built-but-not-verified).
@@ -31,10 +31,11 @@ character for character against what the admin registered by hand, so tying it t
 a menu page would mean that reorganising the admin silently breaks every existing
 connection — with an error naming the URI rather than the rename that caused it.
 
-The legacy PHP admin classes (`admin/class-admin-page.php` and
-`admin/views/`) are still in the tree but register no menu page. They are
-reachable only through their `admin_post_*` handlers, which the OAuth callbacks
-use. Removing them is deferred, not decided against.
+There is no second admin interface any more. The server-rendered settings
+screens under `admin/views/` were deleted when the wordpress.org review flagged
+the inline `<script>` in one of them; nothing reached them, because the only
+registered menu page is the React app. What is left of `Admin_Page` is the
+Google sign-in round trip and the delivery-failure notice.
 
 ---
 
@@ -90,9 +91,8 @@ paths are the ones to exercise first, because they are the most involved.
 | Gap | Detail |
 |---|---|
 | Large attachments | ~2 MB ceiling, enforced before sending. A message on this path is base64-encoded twice, so the usable payload is about half the API limit. Chunked upload not built. |
-| Plugin Check | Not yet run against this build. Required before submission. |
-| wordpress.org submission | Not done. |
-| Translations | The German catalogue predates the split: 592 strings translated, 81 added on this branch still in English. Entries for removed strings are simply never looked up. Regenerate before release. |
+| Plugin Check | Zero errors against the wordpress.org review ruleset. Fourteen warnings remain, all of them an interpolated `$wpdb->prefix` table name in the queue and the privacy exporter — a table name cannot be a placeholder, so there is nothing to change. |
+| wordpress.org submission | Submitted, reviewed, nine findings, all answered. Awaiting the second review. |
+| Translations | None bundled. The German catalogue was removed at the reviewer's request: a plugin in the directory gets its translations from translate.wordpress.org, and core discovers those by itself. German is untranslated until it is uploaded there — the strings themselves are unchanged, so the existing work can be imported rather than redone. |
 | Upgrade prompts | The free build carries no pointer to the paid add-on yet. Permitted by the directory guidelines, within bounds — contextual, on our own screens, dismissible. |
 | `migrate_merged_providers` | Has no test coverage. The file that covered it was never wired into `run.sh` and was deleted with the Microsoft removal; the gap predates that. |
-| Legacy PHP admin | Two interfaces for one set of settings. Deferred. |

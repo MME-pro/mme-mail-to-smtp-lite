@@ -195,7 +195,8 @@ Full detail, including known gaps and what is deliberately out of scope, is in
 | Other SMTP | works, tested |
 | Retry queue | works, tested |
 | Large attachments | ~2 MB ceiling, enforced before sending. Messages are base64-encoded twice on this path, so the usable payload is about half the API limit. Chunked upload not built |
-| Plugin Check, wordpress.org submission | not done |
+| Plugin Check | zero errors against the wordpress.org review ruleset. The remaining warnings are interpolated table names, which cannot be placeholders |
+| wordpress.org submission | reviewed once, every finding answered, resubmitted |
 
 ## Releasing
 

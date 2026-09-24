@@ -176,12 +176,10 @@ class Google_Consent {
 			);
 		}
 
-		// Resolve rather than assume. This read `SLOT_BACKUP === $saved['slot']
-		// ? backup : primary`, which quietly mapped every additional connection
-		// onto the primary one: an admin signing in from a third connection
-		// banked the refresh token over the primary's, and the connection they
-		// were actually configuring went on reporting itself disconnected
-		// however many times they tried.
+		// Resolve rather than assume. The slot is what decides which connection's
+		// credentials the returning token is banked against, and an id that no
+		// longer resolves must not fall back to the primary - that would bank a
+		// token over credentials the admin was not configuring.
 		//
 		// null means the connection was deleted while the admin was away at
 		// Google. Saying so beats writing the grant to whichever slot is left.

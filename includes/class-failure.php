@@ -86,29 +86,4 @@ class Failure {
 
 		return false;
 	}
-
-	/**
-	 * Is this failure one a different connection might survive?
-	 *
-	 * Broader than is_retryable(): a backup connection has its own credentials,
-	 * its own tenant and its own outbound endpoint, so it can get past things
-	 * that are permanent for the primary. An expired Microsoft client secret is
-	 * fatal on the primary forever, but says nothing about a Gmail backup.
-	 *
-	 * The exclusions are the failures that are properties of the *message*
-	 * rather than of the connection. Retrying an oversized attachment or a
-	 * malformed recipient list on a second provider just produces the same
-	 * rejection twice and doubles the log noise.
-	 */
-	public static function should_try_backup( WP_Error $error ): bool {
-		$fatal_for_any_connection = [
-			'mmoa_message_too_large',
-			'mmoa_graph_too_large',
-			'mmoa_gmail_too_large',
-			'mmoa_no_provider',
-			'mmoa_invalid_url',
-		];
-
-		return ! in_array( $error->get_error_code(), $fatal_for_any_connection, true );
-	}
 }

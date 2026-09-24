@@ -205,90 +205,41 @@ $result = $consent->disconnect( Settings::SLOT_PRIMARY );
 check( 'the failure is surfaced', is_wp_error( $result ) && 'mmoa_oauth_revoke_failed' === $result->get_error_code(), is_wp_error( $result ) ? $result->get_error_code() : 'silent' );
 check( 'but the token is gone from this site regardless', '' === $plugin->secrets->get( 'google_refresh' ) );
 
-echo "\n=== 12. Primary and backup grants are independent ===\n";
-// Both slots share one redirect URI, so the slot has to survive the round trip
-// inside `state` - if it did not, connecting the backup would overwrite the
-// primary's grant.
-$plugin->settings->for_slot( Settings::SLOT_BACKUP )->update( [
-	'provider'         => 'gmail_oauth',
-	'google_client_id' => '999-zzz.apps.googleusercontent.com',
-] );
-$plugin->secrets->for_slot( Settings::SLOT_BACKUP )->set( 'google_client_sec', 'backup-secret' );
+echo "\n=== 12. A slot that does not resolve is refused, not redirected to the primary ===\n";
+// The slot travels through Google inside `state`, because both connections
+// share one redirect URI. The regression this guards: the callback used to
+// resolve the slot by asking "is it the backup? no - then it is the primary",
+// so a sign-in started anywhere else banked its refresh token over the
+// PRIMARY one. A working primary was overwritten with a grant minted from a
+// different OAuth client, which then failed at its next token refresh.
+//
+// Now an id that does not resolve is refused outright. That is also what
+// happens when the connection is removed while the admin is away at Google.
 $plugin->secrets->set( 'google_refresh', 'PRIMARY-RT' );
-Settings::flush_cache();
-
-$url   = $consent->authorization_url( Settings::SLOT_BACKUP );
-$p     = params_of( $url );
-$state = $p['state'];
-
-check( 'the backup uses its own client ID', '999-zzz.apps.googleusercontent.com' === ( $p['client_id'] ?? '' ), $p['client_id'] ?? 'missing' );
-check( 'both slots share one redirect URI', Google_Consent::redirect_uri() === ( $p['redirect_uri'] ?? '' ) );
-
-$calls  = 0;
-$script = fn( $u, $a, $n ) => json_response( 200, [ 'access_token' => 'AT', 'refresh_token' => 'BACKUP-RT', 'expires_in' => 3599 ] );
-
-$slot = $consent->handle_callback( [ 'code' => 'C3', 'state' => $state ] );
-
-check( 'the callback landed on the backup slot', Settings::SLOT_BACKUP === $slot, is_wp_error( $slot ) ? $slot->get_error_message() : var_export( $slot, true ) );
-check( 'the backup grant was stored', 'BACKUP-RT' === $plugin->secrets->for_slot( Settings::SLOT_BACKUP )->get( 'google_refresh' ) );
-check( 'the primary grant was untouched', 'PRIMARY-RT' === $plugin->secrets->get( 'google_refresh' ) );
-
-echo "\n=== 13. An additional connection keeps its own grant ===\n";
-// The regression this guards: the callback resolved the slot by asking "is it
-// backup? no - then it is primary", so signing in from any of the additional
-// connections banked the refresh token over the PRIMARY one. The connection
-// being configured stayed disconnected however many times an admin tried, and
-// a working primary was overwritten with a grant minted from a different
-// OAuth client - which then failed at its next token refresh.
-$extra = $plugin->connections->add( 'Newsletter' );
-$extra = is_wp_error( $extra ) ? '' : $extra;
-
-check( 'an additional connection was created', '' !== $extra && Settings::SLOT_PRIMARY !== $extra, (string) $extra );
-
-$plugin->settings->for_slot( $extra )->update( [
+$plugin->settings->for_slot( 'cgone' )->update( [
 	'provider'         => 'gmail_oauth',
 	'google_client_id' => '777-extra.apps.googleusercontent.com',
 ] );
-$plugin->secrets->for_slot( $extra )->set( 'google_client_sec', 'extra-secret' );
-$plugin->secrets->set( 'google_refresh', 'PRIMARY-RT' );
+$plugin->secrets->for_slot( 'cgone' )->set( 'google_client_sec', 'extra-secret' );
 Settings::flush_cache();
 
-$url   = $consent->authorization_url( $extra );
-$p     = params_of( $url );
-$state = $p['state'];
-
-check( 'it uses its own client ID', '777-extra.apps.googleusercontent.com' === ( $p['client_id'] ?? '' ), $p['client_id'] ?? 'missing' );
+$url   = $consent->authorization_url( 'cgone' );
+$state = params_of( $url )['state'];
 
 $calls  = 0;
 $script = fn( $u, $a, $n ) => json_response( 200, [ 'access_token' => 'AT', 'refresh_token' => 'EXTRA-RT', 'expires_in' => 3599 ] );
 
-$slot = $consent->handle_callback( [ 'code' => 'C4', 'state' => $state ] );
-
-check( 'the callback landed on that connection, not the primary', $extra === $slot, is_wp_error( $slot ) ? $slot->get_error_message() : var_export( $slot, true ) );
-check( 'its grant was stored against itself', 'EXTRA-RT' === $plugin->secrets->for_slot( $extra )->get( 'google_refresh' ) );
-check( 'it now reports itself connected', $consent->is_connected( $extra ) );
-check( 'the primary grant was not overwritten', 'PRIMARY-RT' === $plugin->secrets->get( 'google_refresh' ), (string) $plugin->secrets->get( 'google_refresh' ) );
-
-echo "\n=== 14. A connection deleted mid-flow is refused, not redirected elsewhere ===\n";
-// Deleting the connection while the admin is away at Google leaves a state
-// transient naming a slot that no longer exists. Writing that grant to the
-// primary would be worse than failing.
-$url   = $consent->authorization_url( $extra );
-$state = params_of( $url )['state'];
-$plugin->connections->delete( $extra );
-Settings::flush_cache();
-
 $gone = $consent->handle_callback( [ 'code' => 'C5', 'state' => $state ] );
 
 check( 'the callback failed rather than guessing a slot', is_wp_error( $gone ) && 'mmoa_oauth_gone' === $gone->get_error_code(), is_wp_error( $gone ) ? $gone->get_error_code() : var_export( $gone, true ) );
+check( 'no grant was banked against that slot', '' === $plugin->secrets->for_slot( 'cgone' )->get( 'google_refresh' ) );
 check( 'and the primary grant is still its own', 'PRIMARY-RT' === $plugin->secrets->get( 'google_refresh' ), (string) $plugin->secrets->get( 'google_refresh' ) );
 
 // Leave the site unconfigured, as the other suites do.
 $plugin->secrets->set( 'google_refresh', '' );
 $plugin->secrets->set( 'google_client_sec', '' );
-$plugin->secrets->for_slot( Settings::SLOT_BACKUP )->set( 'google_refresh', '' );
-$plugin->secrets->for_slot( Settings::SLOT_BACKUP )->set( 'google_client_sec', '' );
-$plugin->settings->for_slot( Settings::SLOT_BACKUP )->update( [ 'provider' => '' ] );
+$plugin->secrets->for_slot( 'cgone' )->set( 'google_client_sec', '' );
+$plugin->settings->for_slot( 'cgone' )->update( [ 'provider' => '' ] );
 $plugin->settings->update( [ 'provider' => '' ] );
 $plugin->tokens->flush();
 $plugin->health->reset();

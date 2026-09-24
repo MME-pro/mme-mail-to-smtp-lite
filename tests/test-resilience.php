@@ -1,6 +1,6 @@
 <?php
 /**
- * Stale-token grace, backup connection, and retry queue.
+ * Stale-token grace and the retry queue.
  *
  * The scenario driving all of this is a real one, taken from a site whose host
  * had intermittently broken outbound DNS:
@@ -39,12 +39,9 @@ function configure_primary_only( ModernMailer\Plugin $plugin ): void {
 		'ms_client_id'  => 'cid',
 		'ms_sender'     => 'noreply@contoso.com',
 		'queue_enabled' => true,
-		'alert_email'   => '',
 	] );
 	$plugin->secrets->set( 'ms_client_secret', 'secret' );
 
-	// Clear any backup left behind by an earlier test.
-	$plugin->settings->for_slot( ModernMailer\Settings::SLOT_BACKUP )->update( [ 'provider' => '' ] );
 }
 
 function reset_state( ModernMailer\Plugin $plugin ): void {
@@ -188,17 +185,10 @@ check( 'the send failed loudly', false === $sent );
 check( 'nothing was queued', 0 === $plugin->queue->stats()['pending'], wp_json_encode( $plugin->queue->stats() ) );
 check( 'and the error still names the real cause', $err instanceof WP_Error && false !== strpos( $err->get_error_message(), 'client secret' ), $err ? $err->get_error_message() : 'none' );
 
-echo "\n=== 6. An oversized message is not queued and not sent to the backup ===\n";
+echo "\n=== 6. An oversized message is not queued ===\n";
 // A property of the message, not the connection: no amount of patience or
 // alternative credentials will make it fit.
 reset_state( $plugin );
-$plugin->settings->for_slot( ModernMailer\Settings::SLOT_BACKUP )->update( [
-	'provider'        => 'gmail_sa',
-	'google_sa_email' => 'sa@project.iam.gserviceaccount.com',
-	'google_sender'   => 'noreply@contoso.com',
-] );
-$plugin->secrets->for_slot( ModernMailer\Settings::SLOT_BACKUP )
-	->set( 'google_sa_key', file_get_contents( __DIR__ . '/test-sa-key.pem' ) );
 ModernMailer\Settings::flush_cache();
 $plugin->dispatcher->reset_providers();
 $plugin->install_mailer();
@@ -213,76 +203,40 @@ check( 'the oversized send failed', false === $sent );
 check( 'no HTTP call was made at all', 0 === $calls, "{$calls} calls" );
 check( 'nothing was queued', 0 === $plugin->queue->stats()['pending'] );
 
-echo "\n=== 7. The backup connection delivers what the primary cannot ===\n";
+echo "\n=== 7. A test message is never rescued by the queue ===\n";
+// Send test exists to answer one question: does the connection work? Every
+// mechanism that makes ordinary sending resilient makes that unanswerable - a
+// test that got queued would report success for a message never sent.
 reset_state( $plugin );
-$used_backup = 0;
-add_action( 'mmoa_backup_used', function () use ( &$used_backup ) { $used_backup++; } );
-
-$hit = [ 'graph' => 0, 'gmail' => 0 ];
+$hit    = [ 'graph' => 0 ];
 $calls  = 0;
 $script = function ( $url, $args, $n ) use ( &$hit ) {
-	if ( false !== strpos( $url, 'microsoft' ) ) {
-		$hit['graph']++;
-		return curl7();                       // primary is unreachable, entirely
-	}
-	if ( false !== strpos( $url, 'oauth2.googleapis' ) ) {
+	if ( is_token_url( $url ) ) {
 		return ok_token();
 	}
-	$hit['gmail']++;
-	return json_response( 200, [ 'id' => 'abc' ] );
+
+	$hit['graph']++;
+
+	return curl7();
 };
-
-$sent = wp_mail( 'a@example.com', 'via backup', 'body' );
-
-check( 'the message was delivered', true === $sent, var_export( $sent, true ) );
-check( 'the primary was tried first', $hit['graph'] > 0 );
-check( 'the backup actually sent it', $hit['gmail'] > 0 );
-check( 'the fallback was announced', 1 === $used_backup, "fired {$used_backup}x" );
-check( 'nothing was queued, because nothing was lost', 0 === $plugin->queue->stats()['pending'] );
-check( 'health is clean, because the site did deliver', ! $plugin->health->is_failing() );
-
-echo "\n=== 7b. A test message is never rescued by anything ===\n";
-// Send test exists to answer one question: does the primary work? Every
-// mechanism that makes ordinary sending resilient makes that unanswerable - a
-// test that fell through to the backup reported success while the primary was
-// broken, which is the exact situation somebody presses the button to find out
-// about, and one that got queued reported success for a message never sent.
-//
-// The arrangement is identical to section 7, where the backup did rescue it.
-reset_state( $plugin );
-$hit    = [ 'graph' => 0, 'gmail' => 0 ];
-$calls  = 0;
-$before = $used_backup;
 
 $sent = $plugin->dispatcher->without_fallbacks(
 	fn() => wp_mail( 'a@example.com', 'test message', 'body' )
 );
 
-check( 'the test reports failure, not the backup\'s success', true !== $sent, var_export( $sent, true ) );
-check( 'the primary was tried', $hit['graph'] > 0 );
-check( 'the backup was never asked', 0 === $hit['gmail'], "backup called {$hit['gmail']}x" );
-check( 'no fallback was announced', $before === $used_backup );
+check( 'the test reports the failure rather than hiding it', true !== $sent, var_export( $sent, true ) );
+check( 'the connection was tried', $hit['graph'] > 0 );
 check( 'and nothing was queued behind it', 0 === $plugin->queue->stats()['pending'], (string) $plugin->queue->stats()['pending'] );
 
-echo "\n=== 7c. Ordinary sending still has its safety nets ===\n";
+echo "\n=== 8. Ordinary sending still has its safety net ===\n";
 // The flag must not leak past the callback: the same arrangement that was
-// deliberately not rescued above must be rescued now.
+// deliberately not rescued above must be queued now.
 reset_state( $plugin );
-$hit    = [ 'graph' => 0, 'gmail' => 0 ];
+$hit    = [ 'graph' => 0 ];
 $calls  = 0;
 $normal = wp_mail( 'a@example.com', 'ordinary message', 'body' );
 
-check( 'an ordinary send still reaches the backup', true === $normal, var_export( $normal, true ) );
-check( 'and the backup delivered it', $hit['gmail'] > 0 );
-
-echo "\n=== 8. Both connections down: queued, not lost ===\n";
-reset_state( $plugin );
-$calls  = 0;
-$script = fn( $url, $args, $n ) => curl7();
-
-$sent = wp_mail( 'a@example.com', 'both down', 'body' );
-
-check( 'accepted for later delivery', true === $sent, var_export( $sent, true ) );
+check( 'an ordinary send is accepted for later delivery', true === $normal, var_export( $normal, true ) );
 check( 'and it is on the queue', 1 === $plugin->queue->stats()['pending'] );
 
 echo "\n=== 9. A queue drain cannot re-enqueue its own retries ===\n";
@@ -300,46 +254,8 @@ check( 'the row was retried', 1 === $drained['attempted'], wp_json_encode( $drai
 check( 'it failed again', 1 === $drained['failed'], wp_json_encode( $drained ) );
 check( 'the queue did not grow', $after === $before, "{$before} -> {$after}" );
 
-echo "\n=== 10. Backup credentials are stored separately from the primary ===\n";
-// The slot scoping is the whole basis of the backup connection; if the two
-// slots ever aliased, saving a backup would silently overwrite the primary.
-check(
-	'primary and backup client secrets are independent',
-	'secret' === $plugin->secrets->get( 'ms_client_secret' )
-		&& '' === $plugin->secrets->for_slot( ModernMailer\Settings::SLOT_BACKUP )->get( 'ms_client_secret' )
-);
-check(
-	'primary and backup providers are independent',
-	'graph' === $plugin->settings->get( 'provider' )
-		&& 'gmail_sa' === $plugin->settings->for_slot( ModernMailer\Settings::SLOT_BACKUP )->get( 'provider' )
-);
-// The From address is per connection, not site-wide. Two connections almost
-// always authenticate as different mailboxes, and every provider here refuses
-// or rewrites a From address the authenticated identity may not use - so a
-// shared value meant the backup could only work by coincidence.
-$plugin->settings->for_slot( ModernMailer\Settings::SLOT_BACKUP )->update( [ 'from_email' => 'backup@contoso.com' ] );
-ModernMailer\Settings::flush_cache();
-
-check(
-	'the From address is independent per connection',
-	'noreply@contoso.com' === $plugin->settings->get( 'from_email' )
-		&& 'backup@contoso.com' === $plugin->settings->for_slot( ModernMailer\Settings::SLOT_BACKUP )->get( 'from_email' ),
-	$plugin->settings->get( 'from_email' ) . ' / ' . $plugin->settings->for_slot( ModernMailer\Settings::SLOT_BACKUP )->get( 'from_email' )
-);
-
-// Genuinely site-wide settings still read the same through any slot.
-check(
-	'site-wide settings still read the same through either slot',
-	$plugin->settings->get( 'queue_enabled' )
-		=== $plugin->settings->for_slot( ModernMailer\Settings::SLOT_BACKUP )->get( 'queue_enabled' )
-);
-
-$plugin->settings->for_slot( ModernMailer\Settings::SLOT_BACKUP )->update( [ 'from_email' => '' ] );
-ModernMailer\Settings::flush_cache();
-
 // Leave the site unconfigured, as the other suites do.
 $plugin->queue->purge();
-$plugin->settings->for_slot( ModernMailer\Settings::SLOT_BACKUP )->update( [ 'provider' => '' ] );
 $plugin->settings->update( [ 'provider' => '' ] );
 $plugin->tokens->flush();
 $plugin->health->reset();

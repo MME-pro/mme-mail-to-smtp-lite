@@ -140,8 +140,8 @@ check( 'the password is NOT in the settings option', false === strpos( $raw, 'hu
 $rawSecrets = (string) $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM {$wpdb->options} WHERE option_name = %s", 'mmoa_secrets' ) );
 check( 'and it is ciphertext where it is stored', false === strpos( $rawSecrets, 'hunter2-the-password' ) );
 
-echo "\n=== 4. Primary and backup keep separate SMTP credentials ===\n";
-$backup = $plugin->settings->for_slot( Settings::SLOT_BACKUP );
+echo "\n=== 4. Two connection slots keep separate SMTP credentials ===\n";
+$backup = $plugin->settings->for_slot( 'backup' );
 $backup->update( [ 'provider' => 'smtp', 'smtp_host' => 'smtp.backup.example.com' ] );
 $backup->secrets()->set( 'smtp_password', 'different-password' );
 Settings::flush_cache();
@@ -209,8 +209,6 @@ check(
 	! Failure::is_retryable( $permanent ),
 	'550 would be retryable if it were treated as HTTP'
 );
-
-check( 'a bad password is still worth trying on the backup', Failure::should_try_backup( $auth ) );
 
 echo "\n=== 7. Restoring a clean state ===\n";
 $backup->update( [ 'provider' => '', 'smtp_host' => '' ] );

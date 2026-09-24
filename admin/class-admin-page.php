@@ -32,7 +32,6 @@ class Admin_Page {
 
 	/** Settings, and the parent menu slug. */
 	private const SLUG        = 'modern-mailer-oauth';
-	private const SLUG_BACKUP = 'modern-mailer-backup';
 
 	private const CAPABILITY = 'manage_options';
 	private const NOTICE     = 'mmoa_notice';
@@ -144,9 +143,7 @@ class Admin_Page {
 
 		$this->plugin->settings->update( $global );
 
-		foreach ( [ Settings::SLOT_PRIMARY, Settings::SLOT_BACKUP ] as $slot ) {
-			$this->save_connection( $slot, $posted );
-		}
+		$this->save_connection( Settings::SLOT_PRIMARY, $posted );
 
 		// Credentials may have changed underneath a cached token, and any
 		// provider built earlier in this request captured the old ones.
@@ -200,9 +197,7 @@ class Admin_Page {
 	public function handle_verify(): void {
 		$this->guard( 'mmoa_verify' );
 
-		$slot = Settings::SLOT_BACKUP === ( $_POST['slot'] ?? '' ) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-			? Settings::SLOT_BACKUP
-			: Settings::SLOT_PRIMARY;
+		$slot = Settings::SLOT_PRIMARY;
 
 		$provider = $this->plugin->dispatcher->provider( $slot );
 
@@ -224,9 +219,7 @@ class Admin_Page {
 
 		$this->redirect(
 			'saved',
-			Settings::SLOT_BACKUP === $slot
-				? __( 'Backup connection verified. Credentials are valid and the mailbox is reachable.', 'modern-mailer-oauth' )
-				: __( 'Connection verified. Credentials are valid and the mailbox is reachable.', 'modern-mailer-oauth' )
+			__( 'Connection verified. Credentials are valid and the mailbox is reachable.', 'modern-mailer-oauth' )
 		);
 	}
 
@@ -721,17 +714,6 @@ class Admin_Page {
 		require __DIR__ . '/views/settings.php';
 	}
 
-	public function render_backup(): void {
-		if ( ! current_user_can( self::CAPABILITY ) ) {
-			return;
-		}
-
-		$settings = $this->plugin->settings;
-		$page     = self::SLUG_BACKUP;
-
-		require __DIR__ . '/views/backup.php';
-	}
-
 	/**
 	 * The hidden field that sends a form handler back to the current screen.
 	 */
@@ -867,7 +849,7 @@ class Admin_Page {
 	private function return_slug(): string {
 		$posted = isset( $_POST['return_page'] ) ? sanitize_key( wp_unslash( $_POST['return_page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- callers verify a nonce first.
 
-		return in_array( $posted, [ self::SLUG, self::SLUG_BACKUP ], true )
+		return in_array( $posted, [ self::SLUG ], true )
 			? $posted
 			: self::SLUG;
 	}

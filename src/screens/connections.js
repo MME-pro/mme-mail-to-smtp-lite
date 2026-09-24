@@ -1,19 +1,16 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Check, ShieldCheck, Send, AlertTriangle, Plus, Trash2, Unplug } from 'lucide-react';
+import { Check, ShieldCheck, Send, AlertTriangle, Unplug } from 'lucide-react';
 import {
 	getConnection,
 	saveConnection,
 	verifyConnection,
 	disconnectConnection,
 	sendTestEmail,
-	listConnections,
-	addConnection,
-	deleteConnection,
 } from '../api/client';
 import { useToast } from '../components/toast';
-import { Panel, Button, Badge, FormField, Spinner, Input, inputClass } from '../components/ui';
+import { Panel, Button, Badge, FormField, Spinner, inputClass } from '../components/ui';
 import { cn } from '../lib/utils';
 import GoogleConnect from '../components/google-connect';
 import GoogleSetupGuide from '../components/google-setup-guide';
@@ -24,32 +21,13 @@ import ProviderForm, { missingRequired } from '../components/provider-form';
 import ProviderPicker from '../components/provider-picker';
 
 /**
- * What each connection is for.
- *
- * The two built-ins have fixed meanings worth stating on the screen; an
- * additional connection means whatever the routing rules make it mean, so it
- * gets pointed at the screen that decides that.
+ * What the connection is for, said once on the screen.
  */
-const describeSlot = ( slot ) => {
-	if ( 'primary' === slot ) {
-		return __(
-			'Every message is attempted here first, unless a routing rule sends it elsewhere.',
-			'modern-mailer-oauth'
-		);
-	}
-
-	if ( 'backup' === slot ) {
-		return __(
-			'Used when the chosen connection fails. Use a different provider.',
-			'modern-mailer-oauth'
-		);
-	}
-
-	return __(
-		'Used only for messages a routing rule sends here. Set those up under Routing.',
+const describeSlot = () =>
+	__(
+		'Every message WordPress sends goes out over this connection.',
 		'modern-mailer-oauth'
 	);
-};
 
 const ConnectionPanel = ( { slot, categories, title } ) => {
 	const toast = useToast();
@@ -416,203 +394,23 @@ const TestEmail = () => {
 	);
 };
 
-/**
- * The list of connections down the side.
- *
- * Primary and Backup are fixed - one is what sends by default and the other is
- * the fallback, so neither can be removed or renamed without the words meaning
- * something else. Everything after them exists to give a routing rule somewhere
- * to point.
- */
-const ConnectionList = ( { connections, selected, max, onSelect } ) => {
-	const toast = useToast();
-	const queryClient = useQueryClient();
-	const [ adding, setAdding ] = useState( false );
-	const [ name, setName ] = useState( '' );
-
-	const refresh = () => {
-		queryClient.invalidateQueries( { queryKey: [ 'connection-list' ] } );
-		queryClient.invalidateQueries( { queryKey: [ 'bootstrap' ] } );
-		queryClient.invalidateQueries( { queryKey: [ 'routing' ] } );
-	};
-
-	const add = useMutation( {
-		mutationFn: () => addConnection( name ),
-		onSuccess: ( result ) => {
-			if ( ! result.ok ) {
-				toast( result.message, 'bad' );
-				return;
-			}
-
-			setAdding( false );
-			setName( '' );
-			refresh();
-			onSelect( result.id );
-			toast( __( 'Connection added. Choose a provider for it.', 'modern-mailer-oauth' ) );
-		},
-		onError: ( error ) => toast( error.message, 'bad' ),
-	} );
-
-	const remove = useMutation( {
-		mutationFn: deleteConnection,
-		onSuccess: ( result ) => {
-			toast( result.message, result.ok ? 'ok' : 'bad' );
-			refresh();
-			onSelect( 'primary' );
-		},
-		onError: ( error ) => toast( error.message, 'bad' ),
-	} );
-
-	const additional = connections.filter( ( c ) => ! c.builtin );
-	const full = additional.length >= max;
-
-	return (
-		<div className="grid gap-2 content-start">
-			{ connections.map( ( connection ) => {
-				const active = selected === connection.id;
-
-				return (
-					<div
-						key={ connection.id }
-						className={ cn(
-							'group flex items-center gap-2 rounded-lg border px-3 py-2 transition-colors',
-							active ? 'border-brand bg-brand-subtle' : 'bg-card hover:bg-muted'
-						) }
-					>
-						<button
-							type="button"
-							onClick={ () => onSelect( connection.id ) }
-							className="flex-1 min-w-0 text-left bg-transparent border-0 cursor-pointer p-0"
-						>
-							<span className="block text-sm font-medium truncate">
-								{ connection.name }
-							</span>
-							<span className="block text-xs text-muted-foreground truncate">
-								{ connection.configured
-									? connection.provider
-									: __( 'Not configured', 'modern-mailer-oauth' ) }
-							</span>
-						</button>
-
-						{ connection.configured && (
-							<span
-								aria-hidden="true"
-								className="size-1.5 rounded-full bg-success shrink-0"
-							/>
-						) }
-
-						{ ! connection.builtin && (
-							<Button
-								variant="ghost"
-								size="icon"
-								className="opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
-								aria-label={ sprintf(
-									/* translators: %s: connection name. */
-									__( 'Remove %s', 'modern-mailer-oauth' ),
-									connection.name
-								) }
-								busy={ remove.isPending }
-								onClick={ () => {
-									// Deleting takes the stored credentials with
-									// it, which is not recoverable from here.
-									// eslint-disable-next-line no-alert
-									if (
-										window.confirm(
-											sprintf(
-												/* translators: %s: connection name. */
-												__(
-													'Remove %s and its stored credentials? Any routing rule using it will be deleted too.',
-													'modern-mailer-oauth'
-												),
-												connection.name
-											)
-										)
-									) {
-										remove.mutate( connection.id );
-									}
-								} }
-							>
-								<Trash2 className="text-danger" />
-							</Button>
-						) }
-					</div>
-				);
-			} ) }
-
-			{ adding ? (
-				<div className="grid gap-2 rounded-lg border p-3">
-					<Input
-						autoFocus
-						placeholder={ __( 'Connection name', 'modern-mailer-oauth' ) }
-						value={ name }
-						onChange={ ( e ) => setName( e.target.value ) }
-						onKeyDown={ ( e ) => e.key === 'Enter' && add.mutate() }
-					/>
-					<div className="flex gap-2">
-						<Button size="sm" variant="default" busy={ add.isPending } onClick={ () => add.mutate() }>
-							{ __( 'Add', 'modern-mailer-oauth' ) }
-						</Button>
-						<Button size="sm" variant="ghost" onClick={ () => setAdding( false ) }>
-							{ __( 'Cancel', 'modern-mailer-oauth' ) }
-						</Button>
-					</div>
-				</div>
-			) : (
-				<Button
-					variant="outline"
-					size="sm"
-					disabled={ full }
-					onClick={ () => setAdding( true ) }
-				>
-					<Plus />
-					{ full
-						? __( 'Connection limit reached', 'modern-mailer-oauth' )
-						: __( 'Add connection', 'modern-mailer-oauth' ) }
-				</Button>
-			) }
-		</div>
-	);
-};
 
 const Connections = () => {
-	const [ selected, setSelected ] = useState( 'primary' );
-	const { data: bootstrap } = useQuery( { queryKey: [ 'bootstrap' ] } );
-	const { data: list, isLoading } = useQuery( {
-		queryKey: [ 'connection-list' ],
-		queryFn: listConnections,
-	} );
-
-	const categories = bootstrap?.categories || {};
+	const { data: bootstrap, isLoading } = useQuery( { queryKey: [ 'bootstrap' ] } );
 
 	if ( isLoading ) {
 		return <Spinner />;
 	}
 
-	const connections = list?.connections || [];
-	const current = connections.find( ( c ) => c.id === selected );
-
-	// A connection can disappear underneath the selection - deleted here, or in
-	// another tab - so fall back rather than rendering an empty panel.
-	const activeId = current ? selected : 'primary';
-
 	return (
-		<div className="grid gap-5 lg:grid-cols-[260px_1fr] items-start">
-			<ConnectionList
-				connections={ connections }
-				selected={ activeId }
-				max={ list?.max ?? 10 }
-				onSelect={ setSelected }
+		<div className="grid gap-5 min-w-0">
+			<ConnectionPanel
+				slot="primary"
+				title={ __( 'Primary', 'modern-mailer-oauth' ) }
+				categories={ bootstrap?.categories || {} }
 			/>
 
-			<div className="grid gap-5 min-w-0">
-				<ConnectionPanel
-					key={ activeId }
-					slot={ activeId }
-					title={ ( current || connections[ 0 ] )?.name }
-				/>
-
-				{ 'primary' === activeId && <TestEmail /> }
-			</div>
+			<TestEmail />
 		</div>
 	);
 };

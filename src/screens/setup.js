@@ -735,7 +735,7 @@ const Setup = () => {
 						) }
 						title={ __( 'Send one real message', 'modern-mailer-oauth' ) }
 						lead={ __(
-							'It goes out over this connection with routing, the backup and the retry queue switched off, so a failure here is the connection failing rather than something else quietly covering for it.',
+							'It goes out over this connection with the retry queue switched off, so a failure here is the connection failing rather than something else quietly covering for it.',
 							'modern-mailer-oauth'
 						) }
 						back={ () => go( 'verify' ) }

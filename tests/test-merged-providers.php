@@ -333,7 +333,7 @@ $extra = $plugin->connections->add( 'Newsletter' );
 $extra = is_wp_error( $extra ) ? '' : $extra;
 
 $plugin->settings->update( [ 'provider' => 'graph' ] );
-$plugin->settings->for_slot( Settings::SLOT_BACKUP )->update( [ 'provider' => 'gmail_sa' ] );
+$plugin->settings->for_slot( 'backup' )->update( [ 'provider' => 'gmail_sa' ] );
 $plugin->settings->for_slot( $extra )->update( [
 	'provider'          => 'gmail_oauth',
 	'google_setup_mode' => One_Click::MODE_ONE_CLICK,
@@ -347,7 +347,7 @@ Settings::flush_cache();
 check( 'Microsoft 365 became Microsoft', 'microsoft' === $plugin->settings->get( 'provider' ), (string) $plugin->settings->get( 'provider' ) );
 check( 'and kept app-only authentication', One_Click::MODE_OWN_CLIENT === $plugin->settings->get( 'ms_setup_mode' ), (string) $plugin->settings->get( 'ms_setup_mode' ) );
 
-$backup = $plugin->settings->for_slot( Settings::SLOT_BACKUP );
+$backup = $plugin->settings->for_slot( 'backup' );
 check( 'Google Workspace became Google', 'google' === $backup->get( 'provider' ), (string) $backup->get( 'provider' ) );
 check( 'and kept its service account', Google::MODE_SERVICE_ACCOUNT === $backup->get( 'google_setup_mode' ), (string) $backup->get( 'google_setup_mode' ) );
 
@@ -368,7 +368,7 @@ check( 'a later change is not reverted', One_Click::MODE_ONE_CLICK === $plugin->
 // Leave the site unconfigured, as the other suites do.
 $plugin->connections->delete( $extra );
 $plugin->secrets->set( 'ms_refresh', '' );
-$plugin->settings->for_slot( Settings::SLOT_BACKUP )->update( [ 'provider' => '', 'google_setup_mode' => One_Click::MODE_OWN_CLIENT ] );
+$plugin->settings->for_slot( 'backup' )->update( [ 'provider' => '', 'google_setup_mode' => One_Click::MODE_OWN_CLIENT ] );
 $plugin->settings->update( [
 	'provider'          => '',
 	'ms_setup_mode'     => One_Click::MODE_OWN_CLIENT,

@@ -16,20 +16,18 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Chooses a connection, sends, and records the outcome.
  *
- * Three things stand between a transient fault and a lost email, in the order
+ * Two things stand between a transient fault and a lost email, in the order
  * they are tried:
  *
  * 1. Http retries the request a few times inside this page load. Good for a
  *    dropped packet or a brief throttle.
- * 2. If the primary connection still fails, the backup connection is tried.
- *    Separate credentials and a separate endpoint, so it survives faults that
- *    are permanent for the primary.
- * 3. If that fails too and the failure looks transient, the message goes on the
- *    queue and is retried across later requests over the following hours.
+ * 2. If the connection still fails and the failure looks transient, the message
+ *    goes on the queue and is retried across later requests over the following
+ *    hours.
  *
  * The escalation only happens when it can help, which is what Failure decides.
  * An oversized attachment is not retried anywhere, because no amount of
- * patience or alternative credentials will make it fit.
+ * patience will make it fit.
  */
 class Dispatcher {
 
@@ -72,8 +70,8 @@ class Dispatcher {
 		$class  = Provider_Registry::class_for( (string) $scoped->get( 'provider' ) );
 
 		// Providers receive the slot-scoped settings and are otherwise
-		// identical, which is why adding a backup connection needed no changes
-		// inside any provider.
+		// identical, which is why an add-on can introduce a second connection
+		// without changing any provider.
 		$this->providers[ $slot ] = null === $class
 			? null
 			: new $class( $scoped, $this->tokens, $this->http );
@@ -97,13 +95,11 @@ class Dispatcher {
 	 *
 	 * A test message exists to answer one question: does the primary
 	 * connection work? Everything that makes ordinary sending resilient makes
-	 * that question unanswerable. A test that fell through to the backup
-	 * reported success while the primary was broken - which is the exact
-	 * situation somebody presses Send test to find out about - and one that got
-	 * queued reported success for a message that had not been sent at all.
+	 * that question unanswerable: a test that got queued reported success
+	 * for a message that had not been sent at all.
 	 *
-	 * So for the duration of the callback: no routing, no backup, no queue.
-	 * What comes back is the primary connection's own answer.
+	 * So for the duration of the callback: no queue. What comes back is the
+	 * connection's own answer.
 	 *
 	 * @template T
 	 * @param callable():T $send
@@ -120,15 +116,15 @@ class Dispatcher {
 	}
 
 	/**
-	 * Send a built MIME message, escalating through backup and queue.
+	 * Send a built MIME message, escalating to the retry queue.
 	 *
 	 * @return true|WP_Error
 	 */
 	public function dispatch( string $raw_mime, PHPMailer $mailer, ?string $forced_slot = null ) {
 		// $forced_slot is set when a message comes off the queue, where the
 		// choice was already made and recorded. Everything else goes out on the
-		// primary connection, and a failure there falls through to the backup
-		// and then to the queue.
+		// primary connection, and a failure there falls through to the retry
+		// queue.
 		$slot = $forced_slot ?? Settings::SLOT_PRIMARY;
 
 		$result = $this->attempt( $slot, $raw_mime, $mailer );
@@ -139,46 +135,6 @@ class Dispatcher {
 			return true;
 		}
 
-		// A routed message falls back to the backup like any other, unless the
-		// backup is the connection that just failed.
-		if (
-			! $this->testing
-			&& Settings::SLOT_BACKUP !== $slot
-			&& Failure::should_try_backup( $result )
-			&& null !== $this->provider( Settings::SLOT_BACKUP )
-		) {
-			$primary_error = $result;
-			$result        = $this->attempt( Settings::SLOT_BACKUP, $raw_mime, $mailer );
-
-			if ( true === $result ) {
-				/**
-				 * Fires when the backup connection delivered what the primary
-				 * could not.
-				 *
-				 * Sending is working, but on the fallback path - worth knowing
-				 * before the backup is the only thing left.
-				 *
-				 * @param WP_Error            $primary_error Why the primary failed.
-				 * @param array<string,mixed> $context       The message's own details.
-				 */
-				do_action(
-					'mmoa_backup_used',
-					$primary_error,
-					[
-						'recipients' => implode( ', ', $this->recipients( $mailer ) ),
-						'subject'    => (string) $mailer->Subject,
-						'mailer'     => null !== $this->provider( $slot ) ? $this->provider( $slot )->get_label() : '',
-						'slot'       => $slot,
-						'time'       => time(),
-					]
-				);
-
-				$this->health->record_success();
-
-				return true;
-			}
-		}
-
 		// Sending genuinely failed, whatever happens to the message next. The
 		// admin needs to know that even if the queue later delivers it, because
 		// a queue quietly absorbing every send is exactly the silent breakage
@@ -186,8 +142,7 @@ class Dispatcher {
 		//
 		// The message's own details travel with the failure so an alert can
 		// name what failed. Recipients and subject only - never the body,
-		// never a credential - and they go no further than the channels the
-		// administrator configured.
+		// never a credential.
 		$provider = $this->provider( $slot );
 
 		$this->health->record_failure(
@@ -310,14 +265,9 @@ class Dispatcher {
 		}
 
 		// The From address belongs to the connection, and which connection is
-		// sending is only known here - routing chose it, or the backup took
-		// over. wp_mail() built the message long before either happened, so if
-		// this connection wants a different sender the message is rebuilt with
-		// it.
-		//
-		// This is what makes a backup on a second provider work at all: it
-		// authenticates as a different mailbox, and sending as the primary's
-		// address would be refused by every provider here.
+		// sending is only known here - a message off the queue carries its own.
+		// wp_mail() built the message long before that, so if this connection
+		// wants a different sender the message is rebuilt with it.
 		$rebuilt = $this->apply_from( $slot, $mailer );
 
 		if ( null !== $rebuilt ) {
@@ -343,14 +293,15 @@ class Dispatcher {
 		/**
 		 * Fires after every send attempt, whether it succeeded or failed.
 		 *
-		 * Every attempt is reported, including one the backup went on to
+		 * Every attempt is reported, including one a later retry went on to
 		 * rescue - what an add-on records here is the account of what actually
 		 * happened on the wire. Health is decided separately, once, by
 		 * dispatch(), from the final outcome.
 		 *
-		 * The slot travels with it so that a report names which connection's
-		 * settings it was describing. Without it, a site with a primary and a
-		 * backup on the same provider produces two identical-looking records.
+		 * The slot travels with it so that a record names which connection's
+		 * settings it was describing. Without it, an add-on that introduces
+		 * a second connection on the same provider produces two records that
+		 * otherwise look identical.
 		 *
 		 * @param Provider_Interface $provider The provider that was tried.
 		 * @param PHPMailer          $mailer   The message, as PHPMailer built it.

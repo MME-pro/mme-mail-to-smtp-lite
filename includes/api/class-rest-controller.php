@@ -159,40 +159,6 @@ class Rest_Controller {
 
 		register_rest_route(
 			self::NAMESPACE,
-			'/connections',
-			[
-				[
-					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => [ $this, 'list_connections' ],
-					'permission_callback' => $auth,
-				],
-				[
-					'methods'             => WP_REST_Server::CREATABLE,
-					'callback'            => [ $this, 'add_connection' ],
-					'permission_callback' => $auth,
-				],
-			]
-		);
-
-		register_rest_route(
-			self::NAMESPACE,
-			'/connections/(?P<id>[A-Za-z0-9_-]+)/manage',
-			[
-				[
-					'methods'             => WP_REST_Server::EDITABLE,
-					'callback'            => [ $this, 'rename_connection' ],
-					'permission_callback' => $auth,
-				],
-				[
-					'methods'             => WP_REST_Server::DELETABLE,
-					'callback'            => [ $this, 'delete_connection' ],
-					'permission_callback' => $auth,
-				],
-			]
-		);
-
-		register_rest_route(
-			self::NAMESPACE,
 			'/dashboard',
 			[
 				'methods'             => WP_REST_Server::READABLE,
@@ -236,7 +202,6 @@ class Rest_Controller {
 				'settings'    => $this->settings_payload(),
 				'connections' => [
 					'primary' => $this->connection_payload( Settings::SLOT_PRIMARY ),
-					'backup'  => $this->connection_payload( Settings::SLOT_BACKUP ),
 				],
 				'health'      => $this->health_payload(),
 				'queue'       => $this->plugin->queue->stats(),
@@ -558,82 +523,12 @@ class Rest_Controller {
 		}
 	}
 
-	public function list_connections(): WP_REST_Response {
-		return new WP_REST_Response( $this->connections_payload() );
-	}
-
-	public function add_connection( WP_REST_Request $request ): WP_REST_Response {
-		$body = (array) $request->get_json_params();
-		$id   = $this->plugin->connections->add( (string) ( $body['name'] ?? '' ) );
-
-		if ( is_wp_error( $id ) ) {
-			return new WP_REST_Response(
-				[
-					'ok'      => false,
-					'message' => $id->get_error_message(),
-				],
-				400
-			);
-		}
-
-		return new WP_REST_Response(
-			array_merge( [ 'ok' => true, 'id' => $id ], $this->connections_payload() )
-		);
-	}
-
-	public function rename_connection( WP_REST_Request $request ): WP_REST_Response {
-		$body = (array) $request->get_json_params();
-		$done = $this->plugin->connections->rename(
-			(string) $request->get_param( 'id' ),
-			(string) ( $body['name'] ?? '' )
-		);
-
-		return new WP_REST_Response(
-			array_merge(
-				[
-					'ok'      => $done,
-					'message' => $done
-						? __( 'Connection renamed.', 'modern-mailer-oauth' )
-						: __( 'That connection cannot be renamed.', 'modern-mailer-oauth' ),
-				],
-				$this->connections_payload()
-			)
-		);
-	}
-
-	public function delete_connection( WP_REST_Request $request ): WP_REST_Response {
-		$id = (string) $request->get_param( 'id' );
-
-		// Rules pointing at a connection that no longer exists are dropped when
-		// the router reads them, but leaving them stored would mean a rule
-		// silently reappearing if an id were ever reused. They go now.
-		$done = $this->plugin->connections->delete( $id );
-
-		if ( $done ) {
-			$this->plugin->tokens->flush();
-			$this->plugin->dispatcher->reset_providers();
-		}
-
-		return new WP_REST_Response(
-			array_merge(
-				[
-					'ok'      => $done,
-					'message' => $done
-						? __( 'Connection removed, along with its stored credentials.', 'modern-mailer-oauth' )
-						: __( 'That connection cannot be removed.', 'modern-mailer-oauth' ),
-				],
-				$this->connections_payload()
-			)
-		);
-	}
-
 	/**
 	 * @return array<string,mixed>
 	 */
 	private function connections_payload(): array {
 		return [
 			'connections' => $this->plugin->connections->all(),
-			'max'         => \ModernMailer\Connections::MAX,
 			'labels'      => Provider_Registry::labels(),
 		];
 	}
@@ -807,7 +702,6 @@ class Rest_Controller {
 			'last_error'   => (string) ( $state['last_error']['message'] ?? '' ),
 			'last_success' => (int) $state['last_success'],
 			'active'       => $this->plugin->settings->is_active(),
-			'has_backup'   => $this->plugin->settings->has_backup(),
 		];
 	}
 

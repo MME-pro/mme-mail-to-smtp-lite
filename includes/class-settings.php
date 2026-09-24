@@ -31,7 +31,6 @@ class Settings {
 	 * general, and additional connections use it unchanged.
 	 */
 	public const SLOT_PRIMARY = '';
-	public const SLOT_BACKUP  = 'backup';
 
 	/**
 	 * Keys that describe one connection, and so exist once per slot.
@@ -118,12 +117,6 @@ class Settings {
 		// a queued row holds the entire message, so this is the longest
 		// anybody's correspondence can remain in the database unsent.
 		'queue_retention' => [ 7, null, 'int' ],
-
-		// Additional connections beyond primary and backup: [ id => name ].
-		// Only the names live here; every credential a connection holds is
-		// stored under its own slot prefix by the same mechanism the backup
-		// already uses.
-		'connections'     => [ [], null, 'list' ],
 	];
 
 	/**
@@ -400,13 +393,6 @@ class Settings {
 	 */
 	public function is_active(): bool {
 		return self::PROVIDER_NONE !== $this->get( 'provider' );
-	}
-
-	/**
-	 * Is a backup connection configured?
-	 */
-	public function has_backup(): bool {
-		return self::PROVIDER_NONE !== $this->for_slot( self::SLOT_BACKUP )->get( 'provider' );
 	}
 
 	/**

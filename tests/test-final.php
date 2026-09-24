@@ -63,10 +63,8 @@ function render_screen( ModernMailer\Admin\Admin_Page $page, string $method ): s
 }
 
 $html   = render_screen( $page, 'render_settings' );
-$backup = render_screen( $page, 'render_backup' );
 
 check( 'Settings renders without fatal', strlen( $html ) > 1000, strlen( $html ) . ' bytes' );
-check( 'Backup renders without fatal', strlen( $backup ) > 500, strlen( $backup ) . ' bytes' );
 
 check( 'provider selector present', false !== strpos( $html, 'id="provider"' ) );
 check( 'access-policy warning shown', false !== strpos( $html, 'New-ApplicationAccessPolicy' ) );
@@ -75,16 +73,9 @@ check( 'nonce fields emitted', substr_count( $html, '_wpnonce' ) >= 3, substr_co
 check( 'no credential echoed into the form', false === strpos( $html, 'SuperSecretValue123' ) );
 check( 'constant-pinned field marked as such', false !== strpos( $html, 'wp-config.php' ) );
 
-// The backup screen must drive its own slot, or saving it would overwrite the
-// primary's credentials.
-check( 'Backup screen fields are slot-prefixed', false !== strpos( $backup, 'name="backup_provider"' ) );
-check( 'Backup screen does not render primary fields', false === strpos( $backup, 'name="ms_tenant_id"' ) );
-check( 'Backup screen warns when no primary exists', false !== strpos( $backup, 'no primary connection' ) );
-
-// Every form has to say which screen to return to, or actions taken on the Backup
-// screen would bounce the admin to Settings.
+// The form has to say which screen to return to, or an action taken on it
+// would bounce the admin somewhere else.
 check( 'Settings forms carry a return page', false !== strpos( $html, 'name="return_page" value="modern-mailer-oauth"' ) );
-check( 'Backup forms carry a return page', false !== strpos( $backup, 'name="return_page" value="modern-mailer-backup"' ) );
 
 // The redirect URI must not depend on where the menu lives, or reorganising the
 // admin breaks every existing Google connection.

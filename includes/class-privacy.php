@@ -20,33 +20,22 @@ defined( 'ABSPATH' ) || exit;
  * here for anybody to consent to, and the lawful basis for any given email
  * belongs to whatever produced it rather than to the thing that carried it.
  *
- * What it does hold is a record of messages it carried, and that record
- * contains other people's email addresses:
+ * What it does hold is a copy of any message it could not deliver yet, and that
+ * copy contains other people's email addresses: the queue keeps the complete
+ * message - body, headers and attachments - for as long as a retry might still
+ * be wanted.
  *
- * - The log keeps the recipients, the subject and, for a failure, a diagnostic
- *   report whose SMTP transcript names the recipients again.
- * - The queue keeps the complete message - body, headers and attachments -
- *   for as long as a retry might still be wanted.
+ * That is personal data belonging to the recipient, not to the site. Until this
+ * class existed, a site owner answering a request through Tools, Erase Personal
+ * Data got nothing back from this plugin while the table sat there holding the
+ * answer.
  *
- * Both are personal data belonging to the recipient, not to the site. Until
- * this class existed, a site owner answering a request through Tools, Erase
- * Personal Data got nothing back from this plugin while both tables sat there
- * holding the answer.
- *
- * ## Erase means two different things here
+ * ## Erase deletes rather than anonymises
  *
  * A queued message is deleted outright. It has not been sent, its body is
  * sitting in the database in the clear, and someone has just asked to be
  * forgotten - delivering it afterwards would be the opposite of honouring
  * that.
- *
- * A log entry is anonymised instead: the address and subject are replaced and
- * the diagnostics dropped, while the timestamp, provider and status remain.
- * That keeps the operational record - how much mail failed, and when - which
- * the site owner has their own reason to hold, without keeping anything that
- * identifies the person. Which of the two happened is reported back, because
- * "we kept a row" is exactly the kind of thing a requester is entitled to be
- * told.
  *
  * ## Matching
  *
@@ -108,43 +97,6 @@ class Privacy {
 		$page   = max( 1, $page );
 		$export = [];
 
-		$logs = $this->rows( Logger::table(), $email, $page, [ 'id', 'created_at', 'provider', 'recipients', 'subject', 'status', 'error_code', 'error_message' ] );
-
-		foreach ( $logs as $row ) {
-			$export[] = [
-				'group_id'          => 'mmoa-log',
-				'group_label'       => __( 'Email delivery log', 'modern-mailer-oauth' ),
-				'group_description' => __( 'Messages this site sent to this address, and what the mail provider said about each one.', 'modern-mailer-oauth' ),
-				'item_id'           => 'mmoa-log-' . (int) $row->id,
-				'data'              => [
-					[
-						'name'  => __( 'Sent', 'modern-mailer-oauth' ),
-						'value' => (string) $row->created_at,
-					],
-					[
-						'name'  => __( 'Recipients', 'modern-mailer-oauth' ),
-						'value' => (string) $row->recipients,
-					],
-					[
-						'name'  => __( 'Subject', 'modern-mailer-oauth' ),
-						'value' => (string) $row->subject,
-					],
-					[
-						'name'  => __( 'Sent through', 'modern-mailer-oauth' ),
-						'value' => (string) $row->provider,
-					],
-					[
-						'name'  => __( 'Result', 'modern-mailer-oauth' ),
-						'value' => (string) $row->status,
-					],
-					[
-						'name'  => __( 'Failure reason', 'modern-mailer-oauth' ),
-						'value' => trim( $row->error_code . ' ' . $row->error_message ),
-					],
-				],
-			];
-		}
-
 		$queued = $this->rows( Queue::table(), $email, $page, [ 'id', 'created_at', 'recipients', 'subject', 'status', 'attempts' ] );
 
 		foreach ( $queued as $row ) {
@@ -186,16 +138,13 @@ class Privacy {
 		return [
 			'data' => $export,
 
-			// A short page means there is nothing after it. Counting both
-			// tables together is deliberate: either can run out first, and
-			// stopping when the combined page is short is the only condition
-			// that waits for both.
-			'done' => count( $logs ) < self::BATCH && count( $queued ) < self::BATCH,
+			// A short page means there is nothing after it.
+			'done' => count( $queued ) < self::BATCH,
 		];
 	}
 
 	/**
-	 * Forget one address: delete what is unsent, anonymise what was sent.
+	 * Forget one address: delete anything still waiting to be sent to it.
 	 *
 	 * @return array{items_removed:bool,items_retained:bool,messages:array<int,string>,done:bool}
 	 */
@@ -205,12 +154,10 @@ class Privacy {
 		unset( $page );
 
 		$removed  = false;
-		$retained = false;
 		$messages = [];
 
-		// Always the first page. Every row this finds is either deleted or
-		// rewritten so that it no longer matches, so paging forward would step
-		// over rows that have just moved.
+		// Always the first page. Every row this finds is deleted, so paging
+		// forward would step over rows that have just gone.
 		$queued = $this->rows( Queue::table(), $email, 1, [ 'id' ] );
 
 		foreach ( $queued as $row ) {
@@ -231,55 +178,15 @@ class Privacy {
 			);
 		}
 
-		$logs = $this->rows( Logger::table(), $email, 1, [ 'id' ] );
-
-		foreach ( $logs as $row ) {
-			$wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-				Logger::table(),
-				[
-					'recipients'    => self::REDACTED,
-					'subject'       => self::REDACTED,
-					'error_message' => '',
-
-					// The transcript inside this names the recipient too, and
-					// nothing in it is worth keeping once the row it explains
-					// has been anonymised.
-					'diagnostics'   => null,
-				],
-				[ 'id' => (int) $row->id ],
-				[ '%s', '%s', '%s', '%s' ],
-				[ '%d' ]
-			);
-
-			$removed  = true;
-			$retained = true;
-		}
-
-		if ( [] !== $logs ) {
-			$messages[] = sprintf(
-				/* translators: %d: number of log entries. */
-				_n(
-					'%d delivery log entry was anonymised. The date and outcome were kept as a record that a message was sent; the address, subject and diagnostics were removed.',
-					'%d delivery log entries were anonymised. The dates and outcomes were kept as a record that messages were sent; the addresses, subjects and diagnostics were removed.',
-					count( $logs ),
-					'modern-mailer-oauth'
-				),
-				count( $logs )
-			);
-		}
-
 		// Done only when a pass found nothing left. Anything this pass touched
 		// no longer matches the address, so the next pass sees what is left.
 		return [
 			'items_removed'  => $removed,
-			'items_retained' => $retained,
+			'items_retained' => false,
 			'messages'       => $messages,
-			'done'           => [] === $queued && [] === $logs,
+			'done'           => [] === $queued,
 		];
 	}
-
-	/** What an anonymised log row holds instead of an address. */
-	private const REDACTED = '[removed]';
 
 	/**
 	 * Rows of one table whose recipients genuinely include this address.
@@ -327,7 +234,7 @@ class Privacy {
 		// address - bob@example.com sits inside bbob@example.com. Acting on
 		// that while answering an erasure request would delete a stranger's
 		// mail, so every row is checked against the actual list before it
-		// counts as a match. Recipients are joined with ", " by the logger.
+		// counts as a match. Recipients are joined with ", " by the queue.
 		return array_values(
 			array_filter(
 				$rows,
@@ -367,15 +274,8 @@ class Privacy {
 		}
 
 		$content = '<p>' . __( 'This site sends its email through a third-party mail provider rather than through the web server. The complete message - recipients, subject, body and any attachments - is transmitted to that provider in order to be delivered.', 'modern-mailer-oauth' ) . '</p>'
-			. '<p>' . __( 'A record of each message sent is kept: the recipients, the subject, the time, and whether delivery succeeded. Where a delivery fails, a diagnostic report is kept with it. These records are deleted automatically after the retention period set by the site administrator.', 'modern-mailer-oauth' ) . '</p>'
 			. '<p>' . __( 'A message that cannot be delivered immediately is held, in full, until it can be retried or until it is discarded as undeliverable.', 'modern-mailer-oauth' ) . '</p>'
 			. '<p>' . __( 'This plugin sets no cookies, records no IP addresses, and does nothing in a visitor&#8217;s browser.', 'modern-mailer-oauth' ) . '</p>'
-
-			// Named here as well as in the readme, because this is the text a
-			// site owner publishes to their own visitors. A phone-home that is
-			// documented only in a file nobody reads is not disclosed.
-			. '<p>' . __( 'The plugin also checks in daily with its own vendor&#8217;s licensing service. That check-in carries this site&#8217;s address, the versions of the software it runs on, which mail providers are configured, and the number of messages sent in the current month. It never carries a recipient, a subject, a message body or a credential, and it is not involved in delivering any message.', 'modern-mailer-oauth' ) . '</p>'
-
 			. '<p>' . __( 'The administrator should name the mail provider in use here, and link to that provider&#8217;s own privacy policy.', 'modern-mailer-oauth' ) . '</p>';
 
 		wp_add_privacy_policy_content(

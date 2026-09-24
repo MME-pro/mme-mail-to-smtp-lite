@@ -26,36 +26,7 @@ const request = async ( path, options = {} ) => {
 export const getBootstrap = () => request( '/bootstrap' );
 export const getSettings = () => request( '/settings' );
 export const getDashboard = () => request( '/dashboard' );
-/**
- * One page of the send log.
- *
- * Status and search are sent to the server rather than applied here, because
- * a filter that only sees the current page is not a filter.
- */
-export const getLogs = ( { page = 1, perPage = 25, status = '', search = '' } = {} ) => {
-	const query = new URLSearchParams( {
-		page: String( page ),
-		per_page: String( perPage ),
-	} );
 
-	if ( status ) {
-		query.set( 'status', status );
-	}
-
-	if ( search ) {
-		query.set( 'search', search );
-	}
-
-	return request( `/logs?${ query.toString() }` );
-};
-
-/**
- * One entry with its diagnostic report.
- *
- * Its own request, because a report runs to kilobytes and a page of fifty
- * failures would otherwise carry a megabyte nobody has asked to read.
- */
-export const getLogEntry = ( id ) => request( `/logs/${ id }` );
 export const getQueue = () => request( '/queue' );
 export const getConnection = ( slot ) => request( `/connections/${ slot }` );
 

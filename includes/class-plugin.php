@@ -39,7 +39,6 @@ class Plugin {
 	public Settings $settings;
 	public Token_Store $tokens;
 	public Http $http;
-	public Logger $logger;
 	public Health_Monitor $health;
 	public Queue $queue;
 	public Connections $connections;
@@ -65,7 +64,6 @@ class Plugin {
 		$this->settings   = new Settings( $this->secrets );
 		$this->tokens     = new Token_Store();
 		$this->http       = new Http();
-		$this->logger     = new Logger( $this->settings );
 		$this->health     = new Health_Monitor( $this->settings );
 		$this->queue      = new Queue( $this->settings );
 		$this->connections = new Connections( $this->settings );
@@ -79,7 +77,6 @@ class Plugin {
 			$this->settings,
 			$this->tokens,
 			$this->http,
-			$this->logger,
 			$this->health,
 			$this->queue
 		);
@@ -89,7 +86,6 @@ class Plugin {
 
 	public function boot(): void {
 		add_action( 'plugins_loaded', [ $this, 'install_mailer' ], 20 );
-		add_action( Logger::CRON_HOOK, [ $this->logger, 'prune' ] );
 
 		add_action( Queue::CRON_HOOK, [ $this, 'drain_queue' ] );
 
@@ -217,12 +213,11 @@ class Plugin {
 	 *
 	 * The activation hook does not fire on update, so a site that upgrades into
 	 * this version would otherwise have the queue code but no queue table, and
-	 * every enqueue would fail silently at the exact moment it was needed. Both
-	 * installers no-op once their version option matches, so this costs one
+	 * every enqueue would fail silently at the exact moment it was needed. The
+	 * installer no-ops once its version option matches, so this costs one
 	 * option read per admin request.
 	 */
 	public function maybe_upgrade(): void {
-		Logger::install();
 		Queue::install();
 
 		if ( ! wp_next_scheduled( Queue::CRON_HOOK ) ) {
@@ -390,8 +385,8 @@ class Plugin {
 	}
 
 	public static function activate(): void {
-		Logger::install();
 		Queue::install();
+
 		// Asks for the wizard on the next admin screen. It cannot redirect
 		// from here: this runs inside the activation request, which WordPress
 		// is still in the middle of reporting on.
@@ -403,17 +398,13 @@ class Plugin {
 		Microsoft_Consent::add_rewrite();
 		flush_rewrite_rules( false );
 
-		if ( ! wp_next_scheduled( Logger::CRON_HOOK ) ) {
-			wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', Logger::CRON_HOOK );
-		}
-
 		if ( ! wp_next_scheduled( Queue::CRON_HOOK ) ) {
 			wp_schedule_event( time() + ( 5 * MINUTE_IN_SECONDS ), Queue::SCHEDULE_NAME, Queue::CRON_HOOK );
 		}
 	}
 
 	public static function deactivate(): void {
-		foreach ( [ Logger::CRON_HOOK, Queue::CRON_HOOK ] as $hook ) {
+		foreach ( [ Queue::CRON_HOOK ] as $hook ) {
 			$timestamp = wp_next_scheduled( $hook );
 
 			if ( $timestamp ) {

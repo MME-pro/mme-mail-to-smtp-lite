@@ -28,7 +28,6 @@ $plugin->settings->update( [
 	'ms_tenant_id'  => 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
 	'ms_client_id'  => '11111111-2222-3333-4444-555555555555',
 	'ms_sender'     => 'noreply@contoso.com',
-	'log_enabled'   => false,
 	'queue_enabled' => false,
 ] );
 $plugin->secrets->set( 'ms_client_secret', 'test-secret-value' );

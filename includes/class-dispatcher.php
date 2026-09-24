@@ -51,7 +51,6 @@ class Dispatcher {
 		private Settings $settings,
 		private Token_Store $tokens,
 		private Http $http,
-		private Logger $logger,
 		private Health_Monitor $health,
 		private Queue $queue
 	) {}
@@ -341,13 +340,25 @@ class Dispatcher {
 
 		}
 
-		// Every attempt is logged, including one the backup went on to rescue -
-		// the log is the record of what actually happened on the wire. Health
-		// is decided once, by dispatch(), from the final outcome.
-		// The slot goes with it, so a failure's report names which connection's
-		// settings it was describing. Without that, a site with a primary and a
-		// backup on the same provider produces two identical-looking reports.
-		$this->logger->record( $provider, $mailer, $bytes, $result, $slot );
+		/**
+		 * Fires after every send attempt, whether it succeeded or failed.
+		 *
+		 * Every attempt is reported, including one the backup went on to
+		 * rescue - what an add-on records here is the account of what actually
+		 * happened on the wire. Health is decided separately, once, by
+		 * dispatch(), from the final outcome.
+		 *
+		 * The slot travels with it so that a report names which connection's
+		 * settings it was describing. Without it, a site with a primary and a
+		 * backup on the same provider produces two identical-looking records.
+		 *
+		 * @param Provider_Interface $provider The provider that was tried.
+		 * @param PHPMailer          $mailer   The message, as PHPMailer built it.
+		 * @param int                $bytes    Size of the raw MIME message.
+		 * @param true|WP_Error      $result   The outcome of this attempt.
+		 * @param string             $slot     Connection slot that carried it.
+		 */
+		do_action( 'mmoa_send_attempted', $provider, $mailer, $bytes, $result, $slot );
 
 		return $result;
 	}

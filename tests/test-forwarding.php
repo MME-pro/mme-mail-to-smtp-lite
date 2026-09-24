@@ -47,7 +47,6 @@ function section( string $name ): void {
 
 $plugin = Plugin::instance();
 
-ModernMailer\Logger::install();
 ModernMailer\Queue::install();
 
 /* ------------------------------------------------------------ harness ---- */
@@ -60,7 +59,6 @@ function configure_primary( Plugin $plugin ): void {
 			'ms_tenant_id'  => 'tid',
 			'ms_client_id'  => 'cid',
 			'ms_sender'     => 'noreply@contoso.com',
-			'log_enabled'   => true,
 			'queue_enabled' => true,
 		]
 	);

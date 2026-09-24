@@ -22,7 +22,6 @@ function check( string $label, bool $ok, string $detail = '' ) {
 $plugin  = ModernMailer\Plugin::instance();
 $consent = $plugin->consent;
 
-ModernMailer\Logger::install();
 ModernMailer\Queue::install();
 
 // A capable user, since the flow is admin-only and stores state per user.
@@ -37,7 +36,6 @@ $plugin->settings->update( [
 	'google_setup_mode' => 'own_client',
 	'from_email'        => 'me@gmail.com',
 	'google_client_id'  => '123-abc.apps.googleusercontent.com',
-	'log_enabled'      => true,
 	'queue_enabled'    => true,
 	'alert_email'      => '',
 ] );

@@ -31,7 +31,7 @@ $plugin = ModernMailer\Plugin::instance();
 $plugin->settings->update( [
 	'provider' => 'graph', 'from_email' => 'kontakt@example.de', 'from_name' => 'Example Studio',
 	'ms_tenant_id' => 'tid', 'ms_client_id' => 'cid', 'ms_sender' => 'kontakt@example.de',
-	'log_enabled' => true, 'alert_threshold' => 3,
+	'alert_threshold' => 3,
 ] );
 $plugin->secrets->set( 'ms_client_secret', 'secret' );
 $plugin->install_mailer();
@@ -171,10 +171,10 @@ $plugin->tokens->flush(); $plugin->health->reset();
 for ( $i = 0; $i < 3; $i++ ) { llar_mail(); }
 check( 'repeated failures raise the alarm', $plugin->health->is_failing(),
 	'streak=' . $plugin->health->state()['streak'] );
-$logged = $plugin->logger->recent( 1 );
-check( 'the real error is what got logged',
-	isset( $logged[0] ) && false !== stripos( $logged[0]->error_message, 'throttl' ),
-	$logged[0]->error_message ?? 'nothing logged' );
+$last = $plugin->health->state()['last_error'];
+check( 'the real error is what got recorded',
+	false !== stripos( (string) ( $last['message'] ?? '' ), 'throttl' ),
+	(string) ( $last['message'] ?? 'nothing recorded' ) );
 
 // Leave the site unconfigured.
 $plugin->settings->update( [ 'provider' => '', 'ms_tenant_id' => '', 'ms_client_id' => '',

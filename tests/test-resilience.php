@@ -28,7 +28,6 @@ function check( string $label, bool $ok, string $detail = '' ) {
 
 $plugin = ModernMailer\Plugin::instance();
 
-ModernMailer\Logger::install();
 ModernMailer\Queue::install();
 
 /** Reset to a known primary-only Graph configuration. */
@@ -39,7 +38,6 @@ function configure_primary_only( ModernMailer\Plugin $plugin ): void {
 		'ms_tenant_id'  => 'tid',
 		'ms_client_id'  => 'cid',
 		'ms_sender'     => 'noreply@contoso.com',
-		'log_enabled'   => true,
 		'queue_enabled' => true,
 		'alert_email'   => '',
 	] );
@@ -332,8 +330,8 @@ check(
 // Genuinely site-wide settings still read the same through any slot.
 check(
 	'site-wide settings still read the same through either slot',
-	$plugin->settings->get( 'log_enabled' )
-		=== $plugin->settings->for_slot( ModernMailer\Settings::SLOT_BACKUP )->get( 'log_enabled' )
+	$plugin->settings->get( 'queue_enabled' )
+		=== $plugin->settings->for_slot( ModernMailer\Settings::SLOT_BACKUP )->get( 'queue_enabled' )
 );
 
 $plugin->settings->for_slot( ModernMailer\Settings::SLOT_BACKUP )->update( [ 'from_email' => '' ] );

@@ -1,6 +1,6 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
 	ArrowRight,
@@ -13,8 +13,6 @@ import {
 	ShieldCheck,
 	ShieldOff,
 	TriangleAlert,
-	ScrollText,
-	LifeBuoy,
 	Loader2,
 } from 'lucide-react';
 import {
@@ -867,49 +865,6 @@ const Setup = () => {
 								</div>
 							) ) }
 						</dl>
-
-						{ /* What to do next, rather than a congratulation. Each of
-						     these is a thing this plugin does that nobody
-						     discovers by accident, and the moment somebody has
-						     just finished connecting is the one moment they are
-						     looking at this screen. */ }
-						<div className="grid gap-2.5 sm:grid-cols-3">
-							{ [
-								{
-									to: '/connections',
-									icon: LifeBuoy,
-									title: __( 'Add a backup', 'modern-mailer-oauth' ),
-									body: __(
-										'A second provider that takes over when the first one fails.',
-										'modern-mailer-oauth'
-									),
-								},
-								{
-									to: '/logs',
-									icon: ScrollText,
-									title: __( 'Watch the log', 'modern-mailer-oauth' ),
-									body: __(
-										'Every send, with the provider’s own words when one fails.',
-										'modern-mailer-oauth'
-									),
-								},
-							].map( ( { to: href, icon: Icon, title, body: text } ) => (
-								<Link
-									key={ href }
-									to={ href }
-									className="group rounded-lg border border-border bg-card p-4 no-underline transition-all hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-sm"
-								>
-									<Icon className="size-4 text-brand-deep" />
-									<p className="mt-2.5 mb-1 flex items-center gap-1 text-[13px] font-medium text-foreground">
-										{ title }
-										<ArrowRight className="size-3 opacity-0 transition-opacity group-hover:opacity-100" />
-									</p>
-									<p className="m-0 text-xs leading-relaxed text-muted-foreground">
-										{ text }
-									</p>
-								</Link>
-							) ) }
-						</div>
 					</Step>
 				);
 			}

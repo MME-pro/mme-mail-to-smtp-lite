@@ -152,11 +152,11 @@ check( 'and keeps its credentials', 'entra-secret-primary' === $plugin->secrets-
 check( 'and keeps its refresh token', 'msoauth-refresh-primary' === $plugin->secrets->get( 'msoauth_refresh' ) );
 
 echo "\n=== 5. The site's own settings are not connection settings ===\n";
-// Log retention, the connection list and the routing rules belong to the site.
+// Queue retention and the connection list belong to the site.
 // Clearing a connection must not reach them - the connection list in
 // particular holds the names, and losing it would delete the connections
 // themselves rather than empty one.
-$plugin->settings->update( [ 'log_retention' => 21, 'log_enabled' => true ] );
+$plugin->settings->update( [ 'queue_retention' => 21, 'queue_enabled' => true ] );
 Settings::flush_cache();
 
 $connections_before = $plugin->settings->get( 'connections' );
@@ -164,8 +164,8 @@ $connections_before = $plugin->settings->get( 'connections' );
 $plugin->settings->reset_connection();
 Settings::flush_cache();
 
-check( 'log retention survives', 21 === (int) $plugin->settings->get( 'log_retention' ) );
-check( 'logging stays on', true === $plugin->settings->get( 'log_enabled' ) );
+check( 'queue retention survives', 21 === (int) $plugin->settings->get( 'queue_retention' ) );
+check( 'the queue stays on', true === $plugin->settings->get( 'queue_enabled' ) );
 check(
 	'and the connection list is intact, so no connection was deleted',
 	$connections_before === $plugin->settings->get( 'connections' ),
@@ -175,7 +175,7 @@ check(
 echo "\n=== 6. Restoring a clean state ===\n";
 $plugin->settings->for_slot( 'backup' )->reset_connection();
 $plugin->settings->reset_connection();
-$plugin->settings->update( [ 'log_retention' => 30 ] );
+$plugin->settings->update( [ 'queue_retention' => 7 ] );
 $plugin->tokens->flush();
 $plugin->health->reset();
 Settings::flush_cache();

@@ -139,49 +139,6 @@ class Rest_Controller {
 
 		register_rest_route(
 			self::NAMESPACE,
-			'/logs',
-			[
-				'methods'             => WP_REST_Server::READABLE,
-				'callback'            => [ $this, 'get_logs' ],
-				'permission_callback' => $auth,
-				'args'                => [
-					'page'     => [
-						'type'              => 'integer',
-						'default'           => 1,
-						'minimum'           => 1,
-						'sanitize_callback' => 'absint',
-					],
-					'per_page' => [
-						'type'    => 'integer',
-						'default' => \ModernMailer\Logger::DEFAULT_PAGE_SIZE,
-						'enum'    => \ModernMailer\Logger::PAGE_SIZES,
-					],
-					'status'   => [
-						'type'    => 'string',
-						'default' => '',
-						'enum'    => [ '', 'sent', 'failed' ],
-					],
-					'search'   => [
-						'type'              => 'string',
-						'default'           => '',
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-				],
-			]
-		);
-
-		register_rest_route(
-			self::NAMESPACE,
-			'/logs/(?P<id>[0-9]+)',
-			[
-				'methods'             => WP_REST_Server::READABLE,
-				'callback'            => [ $this, 'get_log_entry' ],
-				'permission_callback' => $auth,
-			]
-		);
-
-		register_rest_route(
-			self::NAMESPACE,
 			'/queue',
 			[
 				'methods'             => WP_REST_Server::READABLE,
@@ -333,7 +290,7 @@ class Rest_Controller {
 
 	public function update_settings( WP_REST_Request $request ): WP_REST_Response {
 		$body   = (array) $request->get_json_params();
-		$allow  = [ 'log_enabled', 'log_retention', 'alert_threshold', 'queue_enabled', 'queue_retention' ];
+		$allow  = [ 'alert_threshold', 'queue_enabled', 'queue_retention' ];
 		$values = array_intersect_key( $body, array_flip( $allow ) );
 
 		$this->plugin->settings->update( $values );
@@ -528,77 +485,6 @@ class Rest_Controller {
 		);
 	}
 
-	/**
-	 * One page of the log.
-	 *
-	 * Paginated, filtered and searched in SQL rather than in the browser. The
-	 * log is the one table on this site with no ceiling but the retention
-	 * window, so it is the one place where shipping the whole thing to the
-	 * client eventually stops working - on a busy site, long before anybody
-	 * thinks to complain about it.
-	 */
-	public function get_logs( WP_REST_Request $request ): WP_REST_Response {
-		$result = $this->plugin->logger->page(
-			(int) $request->get_param( 'page' ),
-			(int) $request->get_param( 'per_page' ),
-			(string) $request->get_param( 'status' ),
-			(string) $request->get_param( 'search' )
-		);
-
-		$response = new WP_REST_Response(
-			[
-				'entries'  => array_map( [ $this, 'log_row' ], $result['entries'] ),
-				'enabled'  => (bool) $this->plugin->settings->get( 'log_enabled' ),
-
-				// page and per_page come back rather than being assumed: the
-				// requested page is clamped to one that exists, so the browser
-				// has to be told where it actually landed.
-				'total'    => $result['total'],
-				'pages'    => $result['pages'],
-				'page'     => $result['page'],
-				'per_page' => $result['per_page'],
-			]
-		);
-
-		// The headers WordPress's own list endpoints set, for anything reading
-		// this route that is not our admin app.
-		$response->header( 'X-WP-Total', (string) $result['total'] );
-		$response->header( 'X-WP-TotalPages', (string) $result['pages'] );
-
-		return $response;
-	}
-
-	/**
-	 * One log entry with its diagnostic report.
-	 *
-	 * Its own route rather than a field on the list, because the report runs
-	 * to kilobytes - a page of fifty failures would carry a megabyte of
-	 * transcript nobody has asked to read yet.
-	 */
-	public function get_log_entry( WP_REST_Request $request ): WP_REST_Response {
-		$row = $this->plugin->logger->entry( (int) $request->get_param( 'id' ) );
-
-		if ( null === $row ) {
-			return new WP_REST_Response( [ 'message' => __( 'No such log entry.', 'modern-mailer-oauth' ) ], 404 );
-		}
-
-		$report = json_decode( (string) ( $row->diagnostics ?? '' ), true );
-
-		return new WP_REST_Response(
-			array_merge(
-				$this->log_row( $row ),
-				[
-					'code'        => (string) $row->error_code,
-
-					// Null rather than an empty shape when there is none: a
-					// successful send has nothing to report, and the modal says
-					// so instead of drawing empty sections.
-					'diagnostics' => is_array( $report ) ? $report : null,
-				]
-			)
-		);
-	}
-
 	public function get_queue(): WP_REST_Response {
 		return new WP_REST_Response(
 			[
@@ -753,60 +639,17 @@ class Rest_Controller {
 	}
 
 	/**
-	 * Counts for the dashboard, including a per-day series for the chart.
+	 * What the dashboard shows: whether sending works, and what is waiting.
+	 *
+	 * Deliberately not a send history. The free plugin keeps no record of
+	 * individual messages, so there is nothing to count - what an administrator
+	 * can act on here is the current state and the retry queue.
 	 */
 	public function get_dashboard(): WP_REST_Response {
-		global $wpdb;
-
-		$table = \ModernMailer\Logger::table();
-		$days  = 14;
-
-		$rows = (array) $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
-			$wpdb->prepare(
-				"SELECT DATE(created_at) AS day,
-				        SUM(status = 'sent') AS sent,
-				        SUM(status = 'failed') AS failed
-				 FROM {$table}
-				 WHERE created_at >= DATE_SUB(UTC_TIMESTAMP(), INTERVAL %d DAY)
-				 GROUP BY DATE(created_at) ORDER BY day ASC",
-				$days
-			)
-		);
-
-		$by_day = [];
-
-		foreach ( $rows as $row ) {
-			$by_day[ (string) $row->day ] = [
-				'sent'   => (int) $row->sent,
-				'failed' => (int) $row->failed,
-			];
-		}
-
-		// Emitted as a dense series rather than only the days that have rows.
-		// A chart drawn from sparse data silently closes the gaps and makes an
-		// outage look like a quiet period.
-		$series = [];
-
-		for ( $i = $days - 1; $i >= 0; $i-- ) {
-			$day = gmdate( 'Y-m-d', time() - ( $i * DAY_IN_SECONDS ) );
-
-			$series[] = [
-				'day'    => $day,
-				'sent'   => $by_day[ $day ]['sent'] ?? 0,
-				'failed' => $by_day[ $day ]['failed'] ?? 0,
-			];
-		}
-
 		return new WP_REST_Response(
 			[
-				'series' => $series,
-				'totals' => [
-					'sent'   => array_sum( array_column( $series, 'sent' ) ),
-					'failed' => array_sum( array_column( $series, 'failed' ) ),
-				],
 				'health' => $this->health_payload(),
 				'queue'  => $this->plugin->queue->stats(),
-				'recent' => array_map( [ $this, 'log_row' ], $this->plugin->logger->recent( 8 ) ),
 			]
 		);
 	}
@@ -814,25 +657,9 @@ class Rest_Controller {
 	/**
 	 * @return array<string,mixed>
 	 */
-	private function log_row( object $row ): array {
-		return [
-			'id'         => (int) $row->id,
-			'created_at' => (string) $row->created_at,
-			'provider'   => (string) $row->provider,
-			'recipients' => (string) $row->recipients,
-			'subject'    => (string) $row->subject,
-			'status'     => (string) $row->status,
-			'error'      => (string) $row->error_message,
-			'bytes'      => (int) $row->bytes,
-		];
-	}
-
-	/**
-	 * @return array<string,mixed>
-	 */
 	private function settings_payload(): array {
 		$settings = $this->plugin->settings;
-		$keys     = [ 'log_enabled', 'log_retention', 'alert_threshold', 'queue_enabled', 'queue_retention' ];
+		$keys     = [ 'alert_threshold', 'queue_enabled', 'queue_retention' ];
 
 		$out    = [];
 		$locked = [];

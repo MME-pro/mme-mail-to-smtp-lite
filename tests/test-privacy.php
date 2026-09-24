@@ -16,7 +16,6 @@
 
 require __DIR__ . '/bootstrap.php';
 
-use ModernMailer\Logger;
 use ModernMailer\Privacy;
 use ModernMailer\Queue;
 use ModernMailer\Settings;
@@ -33,35 +32,10 @@ global $wpdb;
 $plugin  = ModernMailer\Plugin::instance();
 $privacy = new Privacy();
 
-Logger::install();
 Queue::install();
 
 $subject_address = 'bob@example.com';
 $lookalike       = 'bbob@example.com';
-
-/**
- * Put one row in the log, bypassing the mailer.
- */
-function log_row( string $recipients, string $subject, string $status = 'sent' ): int {
-	global $wpdb;
-
-	$wpdb->insert(
-		Logger::table(),
-		[
-			'created_at'    => gmdate( 'Y-m-d H:i:s' ),
-			'provider'      => 'smtp',
-			'recipients'    => $recipients,
-			'subject'       => $subject,
-			'status'        => $status,
-			'error_code'    => '',
-			'error_message' => '',
-			'bytes'         => 100,
-			'diagnostics'   => wp_json_encode( [ 'transcript' => "RCPT TO:<{$recipients}>" ] ),
-		]
-	);
-
-	return (int) $wpdb->insert_id;
-}
 
 function queue_row( string $recipients, string $subject, string $status = 'pending' ): int {
 	global $wpdb;
@@ -87,14 +61,11 @@ function queue_row( string $recipients, string $subject, string $status = 'pendi
 }
 
 // A clean slate, so a previous run cannot be mistaken for this one's fixtures.
-$wpdb->query( "DELETE FROM " . Logger::table() ); // phpcs:ignore
 $wpdb->query( "DELETE FROM " . Queue::table() ); // phpcs:ignore
 
-$log_hit     = log_row( $subject_address, 'Your receipt' );
-$log_shared  = log_row( "someone@example.com, {$subject_address}", 'Team update' );
-$log_near    = log_row( $lookalike, 'Not this one' );
-$queue_hit   = queue_row( $subject_address, 'Password reset' );
-$queue_near  = queue_row( $lookalike, 'Also not this one' );
+$queue_hit    = queue_row( $subject_address, 'Password reset' );
+$queue_shared = queue_row( "someone@example.com, {$subject_address}", 'Team update' );
+$queue_near   = queue_row( $lookalike, 'Also not this one' );
 
 echo "\n=== 1. WordPress is offered an exporter and an eraser ===\n";
 $exporters = apply_filters( 'wp_privacy_personal_data_exporters', [] );
@@ -120,17 +91,15 @@ check( 'it reports itself finished', true === ( $result['done'] ?? false ) );
 $items = $result['data'] ?? [];
 $ids   = array_column( $items, 'item_id' );
 
-check( 'the log entry addressed to them is exported', in_array( 'mmoa-log-' . $log_hit, $ids, true ), implode( ',', $ids ) );
-check( 'so is the one where they were among several recipients', in_array( 'mmoa-log-' . $log_shared, $ids, true ) );
-check( 'and the queued message is exported', in_array( 'mmoa-queue-' . $queue_hit, $ids, true ) );
+check( 'the queued message addressed to them is exported', in_array( 'mmoa-queue-' . $queue_hit, $ids, true ), implode( ',', $ids ) );
+check( 'so is the one where they were among several recipients', in_array( 'mmoa-queue-' . $queue_shared, $ids, true ) );
 
 // The near-miss. A LIKE on bob@example.com matches bbob@example.com, so this
 // is the assertion that the post-filter is doing its job.
-check( "the lookalike address is not exported", ! in_array( 'mmoa-log-' . $log_near, $ids, true ), implode( ',', $ids ) );
-check( 'nor is its queued message', ! in_array( 'mmoa-queue-' . $queue_near, $ids, true ) );
+check( 'the lookalike address is not exported', ! in_array( 'mmoa-queue-' . $queue_near, $ids, true ), implode( ',', $ids ) );
 
 $groups = array_unique( array_column( $items, 'group_id' ) );
-check( 'the two kinds of record are grouped separately', 2 === count( $groups ), implode( ',', $groups ) );
+check( 'the queued records are grouped under one heading', 1 === count( $groups ), implode( ',', $groups ) );
 
 $queue_item = null;
 foreach ( $items as $item ) {
@@ -153,29 +122,16 @@ check( 'and is finished', true === ( $empty['done'] ?? false ) );
 $invalid = $privacy->export( 'not-an-address' );
 check( 'a malformed address returns nothing rather than matching everything', [] === ( $invalid['data'] ?? null ) );
 
-echo "\n=== 4. Erasure deletes the unsent and anonymises the sent ===\n";
+echo "\n=== 4. Erasure deletes what is still unsent ===\n";
 $erased = $privacy->erase( $subject_address );
 
 check( 'it reports something removed', true === ( $erased['items_removed'] ?? false ) );
-check( 'it reports something retained, because a log row survives anonymised', true === ( $erased['items_retained'] ?? false ) );
-check( 'and it explains what happened', count( $erased['messages'] ?? [] ) >= 2, wp_json_encode( $erased['messages'] ?? [] ) );
+check( 'and nothing is retained, because nothing is anonymised', false === ( $erased['items_retained'] ?? true ) );
+check( 'and it explains what happened', count( $erased['messages'] ?? [] ) >= 1, wp_json_encode( $erased['messages'] ?? [] ) );
 
 $queued_left = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . Queue::table() . ' WHERE id = %d', $queue_hit ) ); // phpcs:ignore
 check( 'the queued message is gone entirely', '0' === (string) $queued_left );
-
-$row = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . Logger::table() . ' WHERE id = %d', $log_hit ) ); // phpcs:ignore
-
-check( 'the log row still exists', null !== $row );
-check( 'but the address is gone', false === strpos( (string) $row->recipients, 'bob@example.com' ), (string) $row->recipients );
-check( 'the subject is gone', 'Your receipt' !== (string) $row->subject, (string) $row->subject );
-check( 'the diagnostics are gone, transcript and all', '' === (string) $row->diagnostics, (string) $row->diagnostics );
-check( 'and the operational record is kept', 'smtp' === (string) $row->provider && 'sent' === (string) $row->status );
-
 echo "\n=== 5. Erasure does not reach past the person who asked ===\n";
-$near = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . Logger::table() . ' WHERE id = %d', $log_near ) ); // phpcs:ignore
-check( 'the lookalike log entry is untouched', $lookalike === (string) $near->recipients, (string) $near->recipients );
-check( 'and keeps its subject', 'Not this one' === (string) $near->subject );
-
 $near_queued = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . Queue::table() . ' WHERE id = %d', $queue_near ) ); // phpcs:ignore
 check( 'the lookalike queued message is still there', '1' === (string) $near_queued );
 
@@ -195,12 +151,10 @@ Settings::flush_cache();
 check( 'and it can be changed', 3 === (int) $plugin->settings->get( 'queue_retention' ) );
 
 echo "\n=== 8. Restoring a clean state ===\n";
-$wpdb->query( "DELETE FROM " . Logger::table() ); // phpcs:ignore
 $wpdb->query( "DELETE FROM " . Queue::table() ); // phpcs:ignore
 $plugin->settings->update( [ 'queue_retention' => 7 ] );
 Settings::flush_cache();
 
-check( 'the log is empty', '0' === (string) $wpdb->get_var( 'SELECT COUNT(*) FROM ' . Logger::table() ) ); // phpcs:ignore
 check( 'the queue is empty', '0' === (string) $wpdb->get_var( 'SELECT COUNT(*) FROM ' . Queue::table() ) ); // phpcs:ignore
 check( 'retention is back to seven days', 7 === (int) $plugin->settings->get( 'queue_retention' ) );
 

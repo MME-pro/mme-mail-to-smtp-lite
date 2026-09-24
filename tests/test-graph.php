@@ -21,7 +21,6 @@ $plugin->settings->update( [
 	'ms_tenant_id' => 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
 	'ms_client_id' => '11111111-2222-3333-4444-555555555555',
 	'ms_sender'    => 'noreply@contoso.com',
-	'log_enabled'  => true,
 ] );
 $plugin->secrets->set( 'ms_client_secret', 'test-secret-value' );
 $plugin->tokens->flush();
@@ -136,12 +135,34 @@ wp_mail( 'second@example.com', 'Second message', 'body' );
 $added = count( $requests ) - $before;
 check( 'second send reuses cached token (1 new call, not 2)', 1 === $added, "{$added} new calls" );
 
-// --- log --------------------------------------------------------------------
-$recent = $plugin->logger->recent( 5 );
-check( 'both sends logged', count( $recent ) >= 2, count( $recent ) . ' rows' );
-check( 'logged status is sent', ( $recent[0]->status ?? '' ) === 'sent', $recent[0]->status ?? 'none' );
-check( 'log stores no message body',
-	! property_exists( $recent[0], 'body' ) && false === strpos( wp_json_encode( $recent[0] ), 'Hello' ) );
+// --- the send-attempted hook -------------------------------------------------
+// This replaces what used to be a log assertion. The free plugin keeps no log,
+// so what has to hold instead is that every attempt is announced, with enough
+// detail for an add-on to record it - and without the message body.
+$seen = [];
+add_action(
+	'mmoa_send_attempted',
+	static function ( $provider, $mailer, $bytes, $result, $slot ) use ( &$seen ): void {
+		$seen[] = [
+			'class'  => get_class( $provider ),
+			'bytes'  => (int) $bytes,
+			'result' => true === $result,
+			'slot'   => (string) $slot,
+			'to'     => array_column( $mailer->getToAddresses(), 0 ),
+		];
+	},
+	10,
+	5
+);
+
+wp_mail( 'hooked@example.com', 'Hooked message', 'body' );
+
+check( 'the send-attempted hook fired once', 1 === count( $seen ), count( $seen ) . ' times' );
+check( 'it reports the attempt succeeded', true === ( $seen[0]['result'] ?? null ) );
+check( 'it names the provider class', false !== strpos( (string) ( $seen[0]['class'] ?? '' ), 'Graph' ), (string) ( $seen[0]['class'] ?? '' ) );
+check( 'it carries the size of the message', ( $seen[0]['bytes'] ?? 0 ) > 0, (string) ( $seen[0]['bytes'] ?? 0 ) );
+check( 'it carries the recipient', [ 'hooked@example.com' ] === ( $seen[0]['to'] ?? [] ), wp_json_encode( $seen[0]['to'] ?? [] ) );
+check( 'and no message body', false === strpos( wp_json_encode( $seen ), 'Hooked message' ) );
 
 @unlink( $attach );
 echo "\n{$pass} passed, {$fail} failed\n";

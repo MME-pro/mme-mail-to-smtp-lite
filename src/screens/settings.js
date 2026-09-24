@@ -79,35 +79,14 @@ const Settings = () => {
 			</Panel>
 
 			<Panel
-				title={ __( 'Logging and alerts', 'modern-mailer-oauth' ) }
+				title={ __( 'Failure detection', 'modern-mailer-oauth' ) }
 				description={ __(
-					'Almost nothing checks what wp_mail() returned, so an alert is how you find out.',
+					'Almost nothing in WordPress checks what wp_mail() returned, so this decides when the plugin says so itself.',
 					'modern-mailer-oauth'
 				) }
 			>
 				<div className="grid gap-4">
-					<ToggleRow
-						id="mmoa-log-enabled"
-						checked={ values.log_enabled }
-						onChange={ ( v ) => set( 'log_enabled', v ) }
-						label={ __( 'Record the outcome of every send', 'modern-mailer-oauth' ) }
-					/>
-
-					<div className="grid gap-4 sm:grid-cols-3">
-						<FormField
-							label={ __( 'Keep entries for (days)', 'modern-mailer-oauth' ) }
-							htmlFor="mmoa-retention"
-						>
-							<input
-								id="mmoa-retention"
-								type="number"
-								min="1"
-								className={ inputClass }
-								value={ values.log_retention }
-								onChange={ ( e ) => set( 'log_retention', e.target.value ) }
-							/>
-						</FormField>
-
+					<div className="grid gap-4 sm:grid-cols-2">
 						<FormField
 							label={ __( 'Report broken after N failures', 'modern-mailer-oauth' ) }
 							help={ __(
@@ -171,7 +150,7 @@ const Settings = () => {
 					     for the fact. */ }
 					<p className="m-0 text-muted-foreground">
 						{ __(
-							'Once a day this site tells the MME-pro licensing service its domain, its WordPress, PHP and plugin versions, which providers are configured, and how many messages it sent this month. Never a recipient, a subject, a message or a credential. It is not on the path your email takes - if that service is unreachable, sending is unaffected.',
+							'This plugin sends nothing to its own vendor. No registration, no check-in, no usage figures - the only servers it contacts are the mail providers you configure.',
 							'modern-mailer-oauth'
 						) }
 					</p>

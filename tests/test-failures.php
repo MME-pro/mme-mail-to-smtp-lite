@@ -12,7 +12,7 @@ $plugin = ModernMailer\Plugin::instance();
 $plugin->settings->update( [
 	'provider' => 'graph', 'from_email' => 'noreply@contoso.com',
 	'ms_tenant_id' => 'tid', 'ms_client_id' => 'cid', 'ms_sender' => 'noreply@contoso.com',
-	'log_enabled' => true, 'alert_threshold' => 2, 'alert_email' => '',
+	'alert_threshold' => 2,
 ] );
 $plugin->secrets->set( 'ms_client_secret', 'secret' );
 $plugin->install_mailer();

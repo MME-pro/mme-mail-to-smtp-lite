@@ -29,7 +29,6 @@ function check( string $label, bool $ok, string $detail = '' ) {
 $plugin    = ModernMailer\Plugin::instance();
 $one_click = $plugin->one_click;
 
-ModernMailer\Logger::install();
 ModernMailer\Queue::install();
 
 $admin = get_users( [ 'role' => 'administrator', 'number' => 1 ] );
@@ -148,7 +147,6 @@ $plugin->settings->update( [
 	'provider'          => 'gmail_oauth',
 	'from_email'        => 'someone@gmail.com',
 	'google_setup_mode' => One_Click::MODE_ONE_CLICK,
-	'log_enabled'       => true,
 	'queue_enabled'     => true,
 	'alert_email'       => '',
 ] );

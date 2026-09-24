@@ -26,7 +26,7 @@ echo "\n=== Service account (domain-wide delegation) ===\n";
 $plugin->settings->update( [
 	'provider' => 'gmail_sa', 'from_email' => 'noreply@example.com',
 	'google_sa_email' => 'wp-mailer@my-project.iam.gserviceaccount.com',
-	'google_sender' => 'noreply@example.com', 'log_enabled' => true,
+	'google_sender' => 'noreply@example.com',
 ] );
 $plugin->secrets->set( 'google_sa_key', $key );
 $plugin->tokens->flush(); $plugin->health->reset();

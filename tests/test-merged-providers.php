@@ -30,7 +30,6 @@ function check( string $label, bool $ok, string $detail = '' ) {
 
 $plugin = ModernMailer\Plugin::instance();
 
-ModernMailer\Logger::install();
 ModernMailer\Queue::install();
 
 $admin = get_users( [ 'role' => 'administrator', 'number' => 1 ] );
@@ -299,7 +298,6 @@ $plugin->settings->update( [
 	'provider'      => 'microsoft',
 	'from_email'    => 'sender@example.com',
 	'ms_setup_mode' => One_Click::MODE_ONE_CLICK,
-	'log_enabled'   => true,
 	'queue_enabled' => true,
 	'alert_email'   => '',
 ] );

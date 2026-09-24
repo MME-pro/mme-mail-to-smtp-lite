@@ -33,7 +33,6 @@ class Admin_Page {
 	/** Settings, and the parent menu slug. */
 	private const SLUG        = 'modern-mailer-oauth';
 	private const SLUG_BACKUP = 'modern-mailer-backup';
-	private const SLUG_LOGS   = 'modern-mailer-logs';
 
 	private const CAPABILITY = 'manage_options';
 	private const NOTICE     = 'mmoa_notice';
@@ -134,14 +133,13 @@ class Admin_Page {
 		// Site-wide settings first; these exist once regardless of slot.
 		$global = [];
 
-		foreach ( [ 'from_email', 'from_name', 'log_retention', 'alert_threshold' ] as $key ) {
+		foreach ( [ 'from_email', 'from_name', 'alert_threshold' ] as $key ) {
 			if ( isset( $posted[ $key ] ) ) {
 				$global[ $key ] = $posted[ $key ];
 			}
 		}
 
 		$global['force_from']    = ! empty( $posted['force_from'] );
-		$global['log_enabled']   = ! empty( $posted['log_enabled'] );
 		$global['queue_enabled'] = ! empty( $posted['queue_enabled'] );
 
 		$this->plugin->settings->update( $global );
@@ -734,20 +732,6 @@ class Admin_Page {
 		require __DIR__ . '/views/backup.php';
 	}
 
-	public function render_logs(): void {
-		if ( ! current_user_can( self::CAPABILITY ) ) {
-			return;
-		}
-
-		$settings    = $this->plugin->settings;
-		$page        = self::SLUG_LOGS;
-		$entries     = $settings->get( 'log_enabled' ) ? $this->plugin->logger->recent( 100 ) : [];
-		$queue_stats = $this->plugin->queue->stats();
-		$queued      = $this->plugin->queue->recent( 50 );
-
-		require __DIR__ . '/views/logs.php';
-	}
-
 	/**
 	 * The hidden field that sends a form handler back to the current screen.
 	 */
@@ -876,14 +860,14 @@ class Admin_Page {
 	/**
 	 * Where a form handler should send the admin back to.
 	 *
-	 * Forms carry a hidden return_page so an action taken on the Backup or Logs
+	 * Forms carry a hidden return_page so an action taken on the Backup
 	 * screen returns there rather than dumping the admin on Settings. Validated
 	 * against the known slugs, because it ends up in a redirect.
 	 */
 	private function return_slug(): string {
 		$posted = isset( $_POST['return_page'] ) ? sanitize_key( wp_unslash( $_POST['return_page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- callers verify a nonce first.
 
-		return in_array( $posted, [ self::SLUG, self::SLUG_BACKUP, self::SLUG_LOGS ], true )
+		return in_array( $posted, [ self::SLUG, self::SLUG_BACKUP ], true )
 			? $posted
 			: self::SLUG;
 	}

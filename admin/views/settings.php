@@ -70,20 +70,9 @@ defined( 'ABSPATH' ) || exit;
 			</tr>
 		</table>
 
-		<h2><?php esc_html_e( 'Logging and failure detection', 'modern-mailer-oauth' ); ?></h2>
+		<h2><?php esc_html_e( 'Failure detection', 'modern-mailer-oauth' ); ?></h2>
 		<table class="form-table" role="presentation">
-			<tr>
-				<th scope="row"><?php esc_html_e( 'Send log', 'modern-mailer-oauth' ); ?></th>
-				<td>
-					<label>
-						<input type="checkbox" name="log_enabled" value="1" <?php checked( (bool) $settings->get( 'log_enabled' ) ); ?> />
-						<?php esc_html_e( 'Record the outcome of every send', 'modern-mailer-oauth' ); ?>
-					</label>
-					<p class="description"><?php esc_html_e( 'Envelope details and errors only. Message bodies are never stored.', 'modern-mailer-oauth' ); ?></p>
-				</td>
-			</tr>
 			<?php
-			$this->field( 'log_retention', __( 'Keep entries for (days)', 'modern-mailer-oauth' ), '', 'number' );
 			$this->field( 'alert_threshold', __( 'Report broken after N failures', 'modern-mailer-oauth' ), __( 'Consecutive failures before the plugin reports sending as broken, in the admin notice and under Site Health.', 'modern-mailer-oauth' ), 'number' );
 			?>
 		</table>

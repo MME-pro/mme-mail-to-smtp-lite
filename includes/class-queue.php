@@ -29,10 +29,10 @@ defined( 'ABSPATH' ) || exit;
  *
  * ## On storing message bodies
  *
- * Logger deliberately never stores message content, because a mail log holding
- * bodies is a standing liability. This table has no such choice available - you
- * cannot resend a message you did not keep. The mitigations are therefore
- * structural rather than optional:
+ * A mail log holding message bodies is a standing liability, which is why
+ * nothing else in this plugin keeps them. This table has no such choice
+ * available - you cannot resend a message you did not keep. The mitigations
+ * are therefore structural rather than optional:
  *
  * - a row is deleted the moment it is delivered, so the steady state is empty;
  * - a row that exhausts its attempts is kept only until the discard window
@@ -470,8 +470,9 @@ class Queue {
 	 *
 	 * Providers take a PHPMailer but read nothing from it - the recipients and
 	 * headers they use are already inside the raw MIME, which is the whole
-	 * reason this plugin hands over raw MIME in the first place. Logger does
-	 * read it, so the addresses and subject are restored and nothing else is.
+	 * reason this plugin hands over raw MIME in the first place. Anything
+	 * listening on mmoa_send_attempted does read it, so the addresses and
+	 * subject are restored and nothing else is.
 	 */
 	private function rebuild_mailer( object $row ): PHPMailer {
 		require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';

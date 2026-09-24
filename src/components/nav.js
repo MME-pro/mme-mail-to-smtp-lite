@@ -4,7 +4,6 @@ import { NavLink, useLocation } from 'react-router-dom';
 import {
 	LayoutDashboard,
 	Plug,
-	ScrollText,
 	Settings2,
 	TriangleAlert,
 	CircleCheck,
@@ -19,7 +18,6 @@ import Guilloche from './guilloche';
 const TABS = [
 	{ to: '/dashboard', label: __( 'Dashboard', 'modern-mailer-oauth' ), icon: LayoutDashboard },
 	{ to: '/connections', label: __( 'Connections', 'modern-mailer-oauth' ), icon: Plug },
-	{ to: '/logs', label: __( 'Email Logs', 'modern-mailer-oauth' ), icon: ScrollText },
 	{ to: '/settings', label: __( 'Settings', 'modern-mailer-oauth' ), icon: Settings2 },
 ];
 

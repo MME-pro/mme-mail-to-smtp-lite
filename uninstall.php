@@ -7,10 +7,7 @@
 
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
-require_once __DIR__ . '/includes/class-logger.php';
 require_once __DIR__ . '/includes/class-queue.php';
-
-ModernMailer\Logger::uninstall();
 
 // The queue can hold message bodies, so dropping it is the one step here that
 // removes actual content rather than configuration.
@@ -18,16 +15,14 @@ ModernMailer\Queue::uninstall();
 
 // Every option the plugin writes, including the migration flags and the
 // site identifier. Four of these were missed as they were added, so an
-// uninstall left rows behind that nothing would ever read again - and one
-// of them, the site identifier, is what the setup service knows this site
-// by. Uninstall should mean uninstalled.
+// uninstall left rows behind that nothing would ever read again.
+// Uninstall should mean uninstalled.
 foreach (
 	[
 		'mmoa_settings',
 		'mmoa_secrets',
 		'mmoa_tokens',
 		'mmoa_health',
-		'mmoa_db_version',
 		'mmoa_queue_db_version',
 		'mmoa_site_id',
 		'mmoa_merged_providers',
@@ -35,7 +30,6 @@ foreach (
 		'mmoa_pinned_ms_mode',
 		'mmoa_setup',
 		'mmoa_setup_redirect',
-
 	] as $option
 ) {
 	delete_option( $option );
@@ -54,5 +48,4 @@ $wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.Pre
 	"DELETE FROM {$wpdb->options} WHERE option_name LIKE 'mmoa\_lock\_%'"
 );
 
-wp_clear_scheduled_hook( 'mmoa_prune_log' );
 wp_clear_scheduled_hook( 'mmoa_drain_queue' );

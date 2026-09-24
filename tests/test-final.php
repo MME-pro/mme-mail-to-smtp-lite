@@ -64,11 +64,9 @@ function render_screen( ModernMailer\Admin\Admin_Page $page, string $method ): s
 
 $html   = render_screen( $page, 'render_settings' );
 $backup = render_screen( $page, 'render_backup' );
-$logs   = render_screen( $page, 'render_logs' );
 
 check( 'Settings renders without fatal', strlen( $html ) > 1000, strlen( $html ) . ' bytes' );
 check( 'Backup renders without fatal', strlen( $backup ) > 500, strlen( $backup ) . ' bytes' );
-check( 'Logs renders without fatal', strlen( $logs ) > 150, strlen( $logs ) . ' bytes' );
 
 check( 'provider selector present', false !== strpos( $html, 'id="provider"' ) );
 check( 'access-policy warning shown', false !== strpos( $html, 'New-ApplicationAccessPolicy' ) );
@@ -83,13 +81,10 @@ check( 'Backup screen fields are slot-prefixed', false !== strpos( $backup, 'nam
 check( 'Backup screen does not render primary fields', false === strpos( $backup, 'name="ms_tenant_id"' ) );
 check( 'Backup screen warns when no primary exists', false !== strpos( $backup, 'no primary connection' ) );
 
-// Every form has to say which screen to return to, or actions taken on Backup
-// and Logs would bounce the admin to Settings.
+// Every form has to say which screen to return to, or actions taken on the Backup
+// screen would bounce the admin to Settings.
 check( 'Settings forms carry a return page', false !== strpos( $html, 'name="return_page" value="modern-mailer-oauth"' ) );
 check( 'Backup forms carry a return page', false !== strpos( $backup, 'name="return_page" value="modern-mailer-backup"' ) );
-
-check( 'Logs screen shows the send log section', false !== strpos( $logs, 'Send log' ) );
-check( 'Logs screen shows the queue section', false !== strpos( $logs, 'Retry queue' ) );
 
 // The redirect URI must not depend on where the menu lives, or reorganising the
 // admin breaks every existing Google connection.

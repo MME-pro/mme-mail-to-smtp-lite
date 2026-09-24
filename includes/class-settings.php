@@ -109,8 +109,6 @@ class Settings {
 	 */
 	private const GLOBAL_SCHEMA = [
 
-		'log_enabled'     => [ true, null, 'bool' ],
-		'log_retention'   => [ 30, null, 'int' ],
 		'alert_threshold' => [ 3, null, 'int' ],
 
 		'queue_enabled'   => [ true, null, 'bool' ],

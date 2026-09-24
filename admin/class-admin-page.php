@@ -108,7 +108,7 @@ class Admin_Page {
 	public function handle_save(): void {
 		$this->guard( 'mmoa_save' );
 
-		$posted = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput -- sanitized per field below.
+		$posted = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Missing -- sanitized per field below; guard() verified the nonce above.
 
 		// Site-wide settings first; these exist once regardless of slot.
 		$global = [];
@@ -202,7 +202,7 @@ class Admin_Page {
 	public function handle_queue(): void {
 		$this->guard( 'mmoa_queue' );
 
-		$action = sanitize_key( wp_unslash( $_POST['queue_action'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		$action = sanitize_key( wp_unslash( $_POST['queue_action'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Missing -- guard() verified the nonce above.
 
 		switch ( $action ) {
 			case 'drain':
@@ -247,7 +247,7 @@ class Admin_Page {
 	public function handle_test_email(): void {
 		$this->guard( 'mmoa_test_email' );
 
-		$to = sanitize_email( wp_unslash( $_POST['test_to'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		$to = sanitize_email( wp_unslash( $_POST['test_to'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Missing -- guard() verified the nonce above.
 
 		if ( ! is_email( $to ) ) {
 			$this->redirect( 'error', __( 'Enter a valid recipient address.', 'mme-mail-to-smtp' ) );
@@ -365,8 +365,7 @@ class Admin_Page {
 	 * the browser away to Google - which a fetch() cannot do.
 	 */
 	private function posted_slot(): string {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- callers verify a nonce first.
-		$id = sanitize_text_field( (string) ( $_REQUEST['slot'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		$id = sanitize_text_field( (string) ( $_REQUEST['slot'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Recommended -- callers verify a nonce first.
 
 		// Resolved through Connections rather than trusted, so an id that does
 		// not name a connection falls back to the primary instead of addressing

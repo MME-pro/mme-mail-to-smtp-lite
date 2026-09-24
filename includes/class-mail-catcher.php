@@ -187,14 +187,14 @@ class Mail_Catcher extends PHPMailer {
 			'~<a\b[^>]*\shref\s*=\s*(["\'])(.*?)\1[^>]*>(.*?)</a\s*>~is',
 			static function ( array $m ): string {
 				$href  = trim( $m[2] );
-				$label = trim( strip_tags( $m[3] ) );
+				$label = trim( wp_strip_all_tags( $m[3] ) );
 
 				if ( '' === $href || 0 === strpos( $href, '#' ) || false !== strpos( $label, $href ) ) {
 					return $m[3];
 				}
 
-				// Parentheses rather than the conventional angle brackets: the
-				// strip_tags() below would eat <https://example.com/> whole.
+				// Parentheses rather than the conventional angle brackets: the tag
+				// stripping below would eat <https://example.com/> whole.
 				return '' === $label ? $href : $label . ' (' . $href . ')';
 			},
 			$text
@@ -208,7 +208,7 @@ class Mail_Catcher extends PHPMailer {
 		$text = (string) preg_replace( '~</(?:td|th)\s*>~i', ' ', $text );
 		$text = (string) preg_replace( '~</(?:p|div|tr|li|h[1-6]|blockquote|table|ul|ol|pre)\s*>~i', "\n\n", $text );
 
-		$text = html_entity_decode( strip_tags( $text ), ENT_QUOTES, $charset );
+		$text = html_entity_decode( wp_strip_all_tags( $text ), ENT_QUOTES, $charset );
 		$text = str_replace( [ "\r\n", "\r" ], "\n", $text );
 
 		// The substitutions above leave runs of blank lines wherever the markup

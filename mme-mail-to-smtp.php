@@ -82,19 +82,30 @@ register_deactivation_hook( __FILE__, [ Plugin::class, 'deactivate' ] );
 /**
  * Load translations.
  *
+ * Plugin Check calls this "discouraged since 4.6", because a plugin hosted on
+ * wordpress.org gets its translations from translate.wordpress.org, installed
+ * into wp-content/languages/plugins/ - and core discovers those by itself, just
+ * in time for the first translated string, with no call needed.
+ *
+ * It is here anyway, and deliberately, because that discovery does not extend
+ * to a catalogue shipped inside the plugin. Core's just-in-time loader scans
+ * WP_LANG_DIR; the Domain Path header above is what load_plugin_textdomain()
+ * reads, not what the scanner walks. Removing this call was tried and it left
+ * the bundled de_DE translation loaded by nothing.
+ *
+ * Once the directory carries the translations, this call and the files in
+ * languages/ can both go.
+ *
  * On `init` rather than at file scope: WordPress decides the locale from the
  * site setting and the user's own profile preference, and neither is settled
  * until then. Loading earlier gives every admin the site language even when
- * they have chosen a different one for themselves - which is the whole point
- * of that preference.
- *
- * WordPress 4.6 and newer looks in wp-content/languages/plugins/ first, so a
- * translation installed from the directory wins over the one shipped here, and
- * an update cannot overwrite what a translator has corrected.
+ * they have chosen a different one for themselves - which is the whole point of
+ * that preference.
  */
 add_action(
 	'init',
 	static function (): void {
+		// phpcs:ignore PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound -- see the note above: core does not auto-discover a bundled catalogue.
 		load_plugin_textdomain( 'mme-mail-to-smtp', false, dirname( plugin_basename( PLUGIN_FILE ) ) . '/languages' );
 	}
 );

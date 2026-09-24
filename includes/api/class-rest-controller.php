@@ -236,23 +236,6 @@ class Rest_Controller {
 
 		register_rest_route(
 			self::NAMESPACE,
-			'/routing',
-			[
-				[
-					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => [ $this, 'get_routing' ],
-					'permission_callback' => $auth,
-				],
-				[
-					'methods'             => WP_REST_Server::EDITABLE,
-					'callback'            => [ $this, 'update_routing' ],
-					'permission_callback' => $auth,
-				],
-			]
-		);
-
-		register_rest_route(
-			self::NAMESPACE,
 			'/dashboard',
 			[
 				'methods'             => WP_REST_Server::READABLE,
@@ -301,7 +284,6 @@ class Rest_Controller {
 				'health'      => $this->health_payload(),
 				'queue'       => $this->plugin->queue->stats(),
 				'categories'  => Provider_Registry::CATEGORIES,
-				'routing'     => $this->routing_payload(),
 				'catalogue'   => $this->connections_payload(),
 
 				// Carried on the first request rather than fetched by the
@@ -742,7 +724,6 @@ class Rest_Controller {
 		$done = $this->plugin->connections->delete( $id );
 
 		if ( $done ) {
-			$this->prune_rules_for( $id );
 			$this->plugin->tokens->flush();
 			$this->plugin->dispatcher->reset_providers();
 		}
@@ -760,45 +741,6 @@ class Rest_Controller {
 		);
 	}
 
-	public function get_routing(): WP_REST_Response {
-		return new WP_REST_Response( $this->routing_payload() );
-	}
-
-	public function update_routing( WP_REST_Request $request ): WP_REST_Response {
-		$body = (array) $request->get_json_params();
-
-		$this->plugin->settings->update(
-			[
-				'routing_enabled' => ! empty( $body['enabled'] ),
-				'routing_rules'   => is_array( $body['rules'] ?? null ) ? $body['rules'] : [],
-			]
-		);
-
-		return new WP_REST_Response( $this->routing_payload() );
-	}
-
-	/**
-	 * Forget any rule that pointed at a connection which has just gone.
-	 */
-	private function prune_rules_for( string $id ): void {
-		$rules = $this->plugin->settings->get( 'routing_rules' );
-
-		if ( ! is_array( $rules ) ) {
-			return;
-		}
-
-		$kept = array_values(
-			array_filter(
-				$rules,
-				static fn( $rule ): bool => ! is_array( $rule ) || ( $rule['connection'] ?? '' ) !== $id
-			)
-		);
-
-		if ( count( $kept ) !== count( $rules ) ) {
-			$this->plugin->settings->update( [ 'routing_rules' => $kept ] );
-		}
-	}
-
 	/**
 	 * @return array<string,mixed>
 	 */
@@ -807,21 +749,6 @@ class Rest_Controller {
 			'connections' => $this->plugin->connections->all(),
 			'max'         => \ModernMailer\Connections::MAX,
 			'labels'      => Provider_Registry::labels(),
-		];
-	}
-
-	/**
-	 * @return array<string,mixed>
-	 */
-	private function routing_payload(): array {
-		return [
-			'enabled'     => $this->plugin->router->is_enabled(),
-			// Returned raw rather than through Router::rules(), so a rule the
-			// admin is midway through writing is not silently deleted from under
-			// them the next time the screen loads.
-			'rules'       => (array) $this->plugin->settings->get( 'routing_rules' ),
-			'vocabulary'  => \ModernMailer\Router::vocabulary(),
-			'connections' => $this->plugin->connections->all(),
 		];
 	}
 

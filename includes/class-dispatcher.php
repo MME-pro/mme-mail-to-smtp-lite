@@ -14,7 +14,7 @@ use WP_Error;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Chooses a connection, enforces limits, sends, and records the outcome.
+ * Chooses a connection, sends, and records the outcome.
  *
  * Three things stand between a transient fault and a lost email, in the order
  * they are tried:
@@ -53,8 +53,7 @@ class Dispatcher {
 		private Http $http,
 		private Logger $logger,
 		private Health_Monitor $health,
-		private Queue $queue,
-		private Router $router
+		private Queue $queue
 	) {}
 
 	/**
@@ -127,21 +126,11 @@ class Dispatcher {
 	 * @return true|WP_Error
 	 */
 	public function dispatch( string $raw_mime, PHPMailer $mailer, ?string $forced_slot = null ) {
-		// Routing chooses the preferred path; it does not opt the message out of
-		// anything below. A routed send that fails still falls through to the
-		// backup and then to the queue, exactly as an unrouted one does.
-		//
 		// $forced_slot is set when a message comes off the queue, where the
-		// choice was already made and recorded. Re-routing on retry would be
-		// wrong: the rules may have changed since, and a message half-delivered
-		// through one connection should not silently move to another.
-		//
-		// A test is always the primary connection, whatever the routing rules
-		// say. "Send test" sits under the primary and claims to exercise it, so
-		// letting a rule divert it would answer a question nobody asked.
-		$slot = $this->testing
-			? Settings::SLOT_PRIMARY
-			: ( $forced_slot ?? $this->route( $raw_mime, $mailer ) );
+		// choice was already made and recorded. Everything else goes out on the
+		// primary connection, and a failure there falls through to the backup
+		// and then to the queue.
+		$slot = $forced_slot ?? Settings::SLOT_PRIMARY;
 
 		$result = $this->attempt( $slot, $raw_mime, $mailer );
 
@@ -304,30 +293,6 @@ class Dispatcher {
 			// over a From address would turn a cosmetic mismatch into lost mail.
 			return null;
 		}
-	}
-
-	/**
-	 * Ask the router which connection this message prefers.
-	 *
-	 * Building a Message is not free, so it happens only when routing is
-	 * actually switched on - on a site that never enables it this costs one
-	 * boolean read per send.
-	 */
-	private function route( string $raw_mime, PHPMailer $mailer ): string {
-		if ( ! $this->router->is_enabled() ) {
-			return Settings::SLOT_PRIMARY;
-		}
-
-		$slot = $this->router->route( Message::from_mailer( $raw_mime, $mailer ) );
-
-		// A rule pointing at a connection with no provider would fail every
-		// message it matched. Falling back to the primary keeps a half-finished
-		// rule from taking the site's mail down with it.
-		if ( null !== $slot && null !== $this->provider( $slot ) ) {
-			return $slot;
-		}
-
-		return Settings::SLOT_PRIMARY;
 	}
 
 	/**

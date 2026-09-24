@@ -62,8 +62,6 @@ function configure_primary( Plugin $plugin ): void {
 			'ms_sender'     => 'noreply@contoso.com',
 			'log_enabled'   => true,
 			'queue_enabled' => true,
-			'routing_enabled' => false,
-			'routing_rules'   => [],
 		]
 	);
 	$plugin->secrets->set( 'ms_client_secret', 'secret' );
@@ -381,109 +379,7 @@ $plugin->queue->drain( $plugin->dispatcher );
 check( 'the retry used the connection it was queued against', $hit['graph'] > 0, wp_json_encode( $hit ) );
 check( 'and did not divert to the backup', 0 === $hit['gmail'], wp_json_encode( $hit ) );
 
-/* ====================== 8. routing still falls back ======================= */
-
-section( 'a routed message falls back like any other' );
-
-reset_state( $plugin );
-$errors = 0;
-
-$plugin->settings->update(
-	[
-		'routing_enabled' => true,
-		'routing_rules'   => [
-			[
-				'connection' => 'primary',
-				'groups'     => [ [ [ 'field' => 'to_domain', 'operator' => 'is', 'value' => 'example.com' ] ] ],
-			],
-		],
-	]
-);
-Settings::flush_cache();
-
-$hit    = [ 'graph' => 0, 'gmail' => 0 ];
-$script = static function ( $url ) use ( &$hit ) {
-	if ( is_token_url( $url ) ) {
-		return ok_token();
-	}
-
-	if ( false !== strpos( $url, 'graph.microsoft.com' ) ) {
-		$hit['graph']++;
-
-		return timeout();
-	}
-
-	$hit['gmail']++;
-
-	return json_response( 200, [ 'id' => 'ok' ] );
-};
-
-$result = wp_mail( 'customer@example.com', 'Routed', 'body' );
-
-check( 'the rule chose the primary', $hit['graph'] > 0 );
-check( 'and the backup still rescued it', $hit['gmail'] > 0 );
-check( 'routing does not opt a message out of the backup', true === $result, var_export( $result, true ) );
-check( 'accounted for exactly once', 'delivered' === accounted_for( $plugin, $result, $errors ) );
-
-$plugin->settings->update( [ 'routing_enabled' => false, 'routing_rules' => [] ] );
-Settings::flush_cache();
-
-/* ============ 9. a rule pointing at the backup does not try it twice ====== */
-
-section( 'a message routed to the backup is not tried twice' );
-
-reset_state( $plugin );
-$errors = 0;
-
-$plugin->settings->update(
-	[
-		'routing_enabled' => true,
-		'routing_rules'   => [
-			[
-				'connection' => 'backup',
-				'groups'     => [ [ [ 'field' => 'to_domain', 'operator' => 'is', 'value' => 'example.com' ] ] ],
-			],
-		],
-	]
-);
-Settings::flush_cache();
-
-$fellback = 0;
-add_action( 'mmoa_backup_used', static function () use ( &$fellback ) { $fellback++; } );
-
-$hit    = [ 'graph' => 0, 'gmail' => 0 ];
-$script = static function ( $url ) use ( &$hit ) {
-	if ( is_token_url( $url ) ) {
-		return ok_token();
-	}
-
-	if ( false !== strpos( $url, 'graph.microsoft.com' ) ) {
-		$hit['graph']++;
-	} else {
-		$hit['gmail']++;
-	}
-
-	return timeout();
-};
-
-$result = wp_mail( 'customer@example.com', 'Backup routed', 'body' );
-
-check( 'the rule sent it to the backup', $hit['gmail'] > 0, wp_json_encode( $hit ) );
-check( 'the primary was never touched', 0 === $hit['graph'], wp_json_encode( $hit ) );
-
-// Falling back from the backup to the backup would be a wasted round trip and
-// a second identical error in the log. Counted through the hook rather than
-// through HTTP calls, because one dispatcher attempt is already several
-// requests - Http retries a timeout on its own, which is why gmail is hit
-// three times here and not once.
-check( 'it did not fall back from the backup to itself', 0 === $fellback, "mmoa_backup_used fired {$fellback}x" );
-check( 'and it is queued once', 1 === (int) $plugin->queue->stats()['pending'] );
-check( 'accounted for exactly once', 'queued' === accounted_for( $plugin, $result, $errors ) );
-
-$plugin->settings->update( [ 'routing_enabled' => false, 'routing_rules' => [] ] );
-Settings::flush_cache();
-
-/* ================== 10. a test message is never rescued =================== */
+/* ================== 8. a test message is never rescued =================== */
 
 section( 'a test message answers about the primary alone' );
 
@@ -519,7 +415,6 @@ check( 'and nothing was queued behind it', 0 === (int) $plugin->queue->stats()['
 
 reset_state( $plugin );
 configure_backup( $plugin, false );
-$plugin->settings->update( [ 'routing_enabled' => false, 'routing_rules' => [] ] );
 
 echo "\n";
 echo $failed > 0 ? "{$failed} failed, {$passed} passed\n" : "All {$passed} checks passed\n";

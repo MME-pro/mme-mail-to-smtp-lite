@@ -126,9 +126,6 @@ class Settings {
 		// stored under its own slot prefix by the same mechanism the backup
 		// already uses.
 		'connections'     => [ [], null, 'list' ],
-
-		'routing_enabled' => [ false, null, 'bool' ],
-		'routing_rules'   => [ [], null, 'list' ],
 	];
 
 	/**

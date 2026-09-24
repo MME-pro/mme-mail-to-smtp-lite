@@ -13,7 +13,6 @@ import {
 	ShieldCheck,
 	ShieldOff,
 	TriangleAlert,
-	Route as RouteIcon,
 	ScrollText,
 	LifeBuoy,
 	Loader2,
@@ -882,15 +881,6 @@ const Setup = () => {
 									title: __( 'Add a backup', 'modern-mailer-oauth' ),
 									body: __(
 										'A second provider that takes over when the first one fails.',
-										'modern-mailer-oauth'
-									),
-								},
-								{
-									to: '/routing',
-									icon: RouteIcon,
-									title: __( 'Route by rule', 'modern-mailer-oauth' ),
-									body: __(
-										'Send receipts from one mailbox and newsletters from another.',
 										'modern-mailer-oauth'
 									),
 								},

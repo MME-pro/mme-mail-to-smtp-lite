@@ -43,7 +43,6 @@ class Plugin {
 	public Health_Monitor $health;
 	public Queue $queue;
 	public Connections $connections;
-	public Router $router;
 	public Site_Identity $identity;
 	public Broker $broker;
 	public Google_Consent $consent;
@@ -70,7 +69,6 @@ class Plugin {
 		$this->health     = new Health_Monitor( $this->settings );
 		$this->queue      = new Queue( $this->settings );
 		$this->connections = new Connections( $this->settings );
-		$this->router      = new Router( $this->settings, $this->connections );
 		$this->identity   = new Site_Identity();
 		$this->broker     = new Broker( $this->http, $this->identity );
 		$this->consent    = new Google_Consent( $this->settings, $this->http, $this->connections );
@@ -83,8 +81,7 @@ class Plugin {
 			$this->http,
 			$this->logger,
 			$this->health,
-			$this->queue,
-			$this->router
+			$this->queue
 		);
 		$this->setup      = new Setup( $this->settings );
 		$this->conflicts  = new Conflicts( $this->settings );

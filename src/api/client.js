@@ -107,8 +107,3 @@ const setupAction = ( action, extra = {} ) =>
 export const setSetupStep = ( step ) => setupAction( 'step', { step } );
 export const completeSetup = () => setupAction( 'complete' );
 export const skipSetup = () => setupAction( 'skip' );
-
-export const getRouting = () => request( '/routing' );
-
-export const saveRouting = ( enabled, rules ) =>
-	request( '/routing', { method: 'POST', data: { enabled, rules } } );

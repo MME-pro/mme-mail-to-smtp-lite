@@ -7,9 +7,7 @@
 
 namespace ModernMailer\Admin;
 
-use ModernMailer\Auth\Broker;
 use ModernMailer\Auth\Google_Consent;
-use ModernMailer\Auth\One_Click;
 use ModernMailer\Plugin;
 use ModernMailer\Settings;
 
@@ -72,12 +70,6 @@ class Admin_Page {
 		// depend on where the menu happens to live - moving a page would
 		// otherwise silently break every existing connection.
 		add_action( 'admin_post_' . Google_Consent::CALLBACK_ACTION, [ $this, 'handle_google_callback' ] );
-
-		// One-click keeps the same shape as the own-client path, because the
-		// difference between them lives entirely inside the broker.
-		add_action( 'admin_post_mmoa_one_click_connect', [ $this, 'handle_one_click_connect' ] );
-		add_action( 'admin_post_mmoa_one_click_disconnect', [ $this, 'handle_one_click_disconnect' ] );
-		add_action( 'admin_post_' . One_Click::CALLBACK_ACTION, [ $this, 'handle_one_click_callback' ] );
 
 		add_action( 'admin_notices', [ $this, 'failure_notice' ] );
 	}
@@ -368,122 +360,6 @@ class Admin_Page {
 	}
 
 	/**
-	 * Send the admin to the setup service, which sends them on to the provider.
-	 */
-	public function handle_one_click_connect(): void {
-		$this->guard( 'mmoa_one_click_connect' );
-
-		$url = $this->plugin->one_click->authorization_url( $this->posted_family(), $this->posted_slot() );
-
-		if ( is_wp_error( $url ) ) {
-			$this->redirect_to_app( 'error', $url->get_error_message() );
-		}
-
-		// Not wp_safe_redirect(): the broker is deliberately off-host, so the
-		// local-host allowlist would refuse it.
-		wp_redirect( $url ); // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
-		exit;
-	}
-
-	public function handle_one_click_disconnect(): void {
-		$this->guard( 'mmoa_one_click_disconnect' );
-
-		$result = $this->plugin->one_click->disconnect( $this->posted_family(), $this->posted_slot() );
-
-		// Flush regardless: any cached access token was minted from a grant
-		// that no longer exists.
-		$this->plugin->tokens->flush();
-
-		if ( is_wp_error( $result ) ) {
-			// The local credential is gone either way - disconnect() forgets it
-			// before it calls out - so this reports a broker that could not be
-			// told, not a disconnection that did not happen.
-			$this->redirect_to_app(
-				'error',
-				sprintf(
-					/* translators: %s: reason the setup service could not be reached. */
-					__( 'Disconnected here, but the setup service could not be told: %s', 'mme-mail-to-smtp' ),
-					$result->get_error_message()
-				)
-			);
-		}
-
-		$this->redirect_to_app( 'saved', __( 'Account disconnected.', 'mme-mail-to-smtp' ) );
-	}
-
-	/**
-	 * Complete a one-click connection when the broker returns the browser.
-	 */
-	public function handle_one_click_callback(): void {
-		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'You are not allowed to change these settings.', 'mme-mail-to-smtp' ) );
-		}
-
-		// No nonce, by necessity: this request comes from the broker, not from
-		// a form of ours. The `state` parameter is the CSRF defence, checked
-		// against a transient written before leaving and binned on arrival so
-		// a replay cannot reuse it.
-		$result = $this->plugin->one_click->handle_callback( wp_unslash( $_GET ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-
-		$this->plugin->tokens->flush();
-		$this->plugin->health->reset();
-
-		if ( is_wp_error( $result ) ) {
-			$this->redirect_to_app( 'error', $result->get_error_message() );
-		}
-
-		$name    = $this->plugin->connections->name_for( $result['slot'] );
-		$account = $result['account'];
-
-		$this->redirect_to_app(
-			'saved',
-			'' !== $account
-				? sprintf(
-					/* translators: 1: email address connected, 2: connection name. */
-					__( 'Connected %1$s to %2$s. Send a test email to confirm delivery.', 'mme-mail-to-smtp' ),
-					$account,
-					$name
-				)
-				: sprintf(
-					/* translators: %s: connection name. */
-					__( 'Account connected to %s. Send a test email to confirm delivery.', 'mme-mail-to-smtp' ),
-					$name
-				)
-		);
-	}
-
-	/**
-	 * Which provider family a one-click request names.
-	 *
-	 * Anything unrecognised becomes Google rather than being trusted through:
-	 * the value reaches the broker as part of a URL path.
-	 */
-	private function posted_family(): string {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- callers verify a nonce first.
-		$family = sanitize_key( (string) ( $_REQUEST['family'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-
-		return Broker::is_family( $family ) ? $family : Broker::GOOGLE;
-	}
-
-	/**
-	 * Nonce-signed URLs for the one-click flows.
-	 *
-	 * @return array{connect:string,disconnect:string}
-	 */
-	public static function one_click_urls( string $family, string $slot ): array {
-		$out = [];
-
-		foreach ( [ 'connect' => 'mmoa_one_click_connect', 'disconnect' => 'mmoa_one_click_disconnect' ] as $key => $action ) {
-			$out[ $key ] = self::signed_url( $action, [ 'family' => $family, 'slot' => $slot ] );
-		}
-
-		return $out;
-	}
-
-	/**
-	 * The connection slot named by a submitted form, defaulting to primary.
-	 */
-	/**
 	 * $_REQUEST rather than $_POST: the admin app starts these flows from a
 	 * nonce-signed link, because beginning an OAuth handshake means navigating
 	 * the browser away to Google - which a fetch() cannot do.
@@ -492,10 +368,9 @@ class Admin_Page {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- callers verify a nonce first.
 		$id = sanitize_text_field( (string) ( $_REQUEST['slot'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 
-		// Resolved through Connections, not compared against the two built-in
-		// slots. Testing only for 'backup' sent every additional connection's
-		// sign-in to the primary slot, so signing in from a third connection
-		// overwrote the primary's grant and left the intended one unconnected.
+		// Resolved through Connections rather than trusted, so an id that does
+		// not name a connection falls back to the primary instead of addressing
+		// a slot that does not exist - which would silently create one on save.
 		return $this->plugin->connections->slot_for( $id ) ?? Settings::SLOT_PRIMARY;
 	}
 

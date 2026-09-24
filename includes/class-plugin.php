@@ -11,9 +11,7 @@ use ModernMailer\Admin\Admin_Page;
 use ModernMailer\Admin\App_Page;
 use ModernMailer\Admin\Site_Health;
 use ModernMailer\Api\Rest_Controller;
-use ModernMailer\Auth\Broker;
 use ModernMailer\Auth\Google_Consent;
-use ModernMailer\Auth\One_Click;
 use PHPMailer\PHPMailer\PHPMailer;
 
 defined( 'ABSPATH' ) || exit;
@@ -38,10 +36,7 @@ class Plugin {
 	public Health_Monitor $health;
 	public Queue $queue;
 	public Connections $connections;
-	public Site_Identity $identity;
-	public Broker $broker;
 	public Google_Consent $consent;
-	public One_Click $one_click;
 	public Dispatcher $dispatcher;
 	public Setup $setup;
 	public Conflicts $conflicts;
@@ -62,10 +57,7 @@ class Plugin {
 		$this->health     = new Health_Monitor( $this->settings );
 		$this->queue      = new Queue( $this->settings );
 		$this->connections = new Connections( $this->settings );
-		$this->identity   = new Site_Identity();
-		$this->broker     = new Broker( $this->http, $this->identity );
 		$this->consent    = new Google_Consent( $this->settings, $this->http, $this->connections );
-		$this->one_click  = new One_Click( $this->settings, $this->broker, $this->connections, $this->tokens );
 
 		$this->dispatcher = new Dispatcher(
 			$this->settings,
@@ -284,7 +276,7 @@ class Plugin {
 
 		// Slug that was stored => [ merged slug, mode setting, mode value ].
 		// A null mode means "leave whatever is there": gmail_oauth already used
-		// google_setup_mode to record whether its token was brokered, and that
+		// google_setup_mode to record which sign-in path it used, and that
 		// answer is still the right one.
 		$map = [
 			'gmail_sa'    => [ 'google', 'google_setup_mode', Providers\Google::MODE_SERVICE_ACCOUNT ],

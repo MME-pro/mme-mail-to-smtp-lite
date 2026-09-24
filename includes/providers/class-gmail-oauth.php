@@ -7,10 +7,7 @@
 
 namespace ModernMailer\Providers;
 
-use ModernMailer\Auth\Broker;
-use ModernMailer\Auth\One_Click;
 use ModernMailer\Field;
-use ModernMailer\Site_Identity;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -64,36 +61,14 @@ class Gmail_OAuth extends Abstract_Gmail {
 	public static function fields(): array {
 		$fields = [];
 
-		// Offered only where a broker exists to answer. A site that has
-		// filtered it away gets the own-client form with no choice attached,
-		// rather than a radio whose other option cannot work.
-		if ( Broker::is_available() ) {
-			$fields[] = new Field(
-				key: 'google_setup_mode',
-				label: __( 'Setup', 'mme-mail-to-smtp' ),
-				type: Field::RADIO,
-				options: [
-					One_Click::MODE_ONE_CLICK  => __( 'One-click', 'mme-mail-to-smtp' ),
-					One_Click::MODE_OWN_CLIENT => __( 'My own OAuth client', 'mme-mail-to-smtp' ),
-				],
-				default: One_Click::MODE_OWN_CLIENT
-			);
-		}
-
-		// Required only in own-client mode. `depends` is what makes that true
-		// in both directions: the form greys them out, and the required check
-		// that guards verification stops demanding them - a field that cannot
-		// apply must not be able to block a connection.
-		$depends = Broker::is_available()
-			? [ 'field' => 'google_setup_mode', 'value' => One_Click::MODE_OWN_CLIENT ]
-			: [];
-
+		// Both are required, unconditionally. There used to be a setup-mode
+		// radio above these, and a `depends` rule that relaxed the requirement in
+		// the other mode. There is no other mode here.
 		$fields[] = new Field(
 			key: 'google_client_id',
 			label: __( 'OAuth client ID', 'mme-mail-to-smtp' ),
 			required: true,
-			help: __( 'Must be a Web application client, not Desktop.', 'mme-mail-to-smtp' ),
-			depends: $depends
+			help: __( 'Must be a Web application client, not Desktop.', 'mme-mail-to-smtp' )
 		);
 
 		$fields[] = new Field(
@@ -101,8 +76,7 @@ class Gmail_OAuth extends Abstract_Gmail {
 			label: __( 'OAuth client secret', 'mme-mail-to-smtp' ),
 			type: Field::PASSWORD,
 			secret: true,
-			required: true,
-			depends: $depends
+			required: true
 		);
 
 		return $fields;
@@ -115,35 +89,16 @@ class Gmail_OAuth extends Abstract_Gmail {
 		return 'me';
 	}
 
-	/**
-	 * Whether this connection's credential comes from the setup service.
-	 */
-	private function is_brokered(): bool {
-		return One_Click::MODE_ONE_CLICK === (string) $this->settings->get( 'google_setup_mode' )
-			&& Broker::is_available();
-	}
-
 	protected function token_cache_key(): string {
-		// The client ID is part of the key so that rotating a client retires
-		// the cached token with it. A brokered connection has no client ID of
-		// its own, so the mode stands in for one - which also means switching
-		// a connection between modes cannot leave the previous mode's access
-		// token in play.
+		// The client ID is part of the key so that rotating a client retires the
+		// cached token with it.
 		return 'gmail_oauth:' . md5(
-			( $this->is_brokered() ? 'broker' : (string) $this->settings->get( 'google_client_id' ) ) . '|' .
+			(string) $this->settings->get( 'google_client_id' ) . '|' .
 			$this->settings->secrets()->get( 'google_refresh' )
 		);
 	}
 
 	protected function request_token() {
-		if ( $this->is_brokered() ) {
-			// Same refresh token, same Gmail API, different party holding the
-			// client secret. Everything downstream of here is unchanged.
-			$broker = new Broker( $this->http, new Site_Identity() );
-
-			return $broker->token_for( Broker::GOOGLE, $this->settings );
-		}
-
 		$client_id = trim( (string) $this->settings->get( 'google_client_id' ) );
 		$secret    = $this->settings->secrets()->get( 'google_client_sec' );
 		$refresh   = $this->settings->secrets()->get( 'google_refresh' );

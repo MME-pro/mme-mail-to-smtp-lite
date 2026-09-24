@@ -7,7 +7,6 @@
 
 namespace ModernMailer\Api;
 
-use ModernMailer\Auth\Broker;
 use ModernMailer\Failure;
 use ModernMailer\Plugin;
 use ModernMailer\Provider_Registry;
@@ -316,30 +315,18 @@ class Rest_Controller {
 	}
 
 	/**
-	 * Reset one connection to unconfigured.
+	 * Reset the connection to unconfigured.
 	 *
-	 * Clears the provider, every credential in that slot, and any brokered or
-	 * hand-made grant it holds. Deliberately thorough: the reason to press
-	 * this is usually that the credentials are wrong or the account is being
-	 * changed, and leaving half of them behind is how a connection ends up in
-	 * a state nobody can explain.
+	 * Clears the provider, every credential in the slot, and the OAuth grant it
+	 * holds. Deliberately thorough: the reason to press this is usually that the
+	 * credentials are wrong or the account is being changed, and leaving half of
+	 * them behind is how a connection ends up in a state nobody can explain.
 	 *
 	 * The connection itself survives - only what it was configured with goes.
-	 * Removing the connection is a separate action, because a routing rule may
-	 * point at it and losing that silently would be worse.
 	 */
 	public function disconnect_connection( WP_REST_Request $request ): WP_REST_Response {
 		$slot   = $this->slot( $request );
 		$scoped = $this->plugin->settings->for_slot( $slot );
-
-		// Revoked at the provider where we can, not merely forgotten here. A
-		// grant left live at Google is one an admin cannot see and cannot
-		// withdraw from this screen.
-		foreach ( [ Broker::GOOGLE ] as $family ) {
-			if ( $this->plugin->one_click->is_connected( $family, $slot ) ) {
-				$this->plugin->one_click->disconnect( $family, $slot );
-			}
-		}
 
 		if ( $this->plugin->consent->is_connected( $slot ) ) {
 			$this->plugin->consent->disconnect( $slot );
@@ -574,7 +561,6 @@ class Rest_Controller {
 			'provider'  => (string) $scoped->get( 'provider' ),
 			'providers' => Provider_Registry::to_array( $scoped ),
 			'oauth'     => $this->oauth_payload( $slot ),
-			'one_click' => $this->one_click_payload( $slot ),
 		];
 	}
 
@@ -609,38 +595,6 @@ class Rest_Controller {
 			'connect_url'     => $urls['connect'],
 			'disconnect_url'  => $urls['disconnect'],
 			'redirect_uri'    => \ModernMailer\Auth\Google_Consent::redirect_uri(),
-		];
-	}
-
-	/**
-	 * One-click state for each provider family this connection could use.
-	 *
-	 * Returned for every connection rather than only for one already set to a
-	 * brokered provider, for the same reason the own-client block is: the admin
-	 * needs to see the choice while setting the connection up, which is before
-	 * anything has been saved.
-	 *
-	 * @return array<string,mixed>
-	 */
-	private function one_click_payload( string $slot ): array {
-		$families = [];
-
-		foreach ( [ Broker::GOOGLE ] as $family ) {
-			$urls = \ModernMailer\Admin\Admin_Page::one_click_urls( $family, $slot );
-
-			$families[ $family ] = [
-				'connected'      => $this->plugin->one_click->is_connected( $family, $slot ),
-				'account'        => $this->plugin->one_click->account( $family, $slot ),
-				'connect_url'    => $urls['connect'],
-				'disconnect_url' => $urls['disconnect'],
-			];
-		}
-
-		return [
-			// The UI hides the whole one-click affordance when this is false,
-			// rather than offering a button that returns an error.
-			'available' => Broker::is_available(),
-			'families'  => $families,
 		];
 	}
 

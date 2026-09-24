@@ -67,12 +67,7 @@ Each of those receives your API key and the complete outgoing email: sender, rec
 
 **Your own SMTP server** - used when Other SMTP is selected. The message goes to the host and port you enter, and nowhere else.
 
-**One-click connection (optional, and avoidable)** - connecting Google normally means registering an OAuth client in the Google Cloud console. If you would rather not, the one-click option performs that exchange for you:
-
-* `https://api.techyza.com` - receives a random identifier this site generates for itself, and the authorization code Google issues at the end of the sign-in. It returns a real Google credential, which this site then uses directly.
-* It never receives a message, a recipient, a subject, an attachment or your API keys, and it is not on the path your email takes. If it is unreachable, sending is unaffected; only starting a new one-click connection stops working.
-* Registering your own OAuth client avoids this service entirely, and the plugin offers that as the other option on the same screen. To switch it off altogether, add `add_filter( 'mmoa_broker_url', '__return_empty_string' );` in your theme or a small plugin.
-* Terms and privacy: https://mme-pro.de/
+**Nothing else.** The plugin contacts no service of its author's: no registration, no check-in, no usage figures, no update server. The list above is the whole of it.
 
 == Installation ==
 

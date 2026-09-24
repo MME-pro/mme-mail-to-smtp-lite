@@ -100,10 +100,10 @@ class Provider_Registry {
 				continue;
 			}
 
-			// A provider may declare itself unavailable on this site. A brokered
-			// transport does, when the setup service it depends on has been
-			// filtered away: listing a transport that cannot obtain a credential
-			// would let someone select it and then discover it never works.
+			// A provider may declare itself unavailable on this site - a transport
+			// that depends on an external service its host has filtered away, say.
+			// Listing one that cannot obtain a credential would let someone select
+			// it and then discover it never works.
 			//
 			// Not part of Provider_Interface, because the answer is yes for
 			// every provider that does not say otherwise, and adding a method

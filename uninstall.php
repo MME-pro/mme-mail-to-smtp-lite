@@ -24,7 +24,6 @@ foreach (
 		'mmoa_tokens',
 		'mmoa_health',
 		'mmoa_queue_db_version',
-		'mmoa_site_id',
 		'mmoa_merged_providers',
 		'mmoa_per_connection_from',
 		'mmoa_setup',

@@ -9,91 +9,51 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Domain: mme-mail-to-smtp\n"
 
-#: includes/api/class-rest-controller.php:362
+#: includes/api/class-rest-controller.php:349
 msgid "Disconnected. Every setting and credential for this connection has been deleted, the From address included."
 msgstr ""
 
-#: includes/api/class-rest-controller.php:375
+#: includes/api/class-rest-controller.php:362
 msgid "Choose a provider for this connection first."
 msgstr ""
 
-#: includes/api/class-rest-controller.php:392
+#: includes/api/class-rest-controller.php:379
 msgid "Verified. The credentials are valid and the mailbox is reachable."
 msgstr ""
 
-#: includes/api/class-rest-controller.php:405 admin/class-admin-page.php:261
+#: includes/api/class-rest-controller.php:392 admin/class-admin-page.php:253
 msgid "Enter a valid recipient address."
 msgstr ""
 
-#: includes/api/class-rest-controller.php:427 admin/class-admin-page.php:279
+#: includes/api/class-rest-controller.php:414 admin/class-admin-page.php:271
 msgid "MME-Mail to SMTP test from %s"
 msgstr ""
 
-#: includes/api/class-rest-controller.php:430
+#: includes/api/class-rest-controller.php:417
 msgid "This is a test message.\n\nIf you are reading it, the connection is working."
 msgstr ""
 
-#: includes/api/class-rest-controller.php:440
+#: includes/api/class-rest-controller.php:427
 msgid "Accepted for delivery. If it does not arrive, check the log for what the provider said."
 msgstr ""
 
-#: includes/api/class-rest-controller.php:441 admin/class-admin-page.php:296
+#: includes/api/class-rest-controller.php:428 admin/class-admin-page.php:288
 msgid "The test message could not be sent."
 msgstr ""
 
-#: includes/api/class-rest-controller.php:484
+#: includes/api/class-rest-controller.php:471
 msgid "Attempted %1$d: %2$d delivered, %3$d still queued, %4$d abandoned."
 msgstr ""
 
-#: includes/api/class-rest-controller.php:513 admin/class-admin-page.php:248
+#: includes/api/class-rest-controller.php:500 admin/class-admin-page.php:240
 msgid "Queue emptied. Anything it held is gone."
 msgstr ""
 
-#: includes/api/class-rest-controller.php:501 admin/class-admin-page.php:240
+#: includes/api/class-rest-controller.php:488 admin/class-admin-page.php:232
 msgid "%d abandoned message returned to the queue."
 msgid_plural "%d abandoned messages returned to the queue."
 msgstr[0] ""
 msgstr[1] ""
-
-#: includes/auth/class-broker.php:147
-msgid "No account is connected. Use Connect on the settings screen."
-msgstr ""
-
-#: includes/auth/class-broker.php:223
-msgid "The setup service did not return a lasting credential, so the connection would have stopped working within the hour. Try connecting again, and if it repeats, use your own OAuth client instead."
-msgstr ""
-
-#: includes/auth/class-broker.php:250
-msgid "The setup service did not return an access token."
-msgstr ""
-
-#: includes/auth/class-broker.php:287 includes/auth/class-one-click.php:73 src/components/one-click-connect.js:41
-msgid "One-click setup is switched off on this site. Connect using your own OAuth client instead."
-msgstr ""
-
-#: includes/auth/class-broker.php:294 includes/auth/class-one-click.php:84
-msgid "One-click setup has no setup service to talk to yet. Define MMOA_BROKER_URL with the address of yours, or connect using your own OAuth client, which needs no service at all."
-msgstr ""
-
-#: includes/auth/class-broker.php:351
-msgid "That sign-in has already been used or has expired. Start the connection again."
-msgstr ""
-
-#: includes/auth/class-broker.php:353
-msgid "The setup service refused this site. If the account was disconnected from the provider, connect it again; otherwise use your own OAuth client."
-msgstr ""
-
-#: includes/auth/class-broker.php:355
-msgid "The setup service is rate limiting this site. Wait a few minutes and try again."
-msgstr ""
-
-#: includes/auth/class-broker.php:357
-msgid "The setup service is unavailable. Existing connections keep sending; only connecting a new account is affected. Try again shortly, or use your own OAuth client, which does not depend on this service."
-msgstr ""
-
-#: includes/auth/class-broker.php:360
-msgid "The setup service returned an unexpected response (HTTP %d)."
-msgstr ""
 
 #: includes/auth/class-google-consent.php:82
 msgid "Enter and save the OAuth client ID and client secret before connecting."
@@ -115,7 +75,7 @@ msgstr ""
 msgid "Google did not return an authorization code."
 msgstr ""
 
-#: includes/auth/class-google-consent.php:191 includes/auth/class-one-click.php:177
+#: includes/auth/class-google-consent.php:191
 msgid "That connection no longer exists, so the sign-in could not be saved. Start again from the connection you want to use."
 msgstr ""
 
@@ -161,26 +121,6 @@ msgstr ""
 
 #: includes/auth/class-jwt-signer.php:66
 msgid "The authentication assertion could not be signed."
-msgstr ""
-
-#: includes/auth/class-one-click.php:67 includes/auth/class-one-click.php:230 includes/auth/class-one-click.php:268
-msgid "Unknown provider."
-msgstr ""
-
-#: includes/auth/class-one-click.php:133
-msgid "This setup link has expired or did not originate here. Start the connection again."
-msgstr ""
-
-#: includes/auth/class-one-click.php:140
-msgid "This setup was started by a different user account."
-msgstr ""
-
-#: includes/auth/class-one-click.php:153
-msgid "The account was not connected: %s"
-msgstr ""
-
-#: includes/auth/class-one-click.php:165
-msgid "The setup service did not return a usable result. Start the connection again."
 msgstr ""
 
 #: includes/class-conflicts.php:398
@@ -247,7 +187,7 @@ msgid_plural "%s are installed but switched off."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-connections.php:34 includes/class-connections.php:64 src/screens/connections.js:366
+#: includes/class-connections.php:34 includes/class-connections.php:64 src/screens/connections.js:355
 msgid "Primary"
 msgstr ""
 
@@ -267,7 +207,7 @@ msgstr ""
 msgid "The request to the mail API could not be completed."
 msgstr ""
 
-#: includes/class-plugin.php:191
+#: includes/class-plugin.php:183
 msgid "Every five minutes (MME-Mail to SMTP retry queue)"
 msgstr ""
 
@@ -413,47 +353,35 @@ msgstr ""
 msgid "From SMTP & API, API keys in your Brevo account. A v3 API key, not an SMTP password."
 msgstr ""
 
-#: includes/providers/class-gmail-oauth.php:36
+#: includes/providers/class-gmail-oauth.php:33
 msgid "Gmail (OAuth)"
 msgstr ""
 
-#: includes/providers/class-gmail-oauth.php:56 admin/views/connection.php:58
+#: includes/providers/class-gmail-oauth.php:53 admin/views/connection.php:58
 msgid "Gmail"
 msgstr ""
 
-#: includes/providers/class-gmail-oauth.php:57
+#: includes/providers/class-gmail-oauth.php:54
 msgid "Consumer @gmail.com, using your own OAuth client and a one-time sign-in."
 msgstr ""
 
-#: includes/providers/class-gmail-oauth.php:73
-msgid "Setup"
-msgstr ""
-
-#: includes/providers/class-gmail-oauth.php:76 includes/providers/class-google.php:86 src/components/google-setup-guide.js:118
-msgid "One-click"
-msgstr ""
-
-#: includes/providers/class-gmail-oauth.php:77 includes/providers/class-google.php:89 src/components/google-setup-guide.js:128
-msgid "My own OAuth client"
-msgstr ""
-
-#: includes/providers/class-gmail-oauth.php:93 admin/views/connection.php:66
+#: includes/providers/class-gmail-oauth.php:69 admin/views/connection.php:66
 msgid "OAuth client ID"
 msgstr ""
 
-#: includes/providers/class-gmail-oauth.php:95
+#: includes/providers/class-gmail-oauth.php:71
 msgid "Must be a Web application client, not Desktop."
 msgstr ""
 
-#: includes/providers/class-gmail-oauth.php:101 admin/views/connection.php:67
+#: includes/providers/class-gmail-oauth.php:76 admin/views/connection.php:67
 msgid "OAuth client secret"
 msgstr ""
 
-#: includes/providers/class-gmail-oauth.php:154
+#: includes/providers/class-gmail-oauth.php:109
 msgid "The Google OAuth client ID or client secret is missing."
 msgstr ""
 
-#: includes/providers/class-gmail-oauth.php:161
+#: includes/providers/class-gmail-oauth.php:116
 msgid "No Google account is connected. Use the Connect button on the settings screen."
 msgstr ""
 
@@ -493,7 +421,7 @@ msgstr ""
 msgid "The Google service account is missing its client email, private key, or the mailbox to send as."
 msgstr ""
 
-#: includes/providers/class-google.php:46 src/components/one-click-connect.js:21
+#: includes/providers/class-google.php:46
 msgid "Google"
 msgstr ""
 
@@ -501,12 +429,16 @@ msgstr ""
 msgid "Gmail and Google Workspace."
 msgstr ""
 
-#: includes/providers/class-google.php:90 src/components/google-setup-guide.js:138
-msgid "Service account"
+#: includes/providers/class-google.php:79
+msgid "How to connect"
 msgstr ""
 
-#: includes/providers/class-google.php:94
-msgid "How to connect"
+#: includes/providers/class-google.php:82 src/components/google-setup-guide.js:118
+msgid "My own OAuth client"
+msgstr ""
+
+#: includes/providers/class-google.php:83 src/components/google-setup-guide.js:128
+msgid "Service account"
 msgstr ""
 
 #: includes/providers/class-mailgun.php:42 includes/providers/class-mailgun.php:55
@@ -677,7 +609,7 @@ msgstr ""
 msgid "SSL"
 msgstr ""
 
-#: includes/providers/class-smtp.php:166 src/screens/setup.js:801
+#: includes/providers/class-smtp.php:166 src/screens/setup.js:792
 msgid "None"
 msgstr ""
 
@@ -745,111 +677,95 @@ msgstr ""
 msgid "From Settings, API Keys in SMTP2GO. It needs the Email Send permission."
 msgstr ""
 
-#: admin/class-admin-page.php:104
+#: admin/class-admin-page.php:96
 msgid "Email is not being delivered."
 msgstr ""
 
-#: admin/class-admin-page.php:107
+#: admin/class-admin-page.php:99
 msgid "Review mail settings"
 msgstr ""
 
-#: admin/class-admin-page.php:143 src/screens/settings.js:31
+#: admin/class-admin-page.php:135 src/screens/settings.js:31
 msgid "Settings saved."
 msgstr ""
 
-#: admin/class-admin-page.php:186
+#: admin/class-admin-page.php:178
 msgid "Choose a provider first."
 msgstr ""
 
-#: admin/class-admin-page.php:203
+#: admin/class-admin-page.php:195
 msgid "Connection verified. Credentials are valid and the mailbox is reachable."
 msgstr ""
 
-#: admin/class-admin-page.php:224
+#: admin/class-admin-page.php:216
 msgid "Attempted %1$d queued message(s): %2$d delivered, %3$d still queued, %4$d abandoned."
 msgstr ""
 
-#: admin/class-admin-page.php:252
+#: admin/class-admin-page.php:244
 msgid "Unknown queue action."
 msgstr ""
 
-#: admin/class-admin-page.php:282
+#: admin/class-admin-page.php:274
 msgid "This is a test message.\n\nIf you are reading it, the API connection is working."
 msgstr ""
 
-#: admin/class-admin-page.php:289
+#: admin/class-admin-page.php:281
 msgid "Test message accepted by the provider."
 msgstr ""
 
-#: admin/class-admin-page.php:333
+#: admin/class-admin-page.php:325
 msgid "Google account disconnected."
 msgstr ""
 
-#: admin/class-admin-page.php:341 admin/class-admin-page.php:419 admin/class-admin-page.php:726
+#: admin/class-admin-page.php:333 admin/class-admin-page.php:601
 msgid "You are not allowed to change these settings."
 msgstr ""
 
-#: admin/class-admin-page.php:364
+#: admin/class-admin-page.php:356
 msgid "Google account connected to %s. Send a test email to confirm delivery."
 msgstr ""
 
-#: admin/class-admin-page.php:405
-msgid "Disconnected here, but the setup service could not be told: %s"
-msgstr ""
-
-#: admin/class-admin-page.php:411
-msgid "Account disconnected."
-msgstr ""
-
-#: admin/class-admin-page.php:443
-msgid "Connected %1$s to %2$s. Send a test email to confirm delivery."
-msgstr ""
-
-#: admin/class-admin-page.php:449
-msgid "Account connected to %s. Send a test email to confirm delivery."
-msgstr ""
-
-#: admin/class-admin-page.php:551 src/components/google-connect.js:39 src/components/one-click-connect.js:65
+#: admin/class-admin-page.php:426 src/components/google-connect.js:39
 msgid "Account"
 msgstr ""
 
-#: admin/class-admin-page.php:556 src/components/google-connect.js:46
+#: admin/class-admin-page.php:431 src/components/google-connect.js:46
 msgid "Connected. A refresh token is stored for this connection."
 msgstr ""
 
-#: admin/class-admin-page.php:561
+#: admin/class-admin-page.php:436
 msgid "Not connected. Save the client ID and secret first, then sign in to grant access."
 msgstr ""
 
-#: admin/class-admin-page.php:586
+#: admin/class-admin-page.php:461
 msgid "Disconnect Google account"
 msgstr ""
 
-#: admin/class-admin-page.php:587 src/components/google-button.js:63
+#: admin/class-admin-page.php:462 src/components/google-button.js:63
 msgid "Sign in with Google"
 msgstr ""
 
-#: admin/class-admin-page.php:662
+#: admin/class-admin-page.php:537
 msgid "Set in wp-config.php, so it cannot be edited here."
 msgstr ""
 
-#: admin/class-admin-page.php:685
+#: admin/class-admin-page.php:560
 msgid "defined in wp-config.php"
 msgstr ""
 
-#: admin/class-admin-page.php:686
+#: admin/class-admin-page.php:561
 msgid "This is the recommended place to keep it."
 msgstr ""
 
-#: admin/class-admin-page.php:693 src/components/provider-form.js:273
+#: admin/class-admin-page.php:568 src/components/provider-form.js:273
 msgid "Stored. Leave blank to keep it."
 msgstr ""
 
-#: admin/class-admin-page.php:694 src/screens/setup.js:807
+#: admin/class-admin-page.php:569 src/screens/setup.js:798
 msgid "Not set"
 msgstr ""
 
-#: admin/class-admin-page.php:717
+#: admin/class-admin-page.php:592
 msgid "Libsodium is unavailable, so this will be stored unencrypted. Put it in wp-config.php instead."
 msgstr ""
 
@@ -953,7 +869,7 @@ msgid_plural "%d messages could not be sent on the first attempt and are waiting
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/views/connection.php:27 src/screens/setup.js:69 src/screens/setup.js:800
+#: admin/views/connection.php:27 src/screens/setup.js:68 src/screens/setup.js:791
 msgid "Provider"
 msgstr ""
 
@@ -1121,7 +1037,7 @@ msgstr ""
 msgid "This revokes the grant at Google and forgets it here. Sending stops. Continue?"
 msgstr ""
 
-#: src/components/google-connect.js:73 src/components/one-click-connect.js:102 src/screens/connections.js:258
+#: src/components/google-connect.js:73 src/screens/connections.js:257
 msgid "Disconnect"
 msgstr ""
 
@@ -1129,11 +1045,11 @@ msgstr ""
 msgid "Enter the client ID and secret above and save them before signing in."
 msgstr ""
 
-#: src/components/google-connect.js:95 src/components/one-click-connect.js:112
+#: src/components/google-connect.js:95
 msgid "You have unsaved changes. Signing in leaves this page and they will be lost."
 msgstr ""
 
-#: src/components/google-setup-guide.js:98 src/screens/connections.js:199 src/screens/setup.js:557
+#: src/components/google-setup-guide.js:98 src/screens/connections.js:198 src/screens/setup.js:556
 msgid "Documentation"
 msgstr ""
 
@@ -1146,134 +1062,130 @@ msgid "Three ways in, depending on the mailbox and who can authorise it."
 msgstr ""
 
 #: src/components/google-setup-guide.js:121
-msgid "nothing to set up. Sign in and send as that mailbox."
-msgstr ""
-
-#: src/components/google-setup-guide.js:131
 msgid "an OAuth client you create in your own Google Cloud project, so nothing passes through anybody else."
 msgstr ""
 
-#: src/components/google-setup-guide.js:141
+#: src/components/google-setup-guide.js:131
 msgid "Workspace only, and the best where available: no sign-in and nothing expires. Needs a domain administrator."
 msgstr ""
 
-#: src/components/google-setup-guide.js:150
+#: src/components/google-setup-guide.js:140
 msgid "My own OAuth client, step by step"
 msgstr ""
 
-#: src/components/google-setup-guide.js:154
+#: src/components/google-setup-guide.js:144
 msgid "Create or choose a Google Cloud project"
 msgstr ""
 
-#: src/components/google-setup-guide.js:156
+#: src/components/google-setup-guide.js:146
 msgid "Any project will do. The Gmail API is free at this volume."
 msgstr ""
 
-#: src/components/google-setup-guide.js:163
+#: src/components/google-setup-guide.js:153
 msgid "Enable the Gmail API"
 msgstr ""
 
-#: src/components/google-setup-guide.js:165
+#: src/components/google-setup-guide.js:155
 msgid "APIs & Services, then Library, then Gmail API, then Enable."
 msgstr ""
 
-#: src/components/google-setup-guide.js:172
+#: src/components/google-setup-guide.js:162
 msgid "Configure the OAuth consent screen"
 msgstr ""
 
-#: src/components/google-setup-guide.js:174
+#: src/components/google-setup-guide.js:164
 msgid "On a Workspace domain choose Internal: no test users, no verification, no seven-day expiry. Consumer accounts can only choose External."
 msgstr ""
 
-#: src/components/google-setup-guide.js:180
+#: src/components/google-setup-guide.js:170
 msgid "Add one scope and no others:"
 msgstr ""
 
-#: src/components/google-setup-guide.js:187
+#: src/components/google-setup-guide.js:177
 msgid "Copy the scope"
 msgstr ""
 
-#: src/components/google-setup-guide.js:191
+#: src/components/google-setup-guide.js:181
 msgid "Publish the app"
 msgstr ""
 
-#: src/components/google-setup-guide.js:193
+#: src/components/google-setup-guide.js:183
 msgid "Press Publish app so the status reads In production."
 msgstr ""
 
-#: src/components/google-setup-guide.js:199
+#: src/components/google-setup-guide.js:189
 msgid "Google shows an unverified-app notice until verification completes; choose Advanced, then continue. It is the ordinary review, not the paid assessment."
 msgstr ""
 
-#: src/components/google-setup-guide.js:206
+#: src/components/google-setup-guide.js:196
 msgid "Create the OAuth client"
 msgstr ""
 
-#: src/components/google-setup-guide.js:208
+#: src/components/google-setup-guide.js:198
 msgid "Credentials, then Create credentials, then OAuth client ID. Choose Web application, not Desktop."
 msgstr ""
 
-#: src/components/google-setup-guide.js:214
+#: src/components/google-setup-guide.js:204
 msgid "Under Authorised redirect URIs, add this exact address:"
 msgstr ""
 
-#: src/components/google-setup-guide.js:221 src/components/redirect-uri.js:52
+#: src/components/google-setup-guide.js:211 src/components/redirect-uri.js:52
 msgid "Copy redirect URI"
 msgstr ""
 
-#: src/components/google-setup-guide.js:225
+#: src/components/google-setup-guide.js:215
 msgid "Paste, save, sign in"
 msgstr ""
 
-#: src/components/google-setup-guide.js:227
+#: src/components/google-setup-guide.js:217
 msgid "Paste the client ID and secret into the fields on this screen and save. The sign-in button stays disabled until you do."
 msgstr ""
 
-#: src/components/google-setup-guide.js:242
+#: src/components/google-setup-guide.js:232
 msgid "Publish the app, or it stops sending every seven days"
 msgstr ""
 
-#: src/components/google-setup-guide.js:246
+#: src/components/google-setup-guide.js:236
 msgid "In Testing, Google expires every refresh token after seven days, and only listed Test users can sign in."
 msgstr ""
 
-#: src/components/google-setup-guide.js:252
+#: src/components/google-setup-guide.js:242
 msgid "Publishing removes both. It is step 4 above, and it is the one people skip."
 msgstr ""
 
-#: src/components/google-setup-guide.js:263
+#: src/components/google-setup-guide.js:253
 msgid "It worked, then stopped a week later"
 msgstr ""
 
-#: src/components/google-setup-guide.js:266
+#: src/components/google-setup-guide.js:256
 msgid "The consent screen is still in Testing. Publish it, then sign in again here."
 msgstr ""
 
-#: src/components/google-setup-guide.js:275
+#: src/components/google-setup-guide.js:265
 msgid "Service account, in short"
 msgstr ""
 
-#: src/components/google-setup-guide.js:278
+#: src/components/google-setup-guide.js:268
 msgid "Create a service account, download its JSON key, and paste it here with the mailbox to send as. A domain administrator authorises it once."
 msgstr ""
 
-#: src/components/google-setup-guide.js:284
+#: src/components/google-setup-guide.js:274
 msgid "No sign-in and no refresh token, so nothing expires. Not available for a consumer gmail.com address."
 msgstr ""
 
-#: src/components/google-setup-guide.js:301
+#: src/components/google-setup-guide.js:291
 msgid "Consent screen"
 msgstr ""
 
-#: src/components/google-setup-guide.js:311 src/screens/setup.js:70
+#: src/components/google-setup-guide.js:301 src/screens/setup.js:69
 msgid "Credentials"
 msgstr ""
 
-#: src/components/google-setup-guide.js:322
+#: src/components/google-setup-guide.js:312
 msgid "Google's own documentation"
 msgstr ""
 
-#: src/components/google-setup-guide.js:328
+#: src/components/google-setup-guide.js:318
 msgid "Close"
 msgstr ""
 
@@ -1329,28 +1241,12 @@ msgstr ""
 msgid "Switch to dark"
 msgstr ""
 
-#: src/components/nav.js:255 src/screens/setup.js:206 src/screens/setup.js:492
+#: src/components/nav.js:255 src/screens/setup.js:205 src/screens/setup.js:491
 msgid "Guided setup"
 msgstr ""
 
 #: src/components/nav.js:256
 msgid "Authenticated delivery"
-msgstr ""
-
-#: src/components/one-click-connect.js:75
-msgid "Connected as %s."
-msgstr ""
-
-#: src/components/one-click-connect.js:78
-msgid "Connected."
-msgstr ""
-
-#: src/components/one-click-connect.js:92
-msgid "This revokes the grant and forgets it here. Sending stops. Continue?"
-msgstr ""
-
-#: src/components/one-click-connect.js:128
-msgid "Nothing to register with %s."
 msgstr ""
 
 #: src/components/provider-form.js:214
@@ -1373,47 +1269,47 @@ msgstr ""
 msgid "Soon"
 msgstr ""
 
-#: src/screens/connections.js:26
+#: src/screens/connections.js:25
 msgid "Every message WordPress sends goes out over this connection."
 msgstr ""
 
-#: src/screens/connections.js:96
+#: src/screens/connections.js:95
 msgid "Connection saved."
 msgstr ""
 
-#: src/screens/connections.js:135
+#: src/screens/connections.js:134
 msgid "Fill in %s before verifying."
 msgstr ""
 
-#: src/screens/connections.js:161
+#: src/screens/connections.js:160
 msgid "Connection"
 msgstr ""
 
-#: src/screens/connections.js:228
+#: src/screens/connections.js:227
 msgid "Save connection"
 msgstr ""
 
-#: src/screens/connections.js:232 src/screens/setup.js:71
+#: src/screens/connections.js:231 src/screens/setup.js:70
 msgid "Verify"
 msgstr ""
 
-#: src/screens/connections.js:247
+#: src/screens/connections.js:246
 msgid "This clears the provider, every credential and the From address on this connection. Mail routed here stops. Continue?"
 msgstr ""
 
-#: src/screens/connections.js:324
+#: src/screens/connections.js:313
 msgid "Send a test message"
 msgstr ""
 
-#: src/screens/connections.js:325
+#: src/screens/connections.js:314
 msgid "Goes out over the primary connection."
 msgstr ""
 
-#: src/screens/connections.js:333
+#: src/screens/connections.js:322
 msgid "Recipient"
 msgstr ""
 
-#: src/screens/connections.js:347 src/screens/setup.js:723
+#: src/screens/connections.js:336 src/screens/setup.js:714
 msgid "Send test"
 msgstr ""
 
@@ -1561,222 +1457,222 @@ msgstr ""
 msgid "Save settings"
 msgstr ""
 
-#: src/screens/setup.js:72
+#: src/screens/setup.js:71
 msgid "Test"
 msgstr ""
 
-#: src/screens/setup.js:73
+#: src/screens/setup.js:72
 msgid "Finish"
 msgstr ""
 
-#: src/screens/setup.js:187
+#: src/screens/setup.js:186
 msgid "Back"
 msgstr ""
 
-#: src/screens/setup.js:207
+#: src/screens/setup.js:206
 msgid "Let us get this site sending properly."
 msgstr ""
 
-#: src/screens/setup.js:208
+#: src/screens/setup.js:207
 msgid "WordPress is currently handing email to the server’s own mail function, which most inboxes now treat as unsigned post. Four short steps connect a real mailbox instead, and nothing is written until you press Save."
 msgstr ""
 
-#: src/screens/setup.js:215
+#: src/screens/setup.js:214
 msgid "Not now"
 msgstr ""
 
-#: src/screens/setup.js:218
+#: src/screens/setup.js:217
 msgid "Begin setup"
 msgstr ""
 
-#: src/screens/setup.js:228
+#: src/screens/setup.js:227
 msgid "Pick a provider"
 msgstr ""
 
-#: src/screens/setup.js:229
+#: src/screens/setup.js:228
 msgid "Google signs in with a single click. Everything else takes an API key."
 msgstr ""
 
-#: src/screens/setup.js:236
+#: src/screens/setup.js:235
 msgid "Prove it works"
 msgstr ""
 
-#: src/screens/setup.js:237
+#: src/screens/setup.js:236
 msgid "The credentials are checked against the provider before you leave this screen."
 msgstr ""
 
-#: src/screens/setup.js:244
+#: src/screens/setup.js:243
 msgid "Send one message"
 msgstr ""
 
-#: src/screens/setup.js:245
+#: src/screens/setup.js:244
 msgid "A real email, sent with the safety nets off, so a failure cannot hide behind a retry."
 msgstr ""
 
-#: src/screens/setup.js:366
+#: src/screens/setup.js:365
 msgid "Setup finished."
 msgstr ""
 
-#: src/screens/setup.js:400
+#: src/screens/setup.js:399
 msgid "Fill in %s first."
 msgstr ""
 
-#: src/screens/setup.js:427
+#: src/screens/setup.js:426
 msgid "Finish this later"
 msgstr ""
 
-#: src/screens/setup.js:438 src/screens/setup.js:512 src/screens/setup.js:599 src/screens/setup.js:699
+#: src/screens/setup.js:437 src/screens/setup.js:511 src/screens/setup.js:590 src/screens/setup.js:690
 msgid "Step %1$d of %2$d"
 msgstr ""
 
-#: src/screens/setup.js:442
+#: src/screens/setup.js:441
 msgid "How should this site send its email?"
 msgstr ""
 
-#: src/screens/setup.js:443
+#: src/screens/setup.js:442
 msgid "Google can be connected without registering anything, by signing in. The rest need an API key from the service, which takes a minute in their console."
 msgstr ""
 
-#: src/screens/setup.js:455 src/screens/setup.js:618 src/screens/setup.js:726
+#: src/screens/setup.js:454 src/screens/setup.js:609 src/screens/setup.js:717
 msgid "Continue"
 msgstr ""
 
-#: src/screens/setup.js:473
+#: src/screens/setup.js:472
 msgid "Choose one to continue. It can be changed later without losing anything."
 msgstr ""
 
-#: src/screens/setup.js:493
+#: src/screens/setup.js:492
 msgid "No provider chosen yet"
 msgstr ""
 
-#: src/screens/setup.js:494
+#: src/screens/setup.js:493
 msgid "This step asks for the credentials the provider needs, and which credentials those are depends on the provider. Go back and pick one."
 msgstr ""
 
-#: src/screens/setup.js:500
+#: src/screens/setup.js:499
 msgid "Choose a provider"
 msgstr ""
 
-#: src/screens/setup.js:518
+#: src/screens/setup.js:517
 msgid "Connect %s"
 msgstr ""
 
-#: src/screens/setup.js:519
+#: src/screens/setup.js:518
 msgid "the provider"
 msgstr ""
 
-#: src/screens/setup.js:530
+#: src/screens/setup.js:529
 msgid "Save and continue"
 msgstr ""
 
-#: src/screens/setup.js:603
+#: src/screens/setup.js:594
 msgid "Check the credentials reach the mailbox"
 msgstr ""
 
-#: src/screens/setup.js:604
+#: src/screens/setup.js:595
 msgid "This asks the provider whether it recognises what was saved, and whether the mailbox is one this connection is allowed to send from. Nothing is emailed yet."
 msgstr ""
 
-#: src/screens/setup.js:613
+#: src/screens/setup.js:604
 msgid "Continue anyway"
 msgstr ""
 
-#: src/screens/setup.js:630
+#: src/screens/setup.js:621
 msgid "Check again"
 msgstr ""
 
-#: src/screens/setup.js:631
+#: src/screens/setup.js:622
 msgid "Verify connection"
 msgstr ""
 
-#: src/screens/setup.js:663
+#: src/screens/setup.js:654
 msgid "Asking the provider…"
 msgstr ""
 
-#: src/screens/setup.js:665
+#: src/screens/setup.js:656
 msgid "The provider accepted it."
 msgstr ""
 
-#: src/screens/setup.js:667
+#: src/screens/setup.js:658
 msgid "The provider refused."
 msgstr ""
 
-#: src/screens/setup.js:668
+#: src/screens/setup.js:659
 msgid "Not checked yet."
 msgstr ""
 
-#: src/screens/setup.js:672
+#: src/screens/setup.js:663
 msgid "Press Verify. Any unsaved edit on the previous step is saved first, because the check runs against what is stored."
 msgstr ""
 
-#: src/screens/setup.js:684
+#: src/screens/setup.js:675
 msgid "The message above comes from the provider, not from this plugin - it names what is actually wrong. Go back a step to correct it."
 msgstr ""
 
-#: src/screens/setup.js:703
+#: src/screens/setup.js:694
 msgid "Send one real message"
 msgstr ""
 
-#: src/screens/setup.js:704
+#: src/screens/setup.js:695
 msgid "It goes out over this connection with the retry queue switched off, so a failure here is the connection failing rather than something else quietly covering for it."
 msgstr ""
 
-#: src/screens/setup.js:722
+#: src/screens/setup.js:713
 msgid "Send another"
 msgstr ""
 
-#: src/screens/setup.js:734
+#: src/screens/setup.js:725
 msgid "Send to"
 msgstr ""
 
-#: src/screens/setup.js:736
+#: src/screens/setup.js:727
 msgid "Your own address is the fastest way to find out. Somewhere outside this domain tells you more."
 msgstr ""
 
-#: src/screens/setup.js:767
+#: src/screens/setup.js:758
 msgid "Setup complete"
 msgstr ""
 
-#: src/screens/setup.js:770
+#: src/screens/setup.js:761
 msgid "WordPress is sending through your provider."
 msgstr ""
 
-#: src/screens/setup.js:771
+#: src/screens/setup.js:762
 msgid "Nothing is configured yet."
 msgstr ""
 
-#: src/screens/setup.js:775
+#: src/screens/setup.js:766
 msgid "Every message this site sends now goes out over this connection, and every attempt is recorded with whatever the provider said about it."
 msgstr ""
 
-#: src/screens/setup.js:779
+#: src/screens/setup.js:770
 msgid "You can leave now and come back to this at any time - the wizard is always available from the dashboard."
 msgstr ""
 
-#: src/screens/setup.js:793
+#: src/screens/setup.js:784
 msgid "Go to the dashboard"
 msgstr ""
 
-#: src/screens/setup.js:804
+#: src/screens/setup.js:795
 msgid "Sends as"
 msgstr ""
 
-#: src/screens/setup.js:810
+#: src/screens/setup.js:801
 msgid "Test message"
 msgstr ""
 
-#: src/screens/setup.js:813
+#: src/screens/setup.js:804
 msgid "Accepted"
 msgstr ""
 
-#: src/screens/setup.js:814
+#: src/screens/setup.js:805
 msgid "Refused"
 msgstr ""
 
-#: src/screens/setup.js:815
+#: src/screens/setup.js:806
 msgid "Not sent"
 msgstr ""
 
-#: src/screens/setup.js:868
+#: src/screens/setup.js:859
 msgid "Credentials are stored on this site and sent only to the provider they belong to."
 msgstr ""

@@ -112,11 +112,10 @@ if ( $send_req ) {
 
 echo "\n=== Consumer OAuth ===\n";
 $requests = [];
-// google_setup_mode is stated rather than assumed. It decides whether this
-// provider refreshes against Google directly or through the setup service,
-// so a test that left it set to one-click would send this whole section down
-// the brokered path - and the failure would land here, in a suite that never
-// mentions brokering.
+// google_setup_mode is stated rather than assumed. It decides which transport
+// the merged Google tile resolves to, so leaving it unset would send this whole
+// section down the service-account path - and the failure would land here, in a
+// section that is about the OAuth one.
 $plugin->settings->update( [
 	'provider'          => 'gmail_oauth',
 	'google_setup_mode' => 'own_client',

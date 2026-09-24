@@ -42,7 +42,6 @@ import ProviderLogo from '../components/provider-logo';
 import RedirectUri from '../components/redirect-uri';
 import GoogleConnect from '../components/google-connect';
 import GoogleSetupGuide from '../components/google-setup-guide';
-import OneClickConnect from '../components/one-click-connect';
 
 /**
  * Guided setup.
@@ -573,14 +572,6 @@ const Setup = () => {
 								setValues( ( state ) => ( { ...state, [ key ]: value } ) );
 							} }
 						/>
-
-						{ isGoogle && googleMode === 'one_click' && (
-							<OneClickConnect
-								family="google"
-								oneClick={ data.one_click }
-								dirty={ dirty || data.provider !== provider }
-							/>
-						) }
 
 						{ isGoogle && googleMode === 'own_client' && (
 							<GoogleConnect

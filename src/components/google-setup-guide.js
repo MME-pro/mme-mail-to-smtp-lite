@@ -115,16 +115,6 @@ const GoogleSetupGuide = ( { docsUrl, redirectUri } ) => (
 					<div className="grid gap-2">
 						<Note>
 							<strong className="font-medium text-foreground">
-								{ __( 'One-click', 'mme-mail-to-smtp' ) }
-							</strong>
-							{ ' - ' }
-							{ __(
-								'nothing to set up. Sign in and send as that mailbox.',
-								'mme-mail-to-smtp'
-							) }
-						</Note>
-						<Note>
-							<strong className="font-medium text-foreground">
 								{ __( 'My own OAuth client', 'mme-mail-to-smtp' ) }
 							</strong>
 							{ ' - ' }

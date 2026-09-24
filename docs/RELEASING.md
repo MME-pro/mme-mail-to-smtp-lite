@@ -104,7 +104,7 @@ commit. `Stable tag` in `readme.txt` is what decides which tag the directory
 actually serves, so trunk alone changes nothing that sites can see.
 
 Exclude everything that is not part of the shipped plugin: `node_modules/`,
-`tests/`, `tools/`, `broker/`, `src/`, `docs/`, `.github/`, `package.json`,
+`tests/`, `tools/`, `src/`, `docs/`, `.github/`, `package.json`,
 `package-lock.json`, `postcss.config.js`. `build/` **is** shipped.
 
 The directory picks the change up within minutes, and sites are offered it on

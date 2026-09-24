@@ -15,7 +15,6 @@ import { cn } from '../lib/utils';
 import GoogleConnect from '../components/google-connect';
 import GoogleSetupGuide from '../components/google-setup-guide';
 import RedirectUri from '../components/redirect-uri';
-import OneClickConnect from '../components/one-click-connect';
 import ProviderForm, { missingRequired } from '../components/provider-form';
 import ProviderPicker from '../components/provider-picker';
 
@@ -270,16 +269,6 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 					     edited rather than the stored one, so flipping the
 					     radio swaps the sign-in block straight away instead of
 					     after a save. */ }
-					{ /* A service account needs no sign-in at all, so Google
-					     shows a block only in the two modes that do. */ }
-					{ isGoogle && googleMode === 'one_click' && (
-						<OneClickConnect
-							family="google"
-							oneClick={ data.one_click }
-							dirty={ dirty || data.provider !== provider }
-						/>
-					) }
-
 					{ isGoogle && googleMode === 'own_client' && (
 						<GoogleConnect
 							oauth={ data.oauth }

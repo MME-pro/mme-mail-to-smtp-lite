@@ -6,9 +6,9 @@ server — and then makes failure visible.
 
 > **This is the free plugin**, the one published on wordpress.org. The paid
 > add-on lives in a separate repository and adds Microsoft 365 / Outlook, Amazon
-> SES and Zoho, email logs, open/click tracking, a backup connection, smart
-> routing, failure alerts and rate limiting. It requires this plugin to be
-> installed and active; it does not replace it.
+> SES and Zoho, one-click Google sign-in, email logs, open/click tracking, a
+> backup connection, smart routing, failure alerts and rate limiting. It requires
+> this plugin to be installed and active; it does not replace it.
 
 ## Why
 
@@ -107,9 +107,8 @@ secret in, save, then press **Sign in with Google**. Two traps worth knowing:
    exact value to paste; it points at `admin-post.php` deliberately, so that
    reorganising the admin menu cannot break an existing connection.
 
-Alternatively the one-click option does the OAuth exchange through
-`api.techyza.com` and hands back a real Google credential, so nobody has to open
-a cloud console. It never sees a message. `mmoa_broker_url` disables it.
+Both Google paths use credentials you registered yourself — an OAuth client or a
+service account key — so nothing passes through a third party.
 
 ## Privacy and GDPR
 
@@ -128,8 +127,8 @@ somebody downloads.
 `add_policy_content()` contributes suggested text to the site's privacy policy.
 
 **The plugin sends nothing to its author.** No registration, no check-in, no
-usage figures. The only servers it contacts are the mail service you configure
-and, if you choose one-click sign-in, the OAuth broker.
+usage figures, no update server. The only servers it contacts are the mail
+service you configure - nothing else, ever.
 
 ## Tests
 

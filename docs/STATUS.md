@@ -44,7 +44,6 @@ use. Removing them is deferred, not decided against.
 |---|---|---|
 | Google Workspace service account | `providers/class-gmail-service-account.php` | Signed assertion exchanged for a short-lived token. No refresh token exists, so nothing expires. |
 | Gmail consumer OAuth | `providers/class-gmail-oauth.php` | Sign-in prompt, own OAuth client, revocable. Keeps a refresh token — the one path where that is unavoidable. |
-| One-click Google sign-in | `auth/class-one-click.php`, `auth/class-broker.php` | The broker performs the OAuth exchange and returns a real Google credential. Never sees a message. |
 | SendGrid, Mailgun, Brevo, Postmark, Resend, SMTP2GO | `providers/class-*.php` | API key, raw MIME, per-service error mapping |
 | Other SMTP | `providers/class-smtp.php` | Works everywhere; the least diagnosable |
 | Retry queue | `class-queue.php` | 5-minute schedule then backoff, its own table, deleted on delivery |
@@ -63,7 +62,8 @@ use. Removing them is deferred, not decided against.
 These are in the paid add-on, which requires this plugin and does not replace it.
 They are not disabled or locked in this build — the code is absent.
 
-Microsoft 365 / Outlook · Amazon SES · Zoho · email logs (view, search, resend) ·
+Microsoft 365 / Outlook · Amazon SES · Zoho · one-click Google sign-in (and the
+OAuth broker behind it) · email logs (view, search, resend) ·
 open/click tracking and reports · a backup connection · smart routing · failure
 alerts to Slack, Teams, Discord, SMS or webhooks · rate limiting · the weekly
 summary report · licensing.
@@ -95,5 +95,4 @@ paths are the ones to exercise first, because they are the most involved.
 | Translations | The German catalogue predates the split: 592 strings translated, 81 added on this branch still in English. Entries for removed strings are simply never looked up. Regenerate before release. |
 | Upgrade prompts | The free build carries no pointer to the paid add-on yet. Permitted by the directory guidelines, within bounds — contextual, on our own screens, dismissible. |
 | `migrate_merged_providers` | Has no test coverage. The file that covered it was never wired into `run.sh` and was deleted with the Microsoft removal; the gap predates that. |
-| One-click broker flow | Same story, same reason. |
 | Legacy PHP admin | Two interfaces for one set of settings. Deferred. |

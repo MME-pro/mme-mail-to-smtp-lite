@@ -70,15 +70,10 @@ class Settings {
 		'google_sender'     => [ '', 'MMOA_GOOGLE_SENDER', 'email' ],
 		'google_client_id'  => [ '', 'MMOA_GOOGLE_CLIENT_ID', 'text' ],
 
-		// Whether a connection uses the hosted setup service or an OAuth client
-		// this site registered itself. Stored per connection, because one site
-		// can reasonably do both: a brokered Gmail account for convenience and
-		// a self-registered client for the mailbox that matters.
-		//
-		// The default is deliberately the self-registered path. A stored value
-		// only ever appears here because someone chose one-click, so an upgrade
-		// cannot silently move an existing connection onto a service it was
-		// never told about.
+		// Which Google path a connection uses: a service account with
+		// domain-wide delegation, or an OAuth client this site registered.
+		// Stored per connection rather than site-wide, because the right answer
+		// depends on the mailbox rather than on the site.
 		'google_setup_mode' => [ 'own_client', null, 'text' ],
 
 		// Written by the sign-in rather than typed. It is here rather than

@@ -1,5 +1,5 @@
 {
-	"translation-revision-date": "2026-09-24T11:28:59.542Z",
+	"translation-revision-date": "2026-09-24T12:14:55.814Z",
 	"generator": "tools/i18n.mjs",
 	"domain": "messages",
 	"locale_data": {
@@ -9,23 +9,14 @@
 				"lang": "de_DE",
 				"plural-forms": "nplurals=2; plural=(n != 1);"
 			},
-			"One-click setup is switched off on this site. Connect using your own OAuth client instead.": [
-				"Die Ein-Klick-Einrichtung ist auf dieser Website deaktiviert. Verbinden Sie sich stattdessen mit Ihrem eigenen OAuth-Client."
-			],
 			"Primary": [
 				"Primär"
 			],
 			"MME-Mail to SMTP": [
 				"MME-Mail to SMTP"
 			],
-			"One-click": [
-				"Ein Klick"
-			],
 			"My own OAuth client": [
 				"Mein eigener OAuth-Client"
-			],
-			"Google": [
-				"Google"
 			],
 			"Service account": [
 				"Dienstkonto"
@@ -110,9 +101,6 @@
 			],
 			"Three ways in, depending on the mailbox and who can authorise it.": [
 				"Drei Wege, je nach Postfach und wer die Freigabe erteilen kann."
-			],
-			"nothing to set up. Sign in and send as that mailbox.": [
-				"nichts einzurichten. Anmelden und als dieses Postfach senden."
 			],
 			"an OAuth client you create in your own Google Cloud project, so nothing passes through anybody else.": [
 				"ein OAuth-Client in Ihrem eigenen Google-Cloud-Projekt, sodass nichts über Dritte läuft."
@@ -248,18 +236,6 @@
 			],
 			"Authenticated delivery": [
 				"Authentifizierte Zustellung"
-			],
-			"Connected as %s.": [
-				"Verbunden als %s."
-			],
-			"Connected.": [
-				"Verbunden."
-			],
-			"This revokes the grant and forgets it here. Sending stops. Continue?": [
-				"Damit wird die Berechtigung widerrufen und hier verworfen. Der Versand endet. Fortfahren?"
-			],
-			"Nothing to register with %s.": [
-				"Nichts bei %s zu registrieren."
 			],
 			"Copy": [
 				"Kopieren"

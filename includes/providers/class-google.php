@@ -7,8 +7,6 @@
 
 namespace ModernMailer\Providers;
 
-use ModernMailer\Auth\Broker;
-use ModernMailer\Auth\One_Click;
 use ModernMailer\Field;
 
 defined( 'ABSPATH' ) || exit;
@@ -16,25 +14,27 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Gmail and Google Workspace as one choice.
  *
- * Three ways in, and which one is right is decided by the account rather than
- * by preference:
+ * Two ways in, and which one is right is decided by the account rather than by
+ * preference:
  *
- * - **One-click** signs in and sends as that mailbox, with nothing to configure
- *   in Google Cloud. Works for any account, consumer or Workspace.
- * - **Your own OAuth client** is the same sign-in against a Google Cloud
- *   project you registered. More setup, and it depends on nothing of ours.
+ * - **Your own OAuth client** is a sign-in against a Google Cloud project you
+ *   registered. It works for any account, consumer or Workspace, and it depends
+ *   on nothing of ours - but it keeps a refresh token, which a password change
+ *   or a revoked grant will invalidate.
  * - **Service account** uses domain-wide delegation. No consent screen and no
- *   refresh token to be revoked, which makes it the sturdiest of the three -
- *   but it is Workspace-only and needs a domain administrator to authorise it.
+ *   refresh token to be revoked, which makes it the sturdier of the two - but
+ *   it is Workspace-only and needs a domain administrator to authorise it.
  *
- * The first two share a transport: Gmail_OAuth already decides internally
- * whether its refresh token came from the broker or from a client the site
- * registered, so both modes resolve to it and the setup mode is the same
- * setting it was already reading.
+ * The tile exists so that the chooser asks which mail service you use, not
+ * which authentication method you prefer. Somebody arriving at this screen
+ * knows they want to send through Google; the method is the second question.
  */
 class Google extends Abstract_Merged_Provider {
 
-	/** Domain-wide delegation, as distinct from either sign-in path. */
+	/** A sign-in against an OAuth client the site registered itself. */
+	public const MODE_OWN_CLIENT = 'own_client';
+
+	/** Domain-wide delegation, as distinct from the sign-in path. */
 	public const MODE_SERVICE_ACCOUNT = 'service_account';
 
 	public static function slug(): string {
@@ -56,44 +56,32 @@ class Google extends Abstract_Merged_Provider {
 	}
 
 	protected static function default_mode(): string {
-		return One_Click::MODE_OWN_CLIENT;
+		return self::MODE_OWN_CLIENT;
 	}
 
 	/**
 	 * Ordered so each transport's fields gate to the mode that uses them.
 	 *
 	 * Own-client comes first so the OAuth client ID and secret attach to it -
-	 * they are meaningless in the other two modes. One-click resolves to the
-	 * same transport but contributes no fields, having none left to claim.
+	 * they are meaningless in service-account mode, which reads a signing key
+	 * instead.
 	 */
 	protected static function transports(): array {
-		$out = [
-			One_Click::MODE_OWN_CLIENT => Gmail_OAuth::class,
+		return [
+			self::MODE_OWN_CLIENT      => Gmail_OAuth::class,
 			self::MODE_SERVICE_ACCOUNT => Gmail_Service_Account::class,
 		];
-
-		if ( Broker::is_available() ) {
-			$out[ One_Click::MODE_ONE_CLICK ] = Gmail_OAuth::class;
-		}
-
-		return $out;
 	}
 
 	protected static function mode_field(): Field {
-		$options = [];
-
-		if ( Broker::is_available() ) {
-			$options[ One_Click::MODE_ONE_CLICK ] = __( 'One-click', 'mme-mail-to-smtp' );
-		}
-
-		$options[ One_Click::MODE_OWN_CLIENT ] = __( 'My own OAuth client', 'mme-mail-to-smtp' );
-		$options[ self::MODE_SERVICE_ACCOUNT ] = __( 'Service account', 'mme-mail-to-smtp' );
-
 		return new Field(
 			key: self::mode_key(),
 			label: __( 'How to connect', 'mme-mail-to-smtp' ),
 			type: Field::RADIO,
-			options: $options,
+			options: [
+				self::MODE_OWN_CLIENT      => __( 'My own OAuth client', 'mme-mail-to-smtp' ),
+				self::MODE_SERVICE_ACCOUNT => __( 'Service account', 'mme-mail-to-smtp' ),
+			],
 			default: self::default_mode()
 		);
 	}

@@ -89,7 +89,7 @@ const RadioGroup = ( { field, value, disabled, onChange } ) => (
  *
  * Such a field is hidden, not greyed out. These were disabled at first, to stop
  * a three-column row collapsing whenever a toggle moved - but a mode selector
- * makes that trade the wrong way round: choosing one-click setup left two dead
+ * makes that trade the wrong way round: a mode with no fields of its own left
  * credential boxes sitting under it, which reads as something still to fill in
  * rather than something that no longer applies. A row that reflows is a smaller
  * cost than a form that looks unfinished.
@@ -223,7 +223,7 @@ const SecretInput = ( { id, field, value, disabled, placeholder, onChange } ) =>
 };
 
 const ProviderForm = ( { provider, values, onChange } ) => {
-	// A provider can genuinely have nothing to fill in - a brokered sign-in
+	// A provider can genuinely have nothing to fill in - a sign-in that
 	// chooses its mailbox at the provider's own prompt. Rendering the grid
 	// anyway leaves an empty gap above the buttons that reads as a form that
 	// failed to load.

@@ -28,7 +28,7 @@ class Brevo extends Abstract_Api_Provider {
 	private const MAX_MIME_BYTES = 7340032;
 
 	public function get_label(): string {
-		return __( 'Brevo', 'modern-mailer-oauth' );
+		return __( 'Brevo', 'mme-mail-to-smtp' );
 	}
 
 	public function get_max_message_bytes(): int {
@@ -41,8 +41,8 @@ class Brevo extends Abstract_Api_Provider {
 
 	public static function describe(): array {
 		return [
-			'label'    => __( 'Brevo', 'modern-mailer-oauth' ),
-			'summary'  => __( 'Formerly Sendinblue. The From address must be a verified sender.', 'modern-mailer-oauth' ),
+			'label'    => __( 'Brevo', 'mme-mail-to-smtp' ),
+			'summary'  => __( 'Formerly Sendinblue. The From address must be a verified sender.', 'mme-mail-to-smtp' ),
 			'docs'     => 'https://developers.brevo.com/reference/sendtransacemail',
 			'category' => 'api',
 			'raw_mime' => false,
@@ -53,8 +53,8 @@ class Brevo extends Abstract_Api_Provider {
 		return [
 			Field::secret(
 				'brevo_api_key',
-				__( 'API key', 'modern-mailer-oauth' ),
-				__( 'From SMTP & API, API keys in your Brevo account. A v3 API key, not an SMTP password.', 'modern-mailer-oauth' ),
+				__( 'API key', 'mme-mail-to-smtp' ),
+				__( 'From SMTP & API, API keys in your Brevo account. A v3 API key, not an SMTP password.', 'mme-mail-to-smtp' ),
 				'xkeysib-...'
 			),
 		];

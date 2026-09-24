@@ -39,7 +39,7 @@ class Mailgun extends Abstract_Provider {
 	private const MAX_MIME_BYTES = 26214400;
 
 	public function get_label(): string {
-		return __( 'Mailgun', 'modern-mailer-oauth' );
+		return __( 'Mailgun', 'mme-mail-to-smtp' );
 	}
 
 	public function get_max_message_bytes(): int {
@@ -52,8 +52,8 @@ class Mailgun extends Abstract_Provider {
 
 	public static function describe(): array {
 		return [
-			'label'    => __( 'Mailgun', 'modern-mailer-oauth' ),
-			'summary'  => __( 'Accepts the complete message, so attachments and inline images pass through untouched.', 'modern-mailer-oauth' ),
+			'label'    => __( 'Mailgun', 'mme-mail-to-smtp' ),
+			'summary'  => __( 'Accepts the complete message, so attachments and inline images pass through untouched.', 'mme-mail-to-smtp' ),
 			'docs'     => 'https://documentation.mailgun.com/docs/mailgun/api-reference/openapi-final/tag/Messages/',
 			'category' => 'api',
 			'raw_mime' => true,
@@ -70,18 +70,18 @@ class Mailgun extends Abstract_Provider {
 		return [
 			Field::secret(
 				'mailgun_api_key',
-				__( 'Sending API key', 'modern-mailer-oauth' ),
-				__( 'From Send, Sending, Domain settings. A sending key, not the account API key.', 'modern-mailer-oauth' )
+				__( 'Sending API key', 'mme-mail-to-smtp' ),
+				__( 'From Send, Sending, Domain settings. A sending key, not the account API key.', 'mme-mail-to-smtp' )
 			),
 			Field::required(
 				'mailgun_domain',
-				__( 'Sending domain', 'modern-mailer-oauth' ),
-				__( 'The verified domain in Mailgun, for example mg.yourdomain.com.', 'modern-mailer-oauth' ),
+				__( 'Sending domain', 'mme-mail-to-smtp' ),
+				__( 'The verified domain in Mailgun, for example mg.yourdomain.com.', 'mme-mail-to-smtp' ),
 				'mg.yourdomain.com'
 			),
 			new Field(
 				key: 'mailgun_region',
-				label: __( 'Region', 'modern-mailer-oauth' ),
+				label: __( 'Region', 'mme-mail-to-smtp' ),
 				type: Field::SELECT,
 				required: true,
 				options: [
@@ -100,7 +100,7 @@ class Mailgun extends Abstract_Provider {
 		if ( '' === $key || '' === $domain ) {
 			return new WP_Error(
 				'mmoa_provider_incomplete',
-				__( 'Mailgun is missing its sending API key or domain.', 'modern-mailer-oauth' )
+				__( 'Mailgun is missing its sending API key or domain.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -111,7 +111,7 @@ class Mailgun extends Abstract_Provider {
 		if ( [] === $recipients ) {
 			return new WP_Error(
 				'mmoa_no_recipient',
-				__( 'The message has no recipient.', 'modern-mailer-oauth' )
+				__( 'The message has no recipient.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -147,7 +147,7 @@ class Mailgun extends Abstract_Provider {
 		if ( '' === $key || '' === $domain ) {
 			return new WP_Error(
 				'mmoa_provider_incomplete',
-				__( 'Mailgun is missing its sending API key or domain.', 'modern-mailer-oauth' )
+				__( 'Mailgun is missing its sending API key or domain.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -217,7 +217,7 @@ class Mailgun extends Abstract_Provider {
 	protected function request_token() {
 		return new WP_Error(
 			'mmoa_not_applicable',
-			__( 'Mailgun authenticates with an API key and mints no tokens.', 'modern-mailer-oauth' )
+			__( 'Mailgun authenticates with an API key and mints no tokens.', 'mme-mail-to-smtp' )
 		);
 	}
 
@@ -229,7 +229,7 @@ class Mailgun extends Abstract_Provider {
 		if ( 401 === $status ) {
 			return new WP_Error(
 				'mmoa_mailgun_unauthorized',
-				__( 'Mailgun rejected the API key. Note that a sending key and the account API key are different things, and only a sending key works here.', 'modern-mailer-oauth' ),
+				__( 'Mailgun rejected the API key. Note that a sending key and the account API key are different things, and only a sending key works here.', 'mme-mail-to-smtp' ),
 				[ 'status' => $status ]
 			);
 		}
@@ -239,7 +239,7 @@ class Mailgun extends Abstract_Provider {
 				'mmoa_mailgun_no_domain',
 				sprintf(
 					/* translators: 1: domain name, 2: selected region. */
-					__( 'Mailgun has no domain %1$s in the %2$s region. This is almost always the region setting rather than the domain name - a domain created in one region does not exist in the other.', 'modern-mailer-oauth' ),
+					__( 'Mailgun has no domain %1$s in the %2$s region. This is almost always the region setting rather than the domain name - a domain created in one region does not exist in the other.', 'mme-mail-to-smtp' ),
 					$domain,
 					$region
 				),
@@ -251,9 +251,9 @@ class Mailgun extends Abstract_Provider {
 			'mmoa_mailgun_error',
 			sprintf(
 				/* translators: 1: HTTP status, 2: error message from Mailgun. */
-				__( 'Mailgun returned HTTP %1$d: %2$s', 'modern-mailer-oauth' ),
+				__( 'Mailgun returned HTTP %1$d: %2$s', 'mme-mail-to-smtp' ),
 				$status,
-				'' !== $detail ? $detail : __( 'no details supplied', 'modern-mailer-oauth' )
+				'' !== $detail ? $detail : __( 'no details supplied', 'mme-mail-to-smtp' )
 			),
 			[ 'status' => $status ]
 		);

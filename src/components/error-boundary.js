@@ -51,20 +51,20 @@ class ErrorBoundary extends Component {
 			<div id="mmoa-app">
 				<div className="mx-auto w-full max-w-2xl px-6 py-16">
 					<h1 className="font-display m-0 text-2xl font-normal tracking-[-0.02em] text-foreground">
-						{ __( 'This screen stopped responding.', 'modern-mailer-oauth' ) }
+						{ __( 'This screen stopped responding.', 'mme-mail-to-smtp' ) }
 					</h1>
 
 					<p className="mt-4 mb-0 text-sm text-muted-foreground">
 						{ __(
 							'Your change was most likely saved - the failure happens after the save was sent. Reload to check.',
-							'modern-mailer-oauth'
+							'mme-mail-to-smtp'
 						) }
 					</p>
 
 					<p className="mt-3 mb-0 text-sm text-muted-foreground">
 						{ __(
 							'A browser translation is the usual cause. Turning it off for this screen avoids it.',
-							'modern-mailer-oauth'
+							'mme-mail-to-smtp'
 						) }
 					</p>
 
@@ -73,13 +73,13 @@ class ErrorBoundary extends Component {
 						onClick={ () => window.location.reload() }
 						className="mt-6 inline-flex h-9 cursor-pointer items-center rounded-md border-0 bg-primary px-4 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
 					>
-						{ __( 'Reload this screen', 'modern-mailer-oauth' ) }
+						{ __( 'Reload this screen', 'mme-mail-to-smtp' ) }
 					</button>
 
 					{ /* Folded away: useful when reporting the fault, noise otherwise. */ }
 					<details className="mt-8">
 						<summary className="cursor-pointer text-xs text-muted-foreground">
-							{ __( 'Technical detail', 'modern-mailer-oauth' ) }
+							{ __( 'Technical detail', 'mme-mail-to-smtp' ) }
 						</summary>
 						<pre className="mt-2 overflow-x-auto rounded-md bg-muted p-3 text-xs text-muted-foreground">
 							{ String( error?.stack || error?.message || error ) }

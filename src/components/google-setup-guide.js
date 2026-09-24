@@ -95,17 +95,17 @@ const GoogleSetupGuide = ( { docsUrl, redirectUri } ) => (
 				type="button"
 				className="cursor-pointer self-center border-0 bg-transparent p-0 text-[13px] text-brand-deep underline-offset-2 hover:underline"
 			>
-				{ __( 'Documentation', 'modern-mailer-oauth' ) }
+				{ __( 'Documentation', 'mme-mail-to-smtp' ) }
 			</button>
 		</DialogTrigger>
 
 		<DialogContent>
 			<DialogHeader>
-				<DialogTitle>{ __( 'Connecting Google', 'modern-mailer-oauth' ) }</DialogTitle>
+				<DialogTitle>{ __( 'Connecting Google', 'mme-mail-to-smtp' ) }</DialogTitle>
 				<DialogDescription>
 					{ __(
 						'Three ways in, depending on the mailbox and who can authorise it.',
-						'modern-mailer-oauth'
+						'mme-mail-to-smtp'
 					) }
 				</DialogDescription>
 			</DialogHeader>
@@ -115,118 +115,118 @@ const GoogleSetupGuide = ( { docsUrl, redirectUri } ) => (
 					<div className="grid gap-2">
 						<Note>
 							<strong className="font-medium text-foreground">
-								{ __( 'One-click', 'modern-mailer-oauth' ) }
+								{ __( 'One-click', 'mme-mail-to-smtp' ) }
 							</strong>
 							{ ' - ' }
 							{ __(
 								'nothing to set up. Sign in and send as that mailbox.',
-								'modern-mailer-oauth'
+								'mme-mail-to-smtp'
 							) }
 						</Note>
 						<Note>
 							<strong className="font-medium text-foreground">
-								{ __( 'My own OAuth client', 'modern-mailer-oauth' ) }
+								{ __( 'My own OAuth client', 'mme-mail-to-smtp' ) }
 							</strong>
 							{ ' - ' }
 							{ __(
 								'an OAuth client you create in your own Google Cloud project, so nothing passes through anybody else.',
-								'modern-mailer-oauth'
+								'mme-mail-to-smtp'
 							) }
 						</Note>
 						<Note>
 							<strong className="font-medium text-foreground">
-								{ __( 'Service account', 'modern-mailer-oauth' ) }
+								{ __( 'Service account', 'mme-mail-to-smtp' ) }
 							</strong>
 							{ ' - ' }
 							{ __(
 								'Workspace only, and the best where available: no sign-in and nothing expires. Needs a domain administrator.',
-								'modern-mailer-oauth'
+								'mme-mail-to-smtp'
 							) }
 						</Note>
 					</div>
 
 					<div className="grid gap-3">
 						<h4 className="m-0 text-sm font-semibold">
-							{ __( 'My own OAuth client, step by step', 'modern-mailer-oauth' ) }
+							{ __( 'My own OAuth client, step by step', 'mme-mail-to-smtp' ) }
 						</h4>
 
 						<ol className="m-0 grid list-none gap-5 p-0">
-							<Step n="1" title={ __( 'Create or choose a Google Cloud project', 'modern-mailer-oauth' ) }>
+							<Step n="1" title={ __( 'Create or choose a Google Cloud project', 'mme-mail-to-smtp' ) }>
 								<Note>
 									{ __(
 										'Any project will do. The Gmail API is free at this volume.',
-										'modern-mailer-oauth'
+										'mme-mail-to-smtp'
 									) }
 								</Note>
 							</Step>
 
-							<Step n="2" title={ __( 'Enable the Gmail API', 'modern-mailer-oauth' ) }>
+							<Step n="2" title={ __( 'Enable the Gmail API', 'mme-mail-to-smtp' ) }>
 								<Note>
 									{ __(
 										'APIs & Services, then Library, then Gmail API, then Enable.',
-										'modern-mailer-oauth'
+										'mme-mail-to-smtp'
 									) }
 								</Note>
 							</Step>
 
-							<Step n="3" title={ __( 'Configure the OAuth consent screen', 'modern-mailer-oauth' ) }>
+							<Step n="3" title={ __( 'Configure the OAuth consent screen', 'mme-mail-to-smtp' ) }>
 								<Note>
 									{ __(
 										'On a Workspace domain choose Internal: no test users, no verification, no seven-day expiry. Consumer accounts can only choose External.',
-										'modern-mailer-oauth'
+										'mme-mail-to-smtp'
 									) }
 								</Note>
 								<Note>
 									{ __(
 										'Add one scope and no others:',
-										'modern-mailer-oauth'
+										'mme-mail-to-smtp'
 									) }
 								</Note>
 								<Copyable
 									value={ SEND_SCOPE }
-									label={ __( 'Copy the scope', 'modern-mailer-oauth' ) }
+									label={ __( 'Copy the scope', 'mme-mail-to-smtp' ) }
 								/>
 							</Step>
 
-							<Step n="4" title={ __( 'Publish the app', 'modern-mailer-oauth' ) }>
+							<Step n="4" title={ __( 'Publish the app', 'mme-mail-to-smtp' ) }>
 								<Note>
 									{ __(
 										'Press Publish app so the status reads In production.',
-										'modern-mailer-oauth'
+										'mme-mail-to-smtp'
 									) }
 								</Note>
 								<Note>
 									{ __(
 										'Google shows an unverified-app notice until verification completes; choose Advanced, then continue. It is the ordinary review, not the paid assessment.',
-										'modern-mailer-oauth'
+										'mme-mail-to-smtp'
 									) }
 								</Note>
 							</Step>
 
-							<Step n="5" title={ __( 'Create the OAuth client', 'modern-mailer-oauth' ) }>
+							<Step n="5" title={ __( 'Create the OAuth client', 'mme-mail-to-smtp' ) }>
 								<Note>
 									{ __(
 										'Credentials, then Create credentials, then OAuth client ID. Choose Web application, not Desktop.',
-										'modern-mailer-oauth'
+										'mme-mail-to-smtp'
 									) }
 								</Note>
 								<Note>
 									{ __(
 										'Under Authorised redirect URIs, add this exact address:',
-										'modern-mailer-oauth'
+										'mme-mail-to-smtp'
 									) }
 								</Note>
 								<Copyable
 									value={ redirectUri }
-									label={ __( 'Copy redirect URI', 'modern-mailer-oauth' ) }
+									label={ __( 'Copy redirect URI', 'mme-mail-to-smtp' ) }
 								/>
 							</Step>
 
-							<Step n="6" title={ __( 'Paste, save, sign in', 'modern-mailer-oauth' ) }>
+							<Step n="6" title={ __( 'Paste, save, sign in', 'mme-mail-to-smtp' ) }>
 								<Note>
 									{ __(
 										'Paste the client ID and secret into the fields on this screen and save. The sign-in button stays disabled until you do.',
-										'modern-mailer-oauth'
+										'mme-mail-to-smtp'
 									) }
 								</Note>
 							</Step>
@@ -239,19 +239,19 @@ const GoogleSetupGuide = ( { docsUrl, redirectUri } ) => (
 						<Alert variant="warning">
 							<TriangleAlert />
 							<AlertTitle>
-								{ __( 'Publish the app, or it stops sending every seven days', 'modern-mailer-oauth' ) }
+								{ __( 'Publish the app, or it stops sending every seven days', 'mme-mail-to-smtp' ) }
 							</AlertTitle>
 							<AlertDescription>
 								<p className="m-0">
 									{ __(
 										'In Testing, Google expires every refresh token after seven days, and only listed Test users can sign in.',
-										'modern-mailer-oauth'
+										'mme-mail-to-smtp'
 									) }
 								</p>
 								<p className="mt-2 mb-0">
 									{ __(
 										'Publishing removes both. It is step 4 above, and it is the one people skip.',
-										'modern-mailer-oauth'
+										'mme-mail-to-smtp'
 									) }
 								</p>
 							</AlertDescription>
@@ -260,30 +260,30 @@ const GoogleSetupGuide = ( { docsUrl, redirectUri } ) => (
 
 					<div className="grid gap-2 rounded-lg border bg-muted/40 px-4 py-3">
 						<h4 className="m-0 text-sm font-semibold">
-							{ __( 'It worked, then stopped a week later', 'modern-mailer-oauth' ) }
+							{ __( 'It worked, then stopped a week later', 'mme-mail-to-smtp' ) }
 						</h4>
 						<Note>
 							{ __(
 								'The consent screen is still in Testing. Publish it, then sign in again here.',
-								'modern-mailer-oauth'
+								'mme-mail-to-smtp'
 							) }
 						</Note>
 					</div>
 
 					<div className="grid gap-2">
 						<h4 className="m-0 text-sm font-semibold">
-							{ __( 'Service account, in short', 'modern-mailer-oauth' ) }
+							{ __( 'Service account, in short', 'mme-mail-to-smtp' ) }
 						</h4>
 						<Note>
 							{ __(
 								'Create a service account, download its JSON key, and paste it here with the mailbox to send as. A domain administrator authorises it once.',
-								'modern-mailer-oauth'
+								'mme-mail-to-smtp'
 							) }
 						</Note>
 						<Note>
 							{ __(
 								'No sign-in and no refresh token, so nothing expires. Not available for a consumer gmail.com address.',
-								'modern-mailer-oauth'
+								'mme-mail-to-smtp'
 							) }
 						</Note>
 					</div>
@@ -298,7 +298,7 @@ const GoogleSetupGuide = ( { docsUrl, redirectUri } ) => (
 					className="mr-auto inline-flex items-center gap-1.5 text-[13px] text-brand-deep no-underline hover:underline"
 				>
 					<ExternalLink className="size-3.5" />
-					{ __( 'Consent screen', 'modern-mailer-oauth' ) }
+					{ __( 'Consent screen', 'mme-mail-to-smtp' ) }
 				</a>
 
 				<a
@@ -308,7 +308,7 @@ const GoogleSetupGuide = ( { docsUrl, redirectUri } ) => (
 					className="inline-flex items-center gap-1.5 text-[13px] text-brand-deep no-underline hover:underline"
 				>
 					<ExternalLink className="size-3.5" />
-					{ __( 'Credentials', 'modern-mailer-oauth' ) }
+					{ __( 'Credentials', 'mme-mail-to-smtp' ) }
 				</a>
 
 				{ docsUrl && (
@@ -319,13 +319,13 @@ const GoogleSetupGuide = ( { docsUrl, redirectUri } ) => (
 						className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground no-underline hover:underline"
 					>
 						<ExternalLink className="size-3.5" />
-						{ __( "Google's own documentation", 'modern-mailer-oauth' ) }
+						{ __( "Google's own documentation", 'mme-mail-to-smtp' ) }
 					</a>
 				) }
 
 				<DialogClose asChild>
 					<Button variant="outline" size="sm">
-						{ __( 'Close', 'modern-mailer-oauth' ) }
+						{ __( 'Close', 'mme-mail-to-smtp' ) }
 					</Button>
 				</DialogClose>
 			</DialogFooter>

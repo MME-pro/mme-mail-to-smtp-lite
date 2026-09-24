@@ -18,7 +18,7 @@ import { GoogleButton } from './google-button';
 const FAMILY = {
 	google: {
 		Button: GoogleButton,
-		name: __( 'Google', 'modern-mailer-oauth' ),
+		name: __( 'Google', 'mme-mail-to-smtp' ),
 	},
 };
 
@@ -40,7 +40,7 @@ const OneClickConnect = ( { family, oneClick, dirty, heading } ) => {
 					<AlertDescription>
 						{ __(
 							'One-click setup is switched off on this site. Connect using your own OAuth client instead.',
-							'modern-mailer-oauth'
+							'mme-mail-to-smtp'
 						) }
 					</AlertDescription>
 				</Alert>
@@ -62,7 +62,7 @@ const OneClickConnect = ( { family, oneClick, dirty, heading } ) => {
 
 			<div className="grid gap-3 pt-6">
 				<h4 className="text-sm font-medium m-0">
-					{ heading || __( 'Account', 'modern-mailer-oauth' ) }
+					{ heading || __( 'Account', 'mme-mail-to-smtp' ) }
 				</h4>
 
 				{ state.connected ? (
@@ -72,10 +72,10 @@ const OneClickConnect = ( { family, oneClick, dirty, heading } ) => {
 							{ state.account
 								? sprintf(
 										/* translators: %s: connected email address. */
-										__( 'Connected as %s.', 'modern-mailer-oauth' ),
+										__( 'Connected as %s.', 'mme-mail-to-smtp' ),
 										state.account
 								  )
-								: __( 'Connected.', 'modern-mailer-oauth' ) }
+								: __( 'Connected.', 'mme-mail-to-smtp' ) }
 						</span>
 						<Button
 							asChild
@@ -91,7 +91,7 @@ const OneClickConnect = ( { family, oneClick, dirty, heading } ) => {
 										! window.confirm(
 											__(
 												'This revokes the grant and forgets it here. Sending stops. Continue?',
-												'modern-mailer-oauth'
+												'mme-mail-to-smtp'
 											)
 										)
 									) {
@@ -99,7 +99,7 @@ const OneClickConnect = ( { family, oneClick, dirty, heading } ) => {
 									}
 								} }
 							>
-								{ __( 'Disconnect', 'modern-mailer-oauth' ) }
+								{ __( 'Disconnect', 'mme-mail-to-smtp' ) }
 							</a>
 						</Button>
 					</div>
@@ -111,7 +111,7 @@ const OneClickConnect = ( { family, oneClick, dirty, heading } ) => {
 								<AlertDescription>
 									{ __(
 										'You have unsaved changes. Signing in leaves this page and they will be lost.',
-										'modern-mailer-oauth'
+										'mme-mail-to-smtp'
 									) }
 								</AlertDescription>
 							</Alert>
@@ -127,7 +127,7 @@ const OneClickConnect = ( { family, oneClick, dirty, heading } ) => {
 								/* translators: %s: provider name, e.g. Google. */
 								__(
 									'Nothing to register with %s.',
-									'modern-mailer-oauth'
+									'mme-mail-to-smtp'
 								),
 								name
 							) }

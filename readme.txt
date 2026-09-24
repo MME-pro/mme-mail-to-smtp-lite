@@ -1,4 +1,4 @@
-=== MME-Mail to SMTP Lite ===
+=== MME-Mail to SMTP ===
 Contributors: builtwithmtw
 Tags: smtp, wp_mail, microsoft 365, gmail, oauth
 Requires at least: 6.5

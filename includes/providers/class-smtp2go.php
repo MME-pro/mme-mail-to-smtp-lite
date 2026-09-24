@@ -26,7 +26,7 @@ class Smtp2go extends Abstract_Api_Provider {
 	private const MAX_MIME_BYTES = 20971520;
 
 	public function get_label(): string {
-		return __( 'SMTP2GO', 'modern-mailer-oauth' );
+		return __( 'SMTP2GO', 'mme-mail-to-smtp' );
 	}
 
 	public function get_max_message_bytes(): int {
@@ -39,8 +39,8 @@ class Smtp2go extends Abstract_Api_Provider {
 
 	public static function describe(): array {
 		return [
-			'label'    => __( 'SMTP2GO', 'modern-mailer-oauth' ),
-			'summary'  => __( 'Used over HTTPS rather than SMTP, which matters where outbound mail ports are blocked.', 'modern-mailer-oauth' ),
+			'label'    => __( 'SMTP2GO', 'mme-mail-to-smtp' ),
+			'summary'  => __( 'Used over HTTPS rather than SMTP, which matters where outbound mail ports are blocked.', 'mme-mail-to-smtp' ),
 			'docs'     => 'https://apidoc.smtp2go.com/documentation/#/POST%20/email/send',
 			'category' => 'api',
 			'raw_mime' => false,
@@ -57,8 +57,8 @@ class Smtp2go extends Abstract_Api_Provider {
 		return [
 			Field::secret(
 				'smtp2go_api_key',
-				__( 'API key', 'modern-mailer-oauth' ),
-				__( 'From Settings, API Keys in SMTP2GO. It needs the Email Send permission.', 'modern-mailer-oauth' ),
+				__( 'API key', 'mme-mail-to-smtp' ),
+				__( 'From Settings, API Keys in SMTP2GO. It needs the Email Send permission.', 'mme-mail-to-smtp' ),
 				'api-...'
 			),
 		];

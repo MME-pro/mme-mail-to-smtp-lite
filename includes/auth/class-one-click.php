@@ -64,13 +64,13 @@ class One_Click {
 	 */
 	public function authorization_url( string $family, string $slot ) {
 		if ( ! Broker::is_family( $family ) ) {
-			return new WP_Error( 'mmoa_one_click_unknown_family', __( 'Unknown provider.', 'modern-mailer-oauth' ) );
+			return new WP_Error( 'mmoa_one_click_unknown_family', __( 'Unknown provider.', 'mme-mail-to-smtp' ) );
 		}
 
 		if ( ! Broker::is_available() ) {
 			return new WP_Error(
 				'mmoa_broker_disabled',
-				__( 'One-click setup is switched off on this site. Connect using your own OAuth client instead.', 'modern-mailer-oauth' )
+				__( 'One-click setup is switched off on this site. Connect using your own OAuth client instead.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -81,7 +81,7 @@ class One_Click {
 		if ( ! Broker::is_configured() ) {
 			return new WP_Error(
 				'mmoa_broker_unconfigured',
-				__( 'One-click setup has no setup service to talk to yet. Define MMOA_BROKER_URL with the address of yours, or connect using your own OAuth client, which needs no service at all.', 'modern-mailer-oauth' )
+				__( 'One-click setup has no setup service to talk to yet. Define MMOA_BROKER_URL with the address of yours, or connect using your own OAuth client, which needs no service at all.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -130,14 +130,14 @@ class One_Click {
 		if ( ! is_array( $saved ) ) {
 			return new WP_Error(
 				'mmoa_one_click_bad_state',
-				__( 'This setup link has expired or did not originate here. Start the connection again.', 'modern-mailer-oauth' )
+				__( 'This setup link has expired or did not originate here. Start the connection again.', 'mme-mail-to-smtp' )
 			);
 		}
 
 		if ( (int) $saved['user'] !== get_current_user_id() ) {
 			return new WP_Error(
 				'mmoa_one_click_wrong_user',
-				__( 'This setup was started by a different user account.', 'modern-mailer-oauth' )
+				__( 'This setup was started by a different user account.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -150,7 +150,7 @@ class One_Click {
 				'mmoa_one_click_denied',
 				sprintf(
 					/* translators: %s: reason reported by the setup service. */
-					__( 'The account was not connected: %s', 'modern-mailer-oauth' ),
+					__( 'The account was not connected: %s', 'mme-mail-to-smtp' ),
 					sanitize_text_field( $detail )
 				)
 			);
@@ -162,7 +162,7 @@ class One_Click {
 		if ( ! Broker::is_family( $family ) || '' === $handoff ) {
 			return new WP_Error(
 				'mmoa_one_click_no_handoff',
-				__( 'The setup service did not return a usable result. Start the connection again.', 'modern-mailer-oauth' )
+				__( 'The setup service did not return a usable result. Start the connection again.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -174,7 +174,7 @@ class One_Click {
 		if ( null === $slot ) {
 			return new WP_Error(
 				'mmoa_one_click_gone',
-				__( 'That connection no longer exists, so the sign-in could not be saved. Start again from the connection you want to use.', 'modern-mailer-oauth' )
+				__( 'That connection no longer exists, so the sign-in could not be saved. Start again from the connection you want to use.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -227,7 +227,7 @@ class One_Click {
 	 */
 	public function access_token( string $family, string $slot ) {
 		if ( ! Broker::is_family( $family ) ) {
-			return new WP_Error( 'mmoa_one_click_unknown_family', __( 'Unknown provider.', 'modern-mailer-oauth' ) );
+			return new WP_Error( 'mmoa_one_click_unknown_family', __( 'Unknown provider.', 'mme-mail-to-smtp' ) );
 		}
 
 		return $this->broker->token_for( $family, $this->settings->for_slot( $slot ) );
@@ -265,7 +265,7 @@ class One_Click {
 	 */
 	public function disconnect( string $family, string $slot ) {
 		if ( ! Broker::is_family( $family ) ) {
-			return new WP_Error( 'mmoa_one_click_unknown_family', __( 'Unknown provider.', 'modern-mailer-oauth' ) );
+			return new WP_Error( 'mmoa_one_click_unknown_family', __( 'Unknown provider.', 'mme-mail-to-smtp' ) );
 		}
 
 		$keys    = Broker::keys( $family );

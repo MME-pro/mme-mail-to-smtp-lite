@@ -1,5 +1,5 @@
 {
-  "name": "modern-mailer-oauth",
+  "name": "mme-mail-to-smtp",
   "version": "0.15.0",
   "private": true,
   "description": "Admin app for MME-Mail to SMTP.",

@@ -49,8 +49,8 @@ class App_Page {
 	 */
 	public function add_menu(): void {
 		add_menu_page(
-			__( 'MME-Mail to SMTP Lite', 'modern-mailer-oauth' ),
-			__( 'MME-Mail to SMTP Lite', 'modern-mailer-oauth' ),
+			__( 'MME-Mail to SMTP', 'mme-mail-to-smtp' ),
+			__( 'MME-Mail to SMTP', 'mme-mail-to-smtp' ),
 			self::CAPABILITY,
 			self::SLUG,
 			[ $this, 'render' ],
@@ -120,7 +120,7 @@ class App_Page {
 		// while every PHP string around it is translated.
 		wp_set_script_translations(
 			'mmoa-app',
-			'modern-mailer-oauth',
+			'mme-mail-to-smtp',
 			PLUGIN_DIR . 'languages'
 		);
 
@@ -171,13 +171,13 @@ class App_Page {
 		// This gives them somewhere to go above the app instead.
 		?>
 		<div class="wrap" style="margin:0;padding:0">
-			<h1 class="screen-reader-text"><?php esc_html_e( 'MME-Mail to SMTP Lite', 'modern-mailer-oauth' ); ?></h1>
+			<h1 class="screen-reader-text"><?php esc_html_e( 'MME-Mail to SMTP', 'mme-mail-to-smtp' ); ?></h1>
 			<hr class="wp-header-end" style="display:none" />
 
 			<div id="mmoa-app-root">
 				<noscript>
 					<p style="padding:2rem">
-						<?php esc_html_e( 'MME-Mail to SMTP needs JavaScript to show its settings.', 'modern-mailer-oauth' ); ?>
+						<?php esc_html_e( 'MME-Mail to SMTP needs JavaScript to show its settings.', 'mme-mail-to-smtp' ); ?>
 					</p>
 				</noscript>
 			</div>

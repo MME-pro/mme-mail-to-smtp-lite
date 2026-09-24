@@ -31,7 +31,7 @@ class Connections {
 	 */
 	public function all(): array {
 		return [
-			$this->describe( 'primary', Settings::SLOT_PRIMARY, __( 'Primary', 'modern-mailer-oauth' ), true ),
+			$this->describe( 'primary', Settings::SLOT_PRIMARY, __( 'Primary', 'mme-mail-to-smtp' ), true ),
 		];
 	}
 
@@ -61,7 +61,7 @@ class Connections {
 	public function name_for( string $id ): string {
 		unset( $id );
 
-		return __( 'Primary', 'modern-mailer-oauth' );
+		return __( 'Primary', 'mme-mail-to-smtp' );
 	}
 
 	/**

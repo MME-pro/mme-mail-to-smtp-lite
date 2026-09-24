@@ -31,7 +31,7 @@ const RedirectUri = ( { value, warning } ) => {
 	return (
 		<div className="grid gap-2">
 			<h4 className="text-sm font-medium m-0">
-				{ __( 'Redirect URI', 'modern-mailer-oauth' ) }
+				{ __( 'Redirect URI', 'mme-mail-to-smtp' ) }
 			</h4>
 
 			{ warning && (
@@ -49,7 +49,7 @@ const RedirectUri = ( { value, warning } ) => {
 					variant="outline"
 					size="icon"
 					onClick={ copy }
-					aria-label={ __( 'Copy redirect URI', 'modern-mailer-oauth' ) }
+					aria-label={ __( 'Copy redirect URI', 'mme-mail-to-smtp' ) }
 				>
 					{ copied ? <Check className="text-success" /> : <Copy /> }
 				</Button>

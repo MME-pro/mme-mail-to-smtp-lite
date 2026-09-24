@@ -40,7 +40,7 @@ class Jwt_Signer {
 		if ( ! $this->is_available() ) {
 			return new WP_Error(
 				'mmoa_no_openssl',
-				__( 'The OpenSSL PHP extension is required to authenticate with a Google service account.', 'modern-mailer-oauth' )
+				__( 'The OpenSSL PHP extension is required to authenticate with a Google service account.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -51,7 +51,7 @@ class Jwt_Signer {
 		if ( false === $key ) {
 			return new WP_Error(
 				'mmoa_bad_key',
-				__( 'The service account private key could not be read. Paste the whole private_key value from the downloaded JSON, including the BEGIN and END lines.', 'modern-mailer-oauth' )
+				__( 'The service account private key could not be read. Paste the whole private_key value from the downloaded JSON, including the BEGIN and END lines.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -63,7 +63,7 @@ class Jwt_Signer {
 		if ( ! openssl_sign( $signing, $sig, $key, OPENSSL_ALGO_SHA256 ) ) {
 			return new WP_Error(
 				'mmoa_sign_failed',
-				__( 'The authentication assertion could not be signed.', 'modern-mailer-oauth' )
+				__( 'The authentication assertion could not be signed.', 'mme-mail-to-smtp' )
 			);
 		}
 

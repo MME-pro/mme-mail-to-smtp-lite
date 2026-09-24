@@ -66,11 +66,11 @@ import OneClickConnect from '../components/one-click-connect';
  */
 
 const STEPS = [
-	{ id: 'provider', label: __( 'Provider', 'modern-mailer-oauth' ) },
-	{ id: 'connect', label: __( 'Credentials', 'modern-mailer-oauth' ) },
-	{ id: 'verify', label: __( 'Verify', 'modern-mailer-oauth' ) },
-	{ id: 'test', label: __( 'Test', 'modern-mailer-oauth' ) },
-	{ id: 'done', label: __( 'Finish', 'modern-mailer-oauth' ) },
+	{ id: 'provider', label: __( 'Provider', 'mme-mail-to-smtp' ) },
+	{ id: 'connect', label: __( 'Credentials', 'mme-mail-to-smtp' ) },
+	{ id: 'verify', label: __( 'Verify', 'mme-mail-to-smtp' ) },
+	{ id: 'test', label: __( 'Test', 'mme-mail-to-smtp' ) },
+	{ id: 'done', label: __( 'Finish', 'mme-mail-to-smtp' ) },
 ];
 
 const STEP_IDS = [ 'welcome', ...STEPS.map( ( step ) => step.id ) ];
@@ -184,7 +184,7 @@ const Step = ( { eyebrow, title, lead, children, back, actions } ) => (
 				{ back && (
 					<Button variant="ghost" onClick={ back }>
 						<ArrowLeft />
-						{ __( 'Back', 'modern-mailer-oauth' ) }
+						{ __( 'Back', 'mme-mail-to-smtp' ) }
 					</Button>
 				) }
 				<div className="ml-auto flex flex-wrap items-center gap-2">{ actions }</div>
@@ -203,19 +203,19 @@ const Step = ( { eyebrow, title, lead, children, back, actions } ) => (
  */
 const Welcome = ( { onStart, onSkip } ) => (
 	<Step
-		eyebrow={ __( 'Guided setup', 'modern-mailer-oauth' ) }
-		title={ __( 'Let us get this site sending properly.', 'modern-mailer-oauth' ) }
+		eyebrow={ __( 'Guided setup', 'mme-mail-to-smtp' ) }
+		title={ __( 'Let us get this site sending properly.', 'mme-mail-to-smtp' ) }
 		lead={ __(
 			'WordPress is currently handing email to the server’s own mail function, which most inboxes now treat as unsigned post. Four short steps connect a real mailbox instead, and nothing is written until you press Save.',
-			'modern-mailer-oauth'
+			'mme-mail-to-smtp'
 		) }
 		actions={
 			<>
 				<Button variant="ghost" onClick={ onSkip }>
-					{ __( 'Not now', 'modern-mailer-oauth' ) }
+					{ __( 'Not now', 'mme-mail-to-smtp' ) }
 				</Button>
 				<Button variant="brand" size="lg" onClick={ onStart }>
-					{ __( 'Begin setup', 'modern-mailer-oauth' ) }
+					{ __( 'Begin setup', 'mme-mail-to-smtp' ) }
 					<ArrowRight />
 				</Button>
 			</>
@@ -225,26 +225,26 @@ const Welcome = ( { onStart, onSkip } ) => (
 			{ [
 				{
 					icon: Plug,
-					title: __( 'Pick a provider', 'modern-mailer-oauth' ),
+					title: __( 'Pick a provider', 'mme-mail-to-smtp' ),
 					body: __(
 						'Google signs in with a single click. Everything else takes an API key.',
-						'modern-mailer-oauth'
+						'mme-mail-to-smtp'
 					),
 				},
 				{
 					icon: ShieldCheck,
-					title: __( 'Prove it works', 'modern-mailer-oauth' ),
+					title: __( 'Prove it works', 'mme-mail-to-smtp' ),
 					body: __(
 						'The credentials are checked against the provider before you leave this screen.',
-						'modern-mailer-oauth'
+						'mme-mail-to-smtp'
 					),
 				},
 				{
 					icon: Send,
-					title: __( 'Send one message', 'modern-mailer-oauth' ),
+					title: __( 'Send one message', 'mme-mail-to-smtp' ),
 					body: __(
 						'A real email, sent with the safety nets off, so a failure cannot hide behind a retry.',
-						'modern-mailer-oauth'
+						'mme-mail-to-smtp'
 					),
 				},
 			].map( ( { icon: Icon, title, body } ) => (
@@ -363,7 +363,7 @@ const Setup = () => {
 		mutationFn: completeSetup,
 		onSuccess: () => {
 			queryClient.invalidateQueries( { queryKey: [ 'bootstrap' ] } );
-			toast( __( 'Setup finished.', 'modern-mailer-oauth' ) );
+			toast( __( 'Setup finished.', 'mme-mail-to-smtp' ) );
 			navigate( '/dashboard' );
 		},
 		onError: () => navigate( '/dashboard' ),
@@ -397,7 +397,7 @@ const Setup = () => {
 			toast(
 				sprintf(
 					/* translators: %s: comma-separated list of field labels. */
-					__( 'Fill in %s first.', 'modern-mailer-oauth' ),
+					__( 'Fill in %s first.', 'mme-mail-to-smtp' ),
 					gaps.map( ( field ) => field.label ).join( ', ' )
 				),
 				'bad'
@@ -424,7 +424,7 @@ const Setup = () => {
 			onClick={ () => leave.mutate() }
 			className="cursor-pointer border-0 bg-transparent p-0 text-[13px] text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
 		>
-			{ __( 'Finish this later', 'modern-mailer-oauth' ) }
+			{ __( 'Finish this later', 'mme-mail-to-smtp' ) }
 		</button>
 	);
 
@@ -435,14 +435,14 @@ const Setup = () => {
 					<Step
 						eyebrow={ sprintf(
 							/* translators: 1: current step number, 2: total steps. */
-							__( 'Step %1$d of %2$d', 'modern-mailer-oauth' ),
+							__( 'Step %1$d of %2$d', 'mme-mail-to-smtp' ),
 							1,
 							STEPS.length
 						) }
-						title={ __( 'How should this site send its email?', 'modern-mailer-oauth' ) }
+						title={ __( 'How should this site send its email?', 'mme-mail-to-smtp' ) }
 						lead={ __(
 							'Google can be connected without registering anything, by signing in. The rest need an API key from the service, which takes a minute in their console.',
-							'modern-mailer-oauth'
+							'mme-mail-to-smtp'
 						) }
 						back={ () => go( 'welcome' ) }
 						actions={
@@ -452,7 +452,7 @@ const Setup = () => {
 								disabled={ ! provider }
 								onClick={ () => go( 'connect' ) }
 							>
-								{ __( 'Continue', 'modern-mailer-oauth' ) }
+								{ __( 'Continue', 'mme-mail-to-smtp' ) }
 								<ArrowRight />
 							</Button>
 						}
@@ -472,7 +472,7 @@ const Setup = () => {
 							<p className="m-0 text-xs text-muted-foreground">
 								{ __(
 									'Choose one to continue. It can be changed later without losing anything.',
-									'modern-mailer-oauth'
+									'mme-mail-to-smtp'
 								) }
 							</p>
 						) }
@@ -489,15 +489,15 @@ const Setup = () => {
 				if ( ! current ) {
 					return (
 						<Step
-							eyebrow={ __( 'Guided setup', 'modern-mailer-oauth' ) }
-							title={ __( 'No provider chosen yet', 'modern-mailer-oauth' ) }
+							eyebrow={ __( 'Guided setup', 'mme-mail-to-smtp' ) }
+							title={ __( 'No provider chosen yet', 'mme-mail-to-smtp' ) }
 							lead={ __(
 								'This step asks for the credentials the provider needs, and which credentials those are depends on the provider. Go back and pick one.',
-								'modern-mailer-oauth'
+								'mme-mail-to-smtp'
 							) }
 							actions={
 								<Button variant="brand" size="lg" onClick={ () => go( 'provider' ) }>
-									{ __( 'Choose a provider', 'modern-mailer-oauth' ) }
+									{ __( 'Choose a provider', 'mme-mail-to-smtp' ) }
 									<ArrowRight />
 								</Button>
 							}
@@ -509,14 +509,14 @@ const Setup = () => {
 					<Step
 						eyebrow={ sprintf(
 							/* translators: 1: current step number, 2: total steps. */
-							__( 'Step %1$d of %2$d', 'modern-mailer-oauth' ),
+							__( 'Step %1$d of %2$d', 'mme-mail-to-smtp' ),
 							2,
 							STEPS.length
 						) }
 						title={ sprintf(
 							/* translators: %s: provider name, e.g. Brevo. */
-							__( 'Connect %s', 'modern-mailer-oauth' ),
-							current?.label || __( 'the provider', 'modern-mailer-oauth' )
+							__( 'Connect %s', 'mme-mail-to-smtp' ),
+							current?.label || __( 'the provider', 'mme-mail-to-smtp' )
 						) }
 						lead={ current?.summary }
 						back={ () => go( 'provider' ) }
@@ -527,7 +527,7 @@ const Setup = () => {
 								busy={ save.isPending }
 								onClick={ saveThenContinue }
 							>
-								{ __( 'Save and continue', 'modern-mailer-oauth' ) }
+								{ __( 'Save and continue', 'mme-mail-to-smtp' ) }
 								<ArrowRight />
 							</Button>
 						}
@@ -554,7 +554,7 @@ const Setup = () => {
 											rel="noreferrer"
 											className="text-[13px] text-brand-deep no-underline hover:underline"
 										>
-											{ __( 'Documentation', 'modern-mailer-oauth' ) }
+											{ __( 'Documentation', 'mme-mail-to-smtp' ) }
 										</a>
 									)
 								) }
@@ -596,26 +596,26 @@ const Setup = () => {
 					<Step
 						eyebrow={ sprintf(
 							/* translators: 1: current step number, 2: total steps. */
-							__( 'Step %1$d of %2$d', 'modern-mailer-oauth' ),
+							__( 'Step %1$d of %2$d', 'mme-mail-to-smtp' ),
 							3,
 							STEPS.length
 						) }
-						title={ __( 'Check the credentials reach the mailbox', 'modern-mailer-oauth' ) }
+						title={ __( 'Check the credentials reach the mailbox', 'mme-mail-to-smtp' ) }
 						lead={ __(
 							'This asks the provider whether it recognises what was saved, and whether the mailbox is one this connection is allowed to send from. Nothing is emailed yet.',
-							'modern-mailer-oauth'
+							'mme-mail-to-smtp'
 						) }
 						back={ () => go( 'connect' ) }
 						actions={
 							<>
 								{ verifyResult && ! verifyResult.ok && (
 									<Button variant="ghost" onClick={ () => go( 'test' ) }>
-										{ __( 'Continue anyway', 'modern-mailer-oauth' ) }
+										{ __( 'Continue anyway', 'mme-mail-to-smtp' ) }
 									</Button>
 								) }
 								{ verifyResult?.ok ? (
 									<Button variant="brand" size="lg" onClick={ () => go( 'test' ) }>
-										{ __( 'Continue', 'modern-mailer-oauth' ) }
+										{ __( 'Continue', 'mme-mail-to-smtp' ) }
 										<ArrowRight />
 									</Button>
 								) : (
@@ -627,8 +627,8 @@ const Setup = () => {
 									>
 										<ShieldCheck />
 										{ verifyResult
-											? __( 'Check again', 'modern-mailer-oauth' )
-											: __( 'Verify connection', 'modern-mailer-oauth' ) }
+											? __( 'Check again', 'mme-mail-to-smtp' )
+											: __( 'Verify connection', 'mme-mail-to-smtp' ) }
 									</Button>
 								) }
 							</>
@@ -660,18 +660,18 @@ const Setup = () => {
 								     "Verified." would print the word twice. */ }
 								<p className="m-0 text-sm font-medium">
 									{ verify.isPending
-										? __( 'Asking the provider…', 'modern-mailer-oauth' )
+										? __( 'Asking the provider…', 'mme-mail-to-smtp' )
 										: verifyResult?.ok
-										? __( 'The provider accepted it.', 'modern-mailer-oauth' )
+										? __( 'The provider accepted it.', 'mme-mail-to-smtp' )
 										: verifyResult
-										? __( 'The provider refused.', 'modern-mailer-oauth' )
-										: __( 'Not checked yet.', 'modern-mailer-oauth' ) }
+										? __( 'The provider refused.', 'mme-mail-to-smtp' )
+										: __( 'Not checked yet.', 'mme-mail-to-smtp' ) }
 								</p>
 								<p className="mt-1 mb-0 max-w-[62ch] text-[13px] leading-relaxed text-muted-foreground">
 									{ verifyResult?.message ||
 										__(
 											'Press Verify. Any unsaved edit on the previous step is saved first, because the check runs against what is stored.',
-											'modern-mailer-oauth'
+											'mme-mail-to-smtp'
 										) }
 								</p>
 							</div>
@@ -683,7 +683,7 @@ const Setup = () => {
 								<AlertDescription>
 									{ __(
 										'The message above comes from the provider, not from this plugin - it names what is actually wrong. Go back a step to correct it.',
-										'modern-mailer-oauth'
+										'mme-mail-to-smtp'
 									) }
 								</AlertDescription>
 							</Alert>
@@ -696,14 +696,14 @@ const Setup = () => {
 					<Step
 						eyebrow={ sprintf(
 							/* translators: 1: current step number, 2: total steps. */
-							__( 'Step %1$d of %2$d', 'modern-mailer-oauth' ),
+							__( 'Step %1$d of %2$d', 'mme-mail-to-smtp' ),
 							4,
 							STEPS.length
 						) }
-						title={ __( 'Send one real message', 'modern-mailer-oauth' ) }
+						title={ __( 'Send one real message', 'mme-mail-to-smtp' ) }
 						lead={ __(
 							'It goes out over this connection with the retry queue switched off, so a failure here is the connection failing rather than something else quietly covering for it.',
-							'modern-mailer-oauth'
+							'mme-mail-to-smtp'
 						) }
 						back={ () => go( 'verify' ) }
 						actions={
@@ -719,11 +719,11 @@ const Setup = () => {
 								>
 									<Send />
 									{ testResult
-										? __( 'Send another', 'modern-mailer-oauth' )
-										: __( 'Send test', 'modern-mailer-oauth' ) }
+										? __( 'Send another', 'mme-mail-to-smtp' )
+										: __( 'Send test', 'mme-mail-to-smtp' ) }
 								</Button>
 								<Button variant="brand" size="lg" onClick={ () => go( 'done' ) }>
-									{ __( 'Continue', 'modern-mailer-oauth' ) }
+									{ __( 'Continue', 'mme-mail-to-smtp' ) }
 									<ArrowRight />
 								</Button>
 							</>
@@ -731,11 +731,11 @@ const Setup = () => {
 					>
 						<div className="max-w-md">
 							<FormField
-								label={ __( 'Send to', 'modern-mailer-oauth' ) }
+								label={ __( 'Send to', 'mme-mail-to-smtp' ) }
 								htmlFor="mmoa-setup-test-to"
 								help={ __(
 									'Your own address is the fastest way to find out. Somewhere outside this domain tells you more.',
-									'modern-mailer-oauth'
+									'mme-mail-to-smtp'
 								) }
 							>
 								<input
@@ -764,21 +764,21 @@ const Setup = () => {
 
 				return (
 					<Step
-						eyebrow={ __( 'Setup complete', 'modern-mailer-oauth' ) }
+						eyebrow={ __( 'Setup complete', 'mme-mail-to-smtp' ) }
 						title={
 							sending
-								? __( 'WordPress is sending through your provider.', 'modern-mailer-oauth' )
-								: __( 'Nothing is configured yet.', 'modern-mailer-oauth' )
+								? __( 'WordPress is sending through your provider.', 'mme-mail-to-smtp' )
+								: __( 'Nothing is configured yet.', 'mme-mail-to-smtp' )
 						}
 						lead={
 							sending
 								? __(
 										'Every message this site sends now goes out over this connection, and every attempt is recorded with whatever the provider said about it.',
-										'modern-mailer-oauth'
+										'mme-mail-to-smtp'
 								  )
 								: __(
 										'You can leave now and come back to this at any time - the wizard is always available from the dashboard.',
-										'modern-mailer-oauth'
+										'mme-mail-to-smtp'
 								  )
 						}
 						back={ () => go( 'test' ) }
@@ -790,29 +790,29 @@ const Setup = () => {
 								onClick={ () => finish.mutate() }
 							>
 								<Check />
-								{ __( 'Go to the dashboard', 'modern-mailer-oauth' ) }
+								{ __( 'Go to the dashboard', 'mme-mail-to-smtp' ) }
 							</Button>
 						}
 					>
 						<dl className="m-0 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-3">
 							{ [
 								{
-									term: __( 'Provider', 'modern-mailer-oauth' ),
-									value: current?.label || __( 'None', 'modern-mailer-oauth' ),
+									term: __( 'Provider', 'mme-mail-to-smtp' ),
+									value: current?.label || __( 'None', 'mme-mail-to-smtp' ),
 								},
 								{
-									term: __( 'Sends as', 'modern-mailer-oauth' ),
+									term: __( 'Sends as', 'mme-mail-to-smtp' ),
 									value:
 										values.from_email ||
-										__( 'Not set', 'modern-mailer-oauth' ),
+										__( 'Not set', 'mme-mail-to-smtp' ),
 								},
 								{
-									term: __( 'Test message', 'modern-mailer-oauth' ),
+									term: __( 'Test message', 'mme-mail-to-smtp' ),
 									value: testResult
 										? testResult.ok
-											? __( 'Accepted', 'modern-mailer-oauth' )
-											: __( 'Refused', 'modern-mailer-oauth' )
-										: __( 'Not sent', 'modern-mailer-oauth' ),
+											? __( 'Accepted', 'mme-mail-to-smtp' )
+											: __( 'Refused', 'mme-mail-to-smtp' )
+										: __( 'Not sent', 'mme-mail-to-smtp' ),
 									tone: testResult ? ( testResult.ok ? 'ok' : 'bad' ) : null,
 								},
 							].map( ( { term, value, tone } ) => (
@@ -867,7 +867,7 @@ const Setup = () => {
 					<KeyRound className="size-3" />
 					{ __(
 						'Credentials are stored on this site and sent only to the provider they belong to.',
-						'modern-mailer-oauth'
+						'mme-mail-to-smtp'
 					) }
 				</p>
 			) }

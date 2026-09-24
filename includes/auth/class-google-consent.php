@@ -79,7 +79,7 @@ class Google_Consent {
 		if ( '' === $client_id || '' === $scoped->secrets()->get( 'google_client_sec' ) ) {
 			return new WP_Error(
 				'mmoa_gmail_oauth_incomplete',
-				__( 'Enter and save the OAuth client ID and client secret before connecting.', 'modern-mailer-oauth' )
+				__( 'Enter and save the OAuth client ID and client secret before connecting.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -143,14 +143,14 @@ class Google_Consent {
 		if ( ! is_array( $saved ) ) {
 			return new WP_Error(
 				'mmoa_oauth_bad_state',
-				__( 'This authorization link has expired or did not originate here. Start the connection again.', 'modern-mailer-oauth' )
+				__( 'This authorization link has expired or did not originate here. Start the connection again.', 'mme-mail-to-smtp' )
 			);
 		}
 
 		if ( (int) $saved['user'] !== get_current_user_id() ) {
 			return new WP_Error(
 				'mmoa_oauth_wrong_user',
-				__( 'This authorization was started by a different user account.', 'modern-mailer-oauth' )
+				__( 'This authorization was started by a different user account.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -161,7 +161,7 @@ class Google_Consent {
 				'mmoa_oauth_denied',
 				sprintf(
 					/* translators: %s: error code returned by Google. */
-					__( 'Google did not grant access: %s', 'modern-mailer-oauth' ),
+					__( 'Google did not grant access: %s', 'mme-mail-to-smtp' ),
 					sanitize_text_field( (string) $request['error'] )
 				)
 			);
@@ -172,7 +172,7 @@ class Google_Consent {
 		if ( '' === $code ) {
 			return new WP_Error(
 				'mmoa_oauth_no_code',
-				__( 'Google did not return an authorization code.', 'modern-mailer-oauth' )
+				__( 'Google did not return an authorization code.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -188,7 +188,7 @@ class Google_Consent {
 		if ( null === $slot ) {
 			return new WP_Error(
 				'mmoa_oauth_gone',
-				__( 'That connection no longer exists, so the sign-in could not be saved. Start again from the connection you want to use.', 'modern-mailer-oauth' )
+				__( 'That connection no longer exists, so the sign-in could not be saved. Start again from the connection you want to use.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -256,7 +256,7 @@ class Google_Consent {
 		if ( is_wp_error( $response ) ) {
 			return new WP_Error(
 				'mmoa_oauth_revoke_failed',
-				__( 'The account was disconnected here, but Google could not be reached to revoke the grant. Remove it manually under your Google account permissions.', 'modern-mailer-oauth' )
+				__( 'The account was disconnected here, but Google could not be reached to revoke the grant. Remove it manually under your Google account permissions.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -280,7 +280,7 @@ class Google_Consent {
 		if ( $missing_refresh ) {
 			return new WP_Error(
 				'mmoa_oauth_no_refresh_token',
-				__( 'Google authorized the connection but withheld a refresh token, so sending would stop within the hour. This happens when the account has already granted this client access. Remove this app under your Google account permissions, then connect again.', 'modern-mailer-oauth' )
+				__( 'Google authorized the connection but withheld a refresh token, so sending would stop within the hour. This happens when the account has already granted this client access. Remove this app under your Google account permissions, then connect again.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -288,10 +288,10 @@ class Google_Consent {
 		$description = (string) ( $data['error_description'] ?? '' );
 
 		$hints = [
-			'redirect_uri_mismatch' => __( 'The redirect URI does not match the one registered on your OAuth client. Copy the exact value shown on this screen into the Google Cloud console, including the scheme and any trailing parameters.', 'modern-mailer-oauth' ),
-			'invalid_client'        => __( 'Google rejected the OAuth client ID or client secret. Check both, and confirm they belong to a Web application client rather than a Desktop one.', 'modern-mailer-oauth' ),
-			'invalid_grant'         => __( 'The authorization code was already used or has expired. Start the connection again.', 'modern-mailer-oauth' ),
-			'access_denied'         => __( 'Access was declined at the consent screen.', 'modern-mailer-oauth' ),
+			'redirect_uri_mismatch' => __( 'The redirect URI does not match the one registered on your OAuth client. Copy the exact value shown on this screen into the Google Cloud console, including the scheme and any trailing parameters.', 'mme-mail-to-smtp' ),
+			'invalid_client'        => __( 'Google rejected the OAuth client ID or client secret. Check both, and confirm they belong to a Web application client rather than a Desktop one.', 'mme-mail-to-smtp' ),
+			'invalid_grant'         => __( 'The authorization code was already used or has expired. Start the connection again.', 'mme-mail-to-smtp' ),
+			'access_denied'         => __( 'Access was declined at the consent screen.', 'mme-mail-to-smtp' ),
 		];
 
 		if ( isset( $hints[ $error ] ) ) {
@@ -302,8 +302,8 @@ class Google_Consent {
 			'mmoa_oauth_exchange_failed',
 			sprintf(
 				/* translators: %s: error text returned by Google. */
-				__( 'Google refused the authorization: %s', 'modern-mailer-oauth' ),
-				'' !== $description ? $description : ( '' !== $error ? $error : __( 'no details supplied', 'modern-mailer-oauth' ) )
+				__( 'Google refused the authorization: %s', 'mme-mail-to-smtp' ),
+				'' !== $description ? $description : ( '' !== $error ? $error : __( 'no details supplied', 'mme-mail-to-smtp' ) )
 			)
 		);
 	}

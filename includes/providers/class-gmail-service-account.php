@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) || exit;
 class Gmail_Service_Account extends Abstract_Gmail {
 
 	public function get_label(): string {
-		return __( 'Google Workspace (service account)', 'modern-mailer-oauth' );
+		return __( 'Google Workspace (service account)', 'mme-mail-to-smtp' );
 	}
 
 	public static function slug(): string {
@@ -47,8 +47,8 @@ class Gmail_Service_Account extends Abstract_Gmail {
 
 	public static function describe(): array {
 		return [
-			'label'    => __( 'Google Workspace', 'modern-mailer-oauth' ),
-			'summary'  => __( 'Service account with domain-wide delegation. No sign-in, and nothing expires. Workspace only.', 'modern-mailer-oauth' ),
+			'label'    => __( 'Google Workspace', 'mme-mail-to-smtp' ),
+			'summary'  => __( 'Service account with domain-wide delegation. No sign-in, and nothing expires. Workspace only.', 'mme-mail-to-smtp' ),
 			'docs'     => 'https://developers.google.com/identity/protocols/oauth2/service-account',
 			'category' => 'oauth',
 			'raw_mime' => true,
@@ -57,18 +57,18 @@ class Gmail_Service_Account extends Abstract_Gmail {
 
 	public static function fields(): array {
 		return [
-			Field::required( 'google_sa_email', __( 'Service account email', 'modern-mailer-oauth' ), __( 'The client_email value from the downloaded JSON key.', 'modern-mailer-oauth' ) ),
+			Field::required( 'google_sa_email', __( 'Service account email', 'mme-mail-to-smtp' ), __( 'The client_email value from the downloaded JSON key.', 'mme-mail-to-smtp' ) ),
 			new Field(
 				key: 'google_sa_key',
-				label: __( 'Private key', 'modern-mailer-oauth' ),
+				label: __( 'Private key', 'mme-mail-to-smtp' ),
 				type: Field::TEXTAREA,
 				secret: true,
 				required: true,
-				help: __( 'Include the BEGIN and END lines.', 'modern-mailer-oauth' )
+				help: __( 'Include the BEGIN and END lines.', 'mme-mail-to-smtp' )
 			),
 			new Field(
 				key: 'google_sender',
-				label: __( 'Send as mailbox', 'modern-mailer-oauth' ),
+				label: __( 'Send as mailbox', 'mme-mail-to-smtp' ),
 				type: Field::EMAIL,
 				required: true
 			),
@@ -97,7 +97,7 @@ class Gmail_Service_Account extends Abstract_Gmail {
 		if ( '' === $issuer || '' === $subject || '' === $key ) {
 			return new WP_Error(
 				'mmoa_gmail_sa_incomplete',
-				__( 'The Google service account is missing its client email, private key, or the mailbox to send as.', 'modern-mailer-oauth' )
+				__( 'The Google service account is missing its client email, private key, or the mailbox to send as.', 'mme-mail-to-smtp' )
 			);
 		}
 

@@ -55,15 +55,15 @@ const Hero = ( { health, queue } ) => {
 	let tone;
 
 	if ( ! active ) {
-		headline = __( 'Not sending yet', 'modern-mailer-oauth' );
+		headline = __( 'Not sending yet', 'mme-mail-to-smtp' );
 		Icon = TriangleAlert;
 		tone = 'text-muted-foreground';
 	} else if ( failing ) {
-		headline = __( 'Sending is failing', 'modern-mailer-oauth' );
+		headline = __( 'Sending is failing', 'mme-mail-to-smtp' );
 		Icon = XCircle;
 		tone = 'text-danger';
 	} else {
-		headline = __( 'Sending is working', 'modern-mailer-oauth' );
+		headline = __( 'Sending is working', 'mme-mail-to-smtp' );
 		Icon = CircleCheck;
 		tone = 'text-success';
 	}
@@ -73,27 +73,27 @@ const Hero = ( { health, queue } ) => {
 	if ( ! active ) {
 		summary = __(
 			'No provider is configured, so WordPress is still using the server mail function.',
-			'modern-mailer-oauth'
+			'mme-mail-to-smtp'
 		);
 	} else if ( failing ) {
 		summary = sprintf(
 			/* translators: %d: number of consecutive failures. */
 			__(
 				'%d sends have failed in a row. wp_mail() is returning false, so the code that sent them knows.',
-				'modern-mailer-oauth'
+				'mme-mail-to-smtp'
 			),
 			streak
 		);
 	} else if ( lastSuccess > 0 ) {
 		summary = sprintf(
 			/* translators: %s: date and time of the last successful send. */
-			__( 'Last message delivered %s.', 'modern-mailer-oauth' ),
+			__( 'Last message delivered %s.', 'mme-mail-to-smtp' ),
 			new Date( lastSuccess * 1000 ).toLocaleString()
 		);
 	} else {
 		summary = __(
 			'A provider is configured. Nothing has been sent through it yet.',
-			'modern-mailer-oauth'
+			'mme-mail-to-smtp'
 		);
 	}
 
@@ -102,7 +102,7 @@ const Hero = ( { health, queue } ) => {
 			<div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-end">
 				<div>
 					<p className="m-0 text-xs tracking-[0.14em] text-muted-foreground uppercase">
-						{ __( 'Delivery', 'modern-mailer-oauth' ) }
+						{ __( 'Delivery', 'mme-mail-to-smtp' ) }
 					</p>
 
 					<p className="mt-3 mb-0 flex items-center gap-3">
@@ -130,20 +130,20 @@ const Hero = ( { health, queue } ) => {
 
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 					<Stat
-						label={ __( 'Queued for retry', 'modern-mailer-oauth' ) }
+						label={ __( 'Queued for retry', 'mme-mail-to-smtp' ) }
 						value={ queue.pending }
 						tone="warning"
 						icon={ Clock }
-						help={ __( 'Retried every five minutes.', 'modern-mailer-oauth' ) }
+						help={ __( 'Retried every five minutes.', 'mme-mail-to-smtp' ) }
 					/>
 					<Stat
-						label={ __( 'Never delivered', 'modern-mailer-oauth' ) }
+						label={ __( 'Never delivered', 'mme-mail-to-smtp' ) }
 						value={ queue.failed }
 						tone="danger"
 						icon={ XCircle }
 						help={ __(
 							'Out of attempts. Kept until the discard window passes.',
-							'modern-mailer-oauth'
+							'mme-mail-to-smtp'
 						) }
 					/>
 				</div>
@@ -170,19 +170,19 @@ const SetupCallout = () => (
 
 			<div className="min-w-0 flex-1">
 				<p className="m-0 font-display text-[17px] leading-none tracking-[-0.01em]">
-					{ __( 'Nothing is sending yet', 'modern-mailer-oauth' ) }
+					{ __( 'Nothing is sending yet', 'mme-mail-to-smtp' ) }
 				</p>
 				<p className="mt-2 mb-0 max-w-[62ch] text-[13px] leading-relaxed text-muted-foreground">
 					{ __(
 						'WordPress is still using the server mail function. The wizard connects a mailbox, checks the credentials against the provider and sends one real message, in that order.',
-						'modern-mailer-oauth'
+						'mme-mail-to-smtp'
 					) }
 				</p>
 			</div>
 
 			<Button asChild variant="brand" size="lg" className="shrink-0">
 				<Link to="/setup">
-					{ __( 'Run the setup wizard', 'modern-mailer-oauth' ) }
+					{ __( 'Run the setup wizard', 'mme-mail-to-smtp' ) }
 					<ArrowRight />
 				</Link>
 			</Button>
@@ -213,10 +213,10 @@ const Dashboard = () => {
 			<Hero health={ health } queue={ queue } />
 
 			<Panel
-				title={ __( 'Where to look next', 'modern-mailer-oauth' ) }
+				title={ __( 'Where to look next', 'mme-mail-to-smtp' ) }
 				description={ __(
 					'This plugin keeps no copy of what it sent. A failure is reported the moment it happens, through wp_mail() and the checks below.',
-					'modern-mailer-oauth'
+					'mme-mail-to-smtp'
 				) }
 			>
 				<ul className="m-0 grid list-none gap-3 p-0 text-[13px]">
@@ -225,23 +225,23 @@ const Dashboard = () => {
 							to="/connections"
 							className="text-brand-deep no-underline hover:underline"
 						>
-							{ __( 'Connections', 'modern-mailer-oauth' ) }
+							{ __( 'Connections', 'mme-mail-to-smtp' ) }
 						</Link>
 						<span className="text-muted-foreground">
 							{ __(
 								'send a test message and confirm the credentials still work.',
-								'modern-mailer-oauth'
+								'mme-mail-to-smtp'
 							) }
 						</span>
 					</li>
 					<li className="flex flex-wrap items-baseline gap-x-2">
 						<span className="font-medium">
-							{ __( 'Tools, Site Health', 'modern-mailer-oauth' ) }
+							{ __( 'Tools, Site Health', 'mme-mail-to-smtp' ) }
 						</span>
 						<span className="text-muted-foreground">
 							{ __(
 								'the Email delivery check reports whether sending is working, and names the last error.',
-								'modern-mailer-oauth'
+								'mme-mail-to-smtp'
 							) }
 						</span>
 					</li>
@@ -250,12 +250,12 @@ const Dashboard = () => {
 							to="/settings"
 							className="text-brand-deep no-underline hover:underline"
 						>
-							{ __( 'Settings', 'modern-mailer-oauth' ) }
+							{ __( 'Settings', 'mme-mail-to-smtp' ) }
 						</Link>
 						<span className="text-muted-foreground">
 							{ __(
 								'how many failures in a row count as an outage, and how long the retry queue holds a message.',
-								'modern-mailer-oauth'
+								'mme-mail-to-smtp'
 							) }
 						</span>
 					</li>

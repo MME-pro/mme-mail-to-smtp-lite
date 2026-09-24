@@ -211,8 +211,8 @@ const SecretInput = ( { id, field, value, disabled, placeholder, onChange } ) =>
 				<button
 					type="button"
 					onClick={ copy }
-					aria-label={ __( 'Copy', 'modern-mailer-oauth' ) }
-					title={ __( 'Copy to clipboard', 'modern-mailer-oauth' ) }
+					aria-label={ __( 'Copy', 'mme-mail-to-smtp' ) }
+					title={ __( 'Copy to clipboard', 'mme-mail-to-smtp' ) }
 					className="absolute inset-y-0 right-0 flex w-10 items-center justify-center rounded-r-md text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/40"
 				>
 					{ copied ? <Check className="size-4 text-success" /> : <Copy className="size-4" /> }
@@ -270,7 +270,7 @@ const ProviderForm = ( { provider, values, onChange } ) => {
 				// is the only way the form can say "there is something here".
 				const placeholder =
 					field.secret && field.is_set
-						? __( 'Stored. Leave blank to keep it.', 'modern-mailer-oauth' )
+						? __( 'Stored. Leave blank to keep it.', 'mme-mail-to-smtp' )
 						: field.placeholder;
 
 				return (
@@ -303,7 +303,7 @@ const ProviderForm = ( { provider, values, onChange } ) => {
 										onCheckedChange={ ( v ) => handle( field, v ) }
 									/>
 									<Label htmlFor={ id } className="text-muted-foreground">
-										{ __( 'Enabled', 'modern-mailer-oauth' ) }
+										{ __( 'Enabled', 'mme-mail-to-smtp' ) }
 									</Label>
 								</div>
 							) }

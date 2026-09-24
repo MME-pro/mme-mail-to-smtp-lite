@@ -138,7 +138,7 @@ class Provider_Registry {
 	 * @return array<string,string>
 	 */
 	public static function labels(): array {
-		$out = [ '' => __( 'Not configured (WordPress default)', 'modern-mailer-oauth' ) ];
+		$out = [ '' => __( 'Not configured (WordPress default)', 'mme-mail-to-smtp' ) ];
 
 		foreach ( self::all() as $slug => $class ) {
 			$out[ $slug ] = $class::describe()['label'];
@@ -163,7 +163,7 @@ class Provider_Registry {
 		return [
 			new Field(
 				key: 'from_email',
-				label: __( 'From address', 'modern-mailer-oauth' ),
+				label: __( 'From address', 'mme-mail-to-smtp' ),
 				type: Field::EMAIL,
 				required: true,
 				constant: 'FROM_EMAIL',
@@ -171,13 +171,13 @@ class Provider_Registry {
 			),
 			new Field(
 				key: 'from_name',
-				label: __( 'From name', 'modern-mailer-oauth' ),
+				label: __( 'From name', 'mme-mail-to-smtp' ),
 				constant: 'FROM_NAME',
 				width: Field::HALF
 			),
 			new Field(
 				key: 'force_from',
-				label: __( 'Override what other plugins set', 'modern-mailer-oauth' ),
+				label: __( 'Override what other plugins set', 'mme-mail-to-smtp' ),
 				type: Field::CHECKBOX,
 				default: true
 			),

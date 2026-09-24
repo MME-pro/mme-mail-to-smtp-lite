@@ -6,7 +6,7 @@
  * person can run is a translation pipeline that rots. Everything below needs
  * nothing but Node.
  *
- *   node tools/i18n.mjs extract   -> languages/modern-mailer-oauth.pot
+ *   node tools/i18n.mjs extract   -> languages/mme-mail-to-smtp.pot
  *   node tools/i18n.mjs compile   -> .mo next to every .po
  *   node tools/i18n.mjs json      -> the JSON catalogue wp_set_script_translations reads
  *   node tools/i18n.mjs check     -> report untranslated strings
@@ -21,7 +21,7 @@ import { createHash } from 'node:crypto';
 // space in its name, and pathname hands back the percent-encoded form - which
 // silently finds nothing rather than failing.
 const ROOT = dirname( fileURLToPath( new URL( '.', import.meta.url ) ) );
-const DOMAIN = 'modern-mailer-oauth';
+const DOMAIN = 'mme-mail-to-smtp';
 const LANGUAGES = join( ROOT, 'languages' );
 
 /** Directories worth scanning, and the ones that are never shipped. */
@@ -51,11 +51,11 @@ const extractFrom = ( file ) => {
 
 	// __( 'text', 'domain' ) and its escaping variants, single or double quoted.
 	const single =
-		/(?:__|_e|esc_html__|esc_html_e|esc_attr__|esc_attr_e)\(\s*(['"])((?:\\.|(?!\1)[^\\])*)\1\s*,\s*(['"])modern-mailer-oauth\3\s*\)/g;
+		/(?:__|_e|esc_html__|esc_html_e|esc_attr__|esc_attr_e)\(\s*(['"])((?:\\.|(?!\1)[^\\])*)\1\s*,\s*(['"])mme-mail-to-smtp\3\s*\)/g;
 
 	// _n( 'one', 'many', $count, 'domain' )
 	const plural =
-		/_n\(\s*(['"])((?:\\.|(?!\1)[^\\])*)\1\s*,\s*(['"])((?:\\.|(?!\3)[^\\])*)\3\s*,[^,]+,\s*(['"])modern-mailer-oauth\5\s*\)/g;
+		/_n\(\s*(['"])((?:\\.|(?!\1)[^\\])*)\1\s*,\s*(['"])((?:\\.|(?!\3)[^\\])*)\3\s*,[^,]+,\s*(['"])mme-mail-to-smtp\5\s*\)/g;
 
 	let m;
 	while ( ( m = single.exec( source ) ) ) {

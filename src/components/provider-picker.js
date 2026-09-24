@@ -29,7 +29,7 @@ const ProviderPicker = ( { providers, selected, onSelect, className } ) => (
 				<button
 					key={ provider.slug }
 					type="button"
-					title={ soon ? __( 'Coming soon', 'modern-mailer-oauth' ) : provider.summary }
+					title={ soon ? __( 'Coming soon', 'mme-mail-to-smtp' ) : provider.summary }
 					aria-pressed={ active }
 					aria-disabled={ soon }
 					disabled={ soon }
@@ -74,10 +74,10 @@ const ProviderPicker = ( { providers, selected, onSelect, className } ) => (
 					{ soon && (
 						<>
 							<span className="absolute top-2 right-2 rounded-full border border-border bg-muted px-1.5 py-px text-[9px] leading-[1.4] font-medium tracking-wide text-muted-foreground uppercase">
-								{ __( 'Soon', 'modern-mailer-oauth' ) }
+								{ __( 'Soon', 'mme-mail-to-smtp' ) }
 							</span>
 							<span className="sr-only">
-								{ __( 'Coming soon', 'modern-mailer-oauth' ) }
+								{ __( 'Coming soon', 'mme-mail-to-smtp' ) }
 							</span>
 						</>
 					) }

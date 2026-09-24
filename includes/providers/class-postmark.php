@@ -29,7 +29,7 @@ class Postmark extends Abstract_Api_Provider {
 	private const MAX_MIME_BYTES = 7340032;
 
 	public function get_label(): string {
-		return __( 'Postmark', 'modern-mailer-oauth' );
+		return __( 'Postmark', 'mme-mail-to-smtp' );
 	}
 
 	public function get_max_message_bytes(): int {
@@ -42,8 +42,8 @@ class Postmark extends Abstract_Api_Provider {
 
 	public static function describe(): array {
 		return [
-			'label'    => __( 'Postmark', 'modern-mailer-oauth' ),
-			'summary'  => __( 'Transactional only. The From address must be a verified Sender Signature.', 'modern-mailer-oauth' ),
+			'label'    => __( 'Postmark', 'mme-mail-to-smtp' ),
+			'summary'  => __( 'Transactional only. The From address must be a verified Sender Signature.', 'mme-mail-to-smtp' ),
 			'docs'     => 'https://postmarkapp.com/developer/api/email-api',
 			'category' => 'api',
 			'raw_mime' => false,
@@ -60,12 +60,12 @@ class Postmark extends Abstract_Api_Provider {
 		return [
 			Field::secret(
 				'postmark_token',
-				__( 'Server API token', 'modern-mailer-oauth' ),
-				__( 'The Server token, not the Account token. Found under API Tokens on the server you want to send from.', 'modern-mailer-oauth' )
+				__( 'Server API token', 'mme-mail-to-smtp' ),
+				__( 'The Server token, not the Account token. Found under API Tokens on the server you want to send from.', 'mme-mail-to-smtp' )
 			),
 			new Field(
 				key: 'postmark_stream',
-				label: __( 'Message stream', 'modern-mailer-oauth' ),
+				label: __( 'Message stream', 'mme-mail-to-smtp' ),
 				placeholder: 'outbound',
 				default: 'outbound'
 			),
@@ -204,14 +204,14 @@ class Postmark extends Abstract_Api_Provider {
 		$code = is_array( $data ) ? (int) ( $data['ErrorCode'] ?? 0 ) : 0;
 
 		$hints = [
-			10  => __( 'Postmark rejected the server API token. Check that it is the Server token and not the Account token.', 'modern-mailer-oauth' ),
-			300 => __( 'Postmark rejected the message as invalid. Most often the From address is not a verified Sender Signature.', 'modern-mailer-oauth' ),
-			400 => __( 'This Postmark server is not activated for sending. Approve the account or request production access.', 'modern-mailer-oauth' ),
-			401 => __( 'The Postmark account is pending approval and can only send to verified addresses.', 'modern-mailer-oauth' ),
-			402 => __( 'The From address is not a verified Sender Signature in Postmark.', 'modern-mailer-oauth' ),
-			406 => __( 'The recipient is on this Postmark server\'s suppression list, so it refused to send. Remove the suppression if the address is genuinely valid.', 'modern-mailer-oauth' ),
-			429 => __( 'Postmark is rate limiting this account. The message was not sent; it will be retried.', 'modern-mailer-oauth' ),
-			605 => __( 'The message stream named here does not exist on this Postmark server.', 'modern-mailer-oauth' ),
+			10  => __( 'Postmark rejected the server API token. Check that it is the Server token and not the Account token.', 'mme-mail-to-smtp' ),
+			300 => __( 'Postmark rejected the message as invalid. Most often the From address is not a verified Sender Signature.', 'mme-mail-to-smtp' ),
+			400 => __( 'This Postmark server is not activated for sending. Approve the account or request production access.', 'mme-mail-to-smtp' ),
+			401 => __( 'The Postmark account is pending approval and can only send to verified addresses.', 'mme-mail-to-smtp' ),
+			402 => __( 'The From address is not a verified Sender Signature in Postmark.', 'mme-mail-to-smtp' ),
+			406 => __( 'The recipient is on this Postmark server\'s suppression list, so it refused to send. Remove the suppression if the address is genuinely valid.', 'mme-mail-to-smtp' ),
+			429 => __( 'Postmark is rate limiting this account. The message was not sent; it will be retried.', 'mme-mail-to-smtp' ),
+			605 => __( 'The message stream named here does not exist on this Postmark server.', 'mme-mail-to-smtp' ),
 		];
 
 		if ( isset( $hints[ $code ] ) ) {

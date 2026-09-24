@@ -1,4 +1,4 @@
-# MME-Mail to SMTP Lite
+# MME-Mail to SMTP
 
 A WordPress plugin that sends mail through the **Microsoft Graph** and **Gmail** APIs
 using OAuth 2.0 — no mailbox password, and nothing that quietly expires.

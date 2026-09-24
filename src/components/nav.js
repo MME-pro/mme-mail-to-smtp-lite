@@ -16,9 +16,9 @@ import { useTheme } from '../lib/use-theme';
 import Guilloche from './guilloche';
 
 const TABS = [
-	{ to: '/dashboard', label: __( 'Dashboard', 'modern-mailer-oauth' ), icon: LayoutDashboard },
-	{ to: '/connections', label: __( 'Connections', 'modern-mailer-oauth' ), icon: Plug },
-	{ to: '/settings', label: __( 'Settings', 'modern-mailer-oauth' ), icon: Settings2 },
+	{ to: '/dashboard', label: __( 'Dashboard', 'mme-mail-to-smtp' ), icon: LayoutDashboard },
+	{ to: '/connections', label: __( 'Connections', 'mme-mail-to-smtp' ), icon: Plug },
+	{ to: '/settings', label: __( 'Settings', 'mme-mail-to-smtp' ), icon: Settings2 },
 ];
 
 /**
@@ -37,8 +37,8 @@ const statusOf = ( health, queue ) => {
 		return {
 			tone: 'warning',
 			icon: TriangleAlert,
-			text: __( 'No provider configured', 'modern-mailer-oauth' ),
-			detail: __( 'WordPress is using the server mail function.', 'modern-mailer-oauth' ),
+			text: __( 'No provider configured', 'mme-mail-to-smtp' ),
+			detail: __( 'WordPress is using the server mail function.', 'mme-mail-to-smtp' ),
 		};
 	}
 
@@ -46,7 +46,7 @@ const statusOf = ( health, queue ) => {
 		return {
 			tone: 'danger',
 			icon: TriangleAlert,
-			text: __( 'Not delivering', 'modern-mailer-oauth' ),
+			text: __( 'Not delivering', 'mme-mail-to-smtp' ),
 			detail: health.last_error || '',
 		};
 	}
@@ -55,8 +55,8 @@ const statusOf = ( health, queue ) => {
 		return {
 			tone: 'danger',
 			icon: TriangleAlert,
-			text: __( 'Mail was lost', 'modern-mailer-oauth' ),
-			detail: __( 'Some messages exhausted every retry.', 'modern-mailer-oauth' ),
+			text: __( 'Mail was lost', 'mme-mail-to-smtp' ),
+			detail: __( 'Some messages exhausted every retry.', 'mme-mail-to-smtp' ),
 		};
 	}
 
@@ -64,15 +64,15 @@ const statusOf = ( health, queue ) => {
 		return {
 			tone: 'warning',
 			icon: Clock,
-			text: __( 'Queued for retry', 'modern-mailer-oauth' ),
-			detail: __( 'Nothing is lost, but sending is not healthy.', 'modern-mailer-oauth' ),
+			text: __( 'Queued for retry', 'mme-mail-to-smtp' ),
+			detail: __( 'Nothing is lost, but sending is not healthy.', 'mme-mail-to-smtp' ),
 		};
 	}
 
 	return {
 		tone: 'success',
 		icon: CircleCheck,
-		text: __( 'Sending normally', 'modern-mailer-oauth' ),
+		text: __( 'Sending normally', 'mme-mail-to-smtp' ),
 		detail: '',
 	};
 };
@@ -197,8 +197,8 @@ const ThemeToggle = () => {
 			aria-pressed={ dark }
 			aria-label={
 				dark
-					? __( 'Switch to light', 'modern-mailer-oauth' )
-					: __( 'Switch to dark', 'modern-mailer-oauth' )
+					? __( 'Switch to light', 'mme-mail-to-smtp' )
+					: __( 'Switch to dark', 'mme-mail-to-smtp' )
 			}
 			className={ cn(
 				'inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-full',
@@ -248,12 +248,12 @@ const Nav = ( { health, queue, focused = false } ) => {
 				<div className="flex flex-wrap items-start gap-x-6 gap-y-3">
 					<div className="min-w-0">
 						<h1 className="font-display text-[26px] font-normal leading-none tracking-[-0.02em] text-ink-foreground">
-							{ __( 'MME-Mail to SMTP', 'modern-mailer-oauth' ) }
+							{ __( 'MME-Mail to SMTP', 'mme-mail-to-smtp' ) }
 						</h1>
 						<p className="mt-1.5 mb-0 text-xs tracking-[0.14em] text-ink-muted uppercase">
 							{ focused
-								? __( 'Guided setup', 'modern-mailer-oauth' )
-								: __( 'Authenticated delivery', 'modern-mailer-oauth' ) }
+								? __( 'Guided setup', 'mme-mail-to-smtp' )
+								: __( 'Authenticated delivery', 'mme-mail-to-smtp' ) }
 							<span className="mx-2 text-ink-line">/</span>
 							<span className="tracking-normal normal-case">
 								{ window.mmoa?.version }

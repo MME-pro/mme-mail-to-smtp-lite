@@ -60,7 +60,7 @@ const GoogleButton = ( { href, disabled = false, className, children } ) => {
 	const content = (
 		<>
 			<GoogleMark />
-			<span>{ children || __( 'Sign in with Google', 'modern-mailer-oauth' ) }</span>
+			<span>{ children || __( 'Sign in with Google', 'mme-mail-to-smtp' ) }</span>
 		</>
 	);
 

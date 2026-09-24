@@ -144,7 +144,7 @@ class Broker {
 		if ( '' === $refresh ) {
 			return new WP_Error(
 				'mmoa_one_click_not_connected',
-				__( 'No account is connected. Use Connect on the settings screen.', 'modern-mailer-oauth' )
+				__( 'No account is connected. Use Connect on the settings screen.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -220,7 +220,7 @@ class Broker {
 			// looking at the screen that caused it.
 			return new WP_Error(
 				'mmoa_broker_no_refresh_token',
-				__( 'The setup service did not return a lasting credential, so the connection would have stopped working within the hour. Try connecting again, and if it repeats, use your own OAuth client instead.', 'modern-mailer-oauth' )
+				__( 'The setup service did not return a lasting credential, so the connection would have stopped working within the hour. Try connecting again, and if it repeats, use your own OAuth client instead.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -247,7 +247,7 @@ class Broker {
 		if ( empty( $data['access_token'] ) ) {
 			return new WP_Error(
 				'mmoa_broker_no_access_token',
-				__( 'The setup service did not return an access token.', 'modern-mailer-oauth' )
+				__( 'The setup service did not return an access token.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -284,14 +284,14 @@ class Broker {
 		if ( ! self::is_available() ) {
 			return new WP_Error(
 				'mmoa_broker_disabled',
-				__( 'One-click setup is switched off on this site. Connect using your own OAuth client instead.', 'modern-mailer-oauth' )
+				__( 'One-click setup is switched off on this site. Connect using your own OAuth client instead.', 'mme-mail-to-smtp' )
 			);
 		}
 
 		if ( ! self::is_configured() ) {
 			return new WP_Error(
 				'mmoa_broker_unconfigured',
-				__( 'One-click setup has no setup service to talk to yet. Define MMOA_BROKER_URL with the address of yours, or connect using your own OAuth client, which needs no service at all.', 'modern-mailer-oauth' )
+				__( 'One-click setup has no setup service to talk to yet. Define MMOA_BROKER_URL with the address of yours, or connect using your own OAuth client, which needs no service at all.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -348,16 +348,16 @@ class Broker {
 
 		if ( '' === $message ) {
 			if ( 404 === $status || 410 === $status ) {
-				$message = __( 'That sign-in has already been used or has expired. Start the connection again.', 'modern-mailer-oauth' );
+				$message = __( 'That sign-in has already been used or has expired. Start the connection again.', 'mme-mail-to-smtp' );
 			} elseif ( 401 === $status || 403 === $status ) {
-				$message = __( 'The setup service refused this site. If the account was disconnected from the provider, connect it again; otherwise use your own OAuth client.', 'modern-mailer-oauth' );
+				$message = __( 'The setup service refused this site. If the account was disconnected from the provider, connect it again; otherwise use your own OAuth client.', 'mme-mail-to-smtp' );
 			} elseif ( 429 === $status ) {
-				$message = __( 'The setup service is rate limiting this site. Wait a few minutes and try again.', 'modern-mailer-oauth' );
+				$message = __( 'The setup service is rate limiting this site. Wait a few minutes and try again.', 'mme-mail-to-smtp' );
 			} elseif ( $status >= 500 ) {
-				$message = __( 'The setup service is unavailable. Existing connections keep sending; only connecting a new account is affected. Try again shortly, or use your own OAuth client, which does not depend on this service.', 'modern-mailer-oauth' );
+				$message = __( 'The setup service is unavailable. Existing connections keep sending; only connecting a new account is affected. Try again shortly, or use your own OAuth client, which does not depend on this service.', 'mme-mail-to-smtp' );
 			} else {
 				/* translators: %d: HTTP status code. */
-				$message = sprintf( __( 'The setup service returned an unexpected response (HTTP %d).', 'modern-mailer-oauth' ), $status );
+				$message = sprintf( __( 'The setup service returned an unexpected response (HTTP %d).', 'mme-mail-to-smtp' ), $status );
 			}
 		}
 

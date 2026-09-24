@@ -78,10 +78,10 @@ $privacy->register();
 $exporters = apply_filters( 'wp_privacy_personal_data_exporters', [] );
 $erasers   = apply_filters( 'wp_privacy_personal_data_erasers', [] );
 
-check( 'an exporter is registered', isset( $exporters['modern-mailer-oauth'] ) );
-check( 'an eraser is registered', isset( $erasers['modern-mailer-oauth'] ) );
-check( 'the exporter callback is callable', is_callable( $exporters['modern-mailer-oauth']['callback'] ?? null ) );
-check( 'the eraser callback is callable', is_callable( $erasers['modern-mailer-oauth']['callback'] ?? null ) );
+check( 'an exporter is registered', isset( $exporters['mme-mail-to-smtp'] ) );
+check( 'an eraser is registered', isset( $erasers['mme-mail-to-smtp'] ) );
+check( 'the exporter callback is callable', is_callable( $exporters['mme-mail-to-smtp']['callback'] ?? null ) );
+check( 'the eraser callback is callable', is_callable( $erasers['mme-mail-to-smtp']['callback'] ?? null ) );
 
 echo "\n=== 2. Export returns what is held, and only for that person ===\n";
 $result = $privacy->export( $subject_address );

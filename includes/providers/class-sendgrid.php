@@ -32,7 +32,7 @@ class Sendgrid extends Abstract_Api_Provider {
 	private const MAX_MIME_BYTES = 15728640;
 
 	public function get_label(): string {
-		return __( 'SendGrid', 'modern-mailer-oauth' );
+		return __( 'SendGrid', 'mme-mail-to-smtp' );
 	}
 
 	public function get_max_message_bytes(): int {
@@ -45,8 +45,8 @@ class Sendgrid extends Abstract_Api_Provider {
 
 	public static function describe(): array {
 		return [
-			'label'    => __( 'SendGrid', 'modern-mailer-oauth' ),
-			'summary'  => __( 'Twilio SendGrid. Create an API key with Mail Send permission only.', 'modern-mailer-oauth' ),
+			'label'    => __( 'SendGrid', 'mme-mail-to-smtp' ),
+			'summary'  => __( 'Twilio SendGrid. Create an API key with Mail Send permission only.', 'mme-mail-to-smtp' ),
 			'docs'     => 'https://www.twilio.com/docs/sendgrid/api-reference/mail-send',
 			'category' => 'api',
 			'raw_mime' => false,
@@ -57,8 +57,8 @@ class Sendgrid extends Abstract_Api_Provider {
 		return [
 			Field::secret(
 				'sendgrid_api_key',
-				__( 'API key', 'modern-mailer-oauth' ),
-				__( 'Settings, API Keys in SendGrid. Restricted Access with Mail Send is enough; SendGrid shows the key only once.', 'modern-mailer-oauth' ),
+				__( 'API key', 'mme-mail-to-smtp' ),
+				__( 'Settings, API Keys in SendGrid. Restricted Access with Mail Send is enough; SendGrid shows the key only once.', 'mme-mail-to-smtp' ),
 				'SG.xxxxxxxx'
 			),
 		];

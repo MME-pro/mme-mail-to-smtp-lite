@@ -36,7 +36,7 @@ const GoogleConnect = ( { oauth, dirty } ) => {
 			<div className="grid gap-5 pt-6">
 				<div className="grid gap-3">
 					<h4 className="text-sm font-medium m-0">
-						{ __( 'Account', 'modern-mailer-oauth' ) }
+						{ __( 'Account', 'mme-mail-to-smtp' ) }
 					</h4>
 
 					{ connected ? (
@@ -45,7 +45,7 @@ const GoogleConnect = ( { oauth, dirty } ) => {
 							<span className="text-sm flex-1 min-w-[200px]">
 								{ __(
 									'Connected. A refresh token is stored for this connection.',
-									'modern-mailer-oauth'
+									'mme-mail-to-smtp'
 								) }
 							</span>
 							<Button
@@ -62,7 +62,7 @@ const GoogleConnect = ( { oauth, dirty } ) => {
 											! window.confirm(
 												__(
 													'This revokes the grant at Google and forgets it here. Sending stops. Continue?',
-													'modern-mailer-oauth'
+													'mme-mail-to-smtp'
 												)
 											)
 										) {
@@ -70,7 +70,7 @@ const GoogleConnect = ( { oauth, dirty } ) => {
 										}
 									} }
 								>
-									{ __( 'Disconnect', 'modern-mailer-oauth' ) }
+									{ __( 'Disconnect', 'mme-mail-to-smtp' ) }
 								</a>
 							</Button>
 						</div>
@@ -82,7 +82,7 @@ const GoogleConnect = ( { oauth, dirty } ) => {
 									<AlertDescription>
 										{ __(
 											'Enter the client ID and secret above and save them before signing in.',
-											'modern-mailer-oauth'
+											'mme-mail-to-smtp'
 										) }
 									</AlertDescription>
 								</Alert>
@@ -94,7 +94,7 @@ const GoogleConnect = ( { oauth, dirty } ) => {
 									<AlertDescription>
 										{ __(
 											'You have unsaved changes. Signing in leaves this page and they will be lost.',
-											'modern-mailer-oauth'
+											'mme-mail-to-smtp'
 										) }
 									</AlertDescription>
 								</Alert>

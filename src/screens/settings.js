@@ -28,7 +28,7 @@ const Settings = () => {
 		onSuccess: () => {
 			queryClient.invalidateQueries( { queryKey: [ 'settings' ] } );
 			queryClient.invalidateQueries( { queryKey: [ 'bootstrap' ] } );
-			toast( __( 'Settings saved.', 'modern-mailer-oauth' ) );
+			toast( __( 'Settings saved.', 'mme-mail-to-smtp' ) );
 		},
 		onError: ( error ) => toast( error.message, 'bad' ),
 	} );
@@ -42,7 +42,7 @@ const Settings = () => {
 
 	return (
 		<div className="grid gap-5">
-			<Panel title={ __( 'Reliability', 'modern-mailer-oauth' ) }>
+			<Panel title={ __( 'Reliability', 'mme-mail-to-smtp' ) }>
 				<div className="grid gap-4">
 					<ToggleRow
 						id="mmoa-queue-enabled"
@@ -50,7 +50,7 @@ const Settings = () => {
 						onChange={ ( v ) => set( 'queue_enabled', v ) }
 						label={ __(
 							'Hold on to messages that failed for a temporary reason and retry them',
-							'modern-mailer-oauth'
+							'mme-mail-to-smtp'
 						) }
 					/>
 
@@ -60,7 +60,7 @@ const Settings = () => {
 					{ values.queue_enabled && (
 						<div className="max-w-sm">
 							<FormField
-								label={ __( 'Discard undelivered messages after (days)', 'modern-mailer-oauth' ) }
+								label={ __( 'Discard undelivered messages after (days)', 'mme-mail-to-smtp' ) }
 
 								htmlFor="mmoa-queue-retention"
 							>
@@ -79,19 +79,19 @@ const Settings = () => {
 			</Panel>
 
 			<Panel
-				title={ __( 'Failure detection', 'modern-mailer-oauth' ) }
+				title={ __( 'Failure detection', 'mme-mail-to-smtp' ) }
 				description={ __(
 					'Almost nothing in WordPress checks what wp_mail() returned, so this decides when the plugin says so itself.',
-					'modern-mailer-oauth'
+					'mme-mail-to-smtp'
 				) }
 			>
 				<div className="grid gap-4">
 					<div className="grid gap-4 sm:grid-cols-2">
 						<FormField
-							label={ __( 'Report broken after N failures', 'modern-mailer-oauth' ) }
+							label={ __( 'Report broken after N failures', 'mme-mail-to-smtp' ) }
 							help={ __(
 								'Consecutive failures, not failures in total. One success resets the count, so a single bad address never triggers it.',
-								'modern-mailer-oauth'
+								'mme-mail-to-smtp'
 							) }
 							htmlFor="mmoa-threshold"
 						>
@@ -112,18 +112,18 @@ const Settings = () => {
 					     one send failing is not an outage. */ }
 					<div className="p-3 rounded-lg bg-muted/40 text-[13px] text-muted-foreground grid gap-1.5">
 						<p className="m-0 font-medium text-foreground">
-							{ __( 'When you actually get told', 'modern-mailer-oauth' ) }
+							{ __( 'When you actually get told', 'mme-mail-to-smtp' ) }
 						</p>
 						<p className="m-0">
 							{ __(
 								'A failed send is logged immediately, every time, and wp_mail() returns false so the code that sent it knows.',
-								'modern-mailer-oauth'
+								'mme-mail-to-smtp'
 							) }
 						</p>
 						<p className="m-0">
 							{ __(
 								'Once that many sends fail in a row, the plugin reports sending as broken: an admin notice appears and the Email delivery check under Tools, Site Health turns red. One success clears it.',
-								'modern-mailer-oauth'
+								'mme-mail-to-smtp'
 							) }
 						</p>
 					</div>
@@ -135,12 +135,12 @@ const Settings = () => {
 			     an administrator would otherwise have no way of knowing. Four
 			     lines and three links; the detail lives in the policy text and
 			     the README. */ }
-			<Panel title={ __( 'Privacy', 'modern-mailer-oauth' ) }>
+			<Panel title={ __( 'Privacy', 'mme-mail-to-smtp' ) }>
 				<div className="grid gap-3 text-sm">
 					<p className="m-0 text-muted-foreground">
 						{ __(
 							'The log keeps recipients and subjects. A queued message is kept in full until it is sent or discarded. No cookies, no tracking pixels, no IP addresses.',
-							'modern-mailer-oauth'
+							'mme-mail-to-smtp'
 						) }
 					</p>
 
@@ -151,7 +151,7 @@ const Settings = () => {
 					<p className="m-0 text-muted-foreground">
 						{ __(
 							'This plugin sends nothing to its own vendor. No registration, no check-in, no usage figures - the only servers it contacts are the mail providers you configure.',
-							'modern-mailer-oauth'
+							'mme-mail-to-smtp'
 						) }
 					</p>
 
@@ -160,19 +160,19 @@ const Settings = () => {
 							href={ window.mmoa?.privacy?.export }
 							className="text-brand-deep no-underline hover:underline"
 						>
-							{ __( 'Export personal data', 'modern-mailer-oauth' ) }
+							{ __( 'Export personal data', 'mme-mail-to-smtp' ) }
 						</a>
 						<a
 							href={ window.mmoa?.privacy?.erase }
 							className="text-brand-deep no-underline hover:underline"
 						>
-							{ __( 'Erase personal data', 'modern-mailer-oauth' ) }
+							{ __( 'Erase personal data', 'mme-mail-to-smtp' ) }
 						</a>
 						<a
 							href={ window.mmoa?.privacy?.policy }
 							className="text-brand-deep no-underline hover:underline"
 						>
-							{ __( 'Privacy policy text', 'modern-mailer-oauth' ) }
+							{ __( 'Privacy policy text', 'mme-mail-to-smtp' ) }
 						</a>
 					</div>
 				</div>
@@ -183,16 +183,16 @@ const Settings = () => {
 			     one for the first time, and somebody doing it a year later has
 			     no reason to remember where any of it lives. */ }
 			<Panel
-				title={ __( 'Setup wizard', 'modern-mailer-oauth' ) }
+				title={ __( 'Setup wizard', 'mme-mail-to-smtp' ) }
 				description={ __(
 					'Walks through choosing a provider, connecting a mailbox, verifying the credentials and sending a test. It edits the primary connection, so nothing already configured is lost by opening it.',
-					'modern-mailer-oauth'
+					'mme-mail-to-smtp'
 				) }
 			>
 				<Button asChild variant="outline">
 					<Link to="/setup">
 						<Wand2 />
-						{ __( 'Open the setup wizard', 'modern-mailer-oauth' ) }
+						{ __( 'Open the setup wizard', 'mme-mail-to-smtp' ) }
 					</Link>
 				</Button>
 			</Panel>
@@ -203,7 +203,7 @@ const Settings = () => {
 					busy={ save.isPending }
 					onClick={ () => save.mutate() }
 				>
-					{ __( 'Save settings', 'modern-mailer-oauth' ) }
+					{ __( 'Save settings', 'mme-mail-to-smtp' ) }
 				</Button>
 			</div>
 		</div>

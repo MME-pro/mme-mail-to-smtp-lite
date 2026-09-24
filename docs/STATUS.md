@@ -18,7 +18,7 @@ A top-level **MME-Mail to SMTP** menu with three screens:
 
 | Screen | Slug | Holds |
 |---|---|---|
-| Settings | `modern-mailer-oauth` | From address, force-sender, the **primary** connection, retry-queue toggle, logging and alert options, verify + test-email buttons |
+| Settings | `mme-mail-to-smtp` | From address, force-sender, the **primary** connection, retry-queue toggle, logging and alert options, verify + test-email buttons |
 | Backup | `modern-mailer-backup` | The **backup** connection and its verify button. Warns if no primary exists, or if both slots use the same provider |
 | Logs | `modern-mailer-logs` | The retry queue (with Retry now / Return abandoned / Discard controls) above the send log. Carries a count bubble in the menu when the queue holds anything |
 

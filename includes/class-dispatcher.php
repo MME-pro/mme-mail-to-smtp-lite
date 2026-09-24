@@ -260,7 +260,7 @@ class Dispatcher {
 		if ( null === $provider ) {
 			return new WP_Error(
 				'mmoa_no_provider',
-				__( 'No mail provider is configured.', 'modern-mailer-oauth' )
+				__( 'No mail provider is configured.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -344,7 +344,7 @@ class Dispatcher {
 			'mmoa_message_too_large',
 			sprintf(
 				/* translators: 1: message size, 2: maximum size, 3: provider name. */
-				__( 'The message is %1$s, which is over the %2$s that %3$s accepts in one request. Attachments are encoded twice on this path, so the usable attachment size is roughly half the limit.', 'modern-mailer-oauth' ),
+				__( 'The message is %1$s, which is over the %2$s that %3$s accepts in one request. Attachments are encoded twice on this path, so the usable attachment size is roughly half the limit.', 'mme-mail-to-smtp' ),
 				size_format( $bytes, 1 ),
 				size_format( $max, 1 ),
 				$provider->get_label()

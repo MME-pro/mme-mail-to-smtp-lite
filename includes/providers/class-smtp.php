@@ -77,7 +77,7 @@ class Smtp extends Abstract_Provider {
 	}
 
 	public function get_label(): string {
-		return __( 'SMTP', 'modern-mailer-oauth' );
+		return __( 'SMTP', 'mme-mail-to-smtp' );
 	}
 
 	public function get_max_message_bytes(): int {
@@ -108,8 +108,8 @@ class Smtp extends Abstract_Provider {
 
 	public static function describe(): array {
 		return [
-			'label'    => __( 'Other SMTP', 'modern-mailer-oauth' ),
-			'summary'  => __( 'Any server that speaks SMTP. Widest compatibility, least specific errors.', 'modern-mailer-oauth' ),
+			'label'    => __( 'Other SMTP', 'mme-mail-to-smtp' ),
+			'summary'  => __( 'Any server that speaks SMTP. Widest compatibility, least specific errors.', 'mme-mail-to-smtp' ),
 			'docs'     => 'https://datatracker.ietf.org/doc/html/rfc5321',
 			'category' => 'smtp',
 			'raw_mime' => true,
@@ -123,14 +123,14 @@ class Smtp extends Abstract_Provider {
 			// together.
 			new Field(
 				key: 'smtp_host',
-				label: __( 'Server', 'modern-mailer-oauth' ),
+				label: __( 'Server', 'mme-mail-to-smtp' ),
 				required: true,
 				placeholder: 'smtp.example.com',
 				width: Field::THIRD
 			),
 			new Field(
 				key: 'smtp_username',
-				label: __( 'SMTP username', 'modern-mailer-oauth' ),
+				label: __( 'SMTP username', 'mme-mail-to-smtp' ),
 				placeholder: 'you@example.com',
 				width: Field::THIRD,
 				depends: [
@@ -140,7 +140,7 @@ class Smtp extends Abstract_Provider {
 			),
 			new Field(
 				key: 'smtp_password',
-				label: __( 'SMTP password', 'modern-mailer-oauth' ),
+				label: __( 'SMTP password', 'mme-mail-to-smtp' ),
 				type: Field::PASSWORD,
 				secret: true,
 				width: Field::THIRD,
@@ -156,14 +156,14 @@ class Smtp extends Abstract_Provider {
 			// servers that do something unusual.
 			new Field(
 				key: 'smtp_encryption',
-				label: __( 'Encryption', 'modern-mailer-oauth' ),
+				label: __( 'Encryption', 'mme-mail-to-smtp' ),
 				type: Field::RADIO,
 				required: true,
-				help: __( 'None sends the password in the clear.', 'modern-mailer-oauth' ),
+				help: __( 'None sends the password in the clear.', 'mme-mail-to-smtp' ),
 				options: [
-					'tls'  => __( 'TLS', 'modern-mailer-oauth' ),
-					'ssl'  => __( 'SSL', 'modern-mailer-oauth' ),
-					'none' => __( 'None', 'modern-mailer-oauth' ),
+					'tls'  => __( 'TLS', 'mme-mail-to-smtp' ),
+					'ssl'  => __( 'SSL', 'mme-mail-to-smtp' ),
+					'none' => __( 'None', 'mme-mail-to-smtp' ),
 				],
 				default: 'tls',
 				width: Field::HALF,
@@ -175,7 +175,7 @@ class Smtp extends Abstract_Provider {
 			),
 			new Field(
 				key: 'smtp_port',
-				label: __( 'SMTP port', 'modern-mailer-oauth' ),
+				label: __( 'SMTP port', 'mme-mail-to-smtp' ),
 				type: Field::NUMBER,
 				required: true,
 				placeholder: '587',
@@ -185,12 +185,12 @@ class Smtp extends Abstract_Provider {
 
 			new Field(
 				key: 'smtp_auth',
-				label: __( 'Authentication', 'modern-mailer-oauth' ),
+				label: __( 'Authentication', 'mme-mail-to-smtp' ),
 				type: Field::RADIO,
 				required: true,
 				options: [
-					'yes' => __( 'On', 'modern-mailer-oauth' ),
-					'no'  => __( 'Off', 'modern-mailer-oauth' ),
+					'yes' => __( 'On', 'mme-mail-to-smtp' ),
+					'no'  => __( 'Off', 'mme-mail-to-smtp' ),
 				],
 				default: 'yes',
 				width: Field::HALF
@@ -209,7 +209,7 @@ class Smtp extends Abstract_Provider {
 		if ( [] === $recipients ) {
 			return new WP_Error(
 				'mmoa_no_recipient',
-				__( 'The message has no recipient.', 'modern-mailer-oauth' )
+				__( 'The message has no recipient.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -221,7 +221,7 @@ class Smtp extends Abstract_Provider {
 
 		try {
 			if ( ! $smtp->mail( $from['email'] ) ) {
-				return $this->smtp_error( $smtp, __( 'The server rejected the sender address.', 'modern-mailer-oauth' ) );
+				return $this->smtp_error( $smtp, __( 'The server rejected the sender address.', 'mme-mail-to-smtp' ) );
 			}
 
 			foreach ( $recipients as $recipient ) {
@@ -233,7 +233,7 @@ class Smtp extends Abstract_Provider {
 						$smtp,
 						sprintf(
 							/* translators: %s: recipient email address. */
-							__( 'The server rejected the recipient %s.', 'modern-mailer-oauth' ),
+							__( 'The server rejected the recipient %s.', 'mme-mail-to-smtp' ),
 							$recipient
 						)
 					);
@@ -241,7 +241,7 @@ class Smtp extends Abstract_Provider {
 			}
 
 			if ( ! $smtp->data( $raw_mime ) ) {
-				return $this->smtp_error( $smtp, __( 'The server rejected the message.', 'modern-mailer-oauth' ) );
+				return $this->smtp_error( $smtp, __( 'The server rejected the message.', 'mme-mail-to-smtp' ) );
 			}
 
 			return true;
@@ -323,7 +323,7 @@ class Smtp extends Abstract_Provider {
 		if ( '' === $host ) {
 			return new WP_Error(
 				'mmoa_provider_incomplete',
-				__( 'No SMTP server is configured.', 'modern-mailer-oauth' )
+				__( 'No SMTP server is configured.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -340,7 +340,7 @@ class Smtp extends Abstract_Provider {
 		if ( $authenticate && '' === $username ) {
 			return new WP_Error(
 				'mmoa_provider_incomplete',
-				__( 'Authentication is switched on but no SMTP username is set.', 'modern-mailer-oauth' )
+				__( 'Authentication is switched on but no SMTP username is set.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -379,7 +379,7 @@ class Smtp extends Abstract_Provider {
 				'mmoa_smtp_connect_failed',
 				sprintf(
 					/* translators: 1: host, 2: port, 3: error detail. */
-					__( 'Could not connect to %1$s on port %2$d. %3$s', 'modern-mailer-oauth' ),
+					__( 'Could not connect to %1$s on port %2$d. %3$s', 'mme-mail-to-smtp' ),
 					$host,
 					$port,
 					$this->last_error( $smtp )
@@ -403,7 +403,7 @@ class Smtp extends Abstract_Provider {
 					'mmoa_smtp_tls_failed',
 					sprintf(
 						/* translators: %s: error detail from the server. */
-						__( 'The server refused to start TLS. If it only offers implicit TLS, choose that and use port 465. %s', 'modern-mailer-oauth' ),
+						__( 'The server refused to start TLS. If it only offers implicit TLS, choose that and use port 465. %s', 'mme-mail-to-smtp' ),
 						$detail
 					)
 				);
@@ -428,7 +428,7 @@ class Smtp extends Abstract_Provider {
 				'mmoa_smtp_auth_failed',
 				sprintf(
 					/* translators: %s: error detail from the server. */
-					__( 'The server rejected the username or password. If the account has two-factor authentication, you need an app password rather than the account password. %s', 'modern-mailer-oauth' ),
+					__( 'The server rejected the username or password. If the account has two-factor authentication, you need an app password rather than the account password. %s', 'mme-mail-to-smtp' ),
 					$detail
 				)
 			);
@@ -502,7 +502,7 @@ class Smtp extends Abstract_Provider {
 	protected function request_token() {
 		return new WP_Error(
 			'mmoa_not_applicable',
-			__( 'SMTP authenticates with a username and password and mints no tokens.', 'modern-mailer-oauth' )
+			__( 'SMTP authenticates with a username and password and mints no tokens.', 'mme-mail-to-smtp' )
 		);
 	}
 }

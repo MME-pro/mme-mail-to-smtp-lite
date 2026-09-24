@@ -137,10 +137,10 @@ class Setup {
 
 		printf(
 			'<div class="notice notice-info"><p><strong>%s</strong> %s</p><p><a class="button button-primary" href="%s">%s</a></p></div>',
-			esc_html__( 'MME-Mail to SMTP is installed but not sending yet.', 'modern-mailer-oauth' ),
-			esc_html__( 'WordPress is still using the server mail function. The setup wizard connects a mailbox in a few steps.', 'modern-mailer-oauth' ),
+			esc_html__( 'MME-Mail to SMTP is installed but not sending yet.', 'mme-mail-to-smtp' ),
+			esc_html__( 'WordPress is still using the server mail function. The setup wizard connects a mailbox in a few steps.', 'mme-mail-to-smtp' ),
 			esc_url( self::url() ),
-			esc_html__( 'Run the setup wizard', 'modern-mailer-oauth' )
+			esc_html__( 'Run the setup wizard', 'mme-mail-to-smtp' )
 		);
 	}
 

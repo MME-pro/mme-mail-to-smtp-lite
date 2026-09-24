@@ -74,7 +74,7 @@ check( 'constant-pinned field marked as such', false !== strpos( $html, 'wp-conf
 
 // The form has to say which screen to return to, or an action taken on it
 // would bounce the admin somewhere else.
-check( 'Settings forms carry a return page', false !== strpos( $html, 'name="return_page" value="modern-mailer-oauth"' ) );
+check( 'Settings forms carry a return page', false !== strpos( $html, 'name="return_page" value="mme-mail-to-smtp"' ) );
 
 // The redirect URI must not depend on where the menu lives, or reorganising the
 // admin breaks every existing Google connection.

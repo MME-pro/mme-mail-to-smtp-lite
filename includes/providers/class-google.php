@@ -43,8 +43,8 @@ class Google extends Abstract_Merged_Provider {
 
 	public static function describe(): array {
 		return [
-			'label'    => __( 'Google', 'modern-mailer-oauth' ),
-			'summary'  => __( 'Gmail and Google Workspace.', 'modern-mailer-oauth' ),
+			'label'    => __( 'Google', 'mme-mail-to-smtp' ),
+			'summary'  => __( 'Gmail and Google Workspace.', 'mme-mail-to-smtp' ),
 			'docs'     => 'https://developers.google.com/gmail/api/guides/sending',
 			'category' => 'oauth',
 			'raw_mime' => true,
@@ -83,15 +83,15 @@ class Google extends Abstract_Merged_Provider {
 		$options = [];
 
 		if ( Broker::is_available() ) {
-			$options[ One_Click::MODE_ONE_CLICK ] = __( 'One-click', 'modern-mailer-oauth' );
+			$options[ One_Click::MODE_ONE_CLICK ] = __( 'One-click', 'mme-mail-to-smtp' );
 		}
 
-		$options[ One_Click::MODE_OWN_CLIENT ] = __( 'My own OAuth client', 'modern-mailer-oauth' );
-		$options[ self::MODE_SERVICE_ACCOUNT ] = __( 'Service account', 'modern-mailer-oauth' );
+		$options[ One_Click::MODE_OWN_CLIENT ] = __( 'My own OAuth client', 'mme-mail-to-smtp' );
+		$options[ self::MODE_SERVICE_ACCOUNT ] = __( 'Service account', 'mme-mail-to-smtp' );
 
 		return new Field(
 			key: self::mode_key(),
-			label: __( 'How to connect', 'modern-mailer-oauth' ),
+			label: __( 'How to connect', 'mme-mail-to-smtp' ),
 			type: Field::RADIO,
 			options: $options,
 			default: self::default_mode()

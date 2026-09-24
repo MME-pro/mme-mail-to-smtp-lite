@@ -25,7 +25,7 @@ import ProviderPicker from '../components/provider-picker';
 const describeSlot = () =>
 	__(
 		'Every message WordPress sends goes out over this connection.',
-		'modern-mailer-oauth'
+		'mme-mail-to-smtp'
 	);
 
 const ConnectionPanel = ( { slot, categories, title } ) => {
@@ -93,7 +93,7 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 			setDirty( false );
 			queryClient.invalidateQueries( { queryKey: [ 'connection', slot ] } );
 			queryClient.invalidateQueries( { queryKey: [ 'bootstrap' ] } );
-			toast( __( 'Connection saved.', 'modern-mailer-oauth' ) );
+			toast( __( 'Connection saved.', 'mme-mail-to-smtp' ) );
 		},
 		onError: ( error ) => toast( error.message, 'bad' ),
 	} );
@@ -132,7 +132,7 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 					ok: false,
 					message: sprintf(
 						/* translators: %s: comma-separated list of field labels. */
-						__( 'Fill in %s before verifying.', 'modern-mailer-oauth' ),
+						__( 'Fill in %s before verifying.', 'mme-mail-to-smtp' ),
 						gaps.map( ( field ) => field.label ).join( ', ' )
 					),
 				};
@@ -158,7 +158,7 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 	return (
 		<div className="grid gap-5">
 			<Panel
-				title={ title || __( 'Connection', 'modern-mailer-oauth' ) }
+				title={ title || __( 'Connection', 'mme-mail-to-smtp' ) }
 				description={ describeSlot( slot ) }
 			>
 				<ProviderPicker
@@ -196,7 +196,7 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 								rel="noreferrer"
 								className="text-[13px] text-brand-deep no-underline hover:underline self-center"
 							>
-								{ __( 'Documentation', 'modern-mailer-oauth' ) }
+								{ __( 'Documentation', 'mme-mail-to-smtp' ) }
 							</a>
 						) : null
 					}
@@ -225,11 +225,11 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 							busy={ save.isPending }
 							onClick={ () => save.mutate() }
 						>
-							{ __( 'Save connection', 'modern-mailer-oauth' ) }
+							{ __( 'Save connection', 'mme-mail-to-smtp' ) }
 						</Button>
 						<Button busy={ verify.isPending } onClick={ () => verify.mutate() }>
 							<ShieldCheck size={ 14 } />
-							{ __( 'Verify', 'modern-mailer-oauth' ) }
+							{ __( 'Verify', 'mme-mail-to-smtp' ) }
 						</Button>
 
 						{ /* Offered only once there is something to disconnect,
@@ -246,7 +246,7 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 										window.confirm(
 											__(
 												'This clears the provider, every credential and the From address on this connection. Mail routed here stops. Continue?',
-												'modern-mailer-oauth'
+												'mme-mail-to-smtp'
 											)
 										)
 									) {
@@ -255,7 +255,7 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 								} }
 							>
 								<Unplug size={ 14 } />
-								{ __( 'Disconnect', 'modern-mailer-oauth' ) }
+								{ __( 'Disconnect', 'mme-mail-to-smtp' ) }
 							</Button>
 						) }
 					</div>
@@ -321,16 +321,16 @@ const TestEmail = () => {
 
 	return (
 		<Panel
-			title={ __( 'Send a test message', 'modern-mailer-oauth' ) }
+			title={ __( 'Send a test message', 'mme-mail-to-smtp' ) }
 			description={ __(
 				'Goes out over the primary connection.',
-				'modern-mailer-oauth'
+				'mme-mail-to-smtp'
 			) }
 		>
 			<div className="flex flex-wrap gap-3 items-end">
 				<div className="flex-1 min-w-[240px]">
 					<FormField
-						label={ __( 'Recipient', 'modern-mailer-oauth' ) }
+						label={ __( 'Recipient', 'mme-mail-to-smtp' ) }
 						htmlFor="mmoa-test-to"
 					>
 						<input
@@ -344,7 +344,7 @@ const TestEmail = () => {
 				</div>
 				<Button busy={ send.isPending } onClick={ () => send.mutate() }>
 					<Send size={ 14 } />
-					{ __( 'Send test', 'modern-mailer-oauth' ) }
+					{ __( 'Send test', 'mme-mail-to-smtp' ) }
 				</Button>
 			</div>
 		</Panel>
@@ -363,7 +363,7 @@ const Connections = () => {
 		<div className="grid gap-5 min-w-0">
 			<ConnectionPanel
 				slot="primary"
-				title={ __( 'Primary', 'modern-mailer-oauth' ) }
+				title={ __( 'Primary', 'mme-mail-to-smtp' ) }
 				categories={ bootstrap?.categories || {} }
 			/>
 

@@ -387,7 +387,7 @@ class Conflicts {
 				'Another plugin is also set up to send this site\'s email.',
 				'Other plugins are also set up to send this site\'s email.',
 				count( $plugins ),
-				'modern-mailer-oauth'
+				'mme-mail-to-smtp'
 			)
 		);
 
@@ -395,7 +395,7 @@ class Conflicts {
 
 		printf(
 			/* translators: %s: comma-separated plugin names. */
-			esc_html__( 'WordPress lets exactly one plugin take over sending, so whichever loads first wins and every other one is left configured and doing nothing. %s is installed and active alongside this plugin.', 'modern-mailer-oauth' ),
+			esc_html__( 'WordPress lets exactly one plugin take over sending, so whichever loads first wins and every other one is left configured and doing nothing. %s is installed and active alongside this plugin.', 'mme-mail-to-smtp' ),
 			'<strong>' . esc_html( implode( ', ', $names ) ) . '</strong>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		);
 
@@ -405,7 +405,7 @@ class Conflicts {
 			echo '<p>';
 			printf(
 				/* translators: %s: the name of the plugin currently sending. */
-				esc_html__( 'Right now %s is the one sending, and this plugin is the one doing nothing.', 'modern-mailer-oauth' ),
+				esc_html__( 'Right now %s is the one sending, and this plugin is the one doing nothing.', 'mme-mail-to-smtp' ),
 				'<strong>' . esc_html( $winning ) . '</strong>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			);
 			echo '</p>';
@@ -422,8 +422,8 @@ class Conflicts {
 
 		echo esc_html(
 			$configured
-				? __( 'Deactivate and delete the other one, so this connection is the one that sends.', 'modern-mailer-oauth' )
-				: __( 'Set this plugin up first - deactivating the other one before then leaves the site with nothing sending at all. Once mail is going out through this connection, deactivate and delete it.', 'modern-mailer-oauth' )
+				? __( 'Deactivate and delete the other one, so this connection is the one that sends.', 'mme-mail-to-smtp' )
+				: __( 'Set this plugin up first - deactivating the other one before then leaves the site with nothing sending at all. Once mail is going out through this connection, deactivate and delete it.', 'mme-mail-to-smtp' )
 		);
 
 		echo '</p><p>';
@@ -432,7 +432,7 @@ class Conflicts {
 			printf(
 				'<a class="button button-primary" style="margin-right:6px" href="%s">%s</a>',
 				esc_url( Setup::url() ),
-				esc_html__( 'Set up sending', 'modern-mailer-oauth' )
+				esc_html__( 'Set up sending', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -451,7 +451,7 @@ class Conflicts {
 				esc_url( $url ),
 				sprintf(
 					/* translators: %s: plugin name. */
-					esc_html__( 'Deactivate %s', 'modern-mailer-oauth' ),
+					esc_html__( 'Deactivate %s', 'mme-mail-to-smtp' ),
 					esc_html( $plugin['name'] )
 				)
 			);
@@ -460,7 +460,7 @@ class Conflicts {
 		printf(
 			'<a class="button" href="%s">%s</a>',
 			esc_url( admin_url( 'plugins.php' ) ),
-			esc_html__( 'Manage plugins', 'modern-mailer-oauth' )
+			esc_html__( 'Manage plugins', 'mme-mail-to-smtp' )
 		);
 
 		echo '</p></div>';
@@ -472,10 +472,10 @@ class Conflicts {
 	private function render_unknown_owner( string $file ): void {
 		printf(
 			'<div class="notice notice-error"><p><strong>%s</strong> %s</p><p><code>%s</code></p></div>',
-			esc_html__( 'Another plugin has taken over email sending.', 'modern-mailer-oauth' ),
+			esc_html__( 'Another plugin has taken over email sending.', 'mme-mail-to-smtp' ),
 			esc_html__(
 				'It defined wp_mail() before WordPress could, so MME-Mail to SMTP is configured but not sending anything. Deactivate one of the two.',
-				'modern-mailer-oauth'
+				'mme-mail-to-smtp'
 			),
 			esc_html( $file )
 		);
@@ -496,7 +496,7 @@ class Conflicts {
 					'%s is installed but switched off.',
 					'%s are installed but switched off.',
 					count( $plugins ),
-					'modern-mailer-oauth'
+					'mme-mail-to-smtp'
 				)
 			),
 			esc_html( $names )
@@ -506,7 +506,7 @@ class Conflicts {
 
 		echo esc_html__(
 			'Nothing is wrong today - an inactive plugin sends nothing. It is worth deleting all the same: while it is installed, activating it, or a host restoring every plugin at once, quietly takes sending away from this one and there is no error when that happens.',
-			'modern-mailer-oauth'
+			'mme-mail-to-smtp'
 		);
 
 		echo '</p><p>';
@@ -514,9 +514,9 @@ class Conflicts {
 		printf(
 			'<a class="button" href="%s">%s</a> <a href="%s" style="margin-left:8px">%s</a>',
 			esc_url( admin_url( 'plugins.php' ) ),
-			esc_html__( 'Open the Plugins screen', 'modern-mailer-oauth' ),
+			esc_html__( 'Open the Plugins screen', 'mme-mail-to-smtp' ),
 			esc_url( $this->dismiss_url( $plugins ) ),
-			esc_html__( 'Dismiss', 'modern-mailer-oauth' )
+			esc_html__( 'Dismiss', 'mme-mail-to-smtp' )
 		);
 
 		echo '</p></div>';
@@ -531,7 +531,7 @@ class Conflicts {
 	 */
 	public function handle_dismiss(): void {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'You are not allowed to do that.', 'modern-mailer-oauth' ) );
+			wp_die( esc_html__( 'You are not allowed to do that.', 'mme-mail-to-smtp' ) );
 		}
 
 		check_admin_referer( self::DISMISS_ACTION );

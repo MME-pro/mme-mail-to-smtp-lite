@@ -27,16 +27,16 @@ const Footer = () => (
 		<div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
 			<p className="m-0">
 				<span className="font-medium text-foreground">
-					{ __( 'MME-Mail to SMTP', 'modern-mailer-oauth' ) }
+					{ __( 'MME-Mail to SMTP', 'mme-mail-to-smtp' ) }
 				</span>
 				<span className="mx-2 text-border">/</span>
 				{ sprintf(
 					/* translators: %s: plugin version number. */
-					__( 'Version %s', 'modern-mailer-oauth' ),
+					__( 'Version %s', 'mme-mail-to-smtp' ),
 					window.mmoa?.version || ''
 				) }
 				<span className="mx-2 text-border">/</span>
-				{ __( 'GPL-2.0-or-later', 'modern-mailer-oauth' ) }
+				{ __( 'GPL-2.0-or-later', 'mme-mail-to-smtp' ) }
 			</p>
 
 			{ /* One interpolated string rather than a sentence glued to a link.
@@ -45,7 +45,7 @@ const Footer = () => (
 			     place in the clause. */ }
 			<p className="m-0 sm:ml-auto">
 				{ createInterpolateElement(
-					__( 'Built and maintained by <a>MME-pro</a>', 'modern-mailer-oauth' ),
+					__( 'Built and maintained by <a>MME-pro</a>', 'mme-mail-to-smtp' ),
 					{
 						a: (
 							<a

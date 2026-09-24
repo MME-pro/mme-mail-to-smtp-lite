@@ -155,35 +155,35 @@ abstract class Abstract_Gmail extends Abstract_Provider {
 		if ( 'invalid_grant' === $reason || false !== strpos( $message, 'invalid_grant' ) ) {
 			return new WP_Error(
 				'mmoa_gmail_invalid_grant',
-				__( 'Google rejected the credentials. For a service account, confirm domain-wide delegation is authorized for this client ID and the gmail.send scope. For a user connection, the refresh token has been revoked and the account must be reconnected.', 'modern-mailer-oauth' )
+				__( 'Google rejected the credentials. For a service account, confirm domain-wide delegation is authorized for this client ID and the gmail.send scope. For a user connection, the refresh token has been revoked and the account must be reconnected.', 'mme-mail-to-smtp' )
 			);
 		}
 
 		if ( 'unauthorized_client' === $reason ) {
 			return new WP_Error(
 				'mmoa_gmail_unauthorized_client',
-				__( 'The service account is not authorized to impersonate this mailbox. Add its client ID to Google Workspace Admin under Security, API Controls, Domain-wide Delegation, with the gmail.send scope.', 'modern-mailer-oauth' )
+				__( 'The service account is not authorized to impersonate this mailbox. Add its client ID to Google Workspace Admin under Security, API Controls, Domain-wide Delegation, with the gmail.send scope.', 'mme-mail-to-smtp' )
 			);
 		}
 
 		if ( 403 === $status && ( 'accessNotConfigured' === $reason || false !== strpos( $message, 'has not been used' ) ) ) {
 			return new WP_Error(
 				'mmoa_gmail_api_disabled',
-				__( 'The Gmail API is not enabled on this Google Cloud project. Enable it, then wait a minute for the change to propagate.', 'modern-mailer-oauth' )
+				__( 'The Gmail API is not enabled on this Google Cloud project. Enable it, then wait a minute for the change to propagate.', 'mme-mail-to-smtp' )
 			);
 		}
 
 		if ( 429 === $status || 'rateLimitExceeded' === $reason || 'userRateLimitExceeded' === $reason ) {
 			return new WP_Error(
 				'mmoa_gmail_rate_limited',
-				__( 'Google is rate limiting this account. The message was not sent; try again shortly.', 'modern-mailer-oauth' )
+				__( 'Google is rate limiting this account. The message was not sent; try again shortly.', 'mme-mail-to-smtp' )
 			);
 		}
 
 		if ( 400 === $status && false !== strpos( $message, 'Recipient address required' ) ) {
 			return new WP_Error(
 				'mmoa_gmail_no_recipient',
-				__( 'Gmail rejected the message because it had no recipient.', 'modern-mailer-oauth' )
+				__( 'Gmail rejected the message because it had no recipient.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -191,9 +191,9 @@ abstract class Abstract_Gmail extends Abstract_Provider {
 			'mmoa_gmail_error',
 			sprintf(
 				/* translators: 1: HTTP status code, 2: error message from Google. */
-				__( 'The Gmail API returned HTTP %1$d: %2$s', 'modern-mailer-oauth' ),
+				__( 'The Gmail API returned HTTP %1$d: %2$s', 'mme-mail-to-smtp' ),
 				$status,
-				'' !== $message ? $message : __( 'no details supplied', 'modern-mailer-oauth' )
+				'' !== $message ? $message : __( 'no details supplied', 'mme-mail-to-smtp' )
 			),
 			// Failure needs the status to
 			// tell a transient 503 apart from a permanent 400.

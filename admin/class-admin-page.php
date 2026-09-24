@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) || exit;
 class Admin_Page {
 
 	/** Settings, and the parent menu slug. */
-	private const SLUG        = 'modern-mailer-oauth';
+	private const SLUG        = 'mme-mail-to-smtp';
 
 	private const CAPABILITY = 'manage_options';
 	private const NOTICE     = 'mmoa_notice';
@@ -101,10 +101,10 @@ class Admin_Page {
 
 		printf(
 			'<div class="notice notice-error"><p><strong>%s</strong> %s</p><p><a href="%s">%s</a></p></div>',
-			esc_html__( 'Email is not being delivered.', 'modern-mailer-oauth' ),
+			esc_html__( 'Email is not being delivered.', 'mme-mail-to-smtp' ),
 			esc_html( (string) ( $state['last_error']['message'] ?? '' ) ),
 			esc_url( self::url() ),
-			esc_html__( 'Review mail settings', 'modern-mailer-oauth' )
+			esc_html__( 'Review mail settings', 'mme-mail-to-smtp' )
 		);
 	}
 
@@ -140,7 +140,7 @@ class Admin_Page {
 		$this->plugin->health->reset();
 		$this->plugin->dispatcher->reset_providers();
 
-		$this->redirect( 'saved', __( 'Settings saved.', 'modern-mailer-oauth' ) );
+		$this->redirect( 'saved', __( 'Settings saved.', 'mme-mail-to-smtp' ) );
 	}
 
 	/**
@@ -183,7 +183,7 @@ class Admin_Page {
 		$provider = $this->plugin->dispatcher->provider( $slot );
 
 		if ( null === $provider ) {
-			$this->redirect( 'error', __( 'Choose a provider first.', 'modern-mailer-oauth' ) );
+			$this->redirect( 'error', __( 'Choose a provider first.', 'mme-mail-to-smtp' ) );
 		}
 
 		$result = $provider->verify_connection();
@@ -200,7 +200,7 @@ class Admin_Page {
 
 		$this->redirect(
 			'saved',
-			__( 'Connection verified. Credentials are valid and the mailbox is reachable.', 'modern-mailer-oauth' )
+			__( 'Connection verified. Credentials are valid and the mailbox is reachable.', 'mme-mail-to-smtp' )
 		);
 	}
 
@@ -221,7 +221,7 @@ class Admin_Page {
 					$stats['sent'] > 0 || 0 === $stats['attempted'] ? 'saved' : 'error',
 					sprintf(
 						/* translators: 1: attempted count, 2: delivered count, 3: still-queued count, 4: abandoned count. */
-						__( 'Attempted %1$d queued message(s): %2$d delivered, %3$d still queued, %4$d abandoned.', 'modern-mailer-oauth' ),
+						__( 'Attempted %1$d queued message(s): %2$d delivered, %3$d still queued, %4$d abandoned.', 'mme-mail-to-smtp' ),
 						$stats['attempted'],
 						$stats['sent'],
 						$stats['failed'],
@@ -237,7 +237,7 @@ class Admin_Page {
 					'saved',
 					sprintf(
 						/* translators: %d: number of messages returned to the queue. */
-						_n( '%d abandoned message returned to the queue.', '%d abandoned messages returned to the queue.', $count, 'modern-mailer-oauth' ),
+						_n( '%d abandoned message returned to the queue.', '%d abandoned messages returned to the queue.', $count, 'mme-mail-to-smtp' ),
 						$count
 					)
 				);
@@ -245,11 +245,11 @@ class Admin_Page {
 
 			case 'purge':
 				$this->plugin->queue->purge();
-				$this->redirect( 'saved', __( 'Queue emptied. Anything it held is gone.', 'modern-mailer-oauth' ) );
+				$this->redirect( 'saved', __( 'Queue emptied. Anything it held is gone.', 'mme-mail-to-smtp' ) );
 				break;
 		}
 
-		$this->redirect( 'error', __( 'Unknown queue action.', 'modern-mailer-oauth' ) );
+		$this->redirect( 'error', __( 'Unknown queue action.', 'mme-mail-to-smtp' ) );
 	}
 
 	public function handle_test_email(): void {
@@ -258,7 +258,7 @@ class Admin_Page {
 		$to = sanitize_email( wp_unslash( $_POST['test_to'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 
 		if ( ! is_email( $to ) ) {
-			$this->redirect( 'error', __( 'Enter a valid recipient address.', 'modern-mailer-oauth' ) );
+			$this->redirect( 'error', __( 'Enter a valid recipient address.', 'mme-mail-to-smtp' ) );
 		}
 
 		$captured = null;
@@ -276,24 +276,24 @@ class Admin_Page {
 				$to,
 				sprintf(
 					/* translators: %s: site name. */
-					__( 'MME-Mail to SMTP test from %s', 'modern-mailer-oauth' ),
+					__( 'MME-Mail to SMTP test from %s', 'mme-mail-to-smtp' ),
 					get_bloginfo( 'name' )
 				),
-				__( "This is a test message.\n\nIf you are reading it, the API connection is working.", 'modern-mailer-oauth' )
+				__( "This is a test message.\n\nIf you are reading it, the API connection is working.", 'mme-mail-to-smtp' )
 			)
 		);
 
 		remove_action( 'wp_mail_failed', $capture );
 
 		if ( $sent ) {
-			$this->redirect( 'saved', __( 'Test message accepted by the provider.', 'modern-mailer-oauth' ) );
+			$this->redirect( 'saved', __( 'Test message accepted by the provider.', 'mme-mail-to-smtp' ) );
 		}
 
 		$this->redirect(
 			'error',
 			$captured instanceof \WP_Error
 				? $captured->get_error_message()
-				: __( 'The test message could not be sent.', 'modern-mailer-oauth' )
+				: __( 'The test message could not be sent.', 'mme-mail-to-smtp' )
 		);
 	}
 
@@ -330,7 +330,7 @@ class Admin_Page {
 			$this->redirect_to_app( 'error', $result->get_error_message() );
 		}
 
-		$this->redirect_to_app( 'saved', __( 'Google account disconnected.', 'modern-mailer-oauth' ) );
+		$this->redirect_to_app( 'saved', __( 'Google account disconnected.', 'mme-mail-to-smtp' ) );
 	}
 
 	/**
@@ -338,7 +338,7 @@ class Admin_Page {
 	 */
 	public function handle_google_callback(): void {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'You are not allowed to change these settings.', 'modern-mailer-oauth' ) );
+			wp_die( esc_html__( 'You are not allowed to change these settings.', 'mme-mail-to-smtp' ) );
 		}
 
 		// No nonce here by necessity - this request comes from Google, not from
@@ -361,7 +361,7 @@ class Admin_Page {
 			'saved',
 			sprintf(
 				/* translators: %s: connection name, e.g. Primary. */
-				__( 'Google account connected to %s. Send a test email to confirm delivery.', 'modern-mailer-oauth' ),
+				__( 'Google account connected to %s. Send a test email to confirm delivery.', 'mme-mail-to-smtp' ),
 				$this->plugin->connections->name_for( $result )
 			)
 		);
@@ -402,13 +402,13 @@ class Admin_Page {
 				'error',
 				sprintf(
 					/* translators: %s: reason the setup service could not be reached. */
-					__( 'Disconnected here, but the setup service could not be told: %s', 'modern-mailer-oauth' ),
+					__( 'Disconnected here, but the setup service could not be told: %s', 'mme-mail-to-smtp' ),
 					$result->get_error_message()
 				)
 			);
 		}
 
-		$this->redirect_to_app( 'saved', __( 'Account disconnected.', 'modern-mailer-oauth' ) );
+		$this->redirect_to_app( 'saved', __( 'Account disconnected.', 'mme-mail-to-smtp' ) );
 	}
 
 	/**
@@ -416,7 +416,7 @@ class Admin_Page {
 	 */
 	public function handle_one_click_callback(): void {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'You are not allowed to change these settings.', 'modern-mailer-oauth' ) );
+			wp_die( esc_html__( 'You are not allowed to change these settings.', 'mme-mail-to-smtp' ) );
 		}
 
 		// No nonce, by necessity: this request comes from the broker, not from
@@ -440,13 +440,13 @@ class Admin_Page {
 			'' !== $account
 				? sprintf(
 					/* translators: 1: email address connected, 2: connection name. */
-					__( 'Connected %1$s to %2$s. Send a test email to confirm delivery.', 'modern-mailer-oauth' ),
+					__( 'Connected %1$s to %2$s. Send a test email to confirm delivery.', 'mme-mail-to-smtp' ),
 					$account,
 					$name
 				)
 				: sprintf(
 					/* translators: %s: connection name. */
-					__( 'Account connected to %s. Send a test email to confirm delivery.', 'modern-mailer-oauth' ),
+					__( 'Account connected to %s. Send a test email to confirm delivery.', 'mme-mail-to-smtp' ),
 					$name
 				)
 		);
@@ -548,17 +548,17 @@ class Admin_Page {
 		$connected = $this->plugin->consent->is_connected( $slot );
 		$action    = $connected ? 'mmoa_disconnect_google' : 'mmoa_connect_google';
 
-		echo '<tr><th scope="row">' . esc_html__( 'Account', 'modern-mailer-oauth' ) . '</th><td>';
+		echo '<tr><th scope="row">' . esc_html__( 'Account', 'mme-mail-to-smtp' ) . '</th><td>';
 
 		if ( $connected ) {
 			printf(
 				'<p><span style="color:#008a20">&#10003; %s</span></p>',
-				esc_html__( 'Connected. A refresh token is stored for this connection.', 'modern-mailer-oauth' )
+				esc_html__( 'Connected. A refresh token is stored for this connection.', 'mme-mail-to-smtp' )
 			);
 		} else {
 			printf(
 				'<p>%s</p>',
-				esc_html__( 'Not connected. Save the client ID and secret first, then sign in to grant access.', 'modern-mailer-oauth' )
+				esc_html__( 'Not connected. Save the client ID and secret first, then sign in to grant access.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -583,8 +583,8 @@ class Admin_Page {
 
 		submit_button(
 			$connected
-				? __( 'Disconnect Google account', 'modern-mailer-oauth' )
-				: __( 'Sign in with Google', 'modern-mailer-oauth' ),
+				? __( 'Disconnect Google account', 'mme-mail-to-smtp' )
+				: __( 'Sign in with Google', 'mme-mail-to-smtp' ),
 			$connected ? 'delete' : 'primary',
 			'submit',
 			false
@@ -659,7 +659,7 @@ class Admin_Page {
 		if ( $locked ) {
 			printf(
 				'<p class="description">%s</p>',
-				esc_html__( 'Set in wp-config.php, so it cannot be edited here.', 'modern-mailer-oauth' )
+				esc_html__( 'Set in wp-config.php, so it cannot be edited here.', 'mme-mail-to-smtp' )
 			);
 		} elseif ( '' !== $help ) {
 			printf( '<p class="description">%s</p>', esc_html( $help ) );
@@ -682,16 +682,16 @@ class Admin_Page {
 		if ( $locked ) {
 			printf(
 				'<p><code>%s</code></p><p class="description">%s</p></td></tr>',
-				esc_html__( 'defined in wp-config.php', 'modern-mailer-oauth' ),
-				esc_html__( 'This is the recommended place to keep it.', 'modern-mailer-oauth' )
+				esc_html__( 'defined in wp-config.php', 'mme-mail-to-smtp' ),
+				esc_html__( 'This is the recommended place to keep it.', 'mme-mail-to-smtp' )
 			);
 
 			return;
 		}
 
 		$placeholder = $has
-			? __( 'Stored. Leave blank to keep it.', 'modern-mailer-oauth' )
-			: __( 'Not set', 'modern-mailer-oauth' );
+			? __( 'Stored. Leave blank to keep it.', 'mme-mail-to-smtp' )
+			: __( 'Not set', 'mme-mail-to-smtp' );
 
 		if ( $textarea ) {
 			printf(
@@ -714,7 +714,7 @@ class Admin_Page {
 		if ( ! $secrets->is_encryption_available() ) {
 			printf(
 				'<p class="description"><strong>%s</strong></p>',
-				esc_html__( 'Libsodium is unavailable, so this will be stored unencrypted. Put it in wp-config.php instead.', 'modern-mailer-oauth' )
+				esc_html__( 'Libsodium is unavailable, so this will be stored unencrypted. Put it in wp-config.php instead.', 'mme-mail-to-smtp' )
 			);
 		}
 
@@ -723,7 +723,7 @@ class Admin_Page {
 
 	private function guard( string $action ): void {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'You are not allowed to change these settings.', 'modern-mailer-oauth' ) );
+			wp_die( esc_html__( 'You are not allowed to change these settings.', 'mme-mail-to-smtp' ) );
 		}
 
 		check_admin_referer( $action );

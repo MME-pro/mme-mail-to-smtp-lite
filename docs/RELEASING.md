@@ -33,8 +33,8 @@ either offers every site an update it already has or hides one it needs.
 
 | File | Line |
 |---|---|
-| `modern-mailer-oauth.php` | ` * Version:           0.4.3` |
-| `modern-mailer-oauth.php` | `const VERSION     = '0.4.3';` |
+| `mme-mail-to-smtp.php` | ` * Version:           0.4.3` |
+| `mme-mail-to-smtp.php` | `const VERSION     = '0.4.3';` |
 | `package.json` | `"version": "0.4.3",` |
 | `readme.txt` | `Stable tag: 0.4.3` |
 
@@ -44,12 +44,12 @@ All four at once, replacing the old version with the new one:
 OLD=0.4.2
 NEW=0.4.3
 
-sed -i "s/Version:           $OLD/Version:           $NEW/" modern-mailer-oauth.php
-sed -i "s/const VERSION     = '$OLD'/const VERSION     = '$NEW'/" modern-mailer-oauth.php
+sed -i "s/Version:           $OLD/Version:           $NEW/" mme-mail-to-smtp.php
+sed -i "s/const VERSION     = '$OLD'/const VERSION     = '$NEW'/" mme-mail-to-smtp.php
 sed -i "s/\"version\": \"$OLD\"/\"version\": \"$NEW\"/" package.json
 sed -i "s/^Stable tag: $OLD/Stable tag: $NEW/" readme.txt
 
-grep -n "$NEW" modern-mailer-oauth.php package.json readme.txt   # expect 4 lines
+grep -n "$NEW" mme-mail-to-smtp.php package.json readme.txt   # expect 4 lines
 ```
 
 Pick the number the way the change deserves: `0.4.2 -> 0.4.3` for fixes and

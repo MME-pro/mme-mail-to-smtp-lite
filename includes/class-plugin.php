@@ -188,7 +188,7 @@ class Plugin {
 
 		$schedules[ Queue::SCHEDULE_NAME ] = [
 			'interval' => 5 * MINUTE_IN_SECONDS,
-			'display'  => __( 'Every five minutes (MME-Mail to SMTP retry queue)', 'modern-mailer-oauth' ),
+			'display'  => __( 'Every five minutes (MME-Mail to SMTP retry queue)', 'mme-mail-to-smtp' ),
 		];
 
 		return $schedules;

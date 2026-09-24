@@ -27,7 +27,7 @@ class Resend extends Abstract_Api_Provider {
 	private const MAX_MIME_BYTES = 20971520;
 
 	public function get_label(): string {
-		return __( 'Resend', 'modern-mailer-oauth' );
+		return __( 'Resend', 'mme-mail-to-smtp' );
 	}
 
 	public function get_max_message_bytes(): int {
@@ -40,8 +40,8 @@ class Resend extends Abstract_Api_Provider {
 
 	public static function describe(): array {
 		return [
-			'label'    => __( 'Resend', 'modern-mailer-oauth' ),
-			'summary'  => __( 'One API key and a verified sending domain.', 'modern-mailer-oauth' ),
+			'label'    => __( 'Resend', 'mme-mail-to-smtp' ),
+			'summary'  => __( 'One API key and a verified sending domain.', 'mme-mail-to-smtp' ),
 			'docs'     => 'https://resend.com/docs/api-reference/emails/send-email',
 			'category' => 'api',
 			'raw_mime' => false,
@@ -52,8 +52,8 @@ class Resend extends Abstract_Api_Provider {
 		return [
 			Field::secret(
 				'resend_api_key',
-				__( 'API key', 'modern-mailer-oauth' ),
-				__( 'From API Keys in your Resend dashboard. Sending access is enough.', 'modern-mailer-oauth' ),
+				__( 'API key', 'mme-mail-to-smtp' ),
+				__( 'From API Keys in your Resend dashboard. Sending access is enough.', 'mme-mail-to-smtp' ),
 				're_...'
 			),
 		];

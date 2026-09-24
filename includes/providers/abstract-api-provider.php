@@ -73,7 +73,7 @@ abstract class Abstract_Api_Provider extends Abstract_Provider {
 	protected function request_token() {
 		return new WP_Error(
 			'mmoa_not_applicable',
-			__( 'This provider authenticates with an API key and mints no tokens.', 'modern-mailer-oauth' )
+			__( 'This provider authenticates with an API key and mints no tokens.', 'mme-mail-to-smtp' )
 		);
 	}
 
@@ -199,7 +199,7 @@ abstract class Abstract_Api_Provider extends Abstract_Provider {
 			'mmoa_provider_incomplete',
 			sprintf(
 				/* translators: 1: provider name, 2: comma-separated list of field labels. */
-				__( '%1$s is missing: %2$s.', 'modern-mailer-oauth' ),
+				__( '%1$s is missing: %2$s.', 'mme-mail-to-smtp' ),
 				$this->get_label(),
 				implode( ', ', $missing )
 			)
@@ -222,7 +222,7 @@ abstract class Abstract_Api_Provider extends Abstract_Provider {
 				'mmoa_api_unauthorized',
 				sprintf(
 					/* translators: 1: provider name, 2: error detail. */
-					__( '%1$s rejected the API key. %2$s', 'modern-mailer-oauth' ),
+					__( '%1$s rejected the API key. %2$s', 'mme-mail-to-smtp' ),
 					$this->get_label(),
 					$detail
 				),
@@ -235,7 +235,7 @@ abstract class Abstract_Api_Provider extends Abstract_Provider {
 				'mmoa_api_rate_limited',
 				sprintf(
 					/* translators: %s: provider name. */
-					__( '%s is rate limiting this account. The message was not sent; it will be retried.', 'modern-mailer-oauth' ),
+					__( '%s is rate limiting this account. The message was not sent; it will be retried.', 'mme-mail-to-smtp' ),
 					$this->get_label()
 				),
 				[ 'status' => $status ]
@@ -246,7 +246,7 @@ abstract class Abstract_Api_Provider extends Abstract_Provider {
 			'mmoa_api_error',
 			sprintf(
 				/* translators: 1: provider name, 2: HTTP status, 3: error detail. */
-				__( '%1$s returned HTTP %2$d. %3$s', 'modern-mailer-oauth' ),
+				__( '%1$s returned HTTP %2$d. %3$s', 'mme-mail-to-smtp' ),
 				$this->get_label(),
 				$status,
 				$detail

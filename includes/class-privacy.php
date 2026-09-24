@@ -50,7 +50,7 @@ class Privacy {
 	private const BATCH = 50;
 
 	/** The exporter and eraser both answer under this key. */
-	private const SLUG = 'modern-mailer-oauth';
+	private const SLUG = 'mme-mail-to-smtp';
 
 	public function register(): void {
 		add_filter( 'wp_privacy_personal_data_exporters', [ $this, 'register_exporter' ] );
@@ -68,7 +68,7 @@ class Privacy {
 	 */
 	public function register_exporter( array $exporters ): array {
 		$exporters[ self::SLUG ] = [
-			'exporter_friendly_name' => __( 'MME-Mail to SMTP', 'modern-mailer-oauth' ),
+			'exporter_friendly_name' => __( 'MME-Mail to SMTP', 'mme-mail-to-smtp' ),
 			'callback'               => [ $this, 'export' ],
 		];
 
@@ -81,7 +81,7 @@ class Privacy {
 	 */
 	public function register_eraser( array $erasers ): array {
 		$erasers[ self::SLUG ] = [
-			'eraser_friendly_name' => __( 'MME-Mail to SMTP', 'modern-mailer-oauth' ),
+			'eraser_friendly_name' => __( 'MME-Mail to SMTP', 'mme-mail-to-smtp' ),
 			'callback'             => [ $this, 'erase' ],
 		];
 
@@ -107,28 +107,28 @@ class Privacy {
 			// full message bodies in it would disclose more than it answers.
 			$export[] = [
 				'group_id'          => 'mmoa-queue',
-				'group_label'       => __( 'Email waiting to be sent', 'modern-mailer-oauth' ),
-				'group_description' => __( 'Messages held for retry after a delivery failure. The message itself is stored but is not included here.', 'modern-mailer-oauth' ),
+				'group_label'       => __( 'Email waiting to be sent', 'mme-mail-to-smtp' ),
+				'group_description' => __( 'Messages held for retry after a delivery failure. The message itself is stored but is not included here.', 'mme-mail-to-smtp' ),
 				'item_id'           => 'mmoa-queue-' . (int) $row->id,
 				'data'              => [
 					[
-						'name'  => __( 'Queued', 'modern-mailer-oauth' ),
+						'name'  => __( 'Queued', 'mme-mail-to-smtp' ),
 						'value' => (string) $row->created_at,
 					],
 					[
-						'name'  => __( 'Recipients', 'modern-mailer-oauth' ),
+						'name'  => __( 'Recipients', 'mme-mail-to-smtp' ),
 						'value' => (string) $row->recipients,
 					],
 					[
-						'name'  => __( 'Subject', 'modern-mailer-oauth' ),
+						'name'  => __( 'Subject', 'mme-mail-to-smtp' ),
 						'value' => (string) $row->subject,
 					],
 					[
-						'name'  => __( 'State', 'modern-mailer-oauth' ),
+						'name'  => __( 'State', 'mme-mail-to-smtp' ),
 						'value' => (string) $row->status,
 					],
 					[
-						'name'  => __( 'Delivery attempts', 'modern-mailer-oauth' ),
+						'name'  => __( 'Delivery attempts', 'mme-mail-to-smtp' ),
 						'value' => (string) (int) $row->attempts,
 					],
 				],
@@ -172,7 +172,7 @@ class Privacy {
 					'%d message waiting to be sent to this address was deleted and will not be delivered.',
 					'%d messages waiting to be sent to this address were deleted and will not be delivered.',
 					count( $queued ),
-					'modern-mailer-oauth'
+					'mme-mail-to-smtp'
 				),
 				count( $queued )
 			);
@@ -273,13 +273,13 @@ class Privacy {
 			return;
 		}
 
-		$content = '<p>' . __( 'This site sends its email through a third-party mail provider rather than through the web server. The complete message - recipients, subject, body and any attachments - is transmitted to that provider in order to be delivered.', 'modern-mailer-oauth' ) . '</p>'
-			. '<p>' . __( 'A message that cannot be delivered immediately is held, in full, until it can be retried or until it is discarded as undeliverable.', 'modern-mailer-oauth' ) . '</p>'
-			. '<p>' . __( 'This plugin sets no cookies, records no IP addresses, and does nothing in a visitor&#8217;s browser.', 'modern-mailer-oauth' ) . '</p>'
-			. '<p>' . __( 'The administrator should name the mail provider in use here, and link to that provider&#8217;s own privacy policy.', 'modern-mailer-oauth' ) . '</p>';
+		$content = '<p>' . __( 'This site sends its email through a third-party mail provider rather than through the web server. The complete message - recipients, subject, body and any attachments - is transmitted to that provider in order to be delivered.', 'mme-mail-to-smtp' ) . '</p>'
+			. '<p>' . __( 'A message that cannot be delivered immediately is held, in full, until it can be retried or until it is discarded as undeliverable.', 'mme-mail-to-smtp' ) . '</p>'
+			. '<p>' . __( 'This plugin sets no cookies, records no IP addresses, and does nothing in a visitor&#8217;s browser.', 'mme-mail-to-smtp' ) . '</p>'
+			. '<p>' . __( 'The administrator should name the mail provider in use here, and link to that provider&#8217;s own privacy policy.', 'mme-mail-to-smtp' ) . '</p>';
 
 		wp_add_privacy_policy_content(
-			__( 'MME-Mail to SMTP', 'modern-mailer-oauth' ),
+			__( 'MME-Mail to SMTP', 'mme-mail-to-smtp' ),
 			wp_kses_post( wpautop( $content, false ) )
 		);
 	}

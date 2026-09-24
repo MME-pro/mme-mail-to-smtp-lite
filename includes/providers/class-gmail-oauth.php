@@ -33,7 +33,7 @@ defined( 'ABSPATH' ) || exit;
 class Gmail_OAuth extends Abstract_Gmail {
 
 	public function get_label(): string {
-		return __( 'Gmail (OAuth)', 'modern-mailer-oauth' );
+		return __( 'Gmail (OAuth)', 'mme-mail-to-smtp' );
 	}
 
 	public static function slug(): string {
@@ -53,8 +53,8 @@ class Gmail_OAuth extends Abstract_Gmail {
 
 	public static function describe(): array {
 		return [
-			'label'    => __( 'Gmail', 'modern-mailer-oauth' ),
-			'summary'  => __( 'Consumer @gmail.com, using your own OAuth client and a one-time sign-in.', 'modern-mailer-oauth' ),
+			'label'    => __( 'Gmail', 'mme-mail-to-smtp' ),
+			'summary'  => __( 'Consumer @gmail.com, using your own OAuth client and a one-time sign-in.', 'mme-mail-to-smtp' ),
 			'docs'     => 'https://developers.google.com/gmail/api/guides/sending',
 			'category' => 'oauth',
 			'raw_mime' => true,
@@ -70,11 +70,11 @@ class Gmail_OAuth extends Abstract_Gmail {
 		if ( Broker::is_available() ) {
 			$fields[] = new Field(
 				key: 'google_setup_mode',
-				label: __( 'Setup', 'modern-mailer-oauth' ),
+				label: __( 'Setup', 'mme-mail-to-smtp' ),
 				type: Field::RADIO,
 				options: [
-					One_Click::MODE_ONE_CLICK  => __( 'One-click', 'modern-mailer-oauth' ),
-					One_Click::MODE_OWN_CLIENT => __( 'My own OAuth client', 'modern-mailer-oauth' ),
+					One_Click::MODE_ONE_CLICK  => __( 'One-click', 'mme-mail-to-smtp' ),
+					One_Click::MODE_OWN_CLIENT => __( 'My own OAuth client', 'mme-mail-to-smtp' ),
 				],
 				default: One_Click::MODE_OWN_CLIENT
 			);
@@ -90,15 +90,15 @@ class Gmail_OAuth extends Abstract_Gmail {
 
 		$fields[] = new Field(
 			key: 'google_client_id',
-			label: __( 'OAuth client ID', 'modern-mailer-oauth' ),
+			label: __( 'OAuth client ID', 'mme-mail-to-smtp' ),
 			required: true,
-			help: __( 'Must be a Web application client, not Desktop.', 'modern-mailer-oauth' ),
+			help: __( 'Must be a Web application client, not Desktop.', 'mme-mail-to-smtp' ),
 			depends: $depends
 		);
 
 		$fields[] = new Field(
 			key: 'google_client_sec',
-			label: __( 'OAuth client secret', 'modern-mailer-oauth' ),
+			label: __( 'OAuth client secret', 'mme-mail-to-smtp' ),
 			type: Field::PASSWORD,
 			secret: true,
 			required: true,
@@ -151,14 +151,14 @@ class Gmail_OAuth extends Abstract_Gmail {
 		if ( '' === $client_id || '' === $secret ) {
 			return new WP_Error(
 				'mmoa_gmail_oauth_incomplete',
-				__( 'The Google OAuth client ID or client secret is missing.', 'modern-mailer-oauth' )
+				__( 'The Google OAuth client ID or client secret is missing.', 'mme-mail-to-smtp' )
 			);
 		}
 
 		if ( '' === $refresh ) {
 			return new WP_Error(
 				'mmoa_gmail_not_connected',
-				__( 'No Google account is connected. Use the Connect button on the settings screen.', 'modern-mailer-oauth' )
+				__( 'No Google account is connected. Use the Connect button on the settings screen.', 'mme-mail-to-smtp' )
 			);
 		}
 

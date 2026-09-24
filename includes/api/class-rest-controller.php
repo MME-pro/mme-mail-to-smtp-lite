@@ -359,7 +359,7 @@ class Rest_Controller {
 		return new WP_REST_Response(
 			[
 				'ok'      => true,
-				'message' => __( 'Disconnected. Every setting and credential for this connection has been deleted, the From address included.', 'modern-mailer-oauth' ),
+				'message' => __( 'Disconnected. Every setting and credential for this connection has been deleted, the From address included.', 'mme-mail-to-smtp' ),
 			]
 		);
 	}
@@ -372,7 +372,7 @@ class Rest_Controller {
 			return new WP_REST_Response(
 				[
 					'ok'      => false,
-					'message' => __( 'Choose a provider for this connection first.', 'modern-mailer-oauth' ),
+					'message' => __( 'Choose a provider for this connection first.', 'mme-mail-to-smtp' ),
 				]
 			);
 		}
@@ -389,7 +389,7 @@ class Rest_Controller {
 					? $result->get_error_message()
 					: ( is_string( $result )
 						? $result
-						: __( 'Verified. The credentials are valid and the mailbox is reachable.', 'modern-mailer-oauth' ) ),
+						: __( 'Verified. The credentials are valid and the mailbox is reachable.', 'mme-mail-to-smtp' ) ),
 				'code'    => is_wp_error( $result ) ? $result->get_error_code() : '',
 			]
 		);
@@ -402,7 +402,7 @@ class Rest_Controller {
 			return new WP_REST_Response(
 				[
 					'ok'      => false,
-					'message' => __( 'Enter a valid recipient address.', 'modern-mailer-oauth' ),
+					'message' => __( 'Enter a valid recipient address.', 'mme-mail-to-smtp' ),
 				]
 			);
 		}
@@ -424,10 +424,10 @@ class Rest_Controller {
 				$to,
 				sprintf(
 					/* translators: %s: site name. */
-					__( 'MME-Mail to SMTP test from %s', 'modern-mailer-oauth' ),
+					__( 'MME-Mail to SMTP test from %s', 'mme-mail-to-smtp' ),
 					get_bloginfo( 'name' )
 				),
-				__( "This is a test message.\n\nIf you are reading it, the connection is working.", 'modern-mailer-oauth' )
+				__( "This is a test message.\n\nIf you are reading it, the connection is working.", 'mme-mail-to-smtp' )
 			)
 		);
 
@@ -437,8 +437,8 @@ class Rest_Controller {
 			[
 				'ok'      => (bool) $sent,
 				'message' => $sent
-					? __( 'Accepted for delivery. If it does not arrive, check the log for what the provider said.', 'modern-mailer-oauth' )
-					: ( $captured instanceof WP_Error ? $captured->get_error_message() : __( 'The test message could not be sent.', 'modern-mailer-oauth' ) ),
+					? __( 'Accepted for delivery. If it does not arrive, check the log for what the provider said.', 'mme-mail-to-smtp' )
+					: ( $captured instanceof WP_Error ? $captured->get_error_message() : __( 'The test message could not be sent.', 'mme-mail-to-smtp' ) ),
 			]
 		);
 	}
@@ -481,7 +481,7 @@ class Rest_Controller {
 						'stats'   => $stats,
 						'message' => sprintf(
 							/* translators: 1: attempted, 2: delivered, 3: still queued, 4: abandoned. */
-							__( 'Attempted %1$d: %2$d delivered, %3$d still queued, %4$d abandoned.', 'modern-mailer-oauth' ),
+							__( 'Attempted %1$d: %2$d delivered, %3$d still queued, %4$d abandoned.', 'mme-mail-to-smtp' ),
 							$stats['attempted'],
 							$stats['sent'],
 							$stats['failed'],
@@ -498,7 +498,7 @@ class Rest_Controller {
 						'ok'      => true,
 						'message' => sprintf(
 							/* translators: %d: number of messages returned to the queue. */
-							_n( '%d abandoned message returned to the queue.', '%d abandoned messages returned to the queue.', $count, 'modern-mailer-oauth' ),
+							_n( '%d abandoned message returned to the queue.', '%d abandoned messages returned to the queue.', $count, 'mme-mail-to-smtp' ),
 							$count
 						),
 					]
@@ -510,7 +510,7 @@ class Rest_Controller {
 				return new WP_REST_Response(
 					[
 						'ok'      => true,
-						'message' => __( 'Queue emptied. Anything it held is gone.', 'modern-mailer-oauth' ),
+						'message' => __( 'Queue emptied. Anything it held is gone.', 'mme-mail-to-smtp' ),
 					]
 				);
 		}

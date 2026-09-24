@@ -32,12 +32,12 @@ class Site_Health {
 	 */
 	public function add_tests( array $tests ): array {
 		$tests['direct']['mmoa_delivery'] = [
-			'label' => __( 'Email delivery', 'modern-mailer-oauth' ),
+			'label' => __( 'Email delivery', 'mme-mail-to-smtp' ),
 			'test'  => [ $this, 'run_test' ],
 		];
 
 		$tests['direct']['mmoa_conflicts'] = [
-			'label' => __( 'Email plugin conflicts', 'modern-mailer-oauth' ),
+			'label' => __( 'Email plugin conflicts', 'mme-mail-to-smtp' ),
 			'test'  => [ $this, 'run_conflict_test' ],
 		];
 
@@ -58,13 +58,13 @@ class Site_Health {
 		$conflicts = $this->plugin->conflicts;
 
 		$result = [
-			'label'       => __( 'No other mail plugin is competing for wp_mail()', 'modern-mailer-oauth' ),
+			'label'       => __( 'No other mail plugin is competing for wp_mail()', 'mme-mail-to-smtp' ),
 			'status'      => 'good',
 			'badge'       => [
-				'label' => __( 'Email', 'modern-mailer-oauth' ),
+				'label' => __( 'Email', 'mme-mail-to-smtp' ),
 				'color' => 'blue',
 			],
-			'description' => '<p>' . esc_html__( 'Only one plugin on this site replaces the function WordPress sends email with, which is the most that can work.', 'modern-mailer-oauth' ) . '</p>',
+			'description' => '<p>' . esc_html__( 'Only one plugin on this site replaces the function WordPress sends email with, which is the most that can work.', 'mme-mail-to-smtp' ) . '</p>',
 			'actions'     => '',
 			'test'        => 'mmoa_conflicts',
 		];
@@ -74,10 +74,10 @@ class Site_Health {
 		if ( $active ) {
 			$result['status']         = 'critical';
 			$result['badge']['color'] = 'red';
-			$result['label']          = __( 'Two plugins are trying to send this site\'s email', 'modern-mailer-oauth' );
+			$result['label']          = __( 'Two plugins are trying to send this site\'s email', 'mme-mail-to-smtp' );
 			$result['description']    = '<p>' . sprintf(
 				/* translators: %s: comma-separated plugin names. */
-				esc_html__( '%s is active alongside MME-Mail to SMTP. WordPress lets exactly one plugin take over sending, so one of the two is configured and doing nothing - and which one wins depends on load order rather than on anything you chose.', 'modern-mailer-oauth' ),
+				esc_html__( '%s is active alongside MME-Mail to SMTP. WordPress lets exactly one plugin take over sending, so one of the two is configured and doing nothing - and which one wins depends on load order rather than on anything you chose.', 'mme-mail-to-smtp' ),
 				esc_html( implode( ', ', wp_list_pluck( $active, 'name' ) ) )
 			) . '</p>';
 			$result['actions']        = $this->plugins_link();
@@ -90,10 +90,10 @@ class Site_Health {
 		if ( $dormant ) {
 			$result['status']         = 'recommended';
 			$result['badge']['color'] = 'orange';
-			$result['label']          = __( 'An unused mail plugin is still installed', 'modern-mailer-oauth' );
+			$result['label']          = __( 'An unused mail plugin is still installed', 'mme-mail-to-smtp' );
 			$result['description']    = '<p>' . sprintf(
 				/* translators: %s: comma-separated plugin names. */
-				esc_html__( '%s is installed but inactive, so it is not sending anything today. Deleting it removes the chance of it being reactivated later and quietly taking sending away from this plugin.', 'modern-mailer-oauth' ),
+				esc_html__( '%s is installed but inactive, so it is not sending anything today. Deleting it removes the chance of it being reactivated later and quietly taking sending away from this plugin.', 'mme-mail-to-smtp' ),
 				esc_html( implode( ', ', wp_list_pluck( $dormant, 'name' ) ) )
 			) . '</p>';
 			$result['actions']        = $this->plugins_link();
@@ -106,10 +106,10 @@ class Site_Health {
 		if ( '' !== $owner ) {
 			$result['status']         = 'critical';
 			$result['badge']['color'] = 'red';
-			$result['label']          = __( 'Something else has taken over wp_mail()', 'modern-mailer-oauth' );
+			$result['label']          = __( 'Something else has taken over wp_mail()', 'mme-mail-to-smtp' );
 			$result['description']    = '<p>' . sprintf(
 				/* translators: %s: path to the file that defined wp_mail(). */
-				esc_html__( 'wp_mail() was defined by %s rather than by WordPress, which means MME-Mail to SMTP cannot send even when it is configured correctly. It is not a plugin this one recognises, so it may be a custom plugin or something bundled with the theme.', 'modern-mailer-oauth' ),
+				esc_html__( 'wp_mail() was defined by %s rather than by WordPress, which means MME-Mail to SMTP cannot send even when it is configured correctly. It is not a plugin this one recognises, so it may be a custom plugin or something bundled with the theme.', 'mme-mail-to-smtp' ),
 				'<code>' . esc_html( $owner ) . '</code>'
 			) . '</p>';
 			$result['actions']        = $this->plugins_link();
@@ -125,21 +125,21 @@ class Site_Health {
 		$settings = $this->plugin->settings;
 
 		$result = [
-			'label'       => __( 'Email is sending normally', 'modern-mailer-oauth' ),
+			'label'       => __( 'Email is sending normally', 'mme-mail-to-smtp' ),
 			'status'      => 'good',
 			'badge'       => [
-				'label' => __( 'Email', 'modern-mailer-oauth' ),
+				'label' => __( 'Email', 'mme-mail-to-smtp' ),
 				'color' => 'blue',
 			],
-			'description' => '<p>' . esc_html__( 'Outgoing email is being delivered through an authenticated API connection.', 'modern-mailer-oauth' ) . '</p>',
+			'description' => '<p>' . esc_html__( 'Outgoing email is being delivered through an authenticated API connection.', 'mme-mail-to-smtp' ) . '</p>',
 			'actions'     => '',
 			'test'        => 'mmoa_delivery',
 		];
 
 		if ( ! $settings->is_active() ) {
 			$result['status']      = 'recommended';
-			$result['label']       = __( 'No mail provider is configured', 'modern-mailer-oauth' );
-			$result['description'] = '<p>' . esc_html__( 'WordPress is falling back to the server mail function, which most hosts either block or deliver straight to spam.', 'modern-mailer-oauth' ) . '</p>';
+			$result['label']       = __( 'No mail provider is configured', 'mme-mail-to-smtp' );
+			$result['description'] = '<p>' . esc_html__( 'WordPress is falling back to the server mail function, which most hosts either block or deliver straight to spam.', 'mme-mail-to-smtp' ) . '</p>';
 			$result['actions']     = $this->settings_link();
 
 			return $result;
@@ -150,10 +150,10 @@ class Site_Health {
 		if ( $this->plugin->health->is_failing() ) {
 			$result['status'] = 'critical';
 			$result['badge']['color'] = 'red';
-			$result['label']  = __( 'Email is failing to send', 'modern-mailer-oauth' );
+			$result['label']  = __( 'Email is failing to send', 'mme-mail-to-smtp' );
 			$result['description'] = '<p>' . sprintf(
 				/* translators: 1: consecutive failure count, 2: most recent error message. */
-				esc_html__( '%1$d messages in a row have failed. Most recent error: %2$s', 'modern-mailer-oauth' ),
+				esc_html__( '%1$d messages in a row have failed. Most recent error: %2$s', 'mme-mail-to-smtp' ),
 				(int) $state['streak'],
 				esc_html( (string) ( $state['last_error']['message'] ?? '' ) )
 			) . '</p>';
@@ -171,10 +171,10 @@ class Site_Health {
 		if ( $queue['failed'] > 0 ) {
 			$result['status']         = 'critical';
 			$result['badge']['color'] = 'red';
-			$result['label']          = __( 'Some email was never delivered', 'modern-mailer-oauth' );
+			$result['label']          = __( 'Some email was never delivered', 'mme-mail-to-smtp' );
 			$result['description']    = '<p>' . sprintf(
 				/* translators: %d: number of abandoned messages. */
-				esc_html( _n( '%d message exhausted every retry and has been abandoned.', '%d messages exhausted every retry and have been abandoned.', (int) $queue['failed'], 'modern-mailer-oauth' ) ),
+				esc_html( _n( '%d message exhausted every retry and has been abandoned.', '%d messages exhausted every retry and have been abandoned.', (int) $queue['failed'], 'mme-mail-to-smtp' ) ),
 				(int) $queue['failed']
 			) . '</p>';
 			$result['actions']        = $this->logs_link();
@@ -185,10 +185,10 @@ class Site_Health {
 		if ( $queue['pending'] > 0 ) {
 			$result['status']         = 'recommended';
 			$result['badge']['color'] = 'orange';
-			$result['label']          = __( 'Email is queued for retry', 'modern-mailer-oauth' );
+			$result['label']          = __( 'Email is queued for retry', 'mme-mail-to-smtp' );
 			$result['description']    = '<p>' . sprintf(
 				/* translators: %d: number of messages waiting. */
-				esc_html( _n( '%d message could not be sent on the first attempt and is waiting to be retried. Nothing has been lost, but sending is not healthy.', '%d messages could not be sent on the first attempt and are waiting to be retried. Nothing has been lost, but sending is not healthy.', (int) $queue['pending'], 'modern-mailer-oauth' ) ),
+				esc_html( _n( '%d message could not be sent on the first attempt and is waiting to be retried. Nothing has been lost, but sending is not healthy.', '%d messages could not be sent on the first attempt and are waiting to be retried. Nothing has been lost, but sending is not healthy.', (int) $queue['pending'], 'mme-mail-to-smtp' ) ),
 				(int) $queue['pending']
 			) . '</p>';
 			$result['actions']        = $this->logs_link();
@@ -206,7 +206,7 @@ class Site_Health {
 		return sprintf(
 			'<p><a href="%s">%s</a></p>',
 			esc_url( admin_url( 'plugins.php' ) ),
-			esc_html__( 'Open the Plugins screen', 'modern-mailer-oauth' )
+			esc_html__( 'Open the Plugins screen', 'mme-mail-to-smtp' )
 		);
 	}
 
@@ -214,7 +214,7 @@ class Site_Health {
 		return sprintf(
 			'<p><a href="%s">%s</a></p>',
 			esc_url( admin_url( 'admin.php?page=' . App_Page::SLUG ) ),
-			esc_html__( 'Open mail settings', 'modern-mailer-oauth' )
+			esc_html__( 'Open mail settings', 'mme-mail-to-smtp' )
 		);
 	}
 
@@ -225,7 +225,7 @@ class Site_Health {
 		return sprintf(
 			'<p><a href="%s">%s</a></p>',
 			esc_url( admin_url( 'admin.php?page=' . App_Page::SLUG ) ),
-			esc_html__( 'Review queued mail', 'modern-mailer-oauth' )
+			esc_html__( 'Review queued mail', 'mme-mail-to-smtp' )
 		);
 	}
 }

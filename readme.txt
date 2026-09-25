@@ -102,6 +102,14 @@ That reads `src/` and writes `build/`. `npm start` does the same in watch mode f
 
 Credentials can also be set in `wp-config.php` instead of the database - for example `define( 'MMOA_GOOGLE_SA_PRIVATE_KEY', '...' );`. The plugin shows a field as pinned when a constant is set for it.
 
+== Screenshots ==
+
+1. Eight mail services, every one of them available. Choose one and that is the connection every message goes out over.
+2. The dashboard answers the only question that matters: is mail being delivered right now, what was the last error, and what is waiting in the retry queue.
+3. A configured Google Workspace connection. The signing key is stored encrypted and never shown back; verify and send a test without leaving the screen.
+4. The setup wizard. Choose a service, enter its credentials, verify them against the provider, and send one real message - in that order, so you find out it works before you rely on it.
+5. Settings. How many failures in a row count as an outage, how long the retry queue holds a message, and the privacy tools WordPress already gives you.
+
 == Support ==
 
 Written and maintained by MME-pro (https://mme-pro.de/).

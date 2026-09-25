@@ -116,7 +116,7 @@ const Settings = () => {
 						</p>
 						<p className="m-0">
 							{ __(
-								'A failed send is logged immediately, every time, and wp_mail() returns false so the code that sent it knows.',
+								'A failed send is reported immediately, every time, and wp_mail() returns false so the code that sent it knows.',
 								'mme-mail-to-smtp'
 							) }
 						</p>
@@ -139,7 +139,7 @@ const Settings = () => {
 				<div className="grid gap-3 text-sm">
 					<p className="m-0 text-muted-foreground">
 						{ __(
-							'The log keeps recipients and subjects. A queued message is kept in full until it is sent or discarded. No cookies, no tracking pixels, no IP addresses.',
+							'This plugin keeps no record of what it sent. A queued message is kept in full until it is delivered or discarded, and nothing else. No cookies, no tracking pixels, no IP addresses.',
 							'mme-mail-to-smtp'
 						) }
 					</p>

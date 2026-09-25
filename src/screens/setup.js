@@ -440,7 +440,7 @@ const Setup = () => {
 						) }
 						title={ __( 'How should this site send its email?', 'mme-mail-to-smtp' ) }
 						lead={ __(
-							'Google can be connected without registering anything, by signing in. The rest need an API key from the service, which takes a minute in their console.',
+							'Google needs an OAuth client or a service account key from the Google Cloud console. The rest need an API key from the service, which takes a minute to create.',
 							'mme-mail-to-smtp'
 						) }
 						back={ () => go( 'welcome' ) }

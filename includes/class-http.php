@@ -59,7 +59,7 @@ class Http {
 			// through firewall and DNS settings for a rate-limit error.
 			return new WP_Error(
 				'mmoa_invalid_url',
-				__( 'Internal error: tried to contact the mail API using an invalid address. This means an earlier API call failed without being handled. Check the send log for the preceding error.', 'mme-mail-to-smtp' ),
+				__( 'Internal error: tried to contact the mail API using an invalid address. This means an earlier API call failed without being handled. The delivery failure reported before this one is the real cause.', 'mme-mail-to-smtp' ),
 				[ 'url' => $url ]
 			);
 		}

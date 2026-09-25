@@ -124,15 +124,6 @@ class App_Page {
 					'erase'  => admin_url( 'erase-personal-data.php' ),
 					'policy' => admin_url( 'options-privacy.php' ),
 				],
-
-				// Built here rather than in the browser. The app is served from
-				// admin.php, so a relative link would happen to resolve, and
-				// would stop resolving the moment the page moved.
-				'privacy'          => [
-					'export' => admin_url( 'export-personal-data.php' ),
-					'erase'  => admin_url( 'erase-personal-data.php' ),
-					'policy' => admin_url( 'options-privacy.php' ),
-				],
 			]
 		);
 	}

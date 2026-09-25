@@ -424,7 +424,7 @@ class Rest_Controller {
 			[
 				'ok'      => (bool) $sent,
 				'message' => $sent
-					? __( 'Accepted for delivery. If it does not arrive, check the log for what the provider said.', 'mme-mail-to-smtp' )
+					? __( 'Accepted for delivery. If it does not arrive, check the spam folder and the sending domain, then send another.', 'mme-mail-to-smtp' )
 					: ( $captured instanceof WP_Error ? $captured->get_error_message() : __( 'The test message could not be sent.', 'mme-mail-to-smtp' ) ),
 			]
 		);

@@ -83,10 +83,48 @@ class App_Page {
 
 		$asset = require $asset_file;
 
+		/*
+		 * The seam an add-on hangs a screen on.
+		 *
+		 * It is its own script handle rather than a few lines inlined into the
+		 * app, because the order matters and dependency order is the only thing
+		 * that guarantees it. An add-on declares `mmoa-registry` as its
+		 * dependency and adds its own handle to the filter below, so WordPress
+		 * prints the registry, then the add-on, then the app. Registering a
+		 * screen after the app has mounted would be too late: the routes and
+		 * the tab row are built once, from whatever is in the list at that
+		 * moment.
+		 *
+		 * Nothing here knows what an add-on is or whether one exists. On a site
+		 * with none, this is an empty array and four lines of script.
+		 */
+		wp_register_script( 'mmoa-registry', false, [], VERSION, true );
+		wp_enqueue_script( 'mmoa-registry' );
+		wp_add_inline_script(
+			'mmoa-registry',
+			'window.mmoa = window.mmoa || {};'
+			. 'window.mmoa.screens = window.mmoa.screens || [];'
+			. 'window.mmoa.registerScreen = function ( screen ) { window.mmoa.screens.push( screen ); };'
+		);
+
+		/**
+		 * Filters the scripts the admin app waits for.
+		 *
+		 * An add-on that contributes a screen registers its own bundle and adds
+		 * the handle here. Being a dependency of the app is what makes it run
+		 * first, which is what lets it call `window.mmoa.registerScreen()`
+		 * before anything is rendered.
+		 *
+		 * @since 0.17.0
+		 *
+		 * @param string[] $dependencies Script handles the app depends on.
+		 */
+		$dependencies = (array) apply_filters( 'mmoa_admin_app_dependencies', $asset['dependencies'] );
+
 		wp_enqueue_script(
 			'mmoa-app',
 			PLUGIN_URL . 'build/index.js',
-			$asset['dependencies'],
+			$dependencies,
 			$asset['version'],
 			true
 		);

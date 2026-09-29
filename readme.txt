@@ -146,6 +146,7 @@ No. WordPress lets exactly one plugin take over sending, so one of the two would
 
 = 0.17.0 =
 * Add-ons can now contribute their own screens to the admin app. A screen registered this way gets a tab of its own in the row, between Connections and Settings, and a route to match.
+* An add-on's screen can be built from the same panels, buttons and form fields as the screens either side of it, so the page reads as one piece of software rather than two.
 * Nothing changes on a site with no add-on installed. The tab row, the screens and every setting are exactly as they were.
 
 = 0.16.0 =

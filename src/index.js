@@ -2,6 +2,7 @@ import { createRoot } from '@wordpress/element';
 import App from './app';
 import ErrorBoundary from './components/error-boundary';
 import { installTranslationGuard } from './lib/translation-guard';
+import { share } from './lib/share';
 import './styles.css';
 
 /**
@@ -19,6 +20,12 @@ import './styles.css';
  * screen with nothing on it to act on.
  */
 installTranslationGuard();
+
+// Before the first render, so a screen contributed by an add-on can reach the
+// same panels and buttons the screens either side of it are built from. An
+// add-on's own script has already run by now - it is a dependency of this one -
+// which is why it reads this at render time rather than on import.
+share();
 
 const mount = document.getElementById( 'mmoa-app-root' );
 

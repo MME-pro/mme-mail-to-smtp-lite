@@ -13,6 +13,7 @@ in the changelog.
 - a tab between **Connections** and **Settings**, with your label and icon
 - a route under the app's hash router, so `#/your-path` is a real link
 - the same React instance, so your elements render here without ceremony
+- the same components these screens are built from, on `window.mmoa.ui`
 
 ## What you do
 
@@ -87,6 +88,40 @@ add_filter(
 
 The resulting order is `mmoa-registry`, then your script, then `mmoa-app`.
 WordPress guarantees it, because each is a declared dependency of the next.
+
+## Building the screen out of the same parts
+
+Your screen sits between this plugin's own. Built from your own components it
+would read as two pieces of software stapled together, so the kit these screens
+use is on `window.mmoa.ui`:
+
+`Panel` `Button` `Badge` `Input` `Textarea` `Label` `Switch` `Separator`
+`Skeleton` `Alert` `AlertTitle` `AlertDescription` `Tabs` `TabsList`
+`TabsTrigger` `TabsContent` `ToggleRow` `FormField` `inputClass` `Spinner`
+`CardSkeleton` `EmptyState` `useToast` `cn`
+
+**Read it inside your component, not at the top of the file.** Your script is a
+dependency of the app's, so it runs *first* - that is what lets you register
+before anything renders. At that moment `window.mmoa.ui` does not exist yet. By
+the time your screen is rendered, it does.
+
+```js
+const Logs = () => {
+	const { Panel, Button, Spinner, useToast } = window.mmoa.ui;
+	const toast = useToast();
+
+	return <Panel title={ __( 'Email Logs', 'my-addon' ) }>…</Panel>;
+};
+```
+
+```js
+// Wrong: this runs before the app's bundle has assigned anything.
+const { Panel } = window.mmoa.ui;
+```
+
+What is shared is presentation, and only that. No settings, no credentials,
+nothing to do with sending. If your screen needs data, register your own REST
+routes and ask for those.
 
 ## Why registration happens before mount, not after
 

@@ -145,24 +145,41 @@ class App_Page {
 
 		wp_set_script_translations( 'mmoa-app', 'mme-mail-to-smtp' );
 
-		wp_localize_script(
-			'mmoa-app',
-			'mmoa',
-			[
-				'version'          => VERSION,
-				'restNamespace'    => Rest_Controller::NAMESPACE,
-				'currentUserEmail' => wp_get_current_user()->user_email,
-				'redirectUri'      => Google_Consent::redirect_uri(),
+		$data = [
+			'version'          => VERSION,
+			'restNamespace'    => Rest_Controller::NAMESPACE,
+			'currentUserEmail' => wp_get_current_user()->user_email,
+			'redirectUri'      => Google_Consent::redirect_uri(),
 
-				// Built here rather than in the browser. The app is served from
-				// admin.php, so a relative link would happen to resolve, and
-				// would stop resolving the moment the page moved.
-				'privacy'          => [
-					'export' => admin_url( 'export-personal-data.php' ),
-					'erase'  => admin_url( 'erase-personal-data.php' ),
-					'policy' => admin_url( 'options-privacy.php' ),
-				],
-			]
+			// Built here rather than in the browser. The app is served from
+			// admin.php, so a relative link would happen to resolve, and
+			// would stop resolving the moment the page moved.
+			'privacy'          => [
+				'export' => admin_url( 'export-personal-data.php' ),
+				'erase'  => admin_url( 'erase-personal-data.php' ),
+				'policy' => admin_url( 'options-privacy.php' ),
+			],
+		];
+
+		/*
+		 * Merged into window.mmoa rather than assigned over it, and this is not
+		 * a stylistic preference.
+		 *
+		 * wp_localize_script() emits `var mmoa = {...};`, which replaces the
+		 * object wholesale. By the time it runs, `mmoa-registry` has created
+		 * window.mmoa and any add-on script - which is a dependency of this
+		 * one, so it has already executed - has registered its screens into it.
+		 * Assigning over the top threw all of that away a fraction of a second
+		 * before the app read it, so every registered screen silently vanished
+		 * and the tab row looked exactly as it does with no add-on installed.
+		 *
+		 * Object.assign keeps whatever is already there. `before` because the
+		 * app reads these values as it boots.
+		 */
+		wp_add_inline_script(
+			'mmoa-app',
+			'window.mmoa = Object.assign( window.mmoa || {}, ' . wp_json_encode( $data ) . ' );',
+			'before'
 		);
 	}
 

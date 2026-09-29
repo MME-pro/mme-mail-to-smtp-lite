@@ -4,7 +4,7 @@ Tags: smtp, wp_mail, gmail, sendgrid, mailgun
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.17.0
+Stable tag: 0.17.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -143,6 +143,9 @@ Not in this plugin. It records no copy of what it sent - a mail log holding reci
 No. WordPress lets exactly one plugin take over sending, so one of the two would be configured and doing nothing - and which one wins depends on load order rather than on anything you chose. The plugin detects the common ones and says so on screen.
 
 == Changelog ==
+
+= 0.17.1 =
+* Fixed: disconnecting a connection could leave an add-on's sign-in credentials behind. The screen said every credential for the connection had been deleted, while a refresh token stored by an add-on's own sign-in flow stayed in the database. Add-ons can now have their credentials cleared with the rest. Nothing stored by this plugin itself was ever affected.
 
 = 0.17.0 =
 * Add-ons can now contribute their own screens to the admin app. A screen registered this way gets a tab of its own in the row, between Connections and Settings, and a route to match.

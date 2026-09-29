@@ -349,6 +349,21 @@ class Settings {
 			}
 		}
 
+		/**
+		 * Filters the settings a disconnect clears.
+		 *
+		 * The counterpart of `mmoa_connection_secret_keys`, for what a sign-in
+		 * flow stores that is not a credential - the account it connected as,
+		 * the mode it was set up in. Left behind, those describe a mailbox that
+		 * is no longer connected, and pre-fill the form for whoever uses the
+		 * slot next.
+		 *
+		 * @since 0.17.1
+		 *
+		 * @param string[] $keys Setting keys, before the slot is applied.
+		 */
+		$keys = (array) apply_filters( 'mmoa_connection_setting_keys', $keys );
+
 		return array_values( array_unique( $keys ) );
 	}
 
@@ -365,6 +380,26 @@ class Settings {
 				$keys[] = $key;
 			}
 		}
+
+		/**
+		 * Filters the credentials a disconnect clears.
+		 *
+		 * A provider's declared secret fields are already here, taken from the
+		 * registry. What is not, and cannot be, is a credential written by a
+		 * sign-in flow rather than declared as a field: a refresh token arrives
+		 * from a callback, not from the connection form, so nothing in the
+		 * registry has ever heard of it. `google_refresh` is this plugin's own
+		 * and is listed above; an add-on with its own flow adds its equivalents
+		 * through this.
+		 *
+		 * Disconnect tells the administrator that every credential for the
+		 * connection has been deleted. This is what keeps that true.
+		 *
+		 * @since 0.17.1
+		 *
+		 * @param string[] $keys Credential keys, before the slot is applied.
+		 */
+		$keys = (array) apply_filters( 'mmoa_connection_secret_keys', $keys );
 
 		return array_values( array_unique( $keys ) );
 	}

@@ -100,6 +100,15 @@ use is on `window.mmoa.ui`:
 `TabsTrigger` `TabsContent` `ToggleRow` `FormField` `inputClass` `Spinner`
 `CardSkeleton` `EmptyState` `useToast` `cn`
 
+and the data hooks: `useQuery` `useMutation` `useQueryClient` `keepPreviousData`
+
+**Use those hooks rather than bundling your own `@tanstack/react-query`.** This
+app renders inside a `QueryClientProvider`, and React context belongs to one
+copy of a library. A second copy in your bundle has no provider above it, so
+`useQuery` throws "No QueryClient set" the moment your screen renders. Taking
+them from here puts you inside the provider you are already rendering within,
+and there is one cache instead of two.
+
 **Read it inside your component, not at the top of the file.** Your script is a
 dependency of the app's, so it runs *first* - that is what lets you register
 before anything renders. At that moment `window.mmoa.ui` does not exist yet. By

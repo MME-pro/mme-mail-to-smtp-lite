@@ -4,7 +4,7 @@ Tags: smtp, wp_mail, gmail, sendgrid, mailgun
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.17.2
+Stable tag: 0.17.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -143,6 +143,9 @@ Not in this plugin. It records no copy of what it sent - a mail log holding reci
 No. WordPress lets exactly one plugin take over sending, so one of the two would be configured and doing nothing - and which one wins depends on load order rather than on anything you chose. The plugin detects the common ones and says so on screen.
 
 == Changelog ==
+
+= 0.17.3 =
+* Add-on screens can now use this plugin's own data-fetching hooks. Without them an add-on had to bundle a second copy of the same library, which cannot see the cache this app sets up and fails as soon as the screen renders.
 
 = 0.17.2 =
 * Fixed: a screen contributed by an add-on never appeared. The data this plugin passes to its admin app was being assigned over the top of the object the add-on had just registered into, wiping it a moment before the app read it - so the tab row looked exactly as it does with no add-on installed. The data is merged in now instead of replacing what is there.

@@ -1,4 +1,5 @@
 import * as ui from '../components/ui';
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import { useToast } from '../components/toast';
 import { cn } from './utils';
 
@@ -31,10 +32,18 @@ import { cn } from './utils';
  *
  *     const { Panel } = window.mmoa.ui;   // undefined - too early
  *
- * What is shared is presentation and nothing else: panels, buttons, badges,
- * form fields, the toast hook and the class-name helper. No settings, no
- * credentials, no sending. An add-on that wants data asks the REST API for it,
- * with routes of its own.
+ * **The data hooks are here for a reason that is easy to miss.** This app runs
+ * inside a QueryClientProvider. React context is per-copy-of-the-library, so an
+ * add-on that bundles its own `@tanstack/react-query` gets a second copy with
+ * no provider above it, and `useQuery` throws "No QueryClient set" the moment
+ * its screen renders. Sharing these hooks means an add-on uses *this* copy, and
+ * lands inside the provider it is already rendering within. It also means one
+ * cache rather than two.
+ *
+ * What is shared is presentation and the means to fetch: panels, buttons,
+ * badges, form fields, the toast hook, the class-name helper and the query
+ * hooks. No settings, no credentials, no sending. An add-on that wants data
+ * asks the REST API for it, through routes of its own.
  */
 export const share = () => {
 	if ( typeof window === 'undefined' ) {
@@ -47,6 +56,10 @@ export const share = () => {
 		...ui,
 		useToast,
 		cn,
+		useQuery,
+		useMutation,
+		useQueryClient,
+		keepPreviousData,
 	};
 };
 

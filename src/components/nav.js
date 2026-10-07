@@ -5,6 +5,7 @@ import {
 	LayoutDashboard,
 	Plug,
 	Settings2,
+	Puzzle,
 	TriangleAlert,
 	CircleCheck,
 	Clock,
@@ -13,11 +14,27 @@ import {
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useTheme } from '../lib/use-theme';
+import extensions from '../lib/extensions';
 import Guilloche from './guilloche';
 
+/*
+ * Settings stays last. An add-on's screens go between Connections and
+ * Settings rather than after it, because Settings reads as the end of the row
+ * - anything past it looks like an afterthought, and on a site with the
+ * add-on installed these are not.
+ *
+ * An add-on may bring its own icon; the puzzle piece is what it gets if it
+ * does not, and is deliberately plain. This plugin does not style somebody
+ * else's screen, it only gives it a place to be.
+ */
 const TABS = [
 	{ to: '/dashboard', label: __( 'Dashboard', 'mme-mail-to-smtp' ), icon: LayoutDashboard },
 	{ to: '/connections', label: __( 'Connections', 'mme-mail-to-smtp' ), icon: Plug },
+	...extensions.map( ( { path, label, icon } ) => ( {
+		to: path,
+		label,
+		icon: icon || Puzzle,
+	} ) ),
 	{ to: '/settings', label: __( 'Settings', 'mme-mail-to-smtp' ), icon: Settings2 },
 ];
 

@@ -261,8 +261,12 @@ class Provider_Registry {
 			$out[] = array_merge(
 				$meta,
 				[
-					'slug'   => $slug,
-					'fields' => $fields,
+					'slug'     => $slug,
+					'fields'   => $fields,
+					// Which field picks the way in, for a tile with several.
+					// Lets the app and an add-on's connector ask "which mode is
+					// this connection in" without knowing each family's key.
+					'mode_key' => method_exists( $class, 'setup_mode_key' ) ? $class::setup_mode_key() : '',
 				]
 			);
 		}

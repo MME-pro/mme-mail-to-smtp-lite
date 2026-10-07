@@ -83,10 +83,53 @@ class App_Page {
 
 		$asset = require $asset_file;
 
+		/*
+		 * The seam an add-on hangs a screen on.
+		 *
+		 * It is its own script handle rather than a few lines inlined into the
+		 * app, because the order matters and dependency order is the only thing
+		 * that guarantees it. An add-on declares `mmoa-registry` as its
+		 * dependency and adds its own handle to the filter below, so WordPress
+		 * prints the registry, then the add-on, then the app. Registering a
+		 * screen after the app has mounted would be too late: the routes and
+		 * the tab row are built once, from whatever is in the list at that
+		 * moment.
+		 *
+		 * Nothing here knows what an add-on is or whether one exists. On a site
+		 * with none, this is an empty array and four lines of script.
+		 */
+		wp_register_script( 'mmoa-registry', false, [], VERSION, true );
+		wp_enqueue_script( 'mmoa-registry' );
+		wp_add_inline_script(
+			'mmoa-registry',
+			'window.mmoa = window.mmoa || {};'
+			. 'window.mmoa.screens = window.mmoa.screens || [];'
+			. 'window.mmoa.registerScreen = function ( screen ) { window.mmoa.screens.push( screen ); };'
+			// The second seam: the part of a connection form a way of
+			// connecting needs beyond its fields - a sign-in button, a
+			// redirect URI to copy. Keyed "provider:mode", or "provider".
+			. 'window.mmoa.connectors = window.mmoa.connectors || {};'
+			. 'window.mmoa.registerConnector = function ( key, connector ) { window.mmoa.connectors[ key ] = connector; };'
+		);
+
+		/**
+		 * Filters the scripts the admin app waits for.
+		 *
+		 * An add-on that contributes a screen registers its own bundle and adds
+		 * the handle here. Being a dependency of the app is what makes it run
+		 * first, which is what lets it call `window.mmoa.registerScreen()`
+		 * before anything is rendered.
+		 *
+		 * @since 0.17.0
+		 *
+		 * @param string[] $dependencies Script handles the app depends on.
+		 */
+		$dependencies = (array) apply_filters( 'mmoa_admin_app_dependencies', $asset['dependencies'] );
+
 		wp_enqueue_script(
 			'mmoa-app',
 			PLUGIN_URL . 'build/index.js',
-			$asset['dependencies'],
+			$dependencies,
 			$asset['version'],
 			true
 		);
@@ -107,23 +150,85 @@ class App_Page {
 
 		wp_set_script_translations( 'mmoa-app', 'mme-mail-to-smtp' );
 
-		wp_localize_script(
-			'mmoa-app',
-			'mmoa',
-			[
-				'version'          => VERSION,
-				'restNamespace'    => Rest_Controller::NAMESPACE,
-				'currentUserEmail' => wp_get_current_user()->user_email,
-				'redirectUri'      => Google_Consent::redirect_uri(),
+		$data = [
+			'version'          => VERSION,
+			'restNamespace'    => Rest_Controller::NAMESPACE,
+			'currentUserEmail' => wp_get_current_user()->user_email,
+			'redirectUri'      => Google_Consent::redirect_uri(),
 
-				// Built here rather than in the browser. The app is served from
-				// admin.php, so a relative link would happen to resolve, and
-				// would stop resolving the moment the page moved.
-				'privacy'          => [
-					'export' => admin_url( 'export-personal-data.php' ),
-					'erase'  => admin_url( 'erase-personal-data.php' ),
-					'policy' => admin_url( 'options-privacy.php' ),
-				],
+			// Built here rather than in the browser. The app is served from
+			// admin.php, so a relative link would happen to resolve, and
+			// would stop resolving the moment the page moved.
+			'privacy'          => [
+				'export' => admin_url( 'export-personal-data.php' ),
+				'erase'  => admin_url( 'erase-personal-data.php' ),
+				'policy' => admin_url( 'options-privacy.php' ),
+			],
+
+			'pro'              => self::pro_status(),
+		];
+
+		/*
+		 * Merged into window.mmoa rather than assigned over it, and this is not
+		 * a stylistic preference.
+		 *
+		 * wp_localize_script() emits `var mmoa = {...};`, which replaces the
+		 * object wholesale. By the time it runs, `mmoa-registry` has created
+		 * window.mmoa and any add-on script - which is a dependency of this
+		 * one, so it has already executed - has registered its screens into it.
+		 * Assigning over the top threw all of that away a fraction of a second
+		 * before the app read it, so every registered screen silently vanished
+		 * and the tab row looked exactly as it does with no add-on installed.
+		 *
+		 * Object.assign keeps whatever is already there. `before` because the
+		 * app reads these values as it boots.
+		 */
+		wp_add_inline_script(
+			'mmoa-app',
+			'window.mmoa = Object.assign( window.mmoa || {}, ' . wp_json_encode( $data ) . ' );',
+			'before'
+		);
+	}
+
+	/**
+	 * What the app should say when someone picks a connection only Pro has.
+	 *
+	 * This plugin contains none of those connections - no fields, no sign-in,
+	 * nothing switched off waiting for a key. It knows their names, so that
+	 * somebody looking for Microsoft 365 is told where it is rather than left
+	 * wondering whether it exists, and it knows whether Pro is here, so that
+	 * the answer is the right one: buy it, switch it on, or enter its licence.
+	 *
+	 * @return array{installed:bool,active:bool,licensed:bool,buy_url:string,activate_url:string}
+	 */
+	private static function pro_status(): array {
+		$installed = false;
+
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		foreach ( get_plugins() as $plugin ) {
+			if ( 'modern-mailer-oauth' === ( $plugin['TextDomain'] ?? '' ) ) {
+				$installed = true;
+				break;
+			}
+		}
+
+		/**
+		 * Pro's own account of itself, which only Pro can give: whether it is
+		 * running, and whether this site holds a licence.
+		 *
+		 * @param array<string,mixed> $status The status.
+		 */
+		return (array) apply_filters(
+			'mmoa_addon_status',
+			[
+				'installed'    => $installed,
+				'active'       => false,
+				'licensed'     => false,
+				'buy_url'      => 'https://mme-plugins.com/plugins/mme-mail-to-smtp-pro',
+				'activate_url' => admin_url( 'plugins.php' ),
 			]
 		);
 	}

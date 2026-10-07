@@ -332,6 +332,18 @@ class Rest_Controller {
 			$this->plugin->consent->disconnect( $slot );
 		}
 
+		/**
+		 * A connection is about to be wiped.
+		 *
+		 * For an add-on that granted access somewhere else - a sign-in with
+		 * another provider - to revoke it, while the settings that say which
+		 * grant it was still exist.
+		 *
+		 * @param string                $slot   The connection's slot.
+		 * @param \ModernMailer\Settings $scoped Settings scoped to that slot.
+		 */
+		do_action( 'mmoa_connection_disconnecting', $slot, $scoped );
+
 		// Then everything the connection ever stored - every provider field,
 		// every credential, the setup mode, and the From address and name.
 		// Disconnect used to clear the credentials and the provider only,
@@ -556,12 +568,29 @@ class Rest_Controller {
 	private function connection_payload( string $slot ): array {
 		$scoped = $this->plugin->settings->for_slot( $slot );
 
-		return [
-			'slot'      => '' === $slot ? 'primary' : $slot,
-			'provider'  => (string) $scoped->get( 'provider' ),
-			'providers' => Provider_Registry::to_array( $scoped ),
-			'oauth'     => $this->oauth_payload( $slot ),
-		];
+		/**
+		 * What the connection screen knows about one connection.
+		 *
+		 * Filtered so an add-on whose connection methods need state of their
+		 * own - a sign-in's account and the signed links that start and end
+		 * it - can put it beside free's, on the same request the screen
+		 * already refetches after every save and disconnect.
+		 *
+		 * @param array<string,mixed>    $payload The payload.
+		 * @param string                 $slot    The connection's slot.
+		 * @param \ModernMailer\Settings $scoped  Settings scoped to that slot.
+		 */
+		return (array) apply_filters(
+			'mmoa_connection_payload',
+			[
+				'slot'      => '' === $slot ? 'primary' : $slot,
+				'provider'  => (string) $scoped->get( 'provider' ),
+				'providers' => Provider_Registry::to_array( $scoped ),
+				'oauth'     => $this->oauth_payload( $slot ),
+			],
+			$slot,
+			$scoped
+		);
 	}
 
 	/**

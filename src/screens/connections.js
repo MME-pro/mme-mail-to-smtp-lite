@@ -17,6 +17,9 @@ import GoogleSetupGuide from '../components/google-setup-guide';
 import RedirectUri from '../components/redirect-uri';
 import ProviderForm, { missingRequired } from '../components/provider-form';
 import ProviderPicker from '../components/provider-picker';
+import ProDialog from '../components/pro-dialog';
+import ConnectorSlot from '../components/connector-slot';
+import { lockedTiles } from '../lib/pro';
 
 /**
  * What the connection is for, said once on the screen.
@@ -34,6 +37,7 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 	const [ values, setValues ] = useState( {} );
 	const [ verifyResult, setVerifyResult ] = useState( null );
 	const [ dirty, setDirty ] = useState( false );
+	const [ proTile, setProTile ] = useState( null );
 
 	const { data, isLoading } = useQuery( {
 		queryKey: [ 'connection', slot ],
@@ -73,6 +77,18 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 		'own_client';
 
 	const googleMode = modeOf( 'google_setup_mode' );
+
+	// The chosen family's mode, whichever family it is, for a connector an
+	// add-on registered against "provider:mode".
+	const mode = current?.mode_key ? modeOf( current.mode_key ) : '';
+	const slotProps = {
+		slot,
+		provider,
+		mode,
+		values,
+		connection: data,
+		dirty: dirty || data?.provider !== provider,
+	};
 
 	// Which sign-in block belongs under this provider. The merged tile and
 	// the legacy slug are both handled, because a connection keeps its stored
@@ -162,6 +178,8 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 			>
 				<ProviderPicker
 					providers={ data.providers }
+					locked={ lockedTiles( data.providers ) }
+					onLocked={ setProTile }
 					selected={ provider }
 					onSelect={ ( slug ) => {
 						setProvider( slug );
@@ -171,6 +189,8 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 					} }
 				/>
 			</Panel>
+
+			<ProDialog tile={ proTile } onClose={ () => setProTile( null ) } />
 
 			{ current && (
 				<Panel
@@ -208,6 +228,7 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 							<RedirectUri value={ data.oauth.redirect_uri } />
 						</div>
 					) }
+					<ConnectorSlot part="before" { ...slotProps } />
 					<ProviderForm
 						provider={ current }
 						values={ values }						onChange={ ( key, value ) =>
@@ -275,6 +296,7 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 							dirty={ dirty || data.provider !== provider }
 						/>
 					) }
+					<ConnectorSlot part="render" { ...slotProps } />
 					{ verifyResult && (
 						<div
 							className={ `flex items-start gap-2 mt-3 p-3 rounded-lg text-[13px] ${

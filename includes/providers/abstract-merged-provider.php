@@ -67,11 +67,54 @@ abstract class Abstract_Merged_Provider implements Provider_Interface {
 	abstract protected static function mode_field(): Field;
 
 	/**
+	 * Every mode this family can send through: its own, and any an add-on
+	 * contributes.
+	 *
+	 * The seam is what lets a mode live outside this plugin. An add-on adds a
+	 * transport here and a choice to the selector below, and the form, the
+	 * sending path and the stored setting all follow - none of it needs to
+	 * know the mode came from somewhere else.
+	 *
+	 * @return array<string,class-string<Provider_Interface>>
+	 */
+	protected static function modes(): array {
+		$modes = (array) apply_filters( 'mmoa_provider_modes', static::transports(), static::slug() );
+
+		// Only transports that can actually be built. A filter naming a class
+		// that is not loaded must not turn every send into a fatal.
+		return array_filter(
+			$modes,
+			static fn( $class ): bool => is_string( $class ) && class_exists( $class )
+				&& in_array( Provider_Interface::class, class_implements( $class ) ?: [], true )
+		);
+	}
+
+	/**
+	 * The mode selector as offered on this site, with any add-on's choices.
+	 *
+	 * An option is only offered for a mode that has a transport, so a choice
+	 * can never be made that sending then has no way to honour.
+	 */
+	protected static function offered_mode_field(): Field {
+		$field   = static::mode_field();
+		$options = (array) apply_filters( 'mmoa_provider_mode_options', $field->options, static::slug() );
+
+		return $field->with_options( array_intersect_key( $options, static::modes() ) );
+	}
+
+	/**
+	 * The setting that holds this family's mode, for the admin app.
+	 */
+	public static function setup_mode_key(): string {
+		return static::mode_key();
+	}
+
+	/**
 	 * Which mode this connection is set to.
 	 */
 	protected function mode(): string {
 		$mode  = (string) $this->settings->get( static::mode_key() );
-		$modes = static::transports();
+		$modes = static::modes();
 
 		return isset( $modes[ $mode ] ) ? $mode : static::default_mode();
 	}
@@ -80,7 +123,7 @@ abstract class Abstract_Merged_Provider implements Provider_Interface {
 	 * The transport this connection actually sends through.
 	 */
 	protected function delegate(): Provider_Interface {
-		$class = static::transports()[ $this->mode() ];
+		$class = static::modes()[ $this->mode() ];
 
 		return new $class( $this->settings, $this->tokens, $this->http );
 	}
@@ -124,7 +167,7 @@ abstract class Abstract_Merged_Provider implements Provider_Interface {
 	 * @return array<int,Field>
 	 */
 	public static function fields(): array {
-		$mode_field = static::mode_field();
+		$mode_field = static::offered_mode_field();
 
 		// A choice of one is not a choice. With the setup service switched off
 		// a family can have a single way in, and offering it as a radio button
@@ -138,7 +181,7 @@ abstract class Abstract_Merged_Provider implements Provider_Interface {
 		$fields = $gated ? [ $mode_field ] : [];
 		$seen   = [ static::mode_key() => true ];
 
-		foreach ( static::transports() as $mode => $class ) {
+		foreach ( static::modes() as $mode => $class ) {
 			// A transport can stay reachable without being offered: a family may
 			// keep a retired mode in transports so that a connection
 			// already set to it goes on sending, while no longer listing it as

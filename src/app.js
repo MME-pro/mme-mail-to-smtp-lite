@@ -10,6 +10,7 @@ import Dashboard from './screens/dashboard';
 import Connections from './screens/connections';
 import Settings from './screens/settings';
 import Setup from './screens/setup';
+import extensions from './lib/extensions';
 
 const queryClient = new QueryClient( {
 	defaultOptions: {
@@ -90,6 +91,16 @@ const Shell = () => {
 						<Route path="/dashboard" element={ <Dashboard /> } />
 						<Route path="/connections" element={ <Connections /> } />
 						<Route path="/settings" element={ <Settings /> } />
+
+						{ /* Anything an add-on registered. Listed before the
+						     catch-all so a registered path is matched rather
+						     than bounced to the dashboard, and after this
+						     plugin's own so nothing can take one of them over -
+						     the registry refuses those paths anyway. */ }
+						{ extensions.map( ( { id, path, render } ) => (
+							<Route key={ id } path={ path } element={ render() } />
+						) ) }
+
 						<Route
 							path="*"
 							element={ <Navigate to="/dashboard" replace /> }

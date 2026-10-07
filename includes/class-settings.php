@@ -104,6 +104,53 @@ class Settings {
 		'queue_retention' => [ 7, null, 'int' ],
 	];
 
+	/** Resolved once per request; the filter cannot change mid-flight. */
+	private static ?array $extra_globals = null;
+
+	/**
+	 * Site-wide settings an add-on has declared.
+	 *
+	 * A provider's fields are learned from the registry, which is how a
+	 * provider can be added without editing this class. Nothing did the same
+	 * for a setting that belongs to the site rather than to a connection - so
+	 * an add-on writing one wrote nothing, read back null, and looked like it
+	 * had a save bug. schema() returns null for a key it does not recognise,
+	 * and a key nothing recognises is silently dropped.
+	 *
+	 * Entries take the same shape as GLOBAL_SCHEMA:
+	 *
+	 *     [ 'my_setting' => [ $default, 'MMOA_MY_SETTING', 'bool' ] ]
+	 *
+	 * where the middle value is a wp-config constant that overrides the stored
+	 * value, or null for none, and the type is one of the casts sanitize()
+	 * knows.
+	 *
+	 * @return array<string,array{0:mixed,1:?string,2:string}>
+	 */
+	private static function extra_globals(): array {
+		if ( null === self::$extra_globals ) {
+			/**
+			 * Filters the site-wide settings this plugin will store.
+			 *
+			 * For an add-on that needs somewhere to keep a setting of its own.
+			 * Connection settings do not belong here - a provider declares
+			 * those as fields and the registry finds them.
+			 *
+			 * @since 0.17.1
+			 *
+			 * @param array<string,array{0:mixed,1:?string,2:string}> $settings
+			 */
+			self::$extra_globals = (array) apply_filters( 'mmoa_global_settings', [] );
+		}
+
+		return self::$extra_globals;
+	}
+
+	/** Is this key site-wide rather than a connection's? */
+	private static function is_global( string $key ): bool {
+		return isset( self::GLOBAL_SCHEMA[ $key ] ) || isset( self::extra_globals()[ $key ] );
+	}
+
 	/**
 	 * Shared across instances on purpose.
 	 *
@@ -149,7 +196,7 @@ class Settings {
 		// other way round - "is it a known connection key" - would silently
 		// leave provider fields unprefixed, and the backup connection would
 		// then write its credentials straight over the primary's.
-		if ( self::SLOT_PRIMARY === $this->slot || isset( self::GLOBAL_SCHEMA[ $key ] ) ) {
+		if ( self::SLOT_PRIMARY === $this->slot || self::is_global( $key ) ) {
 			return $key;
 		}
 
@@ -160,7 +207,7 @@ class Settings {
 	 * @return array{0:mixed,1:?string,2:string}|null
 	 */
 	private function schema( string $key ): ?array {
-		$entry = self::CONNECTION_SCHEMA[ $key ] ?? self::GLOBAL_SCHEMA[ $key ] ?? null;
+		$entry = self::CONNECTION_SCHEMA[ $key ] ?? self::GLOBAL_SCHEMA[ $key ] ?? self::extra_globals()[ $key ] ?? null;
 
 		// Anything a provider declares but this class has never heard of is a
 		// connection setting too. Without this, adding a provider would mean
@@ -177,7 +224,7 @@ class Settings {
 
 		// Only connection keys move between slots, and only they take a
 		// prefixed constant.
-		if ( self::SLOT_PRIMARY !== $this->slot && ! isset( self::GLOBAL_SCHEMA[ $key ] ) && null !== $entry[1] ) {
+		if ( self::SLOT_PRIMARY !== $this->slot && ! self::is_global( $key ) && null !== $entry[1] ) {
 			$entry[1] = 'MMOA_' . strtoupper( $this->slot ) . '_' . substr( $entry[1], 5 );
 		}
 
@@ -344,10 +391,25 @@ class Settings {
 		// another plugin declares keys this class has never heard of, and a
 		// disconnect has to clear those as well.
 		foreach ( Provider_Registry::all_fields() as $key => $field ) {
-			if ( ! $field->secret && ! isset( self::GLOBAL_SCHEMA[ $key ] ) ) {
+			if ( ! $field->secret && ! self::is_global( $key ) ) {
 				$keys[] = $key;
 			}
 		}
+
+		/**
+		 * Filters the settings a disconnect clears.
+		 *
+		 * The counterpart of `mmoa_connection_secret_keys`, for what a sign-in
+		 * flow stores that is not a credential - the account it connected as,
+		 * the mode it was set up in. Left behind, those describe a mailbox that
+		 * is no longer connected, and pre-fill the form for whoever uses the
+		 * slot next.
+		 *
+		 * @since 0.17.1
+		 *
+		 * @param string[] $keys Setting keys, before the slot is applied.
+		 */
+		$keys = (array) apply_filters( 'mmoa_connection_setting_keys', $keys );
 
 		return array_values( array_unique( $keys ) );
 	}
@@ -365,6 +427,26 @@ class Settings {
 				$keys[] = $key;
 			}
 		}
+
+		/**
+		 * Filters the credentials a disconnect clears.
+		 *
+		 * A provider's declared secret fields are already here, taken from the
+		 * registry. What is not, and cannot be, is a credential written by a
+		 * sign-in flow rather than declared as a field: a refresh token arrives
+		 * from a callback, not from the connection form, so nothing in the
+		 * registry has ever heard of it. `google_refresh` is this plugin's own
+		 * and is listed above; an add-on with its own flow adds its equivalents
+		 * through this.
+		 *
+		 * Disconnect tells the administrator that every credential for the
+		 * connection has been deleted. This is what keeps that true.
+		 *
+		 * @since 0.17.1
+		 *
+		 * @param string[] $keys Credential keys, before the slot is applied.
+		 */
+		$keys = (array) apply_filters( 'mmoa_connection_secret_keys', $keys );
 
 		return array_values( array_unique( $keys ) );
 	}
@@ -387,7 +469,8 @@ class Settings {
 	 * instance, and harmless in production.
 	 */
 	public static function flush_cache(): void {
-		self::$cache = null;
+		self::$cache         = null;
+		self::$extra_globals = null;
 	}
 
 	/**

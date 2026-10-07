@@ -42,6 +42,9 @@ import ProviderLogo from '../components/provider-logo';
 import RedirectUri from '../components/redirect-uri';
 import GoogleConnect from '../components/google-connect';
 import GoogleSetupGuide from '../components/google-setup-guide';
+import ProDialog from '../components/pro-dialog';
+import ConnectorSlot from '../components/connector-slot';
+import { lockedTiles } from '../lib/pro';
 
 /**
  * Guided setup.
@@ -276,6 +279,7 @@ const Setup = () => {
 	const [ provider, setProvider ] = useState( '' );
 	const [ values, setValues ] = useState( {} );
 	const [ dirty, setDirty ] = useState( false );
+	const [ proTile, setProTile ] = useState( null );
 	const [ verifyResult, setVerifyResult ] = useState( null );
 	const [ testResult, setTestResult ] = useState( null );
 	const [ to, setTo ] = useState( window.mmoa?.currentUserEmail || '' );
@@ -315,6 +319,16 @@ const Setup = () => {
 
 	const googleMode = modeOf( 'google_setup_mode' );
 	const isGoogle = provider === 'google' || provider === 'gmail_oauth';
+
+	// For a connector an add-on registered against "provider:mode".
+	const slotProps = {
+		slot: 'primary',
+		provider,
+		mode: current?.mode_key ? modeOf( current.mode_key ) : '',
+		values,
+		connection: data,
+		dirty: dirty || data?.provider !== provider,
+	};
 
 	/**
 	 * Move, and tell the server where we got to.
@@ -458,6 +472,8 @@ const Setup = () => {
 					>
 						<ProviderPicker
 							providers={ data.providers }
+							locked={ lockedTiles( data.providers ) }
+							onLocked={ setProTile }
 							selected={ provider }
 							onSelect={ ( slug ) => {
 								setProvider( slug );
@@ -466,6 +482,8 @@ const Setup = () => {
 								setDirty( true );
 							} }
 						/>
+
+						<ProDialog tile={ proTile } onClose={ () => setProTile( null ) } />
 
 						{ ! provider && (
 							<p className="m-0 text-xs text-muted-foreground">
@@ -564,6 +582,8 @@ const Setup = () => {
 							<RedirectUri value={ data.oauth.redirect_uri } />
 						) }
 
+						<ConnectorSlot part="before" { ...slotProps } />
+
 						<ProviderForm
 							provider={ current }
 							values={ values }
@@ -579,6 +599,8 @@ const Setup = () => {
 								dirty={ dirty || data.provider !== provider }
 							/>
 						) }
+
+						<ConnectorSlot part="render" { ...slotProps } />
 					</Step>
 				);
 

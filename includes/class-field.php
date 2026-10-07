@@ -105,6 +105,33 @@ class Field {
 	}
 
 	/**
+	 * The same field, offering a different set of options.
+	 *
+	 * For a merged provider's mode selector, whose choices an add-on may extend
+	 * through `mmoa_provider_mode_options`. A copy, for the same reason as
+	 * with_depends().
+	 *
+	 * @param array<string,string> $options Value => label.
+	 */
+	public function with_options( array $options ): self {
+		return new self(
+			key: $this->key,
+			label: $this->label,
+			type: $this->type,
+			secret: $this->secret,
+			required: $this->required,
+			help: $this->help,
+			placeholder: $this->placeholder,
+			options: $options,
+			default: $this->default,
+			constant: $this->constant,
+			width: $this->width,
+			sets: $this->sets,
+			depends: $this->depends
+		);
+	}
+
+	/**
 	 * Shorthand for a required credential.
 	 */
 	public static function secret( string $key, string $label, string $help = '', string $placeholder = '' ): self {

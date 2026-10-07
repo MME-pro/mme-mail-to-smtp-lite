@@ -106,10 +106,60 @@ const Resend = () => (
 	</svg>
 );
 
+/*
+ * The services MME-Mail to SMTP Pro connects to. Only their marks live here,
+ * so the picker can show where Microsoft 365 and Zoho are even on a site
+ * without Pro - and so the tiles look the same once Pro supplies them.
+ */
+const Microsoft = () => (
+	<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+		<path fill="#F25022" d="M2 2h9.5v9.5H2z" />
+		<path fill="#7FBA00" d="M12.5 2H22v9.5h-9.5z" />
+		<path fill="#00A4EF" d="M2 12.5h9.5V22H2z" />
+		<path fill="#FFB900" d="M12.5 12.5H22V22h-9.5z" />
+	</svg>
+);
+
+const Outlook = () => (
+	<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+		<rect x="9" y="4" width="13" height="16" rx="1.6" fill="#0F6CBD" />
+		<path fill="#fff" d="M11 7.4h9v1.5h-9zm0 3.9h9v1.5h-9zm0 3.9h6v1.5h-6z" opacity=".85" />
+		<rect x="2" y="5.6" width="11" height="12.8" rx="2" fill="#0364B8" />
+		<path
+			fill="#fff"
+			d="M7.5 8.3c-1.9 0-3.2 1.5-3.2 3.7s1.3 3.7 3.2 3.7 3.2-1.5 3.2-3.7-1.3-3.7-3.2-3.7zm0 1.6c1 0 1.6.8 1.6 2.1s-.6 2.1-1.6 2.1-1.6-.8-1.6-2.1.6-2.1 1.6-2.1z"
+		/>
+	</svg>
+);
+
+const Zoho = () => (
+	<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+		{ /* Zoho's mark is a wordmark, which is illegible at 24px. What people
+		     actually recognise is the four-colour rule under it, so the tile is
+		     that rule plus an envelope - the service, not the company. */ }
+		<rect width="24" height="24" rx="5" fill="#fff" />
+		<rect x=".5" y=".5" width="23" height="23" rx="4.5" fill="none" stroke="#000" strokeOpacity=".1" />
+		<path
+			fill="#226DB4"
+			d="M4.5 7.1A1.5 1.5 0 0 1 6 5.6h12a1.5 1.5 0 0 1 1.5 1.5v6.9A1.5 1.5 0 0 1 18 15.5H6a1.5 1.5 0 0 1-1.5-1.5zM6 7.3v.3l6 3.8 6-3.8v-.3z"
+		/>
+		<rect x="4" y="17.4" width="4" height="2.2" fill="#E42527" />
+		<rect x="8" y="17.4" width="4" height="2.2" fill="#089949" />
+		<rect x="12" y="17.4" width="4" height="2.2" fill="#226DB4" />
+		<rect x="16" y="17.4" width="4" height="2.2" fill="#F9B21D" />
+	</svg>
+);
+
 const MARKS = {
 	// The merged tile, and the legacy slugs a connection may still
 	// store until the migration runs.
 	google: Google,
+	google_one_click: Google,
+	microsoft: Microsoft,
+	graph: Microsoft,
+	ms_oauth: Microsoft,
+	outlook: Outlook,
+	zoho: Zoho,
 	gmail_sa: Google,
 	gmail_oauth: Gmail,
 	sendgrid: SendGrid,

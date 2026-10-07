@@ -97,7 +97,7 @@ export const ToggleRow = ( { id, checked, onChange, disabled, label, help, class
 	return (
 		<div
 			className={ cn(
-				'flex items-start justify-between gap-6 rounded-lg border p-4 transition-colors',
+				'flex items-start justify-between gap-6 rounded-xl border p-4 transition-colors dark:border-white/[0.07] dark:bg-white/[0.015]',
 				! disabled && 'hover:bg-muted/40',
 				className
 			) }
@@ -175,7 +175,7 @@ export const FormField = ( { label, help, locked, required, error, htmlFor, chil
  * two cannot drift apart.
  */
 export const inputClass = cn(
-	'border-input placeholder:text-muted-foreground/70 flex h-9 w-full min-w-0 rounded-md border bg-card px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none',
+	'border-input placeholder:text-muted-foreground/70 flex h-10 w-full min-w-0 rounded-xl border bg-field px-3.5 py-1 text-sm shadow-xs transition-[color,box-shadow,border-color] outline-none',
 	'focus-visible:border-ring focus-visible:ring-ring/40 focus-visible:ring-[3px]',
 	'disabled:cursor-not-allowed disabled:opacity-60 disabled:bg-muted'
 );

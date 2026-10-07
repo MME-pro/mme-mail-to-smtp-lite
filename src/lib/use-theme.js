@@ -10,18 +10,18 @@ const KEY = 'mmoa-theme';
  * be presumptuous - and would leave WordPress's own chrome in a state it never
  * designed for.
  *
- * It does NOT follow prefers-color-scheme by default. wp-admin is light, and an
- * app that silently goes dark inside a light admin reads as broken rather than
- * as considered. Dark is a choice someone makes here.
+ * Dark by default: it is how the product looks everywhere else - on the
+ * website, in the account dashboard, in every screenshot - so a fresh install
+ * opens looking like what was bought. Light is remembered once chosen.
  */
 export const useTheme = () => {
 	const [ theme, setTheme ] = useState( () => {
 		try {
-			return window.localStorage.getItem( KEY ) === 'dark' ? 'dark' : 'light';
+			return window.localStorage.getItem( KEY ) === 'light' ? 'light' : 'dark';
 		} catch {
 			// Private windows and locked-down browsers throw on access rather
-			// than returning null. Light is the safe answer.
-			return 'light';
+			// than returning null.
+			return 'dark';
 		}
 	} );
 

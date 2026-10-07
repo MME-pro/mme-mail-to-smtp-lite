@@ -17,99 +17,102 @@
 @import "tw-animate-css";
 
 /*
+ * Plus Jakarta Sans, shipped inside the plugin rather than fetched from a font
+ * CDN: an admin screen that calls Google on every load sends the visitor's IP
+ * address somewhere they never agreed to, which in the EU is a complaint
+ * waiting to happen. Latin and Latin Extended cover English and German; the
+ * licence (SIL OFL 1.1) travels alongside in fonts/.
+ */
+@font-face {
+	font-family: "Plus Jakarta Sans";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 200 800;
+	src: url("./fonts/plus-jakarta-sans-latin-ext-wght-normal.woff2") format("woff2-variations");
+	unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+	font-family: "Plus Jakarta Sans";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 200 800;
+	src: url("./fonts/plus-jakarta-sans-latin-wght-normal.woff2") format("woff2-variations");
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/*
+ * Pro's screens render inside this app and use its stylesheet - Pro ships
+ * none of its own. Their class names have to be in this build, so Tailwind
+ * reads the add-on's sources too when it sits beside this plugin at build
+ * time.
+ */
+@source "../../modern-mailer-auth/src";
+
+/*
  * Design system.
  *
- * The token *contract* is shadcn's - --background, --foreground, --primary,
- * --muted and so on - so any shadcn component drops in unmodified. The values
- * are MME-pro's, read out of the Elementor global palette on mme-pro.de rather
- * than sampled by eye: #121212, #6AA475, #DAFAE4, #313131, #AEAEAE, #F20000.
+ * The token contract is shadcn's - --background, --foreground, --primary and
+ * the rest - so any shadcn component drops in unmodified. The values are the
+ * MME brand as the website wears it: a charcoal ground, glass surfaces with a
+ * lit edge, and one bright accent - lime, warmed toward MME-pro's sage.
  *
- * The site is dark-first - near-black ground, muted sage accent, mint-tinted
- * text. That inverts here, and deliberately. wp-admin's own chrome is light,
- * and a screen that fights it reads as a foreign object bolted into the
- * dashboard. So daylight is the default and the near-black becomes the
- * *chrome*: the header band is the site's own ground colour, the workspace
- * below it is paper. Dark mode is where the palette gets to be itself.
+ * Dark is the default. This is where the brand is itself, and it is how the
+ * product looks everywhere else - on mme-plugins.de, in screenshots, in the
+ * account dashboard. Light stays one click away for anyone who wants their
+ * plugin screens to match the rest of wp-admin.
  *
- * Sage carries the personality and appears where the site puts it - active
- * state, focus, links, the primary data series.
- *
- * Two things the palette forces, both contrast:
- *
- * Sage is a mid-tone. On white it manages 2.9:1 - fine for a fill or a rule,
- * nowhere near enough for text. So any accent *word* uses --brand-deep, the
- * same hue taken down to 5.1:1, and the bright value stays on graphics.
- *
- * And the semantic trio does not move. With a green brand, a green "delivered"
- * badge stops reading as a state and starts reading as decoration - so success
- * keeps its deeper emerald, far enough from sage to separate at a glance and
- * still the green everyone already understands.
+ * The semantic four do not move with the brand. A lime "success" would stop
+ * reading as a state and start reading as decoration, so delivered stays an
+ * emerald, warnings amber, failures red and information blue.
  */
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-	--radius: 10px;
+	--radius: 14px;
 
-	/* Paper, pulled a shade toward the site's off-white rather than pure. */
-	--background: #f7f9f7;
-	--foreground: #121212;
+	--background: #f3f5f2;
+	--foreground: #0e1210;
 
 	--card: #ffffff;
-	--card-foreground: #121212;
+	--card-foreground: #0e1210;
 
 	--popover: #ffffff;
-	--popover-foreground: #121212;
+	--popover-foreground: #0e1210;
 
-	/* The site's own near-black, so a primary button carries the same weight of
-	   ink the site uses for its own. */
-	--primary: #121212;
-	--primary-foreground: #fcfcfc;
+	--primary: #0e1210;
+	--primary-foreground: #f4ffe0;
 
-	--secondary: #eef1ee;
-	--secondary-foreground: #121212;
+	--secondary: #ebefea;
+	--secondary-foreground: #0e1210;
 
-	--muted: #eef1ee;
-	/* Not the site's #AEAEAE: on paper that is 2.2:1 and simply unreadable.
-	   This is the same neutral taken to 4.8:1, which is the least it can be
-	   and still be text. */
-	--muted-foreground: #6c716d;
+	--muted: #ebefea;
+	--muted-foreground: #5d6761;
 
-	--accent: #eef1ee;
-	--accent-foreground: #121212;
+	--accent: #ebefea;
+	--accent-foreground: #0e1210;
 
-	--border: #e2e7e3;
-	--input: #cdd4ce;
+	--border: #e0e6e1;
+	--input: #d2dad4;
+	/* Fields sit a shade off the card so they read as places to type. */
+	--field: #fbfcfb;
 	--ring: #6aa475;
 
-	/* The accent, straight off the site. Fills, rules, focus and the primary
-	   data series - never a word on a light ground. */
-	--brand: #6aa475;
-	--brand-foreground: #121212;
-	--brand-subtle: #dafae4;
-	/* The same sage, dark enough to be read. This is what links use. */
+	/* Lime as a fill with dark text on it; as a word on white it would vanish,
+	   so accent words use the deep sage instead. */
+	--brand: #c8f26d;
+	--brand-foreground: #0e1210;
+	--brand-subtle: #f0fbd9;
 	--brand-deep: #3f7a50;
 
-	/* Chrome. The site's ground colour and its own text tint, so the header
-	   band is a piece of mme-pro.de sitting inside wp-admin. */
-	--ink: #121212;
-	--ink-raised: #1c1c1c;
-	--ink-line: #313131;
-	--ink-foreground: #dafae4;
-	--ink-muted: #aeaeae;
+	/* The header band is dark in both themes - the brand's own ground. */
+	--ink: #0b0d0c;
+	--ink-raised: #121714;
+	--ink-line: #232b26;
+	--ink-foreground: #f2f7f3;
+	--ink-muted: #9aa59f;
 
-	/* Semantic only. Never borders, never headings, never decoration.
-	 *
-	 * Four states, four meanings, and each has to be readable as a colour
-	 * before it is read as words: blue tells you something, yellow asks you
-	 * to be careful, red says something is wrong, green says it worked.
-	 *
-	 * Info is its own blue rather than the brand. It borrowed --brand once,
-	 * which was fine while the brand was indigo and became wrong the moment
-	 * the house palette made it sage - every informational notice in the app
-	 * turned green and started reading as a success. A meaning that changes
-	 * when the branding changes was never a meaning.
-	 */
 	--info: #175cd3;
 	--info-subtle: #eff8ff;
 	--success: #067647;
@@ -125,78 +128,57 @@
 	--switch-off: #cdd4ce;
 	--switch-thumb: #ffffff;
 
-	/* Series one is the brand. Series two is the site's own red, which appears
-	   against failure and nowhere else. */
 	--chart-1: #6aa475;
-	--chart-2: #f20000;
+	--chart-2: #e5484d;
 
-	/* The site is Inter throughout, so display and sans are the same face here.
-	   Headings separate on size and tracking rather than on a second family the
-	   brand does not actually use. */
-	--font-display: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
-	--font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+	--font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+	--font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 /*
- * Dark: the site as it actually is.
+ * Dark: the brand as it is.
  *
- * The easy direction, because mme-pro.de is already a dark design - #121212
- * ground, #DAFAE4 text, sage on top. The light theme above is the translation;
- * this is the original.
- *
- * Two things still have to be corrected rather than copied.
- *
- * Elevation is built from lightness, not shadow. A shadow cast on near-black is
- * invisible, so every surface separates by its own value - roughly six points
- * per step, which is what makes a card read as sitting on the canvas rather
- * than painted onto it. The chrome stays a step *above* the canvas for the same
- * reason: keeping it darker, the literal inversion, made the band vanish.
- *
- * And sage lifts. #6AA475 has just enough contrast on white to be a fill and
- * not enough on near-black to be anything at all, so the accent moves to the
- * site's brighter green - which clears 9:1 here and can finally carry text.
+ * Elevation comes from lightness, not shadow - a shadow on near-black is
+ * invisible - so each surface is a step brighter than the one beneath it, and
+ * cards get a lit top edge (see .sheet) like glass catching light.
  */
 .dark {
-	--background: #121212;
-	--foreground: #dafae4;
+	--background: #0b0d0c;
+	--foreground: #eef4ef;
 
-	--card: #1b1b1b;
-	--card-foreground: #dafae4;
+	--card: #121714;
+	--card-foreground: #eef4ef;
 
-	--popover: #232323;
-	--popover-foreground: #dafae4;
+	--popover: #161c18;
+	--popover-foreground: #eef4ef;
 
-	--primary: #dafae4;
-	--primary-foreground: #121212;
+	--primary: #c8f26d;
+	--primary-foreground: #0b0d0c;
 
-	--secondary: #262626;
-	--secondary-foreground: #dafae4;
+	--secondary: #1a211c;
+	--secondary-foreground: #eef4ef;
 
-	--muted: #262626;
-	/* The site's own grey, which needs no correction at night. */
-	--muted-foreground: #aeaeae;
+	--muted: #1a211c;
+	--muted-foreground: #9aa59f;
 
-	--accent: #262626;
-	--accent-foreground: #dafae4;
+	--accent: #1a211c;
+	--accent-foreground: #eef4ef;
 
-	/* Structure has to stay visible or the layout dissolves into one dark field. */
-	--border: #313131;
-	--input: #3d3d3d;
-	--ring: #86cd94;
+	--border: #232b26;
+	--input: #2e3832;
+	--field: #0e1210;
+	--ring: #c8f26d;
 
-	--brand: #86cd94;
-	--brand-foreground: #121212;
-	--brand-subtle: #17281c;
-	/* Inverted on purpose: in daylight "deep" means darker for contrast against
-	   white, at night it must be lighter or every accent link goes unreadable.
-	   Short of the mint, so a link still separates from body text. */
-	--brand-deep: #a9e3b6;
+	--brand: #c8f26d;
+	--brand-foreground: #0b0d0c;
+	--brand-subtle: #1b2512;
+	--brand-deep: #c8f26d;
 
-	--ink: #1b1b1b;
-	--ink-raised: #232323;
-	--ink-line: #313131;
-	--ink-foreground: #dafae4;
-	--ink-muted: #aeaeae;
+	--ink: #0b0d0c;
+	--ink-raised: #121714;
+	--ink-line: #232b26;
+	--ink-foreground: #f2f7f3;
+	--ink-muted: #9aa59f;
 
 	--info: #53b1fd;
 	--info-subtle: #10243e;
@@ -208,13 +190,12 @@
 	--danger-subtle: #2d1512;
 
 	--destructive: #f97066;
-	/* The destructive fill is light here, so its label must be dark. */
-	--destructive-foreground: #121212;
+	--destructive-foreground: #0b0d0c;
 
-	--switch-off: #3d3d3d;
-	--switch-thumb: #dafae4;
+	--switch-off: #2e3832;
+	--switch-thumb: #f2f7f3;
 
-	--chart-1: #86cd94;
+	--chart-1: #c8f26d;
 	--chart-2: #f97066;
 }
 
@@ -238,6 +219,7 @@
 	--color-border: var(--border);
 	--color-input: var(--input);
 	--color-ring: var(--ring);
+	--color-field: var(--field);
 
 	--color-ink: var(--ink);
 	--color-ink-raised: var(--ink-raised);
@@ -326,14 +308,28 @@
 	margin: 0;
 }
 
-#mmoa-app a {
+#mmoa-app a:not([data-slot="button"]) {
 	color: inherit;
 	text-decoration: none;
 }
 
-#mmoa-app a:focus,
-#mmoa-app a:hover {
+#mmoa-app a[data-slot="button"] {
+	text-decoration: none;
+}
+
+#mmoa-app .font-display {
+	font-weight: 700;
+	letter-spacing: -0.025em;
+}
+
+#mmoa-app a:not([data-slot="button"]):focus,
+#mmoa-app a:not([data-slot="button"]):hover {
 	color: inherit;
+	box-shadow: none;
+}
+
+#mmoa-app a[data-slot="button"]:focus,
+#mmoa-app a[data-slot="button"]:hover {
 	box-shadow: none;
 }
 
@@ -377,6 +373,10 @@
 	min-height: 0;
 	margin: 0;
 	background-image: none;
+	background-color: var(--field);
+	color: var(--foreground);
+	border-color: var(--input);
+	border-radius: 12px;
 }
 
 #mmoa-app input:focus,
@@ -396,8 +396,18 @@
 		background: var(--card);
 		border: 1px solid var(--border);
 		box-shadow:
-			0 1px 2px rgb(15 27 28 / 0.04),
-			0 8px 24px -16px rgb(15 27 28 / 0.14);
+			0 1px 2px rgb(14 18 16 / 0.04),
+			0 12px 32px -18px rgb(14 18 16 / 0.18);
+	}
+
+	.dark .sheet {
+		background:
+			linear-gradient(180deg, rgb(255 255 255 / 0.035), rgb(255 255 255 / 0.01) 40%),
+			var(--card);
+		border-color: rgb(255 255 255 / 0.07);
+		box-shadow:
+			inset 0 1px 0 rgb(255 255 255 / 0.06),
+			0 30px 60px -36px rgb(0 0 0 / 0.9);
 	}
 
 	.sheet-hover {
@@ -409,8 +419,41 @@
 	.sheet-hover:hover {
 		transform: translateY(-1px);
 		box-shadow:
-			0 2px 4px rgb(15 27 28 / 0.05),
-			0 16px 32px -18px rgb(15 27 28 / 0.2);
+			0 2px 4px rgb(14 18 16 / 0.05),
+			0 18px 40px -20px rgb(14 18 16 / 0.24);
+	}
+
+	.dark .sheet-hover:hover {
+		border-color: rgb(255 255 255 / 0.11);
+		box-shadow:
+			inset 0 1px 0 rgb(255 255 255 / 0.08),
+			0 30px 60px -30px rgb(0 0 0 / 0.95);
+	}
+
+	/* The header band's glow and grid, the website's hero in miniature. */
+	.ink-glow {
+		background:
+			radial-gradient(45% 120% at 12% 0%, rgb(124 196 139 / 0.22), transparent 70%),
+			radial-gradient(35% 90% at 88% 0%, rgb(200 242 109 / 0.12), transparent 70%);
+	}
+
+	.ink-grid {
+		background-image:
+			linear-gradient(rgb(255 255 255 / 0.04) 1px, transparent 1px),
+			linear-gradient(90deg, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+		background-size: 48px 48px;
+		-webkit-mask-image: linear-gradient(180deg, #000, transparent 85%);
+		mask-image: linear-gradient(180deg, #000, transparent 85%);
+	}
+
+	/* A status that is alive pulses gently, once every couple of seconds. */
+	.pulse-ring {
+		animation: mmoa-pulse 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+	}
+
+	@keyframes mmoa-pulse {
+		0% { transform: scale(0.85); opacity: 0.55; }
+		100% { transform: scale(1.9); opacity: 0; }
 	}
 
 	/*

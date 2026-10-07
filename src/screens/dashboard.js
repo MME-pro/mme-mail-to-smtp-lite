@@ -11,10 +11,18 @@ import { cn } from '../lib/utils';
  * card of its own, just a hairline and a number.
  */
 const Stat = ( { label, value, tone, icon: Icon, help } ) => (
-	<div className="border-t border-border pt-4 first:border-t-0 first:pt-0 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-5 sm:first:border-l-0 sm:first:pl-0">
+	<div className="rounded-2xl border border-border bg-muted/40 p-5 dark:border-white/[0.07] dark:bg-white/[0.025]">
+		<span className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+			{ Icon && (
+				<span className="grid size-6 place-items-center rounded-lg bg-background/60 dark:bg-white/[0.05]">
+					<Icon className="size-3.5" />
+				</span>
+			) }
+			{ label }
+		</span>
 		<span
 			className={ cn(
-				'block font-display text-[28px] leading-none',
+				'mt-3 block font-display text-[40px] leading-none',
 				tone === 'danger' && value > 0 && 'text-danger',
 				tone === 'warning' && value > 0 && 'text-warning',
 				( ! tone || value === 0 ) && 'text-foreground'
@@ -22,17 +30,20 @@ const Stat = ( { label, value, tone, icon: Icon, help } ) => (
 		>
 			{ value }
 		</span>
-		<span className="mt-1.5 flex items-center gap-1 text-xs text-muted-foreground">
-			{ Icon && <Icon className="size-3" /> }
-			{ label }
-		</span>
 		{ help && (
-			<span className="mt-1 block text-[11px] leading-snug text-muted-foreground">
+			<span className="mt-2 block text-xs leading-snug text-muted-foreground">
 				{ help }
 			</span>
 		) }
 	</div>
 );
+
+/* The glow behind the hero, in the colour of the state it reports. */
+const GLOW = {
+	'text-success': 'rgb(71 205 137 / 0.22)',
+	'text-danger': 'rgb(249 112 102 / 0.22)',
+	'text-muted-foreground': 'rgb(253 176 34 / 0.14)',
+};
 
 /**
  * The hero: whether sending works, said at display size.
@@ -98,21 +109,29 @@ const Hero = ( { health, queue } ) => {
 	}
 
 	return (
-		<Panel className="overflow-hidden">
-			<div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-end">
+		<Panel className="relative overflow-hidden">
+			<div
+				aria-hidden="true"
+				className="pointer-events-none absolute -top-24 -left-16 h-72 w-[60%] rounded-full blur-3xl"
+				style={ { background: `radial-gradient(closest-side, ${ GLOW[ tone ] }, transparent)` } }
+			/>
+			<div className="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-center">
 				<div>
-					<p className="m-0 text-xs tracking-[0.14em] text-muted-foreground uppercase">
+					<p className="m-0 inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-xs font-semibold text-muted-foreground dark:border-white/10 dark:bg-white/[0.03]">
+						<span className={ cn( 'size-1.5 rounded-full bg-current', tone ) } />
 						{ __( 'Delivery', 'mme-mail-to-smtp' ) }
 					</p>
 
-					<p className="mt-3 mb-0 flex items-center gap-3">
-						<Icon className={ cn( 'size-8 shrink-0', tone ) } />
-						<span
-							className={ cn(
-								'font-display text-[40px] leading-[0.95] tracking-[-0.02em]',
-								tone
+					<p className="mt-5 mb-0 flex items-center gap-4">
+						<span className="relative grid size-14 shrink-0 place-items-center">
+							{ active && ! failing && (
+								<span className="pulse-ring absolute inset-2 rounded-full bg-success/40" />
 							) }
-						>
+							<span className={ cn( 'relative grid size-14 place-items-center rounded-2xl border border-current/20 bg-current/10', tone ) }>
+								<Icon className="size-7" />
+							</span>
+						</span>
+						<span className={ cn( 'font-display text-[44px] leading-[0.95]', tone ) }>
 							{ headline }
 						</span>
 					</p>
@@ -162,10 +181,10 @@ const Hero = ( { health, queue } ) => {
  * like, not a fault.
  */
 const SetupCallout = () => (
-	<Panel className="border-brand/35 bg-brand-subtle/40">
+	<Panel className="relative overflow-hidden border-brand/35 bg-brand-subtle/40 dark:border-brand/25 dark:bg-[linear-gradient(110deg,rgb(200_242_109/0.1),transparent_60%)]">
 		<div className="flex flex-wrap items-center gap-x-6 gap-y-4">
-			<span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl border border-brand/30 bg-card text-brand-deep">
-				<Wand2 className="size-4" />
+			<span className="inline-flex size-12 shrink-0 items-center justify-center rounded-2xl bg-brand text-brand-foreground shadow-[0_10px_30px_-12px_rgb(200_242_109/0.7)]">
+				<Wand2 className="size-5" />
 			</span>
 
 			<div className="min-w-0 flex-1">

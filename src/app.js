@@ -12,6 +12,15 @@ import Settings from './screens/settings';
 import Setup from './screens/setup';
 import extensions from './lib/extensions';
 
+/** Whether this browser chose the light theme (see lib/use-theme). */
+const startsLight = () => {
+	try {
+		return window.localStorage.getItem( 'mmoa-theme-choice' ) === 'light';
+	} catch {
+		return false;
+	}
+};
+
 const queryClient = new QueryClient( {
 	defaultOptions: {
 		queries: {
@@ -68,7 +77,8 @@ const Shell = () => {
 	const focused = pathname.startsWith( '/setup' );
 
 	return (
-		<div id="mmoa-app">
+		// Dark from the first paint; useTheme flips it only for someone who chose light.
+		<div id="mmoa-app" className={ startsLight() ? undefined : 'dark' }>
 			<Nav health={ data?.health } queue={ data?.queue } focused={ focused } />
 
 			{ /* Full width on purpose. The header band already spans the whole admin

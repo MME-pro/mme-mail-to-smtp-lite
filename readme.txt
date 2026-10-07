@@ -4,7 +4,7 @@ Tags: smtp, wp_mail, gmail, sendgrid, mailgun
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.17.4
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -144,24 +144,6 @@ No. WordPress lets exactly one plugin take over sending, so one of the two would
 
 == Changelog ==
 
-= 0.17.4 =
-* Microsoft 365, Zoho Mail and Google one-click now appear in the connection picker, marked Pro. They come with MME-Mail to SMTP Pro, which is a separate plugin; choosing one explains where it comes from, or - when Pro is already installed - what is left to do: switch Pro on, or enter its licence. Nothing of those connections is inside this plugin.
-* Add-ons can now contribute a way of connecting to an existing service - a new mode on a tile such as Google - and the sign-in block that goes with it, shown on the connection screen and in the setup wizard alike.
-* Add-ons can add their own state to the connection screen, and are told before a connection is wiped so they can withdraw any access they granted elsewhere.
+= 1.0.0 =
+* First stable release.
 
-= 0.17.3 =
-* Add-on screens can now use this plugin's own data-fetching hooks. Without them an add-on had to bundle a second copy of the same library, which cannot see the cache this app sets up and fails as soon as the screen renders.
-
-= 0.17.2 =
-* Fixed: a screen contributed by an add-on never appeared. The data this plugin passes to its admin app was being assigned over the top of the object the add-on had just registered into, wiping it a moment before the app read it - so the tab row looked exactly as it does with no add-on installed. The data is merged in now instead of replacing what is there.
-
-= 0.17.1 =
-* Fixed: disconnecting a connection could leave an add-on's sign-in credentials behind. The screen said every credential for the connection had been deleted, while a refresh token stored by an add-on's own sign-in flow stayed in the database. Add-ons can now have their credentials cleared with the rest. Nothing stored by this plugin itself was ever affected.
-
-= 0.17.0 =
-* Add-ons can now contribute their own screens to the admin app. A screen registered this way gets a tab of its own in the row, between Connections and Settings, and a route to match.
-* An add-on's screen can be built from the same panels, buttons and form fields as the screens either side of it, so the page reads as one piece of software rather than two.
-* Nothing changes on a site with no add-on installed. The tab row, the screens and every setting are exactly as they were.
-
-= 0.16.0 =
-* First public release.

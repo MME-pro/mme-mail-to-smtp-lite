@@ -1,0 +1,5 @@
+# Compiled catalogues are binary. Git's own heuristic already works this out
+# from the NUL bytes, but it is left to a heuristic nowhere else in the repo,
+# and the failure is silent: a .mo with line endings rewritten still looks
+# like a file, and WordPress answers by ignoring it and showing English.
+*.mo binary

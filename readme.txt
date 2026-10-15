@@ -4,7 +4,7 @@ Tags: smtp, wp_mail, gmail, sendgrid, mailgun
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -143,6 +143,15 @@ Not in this plugin. It records no copy of what it sent - a mail log holding reci
 No. WordPress lets exactly one plugin take over sending, so one of the two would be configured and doing nothing - and which one wins depends on load order rather than on anything you chose. The plugin detects the common ones and says so on screen.
 
 == Changelog ==
+
+= 1.0.1 =
+* German translation, complete across all 388 strings.
+* Fixed: the plugin never registered where its own translations live, so a
+  bundled catalogue was never looked at and every screen stayed English.
+* Fixed: the compiled catalogue was written in a form WordPress refuses to
+  read, and refuses silently.
+* Dark mode is now what the interface opens in, for anyone who has not asked
+  for light.
 
 = 1.0.0 =
 * First stable release.

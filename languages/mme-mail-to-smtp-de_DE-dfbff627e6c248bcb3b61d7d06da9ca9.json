@@ -1,0 +1,614 @@
+{
+	"translation-revision-date": "2026-10-15T11:38:13.635Z",
+	"generator": "tools/i18n.mjs",
+	"domain": "messages",
+	"locale_data": {
+		"messages": {
+			"": {
+				"domain": "messages",
+				"lang": "de_DE",
+				"plural-forms": "nplurals=2; plural=(n != 1);"
+			},
+			"Primary": [
+				"Primär"
+			],
+			"MME-Mail to SMTP": [
+				"MME-Mail to SMTP"
+			],
+			"Run the setup wizard": [
+				"Einrichtungsassistenten starten"
+			],
+			"My own OAuth client": [
+				"Mein eigener OAuth-Client"
+			],
+			"Service account": [
+				"Dienstkonto"
+			],
+			"None": [
+				"Keine"
+			],
+			"Part of this form, provided by an add-on, could not be shown. Updating the add-on usually fixes this.": [
+				"Ein Teil dieses Formulars, der von einem Add-on stammt, konnte nicht angezeigt werden. Ein Update des Add-ons behebt das in der Regel."
+			],
+			"This screen stopped responding.": [
+				"Diese Seite reagiert nicht mehr."
+			],
+			"Your change was most likely saved - the failure happens after the save was sent. Reload to check.": [
+				"Ihre Änderung wurde höchstwahrscheinlich gespeichert – der Fehler tritt nach dem Senden auf. Laden Sie neu, um nachzusehen."
+			],
+			"A browser translation is the usual cause. Turning it off for this screen avoids it.": [
+				"Meist liegt es an einer Browser-Übersetzung. Schalten Sie sie für diese Seite ab."
+			],
+			"Reload this screen": [
+				"Seite neu laden"
+			],
+			"Technical detail": [
+				"Technische Details"
+			],
+			"Version %s": [
+				"Version %s"
+			],
+			"GPL-2.0-or-later": [
+				"GPL-2.0-or-later"
+			],
+			"Built and maintained by <a>MME-pro</a>": [
+				"Entwickelt und gepflegt von <a>MME-pro</a>"
+			],
+			"Sign in with Google": [
+				"Mit Google anmelden"
+			],
+			"Account": [
+				"Konto"
+			],
+			"Connected. A refresh token is stored for this connection.": [
+				"Verbunden. Für diese Verbindung ist ein Refresh-Token gespeichert."
+			],
+			"This revokes the grant at Google and forgets it here. Sending stops. Continue?": [
+				"Damit wird die Berechtigung bei Google widerrufen und hier verworfen. Der Versand endet. Fortfahren?"
+			],
+			"Disconnect": [
+				"Trennen"
+			],
+			"Enter the client ID and secret above and save them before signing in.": [
+				"Geben Sie oben Client-ID und Secret ein und speichern Sie sie, bevor Sie sich anmelden."
+			],
+			"You have unsaved changes. Signing in leaves this page and they will be lost.": [
+				"Sie haben ungespeicherte Änderungen. Die Anmeldung verlässt diese Seite und die Änderungen gehen verloren."
+			],
+			"Documentation": [
+				"Dokumentation"
+			],
+			"Connecting Google": [
+				"Google verbinden"
+			],
+			"Three ways in, depending on the mailbox and who can authorise it.": [
+				"Drei Wege, je nach Postfach und wer die Freigabe erteilen kann."
+			],
+			"an OAuth client you create in your own Google Cloud project, so nothing passes through anybody else.": [
+				"ein OAuth-Client in Ihrem eigenen Google-Cloud-Projekt, sodass nichts über Dritte läuft."
+			],
+			"Workspace only, and the best where available: no sign-in and nothing expires. Needs a domain administrator.": [
+				"Nur mit Workspace, und wo verfügbar die beste Wahl: keine Anmeldung, nichts läuft ab. Erfordert eine Domain-Administratorin."
+			],
+			"My own OAuth client, step by step": [
+				"Mein eigener OAuth-Client, Schritt für Schritt"
+			],
+			"Create or choose a Google Cloud project": [
+				"Ein Google-Cloud-Projekt anlegen oder auswählen"
+			],
+			"Any project will do. The Gmail API is free at this volume.": [
+				"Jedes Projekt genügt. Die Gmail-API ist in diesem Umfang kostenlos."
+			],
+			"Enable the Gmail API": [
+				"Die Gmail-API aktivieren"
+			],
+			"APIs & Services, then Library, then Gmail API, then Enable.": [
+				"„APIs & Dienste“, dann „Bibliothek“, dann „Gmail API“, dann „Aktivieren“."
+			],
+			"Configure the OAuth consent screen": [
+				"Den OAuth-Zustimmungsbildschirm einrichten"
+			],
+			"On a Workspace domain choose Internal: no test users, no verification, no seven-day expiry. Consumer accounts can only choose External.": [
+				"Bei einer Workspace-Domain „Intern“ wählen: keine Testnutzer, keine Überprüfung, kein Ablauf nach sieben Tagen. Private Konten können nur „Extern“ wählen."
+			],
+			"Add one scope and no others:": [
+				"Fügen Sie genau einen Bereich hinzu, sonst keinen:"
+			],
+			"Copy the scope": [
+				"Bereich kopieren"
+			],
+			"Publish the app": [
+				"Die App veröffentlichen"
+			],
+			"Press Publish app so the status reads In production.": [
+				"Klicken Sie auf „App veröffentlichen“, sodass der Status „In Produktion“ lautet."
+			],
+			"Google shows an unverified-app notice until verification completes; choose Advanced, then continue. It is the ordinary review, not the paid assessment.": [
+				"Bis zum Abschluss der Überprüfung zeigt Google einen Hinweis auf eine nicht verifizierte App; wählen Sie „Erweitert“ und fahren Sie fort. Es ist die normale Prüfung, nicht die kostenpflichtige Bewertung."
+			],
+			"Create the OAuth client": [
+				"Den OAuth-Client anlegen"
+			],
+			"Credentials, then Create credentials, then OAuth client ID. Choose Web application, not Desktop.": [
+				"„Anmeldedaten“, dann „Anmeldedaten erstellen“, dann „OAuth-Client-ID“. Wählen Sie „Webanwendung“, nicht „Desktop“."
+			],
+			"Under Authorised redirect URIs, add this exact address:": [
+				"Fügen Sie unter „Autorisierte Weiterleitungs-URIs“ genau diese Adresse hinzu:"
+			],
+			"Copy redirect URI": [
+				"Weiterleitungs-URI kopieren"
+			],
+			"Paste, save, sign in": [
+				"Einfügen, speichern, anmelden"
+			],
+			"Paste the client ID and secret into the fields on this screen and save. The sign-in button stays disabled until you do.": [
+				"Fügen Sie Client-ID und Secret in die Felder auf dieser Seite ein und speichern Sie. Bis dahin bleibt die Anmelde-Schaltfläche deaktiviert."
+			],
+			"Publish the app, or it stops sending every seven days": [
+				"Veröffentlichen Sie die App, sonst endet der Versand alle sieben Tage"
+			],
+			"In Testing, Google expires every refresh token after seven days, and only listed Test users can sign in.": [
+				"Im Status „Testing“ lässt Google jedes Refresh-Token nach sieben Tagen verfallen, und nur eingetragene Testnutzer können sich anmelden."
+			],
+			"Publishing removes both. It is step 4 above, and it is the one people skip.": [
+				"Das Veröffentlichen beseitigt beides. Es ist Schritt 4 weiter oben – und der, den die meisten überspringen."
+			],
+			"It worked, then stopped a week later": [
+				"Es lief, und eine Woche später war Schluss"
+			],
+			"The consent screen is still in Testing. Publish it, then sign in again here.": [
+				"Der Zustimmungsbildschirm steht noch auf „Testing“. Veröffentlichen Sie ihn und melden Sie sich hier erneut an."
+			],
+			"Service account, in short": [
+				"Dienstkonto, kurz gefasst"
+			],
+			"Create a service account, download its JSON key, and paste it here with the mailbox to send as. A domain administrator authorises it once.": [
+				"Legen Sie ein Dienstkonto an, laden Sie dessen JSON-Schlüssel herunter und fügen Sie ihn hier mit dem Absenderpostfach ein. Eine Domain-Administratorin gibt es einmalig frei."
+			],
+			"No sign-in and no refresh token, so nothing expires. Not available for a consumer gmail.com address.": [
+				"Keine Anmeldung und kein Refresh-Token, es läuft also nichts ab. Für eine private gmail.com-Adresse nicht verfügbar."
+			],
+			"Consent screen": [
+				"Zustimmungsbildschirm"
+			],
+			"Credentials": [
+				"Anmeldedaten"
+			],
+			"Google's own documentation": [
+				"Googles eigene Dokumentation"
+			],
+			"Close": [
+				"Schließen"
+			],
+			"Dashboard": [
+				"Übersicht"
+			],
+			"Connections": [
+				"Verbindungen"
+			],
+			"Settings": [
+				"Einstellungen"
+			],
+			"No provider configured": [
+				"Kein Anbieter konfiguriert"
+			],
+			"WordPress is using the server mail function.": [
+				"WordPress verwendet die Mail-Funktion des Servers."
+			],
+			"Not delivering": [
+				"Keine Zustellung"
+			],
+			"Mail was lost": [
+				"E-Mails sind verloren gegangen"
+			],
+			"Some messages exhausted every retry.": [
+				"Bei einigen Nachrichten sind alle Wiederholungen aufgebraucht."
+			],
+			"Queued for retry": [
+				"Wartet auf erneuten Versuch"
+			],
+			"Nothing is lost, but sending is not healthy.": [
+				"Es ist nichts verloren, aber der Versand ist nicht gesund."
+			],
+			"Sending normally": [
+				"Versand läuft normal"
+			],
+			"Switch to light": [
+				"Zu Hell wechseln"
+			],
+			"Switch to dark": [
+				"Zu Dunkel wechseln"
+			],
+			"Guided setup": [
+				"Geführte Einrichtung"
+			],
+			"Authenticated delivery": [
+				"Authentifizierte Zustellung"
+			],
+			"This connection comes with MME-Mail to SMTP Pro, which is not available yet.": [
+				"Diese Verbindung gehört zu MME-Mail to SMTP Pro, das noch nicht verfügbar ist."
+			],
+			"Coming soon": [
+				"Demnächst"
+			],
+			"MME-Mail to SMTP Pro is installed on this site but switched off. Activate it to use this connection.": [
+				"MME-Mail to SMTP Pro ist auf dieser Website installiert, aber ausgeschaltet. Aktivieren Sie es, um diese Verbindung zu nutzen."
+			],
+			"Go to Plugins": [
+				"Zu den Plugins"
+			],
+			"MME-Mail to SMTP Pro is running, but this site has no licence yet. Enter your licence key and this connection unlocks straight away.": [
+				"MME-Mail to SMTP Pro läuft, aber diese Website hat noch keine Lizenz. Geben Sie Ihren Lizenzschlüssel ein, und diese Verbindung wird sofort freigeschaltet."
+			],
+			"Enter licence key": [
+				"Lizenzschlüssel eingeben"
+			],
+			"Your version of MME-Mail to SMTP Pro does not include this connection yet. Update Pro from the Plugins screen to get it.": [
+				"Ihre Version von MME-Mail to SMTP Pro enthält diese Verbindung noch nicht. Aktualisieren Sie Pro auf der Plugin-Seite, um sie zu erhalten."
+			],
+			"%s is a Pro connection": [
+				"%s ist eine Pro-Verbindung"
+			],
+			"Not now": [
+				"Jetzt nicht"
+			],
+			"Copy": [
+				"Kopieren"
+			],
+			"Copy to clipboard": [
+				"In die Zwischenablage kopieren"
+			],
+			"Stored. Leave blank to keep it.": [
+				"Gespeichert. Leer lassen, um ihn beizubehalten."
+			],
+			"Enabled": [
+				"Aktiviert"
+			],
+			"Pro": [
+				"Pro"
+			],
+			"Redirect URI": [
+				"Weiterleitungs-URI"
+			],
+			"Microsoft 365": [
+				"Microsoft 365"
+			],
+			"Microsoft 365, Outlook.com and Exchange Online.": [
+				"Microsoft 365, Outlook.com und Exchange Online."
+			],
+			"Google one-click": [
+				"Google mit einem Klick"
+			],
+			"Sign in with Google, with no Cloud project of your own to set up.": [
+				"Mit Google anmelden, ohne ein eigenes Cloud-Projekt einrichten zu müssen."
+			],
+			"Zoho Mail": [
+				"Zoho Mail"
+			],
+			"Zoho Mail and Zoho Workplace.": [
+				"Zoho Mail und Zoho Workplace."
+			],
+			"Every message WordPress sends goes out over this connection.": [
+				"Jede Nachricht, die WordPress versendet, geht über diese Verbindung hinaus."
+			],
+			"Connection saved.": [
+				"Verbindung gespeichert."
+			],
+			"Fill in %s before verifying.": [
+				"Füllen Sie %s aus, bevor Sie prüfen."
+			],
+			"Connection": [
+				"Verbindung"
+			],
+			"Save connection": [
+				"Verbindung speichern"
+			],
+			"Verify": [
+				"Prüfen"
+			],
+			"This clears the provider, every credential and the From address on this connection. Mail routed here stops. Continue?": [
+				"Damit werden Anbieter, sämtliche Zugangsdaten und die Absenderadresse dieser Verbindung gelöscht. Hierher geleitete E-Mails werden nicht mehr versendet. Fortfahren?"
+			],
+			"Send a test message": [
+				"Testnachricht senden"
+			],
+			"Goes out over the primary connection.": [
+				"Geht über die primäre Verbindung hinaus."
+			],
+			"Recipient": [
+				"Empfänger"
+			],
+			"Send test": [
+				"Test senden"
+			],
+			"Not sending yet": [
+				"Versendet noch nicht"
+			],
+			"Sending is failing": [
+				"Der Versand schlägt fehl"
+			],
+			"Sending is working": [
+				"Der Versand funktioniert"
+			],
+			"No provider is configured, so WordPress is still using the server mail function.": [
+				"Es ist kein Anbieter konfiguriert, WordPress verwendet daher weiterhin die Mail-Funktion des Servers."
+			],
+			"%d sends have failed in a row. wp_mail() is returning false, so the code that sent them knows.": [
+				"%d Sendevorgänge sind nacheinander fehlgeschlagen. wp_mail() gibt false zurück, der sendende Code weiß also Bescheid."
+			],
+			"Last message delivered %s.": [
+				"Letzte Nachricht zugestellt %s."
+			],
+			"A provider is configured. Nothing has been sent through it yet.": [
+				"Ein Anbieter ist konfiguriert. Darüber wurde noch nichts versendet."
+			],
+			"Delivery": [
+				"Zustellung"
+			],
+			"Retried every five minutes.": [
+				"Wird alle fünf Minuten erneut versucht."
+			],
+			"Never delivered": [
+				"Nie zugestellt"
+			],
+			"Out of attempts. Kept until the discard window passes.": [
+				"Keine Versuche mehr. Wird aufbewahrt, bis die Verwerfungsfrist abläuft."
+			],
+			"Nothing is sending yet": [
+				"Es wird noch nichts versendet"
+			],
+			"WordPress is still using the server mail function. The wizard connects a mailbox, checks the credentials against the provider and sends one real message, in that order.": [
+				"WordPress verwendet weiterhin die Mail-Funktion des Servers. Der Assistent verbindet ein Postfach, prüft die Zugangsdaten beim Anbieter und sendet eine echte Nachricht – in dieser Reihenfolge."
+			],
+			"Where to look next": [
+				"Wo Sie als Nächstes nachsehen"
+			],
+			"This plugin keeps no copy of what it sent. A failure is reported the moment it happens, through wp_mail() and the checks below.": [
+				"Dieses Plugin bewahrt keine Kopie des Versendeten auf. Ein Fehler wird in dem Moment gemeldet, in dem er auftritt – über wp_mail() und die Prüfungen unten."
+			],
+			"send a test message and confirm the credentials still work.": [
+				"senden Sie eine Testnachricht und bestätigen Sie, dass die Zugangsdaten weiterhin funktionieren."
+			],
+			"Tools, Site Health": [
+				"Werkzeuge, Website-Zustand"
+			],
+			"the Email delivery check reports whether sending is working, and names the last error.": [
+				"die Prüfung „E-Mail-Zustellung“ meldet, ob der Versand funktioniert, und nennt den letzten Fehler."
+			],
+			"how many failures in a row count as an outage, and how long the retry queue holds a message.": [
+				"wie viele Fehler nacheinander als Ausfall gelten und wie lange die Wiederholungswarteschlange eine Nachricht aufbewahrt."
+			],
+			"Settings saved.": [
+				"Einstellungen gespeichert."
+			],
+			"Reliability": [
+				"Zuverlässigkeit"
+			],
+			"Hold on to messages that failed for a temporary reason and retry them": [
+				"Nachrichten aufbewahren, die aus einem vorübergehenden Grund fehlgeschlagen sind, und erneut versuchen"
+			],
+			"Discard undelivered messages after (days)": [
+				"Nicht zugestellte Nachrichten verwerfen nach (Tagen)"
+			],
+			"Failure detection": [
+				"Fehlererkennung"
+			],
+			"Almost nothing in WordPress checks what wp_mail() returned, so this decides when the plugin says so itself.": [
+				"Fast nichts in WordPress prüft, was wp_mail() zurückgegeben hat – dies entscheidet daher, wann das Plugin es selbst sagt."
+			],
+			"Report broken after N failures": [
+				"Als gestört melden nach N Fehlern"
+			],
+			"Consecutive failures, not failures in total. One success resets the count, so a single bad address never triggers it.": [
+				"Aufeinanderfolgende Fehler, nicht Fehler insgesamt. Ein Erfolg setzt die Zählung zurück – eine einzelne falsche Adresse löst es also nie aus."
+			],
+			"When you actually get told": [
+				"Wann Sie es tatsächlich erfahren"
+			],
+			"A failed send is reported immediately, every time, and wp_mail() returns false so the code that sent it knows.": [
+				"Ein fehlgeschlagener Versand wird sofort gemeldet, jedes Mal, und wp_mail() gibt false zurück, damit der sendende Code Bescheid weiß."
+			],
+			"Once that many sends fail in a row, the plugin reports sending as broken: an admin notice appears and the Email delivery check under Tools, Site Health turns red. One success clears it.": [
+				"Sobald so viele Sendevorgänge nacheinander fehlschlagen, meldet das Plugin den Versand als gestört: Ein Admin-Hinweis erscheint und die Prüfung „E-Mail-Zustellung“ unter Werkzeuge, Website-Zustand wird rot. Ein Erfolg hebt das wieder auf."
+			],
+			"Privacy": [
+				"Datenschutz"
+			],
+			"This plugin keeps no record of what it sent. A queued message is kept in full until it is delivered or discarded, and nothing else. No cookies, no tracking pixels, no IP addresses.": [
+				"Dieses Plugin führt keine Aufzeichnung über das Versendete. Eine eingereihte Nachricht wird vollständig aufbewahrt, bis sie zugestellt oder verworfen ist – mehr nicht. Keine Cookies, keine Tracking-Pixel, keine IP-Adressen."
+			],
+			"This plugin sends nothing to its own vendor. No registration, no check-in, no usage figures - the only servers it contacts are the mail providers you configure.": [
+				"Dieses Plugin sendet nichts an seinen eigenen Hersteller. Keine Registrierung, keine Rückmeldung, keine Nutzungszahlen – die einzigen Server, die es kontaktiert, sind die von Ihnen konfigurierten Mail-Anbieter."
+			],
+			"Export personal data": [
+				"Personenbezogene Daten exportieren"
+			],
+			"Erase personal data": [
+				"Personenbezogene Daten löschen"
+			],
+			"Privacy policy text": [
+				"Text der Datenschutzerklärung"
+			],
+			"Setup wizard": [
+				"Einrichtungsassistent"
+			],
+			"Walks through choosing a provider, connecting a mailbox, verifying the credentials and sending a test. It edits the primary connection, so nothing already configured is lost by opening it.": [
+				"Führt durch die Wahl eines Anbieters, das Verbinden eines Postfachs, das Prüfen der Zugangsdaten und einen Testversand. Er bearbeitet die primäre Verbindung – durch das Öffnen geht also nichts bereits Konfiguriertes verloren."
+			],
+			"Open the setup wizard": [
+				"Einrichtungsassistenten öffnen"
+			],
+			"Save settings": [
+				"Einstellungen speichern"
+			],
+			"Provider": [
+				"Anbieter"
+			],
+			"Test": [
+				"Test"
+			],
+			"Finish": [
+				"Abschließen"
+			],
+			"Back": [
+				"Zurück"
+			],
+			"Let us get this site sending properly.": [
+				"Bringen wir diese Website dazu, richtig zu versenden."
+			],
+			"WordPress is currently handing email to the server’s own mail function, which most inboxes now treat as unsigned post. Four short steps connect a real mailbox instead, and nothing is written until you press Save.": [
+				"WordPress übergibt E-Mails derzeit an die eigene Mail-Funktion des Servers, die die meisten Postfächer inzwischen wie unsignierte Post behandeln. Vier kurze Schritte verbinden stattdessen ein echtes Postfach, und es wird nichts geschrieben, bis Sie auf Speichern klicken."
+			],
+			"Begin setup": [
+				"Einrichtung beginnen"
+			],
+			"Pick a provider": [
+				"Anbieter wählen"
+			],
+			"Google signs in with a single click. Everything else takes an API key.": [
+				"Google meldet sich mit einem einzigen Klick an. Alles andere benötigt einen API-Schlüssel."
+			],
+			"Prove it works": [
+				"Nachweisen, dass es funktioniert"
+			],
+			"The credentials are checked against the provider before you leave this screen.": [
+				"Die Zugangsdaten werden beim Anbieter geprüft, bevor Sie diese Ansicht verlassen."
+			],
+			"Send one message": [
+				"Eine Nachricht senden"
+			],
+			"A real email, sent with the safety nets off, so a failure cannot hide behind a retry.": [
+				"Eine echte E-Mail, ohne Sicherheitsnetze versendet, damit sich ein Fehler nicht hinter einem Wiederholungsversuch verstecken kann."
+			],
+			"Setup finished.": [
+				"Einrichtung abgeschlossen."
+			],
+			"Fill in %s first.": [
+				"Füllen Sie zuerst %s aus."
+			],
+			"Finish this later": [
+				"Später abschließen"
+			],
+			"Step %1$d of %2$d": [
+				"Schritt %1$d von %2$d"
+			],
+			"How should this site send its email?": [
+				"Wie soll diese Website ihre E-Mails versenden?"
+			],
+			"Google needs an OAuth client or a service account key from the Google Cloud console. The rest need an API key from the service, which takes a minute to create.": [
+				"Google benötigt einen OAuth-Client oder einen Dienstkonto-Schlüssel aus der Google-Cloud-Konsole. Alle anderen benötigen einen API-Schlüssel des Dienstes, dessen Erstellung eine Minute dauert."
+			],
+			"Continue": [
+				"Weiter"
+			],
+			"Choose one to continue. It can be changed later without losing anything.": [
+				"Wählen Sie einen aus, um fortzufahren. Er lässt sich später ändern, ohne dass etwas verloren geht."
+			],
+			"No provider chosen yet": [
+				"Noch kein Anbieter gewählt"
+			],
+			"This step asks for the credentials the provider needs, and which credentials those are depends on the provider. Go back and pick one.": [
+				"Dieser Schritt fragt nach den Zugangsdaten, die der Anbieter benötigt – und welche das sind, hängt vom Anbieter ab. Gehen Sie zurück und wählen Sie einen aus."
+			],
+			"Choose a provider": [
+				"Einen Anbieter wählen"
+			],
+			"Connect %s": [
+				"%s verbinden"
+			],
+			"the provider": [
+				"den Anbieter"
+			],
+			"Save and continue": [
+				"Speichern und fortfahren"
+			],
+			"Check the credentials reach the mailbox": [
+				"Prüfen, ob die Zugangsdaten das Postfach erreichen"
+			],
+			"This asks the provider whether it recognises what was saved, and whether the mailbox is one this connection is allowed to send from. Nothing is emailed yet.": [
+				"Dies fragt den Anbieter, ob er das Gespeicherte erkennt und ob das Postfach eines ist, von dem diese Verbindung senden darf. Es wird noch nichts per E-Mail versendet."
+			],
+			"Continue anyway": [
+				"Trotzdem fortfahren"
+			],
+			"Check again": [
+				"Erneut prüfen"
+			],
+			"Verify connection": [
+				"Verbindung prüfen"
+			],
+			"Asking the provider…": [
+				"Anbieter wird gefragt…"
+			],
+			"The provider accepted it.": [
+				"Der Anbieter hat es angenommen."
+			],
+			"The provider refused.": [
+				"Der Anbieter hat abgelehnt."
+			],
+			"Not checked yet.": [
+				"Noch nicht geprüft."
+			],
+			"Press Verify. Any unsaved edit on the previous step is saved first, because the check runs against what is stored.": [
+				"Klicken Sie auf Prüfen. Nicht gespeicherte Änderungen aus dem vorherigen Schritt werden zuerst gespeichert, denn die Prüfung läuft gegen das, was gespeichert ist."
+			],
+			"The message above comes from the provider, not from this plugin - it names what is actually wrong. Go back a step to correct it.": [
+				"Die Meldung oben stammt vom Anbieter, nicht von diesem Plugin – sie benennt, was tatsächlich falsch ist. Gehen Sie einen Schritt zurück, um es zu korrigieren."
+			],
+			"Send one real message": [
+				"Eine echte Nachricht senden"
+			],
+			"It goes out over this connection with the retry queue switched off, so a failure here is the connection failing rather than something else quietly covering for it.": [
+				"Sie geht über diese Verbindung hinaus, mit abgeschalteter Wiederholungswarteschlange – ein Fehler hier ist also ein Fehler der Verbindung und nicht etwas anderes, das ihn still überdeckt."
+			],
+			"Send another": [
+				"Weitere senden"
+			],
+			"Send to": [
+				"Senden an"
+			],
+			"Your own address is the fastest way to find out. Somewhere outside this domain tells you more.": [
+				"Ihre eigene Adresse ist der schnellste Weg, es herauszufinden. Eine Adresse außerhalb dieser Domain sagt mehr aus."
+			],
+			"Setup complete": [
+				"Einrichtung abgeschlossen"
+			],
+			"WordPress is sending through your provider.": [
+				"WordPress versendet über Ihren Anbieter."
+			],
+			"Nothing is configured yet.": [
+				"Es ist noch nichts konfiguriert."
+			],
+			"Every message this site sends now goes out over this connection, and every attempt is recorded with whatever the provider said about it.": [
+				"Jede Nachricht, die diese Website versendet, geht jetzt über diese Verbindung hinaus, und jeder Versuch wird mit dem festgehalten, was der Anbieter dazu gesagt hat."
+			],
+			"You can leave now and come back to this at any time - the wizard is always available from the dashboard.": [
+				"Sie können jetzt gehen und jederzeit hierher zurückkehren – der Assistent ist immer über das Dashboard erreichbar."
+			],
+			"Go to the dashboard": [
+				"Zum Dashboard"
+			],
+			"Sends as": [
+				"Versendet als"
+			],
+			"Not set": [
+				"Nicht gesetzt"
+			],
+			"Test message": [
+				"Testnachricht"
+			],
+			"Accepted": [
+				"Angenommen"
+			],
+			"Refused": [
+				"Abgelehnt"
+			],
+			"Not sent": [
+				"Nicht versendet"
+			],
+			"Credentials are stored on this site and sent only to the provider they belong to.": [
+				"Zugangsdaten werden auf dieser Website gespeichert und nur an den Anbieter gesendet, zu dem sie gehören."
+			]
+		}
+	}
+}

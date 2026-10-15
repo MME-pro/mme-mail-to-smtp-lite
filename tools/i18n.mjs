@@ -248,7 +248,8 @@ const writeMo = ( entries, target ) => {
 
 	const headerSize = 28;
 	const tableSize = n * 8;
-	let offset = headerSize + tableSize * 2;
+	const stringsAddr = headerSize + tableSize * 2;
+	let offset = stringsAddr;
 
 	const idTable = Buffer.alloc( tableSize );
 	const strTable = Buffer.alloc( tableSize );
@@ -271,8 +272,23 @@ const writeMo = ( entries, target ) => {
 	header.writeUInt32LE( n, 8 );                    // string count
 	header.writeUInt32LE( headerSize, 12 );          // originals table
 	header.writeUInt32LE( headerSize + tableSize, 16 ); // translations table
-	header.writeUInt32LE( 0, 20 );                   // hash size
-	header.writeUInt32LE( 0, 24 );                   // hash offset
+	header.writeUInt32LE( 0, 20 );                   // hash table size - none written
+
+	// Where the hash table would start, which is where the strings start since
+	// there is no hash table. This cannot be left at zero, however reasonable
+	// that looks for a table that does not exist: WordPress derives the length
+	// of the translations index from it,
+	//
+	//     $len = $header['hash_addr'] - $header['translations_lengths_addr'];
+	//     if ( $len !== $header['total'] * 8 ) return false;
+	//
+	// so a zero makes that subtraction negative and import_from_reader() bails
+	// out before reading a single string. It returns false and nothing says
+	// why - the file is simply ignored and every screen comes out in English
+	// with a .mo sitting right beside it. It is also what fixes the string
+	// offsets, because the reader takes them as relative to
+	// hash_addr + hash_length * 4.
+	header.writeUInt32LE( stringsAddr, 24 );         // hash table offset
 
 	const nul = Buffer.from( [ 0 ] );
 	writeFileSync(

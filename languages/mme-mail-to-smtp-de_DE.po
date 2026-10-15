@@ -1,0 +1,1574 @@
+# German translation for Modern Mailer.
+msgid ""
+msgstr ""
+"Project-Id-Version: Modern Mailer\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: mme-mail-to-smtp\n"
+
+#: includes/api/class-rest-controller.php:361
+msgid "Disconnected. Every setting and credential for this connection has been deleted, the From address included."
+msgstr "Verbindung getrennt. Sämtliche Einstellungen und Zugangsdaten dieser Verbindung wurden gelöscht, einschließlich der Absenderadresse."
+
+#: includes/api/class-rest-controller.php:374
+msgid "Choose a provider for this connection first."
+msgstr "Wählen Sie zuerst einen Anbieter für diese Verbindung."
+
+#: includes/api/class-rest-controller.php:391
+msgid "Verified. The credentials are valid and the mailbox is reachable."
+msgstr "Geprüft. Die Zugangsdaten sind gültig und das Postfach ist erreichbar."
+
+#: includes/api/class-rest-controller.php:404
+msgid "Enter a valid recipient address."
+msgstr "Geben Sie eine gültige Empfängeradresse ein."
+
+#: includes/api/class-rest-controller.php:426
+msgid "MME-Mail to SMTP test from %s"
+msgstr "MME-Mail-to-SMTP-Test von %s"
+
+#: includes/api/class-rest-controller.php:429
+msgid "This is a test message.\n\nIf you are reading it, the connection is working."
+msgstr "Dies ist eine Testnachricht.\n\nWenn Sie sie lesen, funktioniert die Verbindung."
+
+#: includes/api/class-rest-controller.php:439
+msgid "Accepted for delivery. If it does not arrive, check the spam folder and the sending domain, then send another."
+msgstr "Zur Zustellung angenommen. Falls sie nicht ankommt, prüfen Sie den Spam-Ordner und die Absenderdomain und senden Sie eine weitere."
+
+#: includes/api/class-rest-controller.php:440
+msgid "The test message could not be sent."
+msgstr "Die Testnachricht konnte nicht gesendet werden."
+
+#: includes/api/class-rest-controller.php:483
+msgid "Attempted %1$d: %2$d delivered, %3$d still queued, %4$d abandoned."
+msgstr "%1$d versucht: %2$d zugestellt, %3$d noch in der Warteschlange, %4$d aufgegeben."
+
+#: includes/api/class-rest-controller.php:512
+msgid "Queue emptied. Anything it held is gone."
+msgstr "Warteschlange geleert. Alles, was darin lag, ist verloren."
+
+#: includes/api/class-rest-controller.php:500
+msgid "%d abandoned message returned to the queue."
+msgid_plural "%d abandoned messages returned to the queue."
+msgstr[0] "%d aufgegebene Nachricht in die Warteschlange zurückgestellt."
+msgstr[1] "%d aufgegebene Nachricht in die Warteschlange zurückgestellt."
+
+#: includes/auth/class-google-consent.php:82
+msgid "Enter and save the OAuth client ID and client secret before connecting."
+msgstr "Geben Sie die OAuth-Client-ID und das Client-Secret ein und speichern Sie sie, bevor Sie sich verbinden."
+
+#: includes/auth/class-google-consent.php:146
+msgid "This authorization link has expired or did not originate here. Start the connection again."
+msgstr "Dieser Autorisierungslink ist abgelaufen oder stammt nicht von hier. Starten Sie die Verbindung erneut."
+
+#: includes/auth/class-google-consent.php:153
+msgid "This authorization was started by a different user account."
+msgstr "Diese Autorisierung wurde von einem anderen Benutzerkonto gestartet."
+
+#: includes/auth/class-google-consent.php:164
+msgid "Google did not grant access: %s"
+msgstr "Google hat den Zugriff nicht gewährt: %s"
+
+#: includes/auth/class-google-consent.php:175
+msgid "Google did not return an authorization code."
+msgstr "Google hat keinen Autorisierungscode zurückgegeben."
+
+#: includes/auth/class-google-consent.php:191
+msgid "That connection no longer exists, so the sign-in could not be saved. Start again from the connection you want to use."
+msgstr "Diese Verbindung existiert nicht mehr, die Anmeldung konnte deshalb nicht gespeichert werden. Beginnen Sie erneut bei der Verbindung, die Sie verwenden möchten."
+
+#: includes/auth/class-google-consent.php:259
+msgid "The account was disconnected here, but Google could not be reached to revoke the grant. Remove it manually under your Google account permissions."
+msgstr "Das Konto wurde hier getrennt, Google war aber nicht erreichbar, um die Freigabe zu widerrufen. Entfernen Sie sie manuell in den Berechtigungen Ihres Google-Kontos."
+
+#: includes/auth/class-google-consent.php:283
+msgid "Google authorized the connection but withheld a refresh token, so sending would stop within the hour. This happens when the account has already granted this client access. Remove this app under your Google account permissions, then connect again."
+msgstr "Google hat die Verbindung autorisiert, aber kein Refresh-Token ausgegeben, das Senden würde also innerhalb einer Stunde aufhören. Das passiert, wenn das Konto diesem Client bereits Zugriff gewährt hat. Entfernen Sie diese App in den Berechtigungen Ihres Google-Kontos und verbinden Sie sich erneut."
+
+#: includes/auth/class-google-consent.php:291
+msgid "The redirect URI does not match the one registered on your OAuth client. Copy the exact value shown on this screen into the Google Cloud console, including the scheme and any trailing parameters."
+msgstr "Die Weiterleitungs-URI stimmt nicht mit der überein, die für Ihren OAuth-Client hinterlegt ist. Kopieren Sie den auf dieser Seite angezeigten Wert exakt in die Google-Cloud-Konsole, einschließlich Schema und aller angehängten Parameter."
+
+#: includes/auth/class-google-consent.php:292
+msgid "Google rejected the OAuth client ID or client secret. Check both, and confirm they belong to a Web application client rather than a Desktop one."
+msgstr "Google hat die OAuth-Client-ID oder das Client-Secret abgelehnt. Prüfen Sie beides und stellen Sie sicher, dass sie zu einem Web-Anwendungs-Client gehören und nicht zu einem Desktop-Client."
+
+#: includes/auth/class-google-consent.php:293
+msgid "The authorization code was already used or has expired. Start the connection again."
+msgstr "Der Autorisierungscode wurde bereits verwendet oder ist abgelaufen. Starten Sie die Verbindung erneut."
+
+#: includes/auth/class-google-consent.php:294
+msgid "Access was declined at the consent screen."
+msgstr "Der Zugriff wurde auf dem Zustimmungsbildschirm abgelehnt."
+
+#: includes/auth/class-google-consent.php:305
+msgid "Google refused the authorization: %s"
+msgstr "Google hat die Autorisierung verweigert: %s"
+
+#: includes/auth/class-google-consent.php:306 includes/providers/abstract-gmail.php:196 includes/providers/class-mailgun.php:250
+msgid "no details supplied"
+msgstr "keine Angaben gemacht"
+
+#: includes/auth/class-jwt-signer.php:43
+msgid "The OpenSSL PHP extension is required to authenticate with a Google service account."
+msgstr "Die PHP-Erweiterung OpenSSL wird benötigt, um sich mit einem Google-Dienstkonto zu authentifizieren."
+
+#: includes/auth/class-jwt-signer.php:54
+msgid "The service account private key could not be read. Paste the whole private_key value from the downloaded JSON, including the BEGIN and END lines."
+msgstr "Der private Schlüssel des Dienstkontos konnte nicht gelesen werden. Fügen Sie den vollständigen Wert von private_key aus der heruntergeladenen JSON-Datei ein, einschließlich der BEGIN- und END-Zeilen."
+
+#: includes/auth/class-jwt-signer.php:66
+msgid "The authentication assertion could not be signed."
+msgstr "Die Authentifizierungs-Assertion konnte nicht signiert werden."
+
+#: includes/class-conflicts.php:398
+msgid "WordPress lets exactly one plugin take over sending, so whichever loads first wins and every other one is left configured and doing nothing. %s is installed and active alongside this plugin."
+msgstr "WordPress lässt genau ein Plugin den Versand übernehmen – wer zuerst geladen wird, gewinnt, und jedes andere bleibt konfiguriert zurück, ohne etwas zu tun. %s ist neben diesem Plugin installiert und aktiv."
+
+#: includes/class-conflicts.php:408
+msgid "Right now %s is the one sending, and this plugin is the one doing nothing."
+msgstr "Derzeit versendet %s, und dieses Plugin ist dasjenige, das nichts tut."
+
+#: includes/class-conflicts.php:425
+msgid "Deactivate and delete the other one, so this connection is the one that sends."
+msgstr "Deaktivieren und löschen Sie das andere, damit diese Verbindung diejenige ist, die versendet."
+
+#: includes/class-conflicts.php:426
+msgid "Set this plugin up first - deactivating the other one before then leaves the site with nothing sending at all. Once mail is going out through this connection, deactivate and delete it."
+msgstr "Richten Sie zuerst dieses Plugin ein – deaktivieren Sie das andere vorher, versendet die Website überhaupt nichts mehr. Sobald E-Mails über diese Verbindung hinausgehen, deaktivieren und löschen Sie es."
+
+#: includes/class-conflicts.php:435
+msgid "Set up sending"
+msgstr "Versand einrichten"
+
+#: includes/class-conflicts.php:454
+msgid "Deactivate %s"
+msgstr "%s deaktivieren"
+
+#: includes/class-conflicts.php:463
+msgid "Manage plugins"
+msgstr "Plugins verwalten"
+
+#: includes/class-conflicts.php:475
+msgid "Another plugin has taken over email sending."
+msgstr "Ein anderes Plugin hat den E-Mail-Versand übernommen."
+
+#: includes/class-conflicts.php:476
+msgid "It defined wp_mail() before WordPress could, so MME-Mail to SMTP is configured but not sending anything. Deactivate one of the two."
+msgstr "Es hat wp_mail() definiert, bevor WordPress dazu kam – MME-Mail to SMTP ist also konfiguriert, sendet aber nichts. Deaktivieren Sie eines der beiden."
+
+#: includes/class-conflicts.php:507
+msgid "Nothing is wrong today - an inactive plugin sends nothing. It is worth deleting all the same: while it is installed, activating it, or a host restoring every plugin at once, quietly takes sending away from this one and there is no error when that happens."
+msgstr "Heute ist nichts falsch – ein inaktives Plugin versendet nichts. Es lohnt sich trotzdem, es zu löschen: solange es installiert ist, nimmt ein Aktivieren – oder ein Hoster, der alle Plugins auf einmal wiederherstellt – diesem Plugin den Versand klammheimlich weg, und dabei erscheint kein Fehler."
+
+#: includes/class-conflicts.php:517 admin/class-site-health.php:209
+msgid "Open the Plugins screen"
+msgstr "Plugin-Seite öffnen"
+
+#: includes/class-conflicts.php:519
+msgid "Dismiss"
+msgstr "Ausblenden"
+
+#: includes/class-conflicts.php:534
+msgid "You are not allowed to do that."
+msgstr "Dazu sind Sie nicht berechtigt."
+
+#: includes/class-conflicts.php:386
+msgid "Another plugin is also set up to send this site's email."
+msgid_plural "Other plugins are also set up to send this site's email."
+msgstr[0] "Ein weiteres Plugin ist ebenfalls für den E-Mail-Versand dieser Website eingerichtet."
+msgstr[1] "Weitere Plugins sind ebenfalls für den E-Mail-Versand dieser Website eingerichtet."
+
+#: includes/class-conflicts.php:495
+msgid "%s is installed but switched off."
+msgid_plural "%s are installed but switched off."
+msgstr[0] "%s ist installiert, aber ausgeschaltet."
+msgstr[1] "%s sind installiert, aber ausgeschaltet."
+
+#: includes/class-connections.php:34 includes/class-connections.php:64 src/screens/connections.js:377
+msgid "Primary"
+msgstr "Primär"
+
+#: includes/class-dispatcher.php:263
+msgid "No mail provider is configured."
+msgstr "Es ist kein E-Mail-Anbieter konfiguriert."
+
+#: includes/class-dispatcher.php:347
+msgid "The message is %1$s, which is over the %2$s that %3$s accepts in one request. Attachments are encoded twice on this path, so the usable attachment size is roughly half the limit."
+msgstr "Die Nachricht ist %1$s groß und überschreitet damit die %2$s, die %3$s in einer Anfrage annimmt. Anhänge werden auf diesem Weg zweimal kodiert, die nutzbare Anhanggröße beträgt daher etwa die Hälfte des Limits."
+
+#: includes/class-http.php:62
+msgid "Internal error: tried to contact the mail API using an invalid address. This means an earlier API call failed without being handled. The delivery failure reported before this one is the real cause."
+msgstr "Interner Fehler: Es wurde versucht, die Mail-API über eine ungültige Adresse zu erreichen. Das bedeutet, dass ein früherer API-Aufruf fehlgeschlagen ist, ohne behandelt zu werden. Der zuvor gemeldete Zustellfehler ist die eigentliche Ursache."
+
+#: includes/class-http.php:138
+msgid "The request to the mail API could not be completed."
+msgstr "Die Anfrage an die Mail-API konnte nicht abgeschlossen werden."
+
+#: includes/class-plugin.php:183
+msgid "Every five minutes (MME-Mail to SMTP retry queue)"
+msgstr "Alle fünf Minuten (MME-Mail-to-SMTP-Wiederholungswarteschlange)"
+
+#: includes/class-privacy.php:71 includes/class-privacy.php:84 includes/class-privacy.php:282 admin/class-app-page.php:52 admin/class-app-page.php:53 admin/class-app-page.php:253 src/components/footer.js:30 src/components/nav.js:228
+msgid "MME-Mail to SMTP"
+msgstr "MME-Mail to SMTP"
+
+#: includes/class-privacy.php:110
+msgid "Email waiting to be sent"
+msgstr "Zum Versand anstehende E-Mail"
+
+#: includes/class-privacy.php:111
+msgid "Messages held for retry after a delivery failure. The message itself is stored but is not included here."
+msgstr "Nachrichten, die nach einem Zustellfehler für einen erneuten Versuch zurückgehalten werden. Die Nachricht selbst wird gespeichert, ist hier aber nicht enthalten."
+
+#: includes/class-privacy.php:115
+msgid "Queued"
+msgstr "In Warteschlange"
+
+#: includes/class-privacy.php:119
+msgid "Recipients"
+msgstr "Empfänger"
+
+#: includes/class-privacy.php:123
+msgid "Subject"
+msgstr "Betreff"
+
+#: includes/class-privacy.php:127
+msgid "State"
+msgstr "Status"
+
+#: includes/class-privacy.php:131
+msgid "Delivery attempts"
+msgstr "Zustellversuche"
+
+#: includes/class-privacy.php:276
+msgid "This site sends its email through a third-party mail provider rather than through the web server. The complete message - recipients, subject, body and any attachments - is transmitted to that provider in order to be delivered."
+msgstr "Diese Website versendet ihre E-Mails über einen externen Mail-Anbieter statt über den Webserver. Die vollständige Nachricht – Empfänger, Betreff, Inhalt und etwaige Anhänge – wird zur Zustellung an diesen Anbieter übermittelt."
+
+#: includes/class-privacy.php:277
+msgid "A message that cannot be delivered immediately is held, in full, until it can be retried or until it is discarded as undeliverable."
+msgstr "Eine Nachricht, die nicht sofort zugestellt werden kann, wird vollständig zurückgehalten, bis ein erneuter Versuch möglich ist oder sie als unzustellbar verworfen wird."
+
+#: includes/class-privacy.php:278
+msgid "This plugin sets no cookies, records no IP addresses, and does nothing in a visitor&#8217;s browser."
+msgstr "Dieses Plugin setzt keine Cookies, speichert keine IP-Adressen und tut nichts im Browser eines Besuchers."
+
+#: includes/class-privacy.php:279
+msgid "The administrator should name the mail provider in use here, and link to that provider&#8217;s own privacy policy."
+msgstr "Die Administration sollte hier den eingesetzten Mail-Anbieter benennen und auf dessen eigene Datenschutzerklärung verlinken."
+
+#: includes/class-privacy.php:171
+msgid "%d message waiting to be sent to this address was deleted and will not be delivered."
+msgid_plural "%d messages waiting to be sent to this address were deleted and will not be delivered."
+msgstr[0] "%d zum Versand an diese Adresse anstehende Nachricht wurde gelöscht und wird nicht zugestellt."
+msgstr[1] "%d zum Versand an diese Adresse anstehende Nachrichten wurden gelöscht und werden nicht zugestellt."
+
+#: includes/class-provider-registry.php:141
+msgid "Not configured (WordPress default)"
+msgstr "Nicht konfiguriert (WordPress-Standard)"
+
+#: includes/class-provider-registry.php:166
+msgid "From address"
+msgstr "Absenderadresse"
+
+#: includes/class-provider-registry.php:174
+msgid "From name"
+msgstr "Absendername"
+
+#: includes/class-provider-registry.php:180
+msgid "Override what other plugins set"
+msgstr "Einstellungen anderer Plugins überschreiben"
+
+#: includes/class-setup.php:140
+msgid "MME-Mail to SMTP is installed but not sending yet."
+msgstr "MME-Mail to SMTP ist installiert, versendet aber noch nicht."
+
+#: includes/class-setup.php:141
+msgid "WordPress is still using the server mail function. The setup wizard connects a mailbox in a few steps."
+msgstr "WordPress verwendet weiterhin die Mail-Funktion des Servers. Der Einrichtungsassistent verbindet in wenigen Schritten ein Postfach."
+
+#: includes/class-setup.php:143 src/screens/dashboard.js:204
+msgid "Run the setup wizard"
+msgstr "Einrichtungsassistenten starten"
+
+#: includes/providers/abstract-api-provider.php:76
+msgid "This provider authenticates with an API key and mints no tokens."
+msgstr "Dieser Anbieter authentifiziert sich mit einem API-Schlüssel und erzeugt keine Token."
+
+#: includes/providers/abstract-api-provider.php:202
+msgid "%1$s is missing: %2$s."
+msgstr "%1$s fehlt: %2$s."
+
+#: includes/providers/abstract-api-provider.php:225
+msgid "%1$s rejected the API key. %2$s"
+msgstr "%1$s hat den API-Schlüssel abgelehnt. %2$s"
+
+#: includes/providers/abstract-api-provider.php:238
+msgid "%s is rate limiting this account. The message was not sent; it will be retried."
+msgstr "%s drosselt dieses Konto. Die Nachricht wurde nicht gesendet; sie wird erneut versucht."
+
+#: includes/providers/abstract-api-provider.php:249
+msgid "%1$s returned HTTP %2$d. %3$s"
+msgstr "%1$s hat HTTP %2$d zurückgegeben. %3$s"
+
+#: includes/providers/abstract-gmail.php:158
+msgid "Google rejected the credentials. For a service account, confirm domain-wide delegation is authorized for this client ID and the gmail.send scope. For a user connection, the refresh token has been revoked and the account must be reconnected."
+msgstr "Google hat die Zugangsdaten abgelehnt. Prüfen Sie bei einem Dienstkonto, ob die domänenweite Delegierung für diese Client-ID und den Bereich gmail.send freigegeben ist. Bei einer Benutzerverbindung wurde das Refresh-Token widerrufen und das Konto muss neu verbunden werden."
+
+#: includes/providers/abstract-gmail.php:165
+msgid "The service account is not authorized to impersonate this mailbox. Add its client ID to Google Workspace Admin under Security, API Controls, Domain-wide Delegation, with the gmail.send scope."
+msgstr "Das Dienstkonto ist nicht berechtigt, dieses Postfach zu verwenden. Tragen Sie seine Client-ID in der Google-Workspace-Administration unter „Sicherheit“, „API-Steuerung“, „Domänenweite Delegierung“ mit dem Bereich gmail.send ein."
+
+#: includes/providers/abstract-gmail.php:172
+msgid "The Gmail API is not enabled on this Google Cloud project. Enable it, then wait a minute for the change to propagate."
+msgstr "Die Gmail-API ist in diesem Google-Cloud-Projekt nicht aktiviert. Aktivieren Sie sie und warten Sie eine Minute, bis die Änderung wirksam wird."
+
+#: includes/providers/abstract-gmail.php:179
+msgid "Google is rate limiting this account. The message was not sent; try again shortly."
+msgstr "Google drosselt dieses Konto. Die Nachricht wurde nicht gesendet; versuchen Sie es in Kürze erneut."
+
+#: includes/providers/abstract-gmail.php:186
+msgid "Gmail rejected the message because it had no recipient."
+msgstr "Gmail hat die Nachricht abgelehnt, weil sie keinen Empfänger hatte."
+
+#: includes/providers/abstract-gmail.php:194
+msgid "The Gmail API returned HTTP %1$d: %2$s"
+msgstr "Die Gmail-API hat HTTP %1$d zurückgegeben: %2$s"
+
+#: includes/providers/class-brevo.php:31 includes/providers/class-brevo.php:44
+msgid "Brevo"
+msgstr "Brevo"
+
+#: includes/providers/class-brevo.php:45
+msgid "Formerly Sendinblue. The From address must be a verified sender."
+msgstr "Früher Sendinblue. Die Absenderadresse muss ein verifizierter Absender sein."
+
+#: includes/providers/class-brevo.php:56 includes/providers/class-resend.php:55 includes/providers/class-sendgrid.php:60 includes/providers/class-smtp2go.php:54
+msgid "API key"
+msgstr "API-Schlüssel"
+
+#: includes/providers/class-brevo.php:57
+msgid "From SMTP & API, API keys in your Brevo account. A v3 API key, not an SMTP password."
+msgstr "Aus „SMTP & API“, „API-Schlüssel“ in Ihrem Brevo-Konto. Ein v3-API-Schlüssel, kein SMTP-Passwort."
+
+#: includes/providers/class-gmail-oauth.php:33
+msgid "Gmail (OAuth)"
+msgstr "Gmail (OAuth)"
+
+#: includes/providers/class-gmail-oauth.php:53
+msgid "Gmail"
+msgstr "Gmail"
+
+#: includes/providers/class-gmail-oauth.php:54
+msgid "Consumer @gmail.com, using your own OAuth client and a one-time sign-in."
+msgstr "Private @gmail.com-Konten, mit Ihrem eigenen OAuth-Client und einer einmaligen Anmeldung."
+
+#: includes/providers/class-gmail-oauth.php:69
+msgid "OAuth client ID"
+msgstr "OAuth-Client-ID"
+
+#: includes/providers/class-gmail-oauth.php:71
+msgid "Must be a Web application client, not Desktop."
+msgstr "Muss ein Client vom Typ „Webanwendung“ sein, nicht „Desktop“."
+
+#: includes/providers/class-gmail-oauth.php:76
+msgid "OAuth client secret"
+msgstr "OAuth-Client-Secret"
+
+#: includes/providers/class-gmail-oauth.php:109
+msgid "The Google OAuth client ID or client secret is missing."
+msgstr "Die Google-OAuth-Client-ID oder das Client-Secret fehlt."
+
+#: includes/providers/class-gmail-oauth.php:116
+msgid "No Google account is connected. Use the Connect button on the settings screen."
+msgstr "Es ist kein Google-Konto verbunden. Verwenden Sie die Schaltfläche „Verbinden“ auf der Einstellungsseite."
+
+#: includes/providers/class-gmail-service-account.php:30
+msgid "Google Workspace (service account)"
+msgstr "Google Workspace (Dienstkonto)"
+
+#: includes/providers/class-gmail-service-account.php:50
+msgid "Google Workspace"
+msgstr "Google Workspace"
+
+#: includes/providers/class-gmail-service-account.php:51
+msgid "Service account with domain-wide delegation. No sign-in, and nothing expires. Workspace only."
+msgstr "Dienstkonto mit domänenweiter Delegierung. Keine Anmeldung, und nichts läuft ab. Nur mit Workspace."
+
+#: includes/providers/class-gmail-service-account.php:60
+msgid "Service account email"
+msgstr "E-Mail-Adresse des Dienstkontos"
+
+#: includes/providers/class-gmail-service-account.php:60
+msgid "The client_email value from the downloaded JSON key."
+msgstr "Der Wert client_email aus der heruntergeladenen JSON-Schlüsseldatei."
+
+#: includes/providers/class-gmail-service-account.php:63
+msgid "Private key"
+msgstr "Privater Schlüssel"
+
+#: includes/providers/class-gmail-service-account.php:67
+msgid "Include the BEGIN and END lines."
+msgstr "Die BEGIN- und END-Zeilen mit einfügen."
+
+#: includes/providers/class-gmail-service-account.php:71
+msgid "Send as mailbox"
+msgstr "Senden als Postfach"
+
+#: includes/providers/class-gmail-service-account.php:100
+msgid "The Google service account is missing its client email, private key, or the mailbox to send as."
+msgstr "Dem Google-Dienstkonto fehlt die Client-E-Mail-Adresse, der private Schlüssel oder das Postfach, unter dem gesendet werden soll."
+
+#: includes/providers/class-google.php:46
+msgid "Google"
+msgstr "Google"
+
+#: includes/providers/class-google.php:47
+msgid "Gmail and Google Workspace."
+msgstr "Gmail und Google Workspace."
+
+#: includes/providers/class-google.php:79
+msgid "How to connect"
+msgstr "Art der Verbindung"
+
+#: includes/providers/class-google.php:82 src/components/google-setup-guide.js:118
+msgid "My own OAuth client"
+msgstr "Mein eigener OAuth-Client"
+
+#: includes/providers/class-google.php:83 src/components/google-setup-guide.js:128
+msgid "Service account"
+msgstr "Dienstkonto"
+
+#: includes/providers/class-mailgun.php:42 includes/providers/class-mailgun.php:55
+msgid "Mailgun"
+msgstr "Mailgun"
+
+#: includes/providers/class-mailgun.php:56
+msgid "Accepts the complete message, so attachments and inline images pass through untouched."
+msgstr "Nimmt die vollständige Nachricht entgegen, sodass Anhänge und eingebettete Bilder unverändert durchlaufen."
+
+#: includes/providers/class-mailgun.php:67
+msgid "Sending API key"
+msgstr "API-Schlüssel zum Senden"
+
+#: includes/providers/class-mailgun.php:68
+msgid "From Send, Sending, Domain settings. A sending key, not the account API key."
+msgstr "Aus „Send“, „Sending“, „Domain settings“. Ein Sending-Key, nicht der Konto-API-Schlüssel."
+
+#: includes/providers/class-mailgun.php:72
+msgid "Sending domain"
+msgstr "Absender-Domain"
+
+#: includes/providers/class-mailgun.php:73
+msgid "The verified domain in Mailgun, for example mg.yourdomain.com."
+msgstr "Die verifizierte Domain in Mailgun, zum Beispiel mg.ihredomain.de."
+
+#: includes/providers/class-mailgun.php:78
+msgid "Region"
+msgstr "Region"
+
+#: includes/providers/class-mailgun.php:97 includes/providers/class-mailgun.php:144
+msgid "Mailgun is missing its sending API key or domain."
+msgstr "Bei Mailgun fehlt der API-Schlüssel zum Senden oder die Domain."
+
+#: includes/providers/class-mailgun.php:108 includes/providers/class-smtp.php:212
+msgid "The message has no recipient."
+msgstr "Die Nachricht hat keinen Empfänger."
+
+#: includes/providers/class-mailgun.php:214
+msgid "Mailgun authenticates with an API key and mints no tokens."
+msgstr "Mailgun authentifiziert sich mit einem API-Schlüssel und erzeugt keine Token."
+
+#: includes/providers/class-mailgun.php:226
+msgid "Mailgun rejected the API key. Note that a sending key and the account API key are different things, and only a sending key works here."
+msgstr "Mailgun hat den API-Schlüssel abgelehnt. Beachten Sie, dass ein Sending-Key und der Konto-API-Schlüssel zweierlei sind und hier nur ein Sending-Key funktioniert."
+
+#: includes/providers/class-mailgun.php:236
+msgid "Mailgun has no domain %1$s in the %2$s region. This is almost always the region setting rather than the domain name - a domain created in one region does not exist in the other."
+msgstr "Mailgun kennt in der Region %2$s keine Domain %1$s. Fast immer liegt das an der Regionseinstellung und nicht am Domainnamen – eine in einer Region angelegte Domain existiert in der anderen nicht."
+
+#: includes/providers/class-mailgun.php:248
+msgid "Mailgun returned HTTP %1$d: %2$s"
+msgstr "Mailgun hat HTTP %1$d zurückgegeben: %2$s"
+
+#: includes/providers/class-postmark.php:32 includes/providers/class-postmark.php:45
+msgid "Postmark"
+msgstr "Postmark"
+
+#: includes/providers/class-postmark.php:46
+msgid "Transactional only. The From address must be a verified Sender Signature."
+msgstr "Nur transaktional. Die Absenderadresse muss eine verifizierte Sender Signature sein."
+
+#: includes/providers/class-postmark.php:57
+msgid "Server API token"
+msgstr "Server-API-Token"
+
+#: includes/providers/class-postmark.php:58
+msgid "The Server token, not the Account token. Found under API Tokens on the server you want to send from."
+msgstr "Das Server-Token, nicht das Konto-Token. Zu finden unter „API Tokens“ auf dem Server, von dem Sie senden möchten."
+
+#: includes/providers/class-postmark.php:62
+msgid "Message stream"
+msgstr "Nachrichtenstrom"
+
+#: includes/providers/class-postmark.php:201
+msgid "Postmark rejected the server API token. Check that it is the Server token and not the Account token."
+msgstr "Postmark hat das Server-API-Token abgelehnt. Prüfen Sie, ob es das Server-Token und nicht das Konto-Token ist."
+
+#: includes/providers/class-postmark.php:202
+msgid "Postmark rejected the message as invalid. Most often the From address is not a verified Sender Signature."
+msgstr "Postmark hat die Nachricht als ungültig abgelehnt. Meist ist die Absenderadresse keine verifizierte Sender Signature."
+
+#: includes/providers/class-postmark.php:203
+msgid "This Postmark server is not activated for sending. Approve the account or request production access."
+msgstr "Dieser Postmark-Server ist nicht zum Senden freigeschaltet. Bestätigen Sie das Konto oder beantragen Sie den Produktivzugang."
+
+#: includes/providers/class-postmark.php:204
+msgid "The Postmark account is pending approval and can only send to verified addresses."
+msgstr "Das Postmark-Konto wartet noch auf Freigabe und kann nur an verifizierte Adressen senden."
+
+#: includes/providers/class-postmark.php:205
+msgid "The From address is not a verified Sender Signature in Postmark."
+msgstr "Die Absenderadresse ist in Postmark keine verifizierte Sender Signature."
+
+#: includes/providers/class-postmark.php:206
+msgid "The recipient is on this Postmark server's suppression list, so it refused to send. Remove the suppression if the address is genuinely valid."
+msgstr "Der Empfänger steht auf der Sperrliste dieses Postmark-Servers, deshalb wurde der Versand verweigert. Heben Sie die Sperre auf, wenn die Adresse tatsächlich gültig ist."
+
+#: includes/providers/class-postmark.php:207
+msgid "Postmark is rate limiting this account. The message was not sent; it will be retried."
+msgstr "Postmark drosselt dieses Konto. Die Nachricht wurde nicht gesendet; sie wird erneut versucht."
+
+#: includes/providers/class-postmark.php:208
+msgid "The message stream named here does not exist on this Postmark server."
+msgstr "Der hier angegebene Nachrichtenstrom existiert auf diesem Postmark-Server nicht."
+
+#: includes/providers/class-resend.php:30 includes/providers/class-resend.php:43
+msgid "Resend"
+msgstr "Resend"
+
+#: includes/providers/class-resend.php:44
+msgid "One API key and a verified sending domain."
+msgstr "Ein API-Schlüssel und eine verifizierte Absenderdomain."
+
+#: includes/providers/class-resend.php:56
+msgid "From API Keys in your Resend dashboard. Sending access is enough."
+msgstr "Aus „API Keys“ in Ihrem Resend-Dashboard. Senderechte genügen."
+
+#: includes/providers/class-sendgrid.php:35 includes/providers/class-sendgrid.php:48
+msgid "SendGrid"
+msgstr "SendGrid"
+
+#: includes/providers/class-sendgrid.php:49
+msgid "Twilio SendGrid. Create an API key with Mail Send permission only."
+msgstr "Twilio SendGrid. Legen Sie einen API-Schlüssel ausschließlich mit der Berechtigung „Mail Send“ an."
+
+#: includes/providers/class-sendgrid.php:61
+msgid "Settings, API Keys in SendGrid. Restricted Access with Mail Send is enough; SendGrid shows the key only once."
+msgstr "„Settings“, „API Keys“ in SendGrid. „Restricted Access“ mit „Mail Send“ genügt; SendGrid zeigt den Schlüssel nur einmal an."
+
+#: includes/providers/class-smtp.php:80
+msgid "SMTP"
+msgstr "SMTP"
+
+#: includes/providers/class-smtp.php:111
+msgid "Other SMTP"
+msgstr "Anderes SMTP"
+
+#: includes/providers/class-smtp.php:112
+msgid "Any server that speaks SMTP. Widest compatibility, least specific errors."
+msgstr "Jeder Server, der SMTP spricht. Größte Kompatibilität, unspezifischste Fehlermeldungen."
+
+#: includes/providers/class-smtp.php:126
+msgid "Server"
+msgstr "Server"
+
+#: includes/providers/class-smtp.php:133
+msgid "SMTP username"
+msgstr "SMTP-Benutzername"
+
+#: includes/providers/class-smtp.php:143
+msgid "SMTP password"
+msgstr "SMTP-Passwort"
+
+#: includes/providers/class-smtp.php:159
+msgid "Encryption"
+msgstr "Verschlüsselung"
+
+#: includes/providers/class-smtp.php:162
+msgid "None sends the password in the clear."
+msgstr "„Keine“ überträgt das Passwort im Klartext."
+
+#: includes/providers/class-smtp.php:164
+msgid "TLS"
+msgstr "TLS"
+
+#: includes/providers/class-smtp.php:165
+msgid "SSL"
+msgstr "SSL"
+
+#: includes/providers/class-smtp.php:166 src/screens/setup.js:814
+msgid "None"
+msgstr "Keine"
+
+#: includes/providers/class-smtp.php:178
+msgid "SMTP port"
+msgstr "SMTP-Port"
+
+#: includes/providers/class-smtp.php:188
+msgid "Authentication"
+msgstr "Authentifizierung"
+
+#: includes/providers/class-smtp.php:192
+msgid "On"
+msgstr "An"
+
+#: includes/providers/class-smtp.php:193
+msgid "Off"
+msgstr "Aus"
+
+#: includes/providers/class-smtp.php:224
+msgid "The server rejected the sender address."
+msgstr "Der Server hat die Absenderadresse abgelehnt."
+
+#: includes/providers/class-smtp.php:236
+msgid "The server rejected the recipient %s."
+msgstr "Der Server hat den Empfänger %s abgelehnt."
+
+#: includes/providers/class-smtp.php:244
+msgid "The server rejected the message."
+msgstr "Der Server hat die Nachricht abgelehnt."
+
+#: includes/providers/class-smtp.php:326
+msgid "No SMTP server is configured."
+msgstr "Es ist kein SMTP-Server konfiguriert."
+
+#: includes/providers/class-smtp.php:343
+msgid "Authentication is switched on but no SMTP username is set."
+msgstr "Die Authentifizierung ist aktiviert, aber es ist kein SMTP-Benutzername hinterlegt."
+
+#: includes/providers/class-smtp.php:382
+msgid "Could not connect to %1$s on port %2$d. %3$s"
+msgstr "Verbindung zu %1$s auf Port %2$d nicht möglich. %3$s"
+
+#: includes/providers/class-smtp.php:406
+msgid "The server refused to start TLS. If it only offers implicit TLS, choose that and use port 465. %s"
+msgstr "Der Server hat den Start von TLS verweigert. Wenn er nur implizites TLS anbietet, wählen Sie dieses und verwenden Sie Port 465. %s"
+
+#: includes/providers/class-smtp.php:431
+msgid "The server rejected the username or password. If the account has two-factor authentication, you need an app password rather than the account password. %s"
+msgstr "Der Server hat Benutzername oder Passwort abgelehnt. Wenn für das Konto die Zwei-Faktor-Authentifizierung aktiv ist, benötigen Sie ein App-Passwort statt des Kontopassworts. %s"
+
+#: includes/providers/class-smtp.php:505
+msgid "SMTP authenticates with a username and password and mints no tokens."
+msgstr "SMTP authentifiziert sich mit Benutzername und Passwort und erzeugt keine Token."
+
+#: includes/providers/class-smtp2go.php:29 includes/providers/class-smtp2go.php:42
+msgid "SMTP2GO"
+msgstr "SMTP2GO"
+
+#: includes/providers/class-smtp2go.php:43
+msgid "Used over HTTPS rather than SMTP, which matters where outbound mail ports are blocked."
+msgstr "Wird über HTTPS statt SMTP genutzt, was zählt, wo ausgehende Mail-Ports gesperrt sind."
+
+#: includes/providers/class-smtp2go.php:55
+msgid "From Settings, API Keys in SMTP2GO. It needs the Email Send permission."
+msgstr "Aus „Settings“, „API Keys“ in SMTP2GO. Er benötigt die Berechtigung „Email Send“."
+
+#: admin/class-admin-page.php:66
+msgid "Email is not being delivered."
+msgstr "E-Mails werden nicht zugestellt."
+
+#: admin/class-admin-page.php:69
+msgid "Review mail settings"
+msgstr "E-Mail-Einstellungen prüfen"
+
+#: admin/class-admin-page.php:106
+msgid "Google account disconnected."
+msgstr "Google-Konto getrennt."
+
+#: admin/class-admin-page.php:114 admin/class-admin-page.php:198
+msgid "You are not allowed to change these settings."
+msgstr "Sie sind nicht berechtigt, diese Einstellungen zu ändern."
+
+#: admin/class-admin-page.php:134
+msgid "Google account connected to %s. Send a test email to confirm delivery."
+msgstr "Google-Konto mit %s verbunden. Senden Sie eine Test-E-Mail, um die Zustellung zu bestätigen."
+
+#: admin/class-app-page.php:259
+msgid "MME-Mail to SMTP needs JavaScript to show its settings."
+msgstr "MME-Mail to SMTP benötigt JavaScript, um seine Einstellungen anzuzeigen."
+
+#: admin/class-site-health.php:35
+msgid "Email delivery"
+msgstr "E-Mail-Zustellung"
+
+#: admin/class-site-health.php:40
+msgid "Email plugin conflicts"
+msgstr "Konflikte mit E-Mail-Plugins"
+
+#: admin/class-site-health.php:61
+msgid "No other mail plugin is competing for wp_mail()"
+msgstr "Kein anderes Mail-Plugin konkurriert um wp_mail()"
+
+#: admin/class-site-health.php:64 admin/class-site-health.php:131
+msgid "Email"
+msgstr "E-Mail"
+
+#: admin/class-site-health.php:67
+msgid "Only one plugin on this site replaces the function WordPress sends email with, which is the most that can work."
+msgstr "Nur ein Plugin dieser Website ersetzt die Funktion, mit der WordPress E-Mails versendet – mehr können nicht funktionieren."
+
+#: admin/class-site-health.php:77
+msgid "Two plugins are trying to send this site's email"
+msgstr "Zwei Plugins versuchen, die E-Mails dieser Website zu versenden"
+
+#: admin/class-site-health.php:80
+msgid "%s is active alongside MME-Mail to SMTP. WordPress lets exactly one plugin take over sending, so one of the two is configured and doing nothing - and which one wins depends on load order rather than on anything you chose."
+msgstr "%s ist neben MME-Mail to SMTP aktiv. WordPress lässt genau ein Plugin den Versand übernehmen – eines der beiden ist also konfiguriert und tut nichts, und welches gewinnt, hängt von der Ladereihenfolge ab und nicht von Ihrer Entscheidung."
+
+#: admin/class-site-health.php:93
+msgid "An unused mail plugin is still installed"
+msgstr "Ein ungenutztes Mail-Plugin ist weiterhin installiert"
+
+#: admin/class-site-health.php:96
+msgid "%s is installed but inactive, so it is not sending anything today. Deleting it removes the chance of it being reactivated later and quietly taking sending away from this plugin."
+msgstr "%s ist installiert, aber inaktiv und versendet heute nichts. Es zu löschen nimmt die Möglichkeit, dass es später reaktiviert wird und diesem Plugin den Versand klammheimlich wegnimmt."
+
+#: admin/class-site-health.php:109
+msgid "Something else has taken over wp_mail()"
+msgstr "Etwas anderes hat wp_mail() übernommen"
+
+#: admin/class-site-health.php:112
+msgid "wp_mail() was defined by %s rather than by WordPress, which means MME-Mail to SMTP cannot send even when it is configured correctly. It is not a plugin this one recognises, so it may be a custom plugin or something bundled with the theme."
+msgstr "wp_mail() wurde von %s definiert und nicht von WordPress – MME-Mail to SMTP kann deshalb nicht versenden, selbst wenn es korrekt konfiguriert ist. Es ist kein Plugin, das dieses hier kennt; es kann sich also um ein eigenes Plugin oder etwas im Theme Enthaltenes handeln."
+
+#: admin/class-site-health.php:128
+msgid "Email is sending normally"
+msgstr "E-Mails werden normal versendet"
+
+#: admin/class-site-health.php:134
+msgid "Outgoing email is being delivered through an authenticated API connection."
+msgstr "Ausgehende E-Mails werden über eine authentifizierte API-Verbindung zugestellt."
+
+#: admin/class-site-health.php:141
+msgid "No mail provider is configured"
+msgstr "Es ist kein E-Mail-Anbieter konfiguriert"
+
+#: admin/class-site-health.php:142
+msgid "WordPress is falling back to the server mail function, which most hosts either block or deliver straight to spam."
+msgstr "WordPress weicht auf die Mail-Funktion des Servers aus, die die meisten Hoster entweder blockieren oder direkt in den Spam zustellen."
+
+#: admin/class-site-health.php:153
+msgid "Email is failing to send"
+msgstr "Der E-Mail-Versand schlägt fehl"
+
+#: admin/class-site-health.php:156
+msgid "%1$d messages in a row have failed. Most recent error: %2$s"
+msgstr "%1$d Nachrichten in Folge sind fehlgeschlagen. Letzter Fehler: %2$s"
+
+#: admin/class-site-health.php:174
+msgid "Some email was never delivered"
+msgstr "Ein Teil der E-Mails wurde nie zugestellt"
+
+#: admin/class-site-health.php:188
+msgid "Email is queued for retry"
+msgstr "E-Mails warten auf einen erneuten Versuch"
+
+#: admin/class-site-health.php:217
+msgid "Open mail settings"
+msgstr "E-Mail-Einstellungen öffnen"
+
+#: admin/class-site-health.php:228
+msgid "Review queued mail"
+msgstr "Wartende E-Mails prüfen"
+
+#: admin/class-site-health.php:177
+msgid "%d message exhausted every retry and has been abandoned."
+msgid_plural "%d messages exhausted every retry and have been abandoned."
+msgstr[0] "%d Nachricht hat alle Wiederholungen ausgeschöpft und wurde aufgegeben."
+msgstr[1] "%d Nachricht hat alle Wiederholungen ausgeschöpft und wurde aufgegeben."
+
+#: admin/class-site-health.php:191
+msgid "%d message could not be sent on the first attempt and is waiting to be retried. Nothing has been lost, but sending is not healthy."
+msgid_plural "%d messages could not be sent on the first attempt and are waiting to be retried. Nothing has been lost, but sending is not healthy."
+msgstr[0] "%d Nachricht konnte im ersten Anlauf nicht gesendet werden und wartet auf einen erneuten Versuch. Es ist nichts verloren, aber der Versand ist nicht gesund."
+msgstr[1] "%d Nachricht konnte im ersten Anlauf nicht gesendet werden und wartet auf einen erneuten Versuch. Es ist nichts verloren, aber der Versand ist nicht gesund."
+
+#: src/components/connector-slot.js:52
+msgid "Part of this form, provided by an add-on, could not be shown. Updating the add-on usually fixes this."
+msgstr "Ein Teil dieses Formulars, der von einem Add-on stammt, konnte nicht angezeigt werden. Ein Update des Add-ons behebt das in der Regel."
+
+#: src/components/error-boundary.js:54
+msgid "This screen stopped responding."
+msgstr "Diese Seite reagiert nicht mehr."
+
+#: src/components/error-boundary.js:58
+msgid "Your change was most likely saved - the failure happens after the save was sent. Reload to check."
+msgstr "Ihre Änderung wurde höchstwahrscheinlich gespeichert – der Fehler tritt nach dem Senden auf. Laden Sie neu, um nachzusehen."
+
+#: src/components/error-boundary.js:65
+msgid "A browser translation is the usual cause. Turning it off for this screen avoids it."
+msgstr "Meist liegt es an einer Browser-Übersetzung. Schalten Sie sie für diese Seite ab."
+
+#: src/components/error-boundary.js:76
+msgid "Reload this screen"
+msgstr "Seite neu laden"
+
+#: src/components/error-boundary.js:82
+msgid "Technical detail"
+msgstr "Technische Details"
+
+#: src/components/footer.js:35
+msgid "Version %s"
+msgstr "Version %s"
+
+#: src/components/footer.js:39
+msgid "GPL-2.0-or-later"
+msgstr "GPL-2.0-or-later"
+
+#: src/components/footer.js:48
+msgid "Built and maintained by <a>MME-pro</a>"
+msgstr "Entwickelt und gepflegt von <a>MME-pro</a>"
+
+#: src/components/google-button.js:63
+msgid "Sign in with Google"
+msgstr "Mit Google anmelden"
+
+#: src/components/google-connect.js:39
+msgid "Account"
+msgstr "Konto"
+
+#: src/components/google-connect.js:46
+msgid "Connected. A refresh token is stored for this connection."
+msgstr "Verbunden. Für diese Verbindung ist ein Refresh-Token gespeichert."
+
+#: src/components/google-connect.js:63
+msgid "This revokes the grant at Google and forgets it here. Sending stops. Continue?"
+msgstr "Damit wird die Berechtigung bei Google widerrufen und hier verworfen. Der Versand endet. Fortfahren?"
+
+#: src/components/google-connect.js:73 src/screens/connections.js:278
+msgid "Disconnect"
+msgstr "Trennen"
+
+#: src/components/google-connect.js:83
+msgid "Enter the client ID and secret above and save them before signing in."
+msgstr "Geben Sie oben Client-ID und Secret ein und speichern Sie sie, bevor Sie sich anmelden."
+
+#: src/components/google-connect.js:95
+msgid "You have unsaved changes. Signing in leaves this page and they will be lost."
+msgstr "Sie haben ungespeicherte Änderungen. Die Anmeldung verlässt diese Seite und die Änderungen gehen verloren."
+
+#: src/components/google-setup-guide.js:98 src/screens/connections.js:218 src/screens/setup.js:574
+msgid "Documentation"
+msgstr "Dokumentation"
+
+#: src/components/google-setup-guide.js:104
+msgid "Connecting Google"
+msgstr "Google verbinden"
+
+#: src/components/google-setup-guide.js:106
+msgid "Three ways in, depending on the mailbox and who can authorise it."
+msgstr "Drei Wege, je nach Postfach und wer die Freigabe erteilen kann."
+
+#: src/components/google-setup-guide.js:121
+msgid "an OAuth client you create in your own Google Cloud project, so nothing passes through anybody else."
+msgstr "ein OAuth-Client in Ihrem eigenen Google-Cloud-Projekt, sodass nichts über Dritte läuft."
+
+#: src/components/google-setup-guide.js:131
+msgid "Workspace only, and the best where available: no sign-in and nothing expires. Needs a domain administrator."
+msgstr "Nur mit Workspace, und wo verfügbar die beste Wahl: keine Anmeldung, nichts läuft ab. Erfordert eine Domain-Administratorin."
+
+#: src/components/google-setup-guide.js:140
+msgid "My own OAuth client, step by step"
+msgstr "Mein eigener OAuth-Client, Schritt für Schritt"
+
+#: src/components/google-setup-guide.js:144
+msgid "Create or choose a Google Cloud project"
+msgstr "Ein Google-Cloud-Projekt anlegen oder auswählen"
+
+#: src/components/google-setup-guide.js:146
+msgid "Any project will do. The Gmail API is free at this volume."
+msgstr "Jedes Projekt genügt. Die Gmail-API ist in diesem Umfang kostenlos."
+
+#: src/components/google-setup-guide.js:153
+msgid "Enable the Gmail API"
+msgstr "Die Gmail-API aktivieren"
+
+#: src/components/google-setup-guide.js:155
+msgid "APIs & Services, then Library, then Gmail API, then Enable."
+msgstr "„APIs & Dienste“, dann „Bibliothek“, dann „Gmail API“, dann „Aktivieren“."
+
+#: src/components/google-setup-guide.js:162
+msgid "Configure the OAuth consent screen"
+msgstr "Den OAuth-Zustimmungsbildschirm einrichten"
+
+#: src/components/google-setup-guide.js:164
+msgid "On a Workspace domain choose Internal: no test users, no verification, no seven-day expiry. Consumer accounts can only choose External."
+msgstr "Bei einer Workspace-Domain „Intern“ wählen: keine Testnutzer, keine Überprüfung, kein Ablauf nach sieben Tagen. Private Konten können nur „Extern“ wählen."
+
+#: src/components/google-setup-guide.js:170
+msgid "Add one scope and no others:"
+msgstr "Fügen Sie genau einen Bereich hinzu, sonst keinen:"
+
+#: src/components/google-setup-guide.js:177
+msgid "Copy the scope"
+msgstr "Bereich kopieren"
+
+#: src/components/google-setup-guide.js:181
+msgid "Publish the app"
+msgstr "Die App veröffentlichen"
+
+#: src/components/google-setup-guide.js:183
+msgid "Press Publish app so the status reads In production."
+msgstr "Klicken Sie auf „App veröffentlichen“, sodass der Status „In Produktion“ lautet."
+
+#: src/components/google-setup-guide.js:189
+msgid "Google shows an unverified-app notice until verification completes; choose Advanced, then continue. It is the ordinary review, not the paid assessment."
+msgstr "Bis zum Abschluss der Überprüfung zeigt Google einen Hinweis auf eine nicht verifizierte App; wählen Sie „Erweitert“ und fahren Sie fort. Es ist die normale Prüfung, nicht die kostenpflichtige Bewertung."
+
+#: src/components/google-setup-guide.js:196
+msgid "Create the OAuth client"
+msgstr "Den OAuth-Client anlegen"
+
+#: src/components/google-setup-guide.js:198
+msgid "Credentials, then Create credentials, then OAuth client ID. Choose Web application, not Desktop."
+msgstr "„Anmeldedaten“, dann „Anmeldedaten erstellen“, dann „OAuth-Client-ID“. Wählen Sie „Webanwendung“, nicht „Desktop“."
+
+#: src/components/google-setup-guide.js:204
+msgid "Under Authorised redirect URIs, add this exact address:"
+msgstr "Fügen Sie unter „Autorisierte Weiterleitungs-URIs“ genau diese Adresse hinzu:"
+
+#: src/components/google-setup-guide.js:211 src/components/redirect-uri.js:52
+msgid "Copy redirect URI"
+msgstr "Weiterleitungs-URI kopieren"
+
+#: src/components/google-setup-guide.js:215
+msgid "Paste, save, sign in"
+msgstr "Einfügen, speichern, anmelden"
+
+#: src/components/google-setup-guide.js:217
+msgid "Paste the client ID and secret into the fields on this screen and save. The sign-in button stays disabled until you do."
+msgstr "Fügen Sie Client-ID und Secret in die Felder auf dieser Seite ein und speichern Sie. Bis dahin bleibt die Anmelde-Schaltfläche deaktiviert."
+
+#: src/components/google-setup-guide.js:232
+msgid "Publish the app, or it stops sending every seven days"
+msgstr "Veröffentlichen Sie die App, sonst endet der Versand alle sieben Tage"
+
+#: src/components/google-setup-guide.js:236
+msgid "In Testing, Google expires every refresh token after seven days, and only listed Test users can sign in."
+msgstr "Im Status „Testing“ lässt Google jedes Refresh-Token nach sieben Tagen verfallen, und nur eingetragene Testnutzer können sich anmelden."
+
+#: src/components/google-setup-guide.js:242
+msgid "Publishing removes both. It is step 4 above, and it is the one people skip."
+msgstr "Das Veröffentlichen beseitigt beides. Es ist Schritt 4 weiter oben – und der, den die meisten überspringen."
+
+#: src/components/google-setup-guide.js:253
+msgid "It worked, then stopped a week later"
+msgstr "Es lief, und eine Woche später war Schluss"
+
+#: src/components/google-setup-guide.js:256
+msgid "The consent screen is still in Testing. Publish it, then sign in again here."
+msgstr "Der Zustimmungsbildschirm steht noch auf „Testing“. Veröffentlichen Sie ihn und melden Sie sich hier erneut an."
+
+#: src/components/google-setup-guide.js:265
+msgid "Service account, in short"
+msgstr "Dienstkonto, kurz gefasst"
+
+#: src/components/google-setup-guide.js:268
+msgid "Create a service account, download its JSON key, and paste it here with the mailbox to send as. A domain administrator authorises it once."
+msgstr "Legen Sie ein Dienstkonto an, laden Sie dessen JSON-Schlüssel herunter und fügen Sie ihn hier mit dem Absenderpostfach ein. Eine Domain-Administratorin gibt es einmalig frei."
+
+#: src/components/google-setup-guide.js:274
+msgid "No sign-in and no refresh token, so nothing expires. Not available for a consumer gmail.com address."
+msgstr "Keine Anmeldung und kein Refresh-Token, es läuft also nichts ab. Für eine private gmail.com-Adresse nicht verfügbar."
+
+#: src/components/google-setup-guide.js:291
+msgid "Consent screen"
+msgstr "Zustimmungsbildschirm"
+
+#: src/components/google-setup-guide.js:301 src/screens/setup.js:72
+msgid "Credentials"
+msgstr "Anmeldedaten"
+
+#: src/components/google-setup-guide.js:312
+msgid "Google's own documentation"
+msgstr "Googles eigene Dokumentation"
+
+#: src/components/google-setup-guide.js:318 src/components/pro-dialog.js:90
+msgid "Close"
+msgstr "Schließen"
+
+#: src/components/nav.js:30
+msgid "Dashboard"
+msgstr "Übersicht"
+
+#: src/components/nav.js:31 src/screens/dashboard.js:247
+msgid "Connections"
+msgstr "Verbindungen"
+
+#: src/components/nav.js:37 src/screens/dashboard.js:272
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: src/components/nav.js:56
+msgid "No provider configured"
+msgstr "Kein Anbieter konfiguriert"
+
+#: src/components/nav.js:57
+msgid "WordPress is using the server mail function."
+msgstr "WordPress verwendet die Mail-Funktion des Servers."
+
+#: src/components/nav.js:65
+msgid "Not delivering"
+msgstr "Keine Zustellung"
+
+#: src/components/nav.js:74
+msgid "Mail was lost"
+msgstr "E-Mails sind verloren gegangen"
+
+#: src/components/nav.js:75
+msgid "Some messages exhausted every retry."
+msgstr "Bei einigen Nachrichten sind alle Wiederholungen aufgebraucht."
+
+#: src/components/nav.js:83 src/screens/dashboard.js:152
+msgid "Queued for retry"
+msgstr "Wartet auf erneuten Versuch"
+
+#: src/components/nav.js:84
+msgid "Nothing is lost, but sending is not healthy."
+msgstr "Es ist nichts verloren, aber der Versand ist nicht gesund."
+
+#: src/components/nav.js:91
+msgid "Sending normally"
+msgstr "Versand läuft normal"
+
+#: src/components/nav.js:166
+msgid "Switch to light"
+msgstr "Zu Hell wechseln"
+
+#: src/components/nav.js:167
+msgid "Switch to dark"
+msgstr "Zu Dunkel wechseln"
+
+#: src/components/nav.js:232 src/screens/setup.js:208 src/screens/setup.js:509
+msgid "Guided setup"
+msgstr "Geführte Einrichtung"
+
+#: src/components/nav.js:233
+msgid "Authenticated delivery"
+msgstr "Authentifizierte Zustellung"
+
+#: src/components/pro-dialog.js:27
+msgid "This connection comes with MME-Mail to SMTP Pro, which is not available yet."
+msgstr "Diese Verbindung gehört zu MME-Mail to SMTP Pro, das noch nicht verfügbar ist."
+
+#: src/components/pro-dialog.js:31
+msgid "Coming soon"
+msgstr "Demnächst"
+
+#: src/components/pro-dialog.js:37
+msgid "MME-Mail to SMTP Pro is installed on this site but switched off. Activate it to use this connection."
+msgstr "MME-Mail to SMTP Pro ist auf dieser Website installiert, aber ausgeschaltet. Aktivieren Sie es, um diese Verbindung zu nutzen."
+
+#: src/components/pro-dialog.js:38 src/components/pro-dialog.js:55
+msgid "Go to Plugins"
+msgstr "Zu den Plugins"
+
+#: src/components/pro-dialog.js:45
+msgid "MME-Mail to SMTP Pro is running, but this site has no licence yet. Enter your licence key and this connection unlocks straight away."
+msgstr "MME-Mail to SMTP Pro läuft, aber diese Website hat noch keine Lizenz. Geben Sie Ihren Lizenzschlüssel ein, und diese Verbindung wird sofort freigeschaltet."
+
+#: src/components/pro-dialog.js:46
+msgid "Enter licence key"
+msgstr "Lizenzschlüssel eingeben"
+
+#: src/components/pro-dialog.js:54
+msgid "Your version of MME-Mail to SMTP Pro does not include this connection yet. Update Pro from the Plugins screen to get it."
+msgstr "Ihre Version von MME-Mail to SMTP Pro enthält diese Verbindung noch nicht. Aktualisieren Sie Pro auf der Plugin-Seite, um sie zu erhalten."
+
+#: src/components/pro-dialog.js:72
+msgid "%s is a Pro connection"
+msgstr "%s ist eine Pro-Verbindung"
+
+#: src/components/pro-dialog.js:90 src/screens/setup.js:217
+msgid "Not now"
+msgstr "Jetzt nicht"
+
+#: src/components/provider-form.js:214
+msgid "Copy"
+msgstr "Kopieren"
+
+#: src/components/provider-form.js:215
+msgid "Copy to clipboard"
+msgstr "In die Zwischenablage kopieren"
+
+#: src/components/provider-form.js:273
+msgid "Stored. Leave blank to keep it."
+msgstr "Gespeichert. Leer lassen, um ihn beizubehalten."
+
+#: src/components/provider-form.js:306
+msgid "Enabled"
+msgstr "Aktiviert"
+
+#: src/components/provider-picker.js:67
+msgid "Pro"
+msgstr "Pro"
+
+#: src/components/redirect-uri.js:34
+msgid "Redirect URI"
+msgstr "Weiterleitungs-URI"
+
+#: src/lib/pro.js:19
+msgid "Microsoft 365"
+msgstr "Microsoft 365"
+
+#: src/lib/pro.js:20
+msgid "Microsoft 365, Outlook.com and Exchange Online."
+msgstr "Microsoft 365, Outlook.com und Exchange Online."
+
+#: src/lib/pro.js:26
+msgid "Google one-click"
+msgstr "Google mit einem Klick"
+
+#: src/lib/pro.js:27
+msgid "Sign in with Google, with no Cloud project of your own to set up."
+msgstr "Mit Google anmelden, ohne ein eigenes Cloud-Projekt einrichten zu müssen."
+
+#: src/lib/pro.js:31
+msgid "Zoho Mail"
+msgstr "Zoho Mail"
+
+#: src/lib/pro.js:32
+msgid "Zoho Mail and Zoho Workplace."
+msgstr "Zoho Mail und Zoho Workplace."
+
+#: src/screens/connections.js:28
+msgid "Every message WordPress sends goes out over this connection."
+msgstr "Jede Nachricht, die WordPress versendet, geht über diese Verbindung hinaus."
+
+#: src/screens/connections.js:111
+msgid "Connection saved."
+msgstr "Verbindung gespeichert."
+
+#: src/screens/connections.js:150
+msgid "Fill in %s before verifying."
+msgstr "Füllen Sie %s aus, bevor Sie prüfen."
+
+#: src/screens/connections.js:176
+msgid "Connection"
+msgstr "Verbindung"
+
+#: src/screens/connections.js:248
+msgid "Save connection"
+msgstr "Verbindung speichern"
+
+#: src/screens/connections.js:252 src/screens/setup.js:73
+msgid "Verify"
+msgstr "Prüfen"
+
+#: src/screens/connections.js:267
+msgid "This clears the provider, every credential and the From address on this connection. Mail routed here stops. Continue?"
+msgstr "Damit werden Anbieter, sämtliche Zugangsdaten und die Absenderadresse dieser Verbindung gelöscht. Hierher geleitete E-Mails werden nicht mehr versendet. Fortfahren?"
+
+#: src/screens/connections.js:335
+msgid "Send a test message"
+msgstr "Testnachricht senden"
+
+#: src/screens/connections.js:336
+msgid "Goes out over the primary connection."
+msgstr "Geht über die primäre Verbindung hinaus."
+
+#: src/screens/connections.js:344
+msgid "Recipient"
+msgstr "Empfänger"
+
+#: src/screens/connections.js:358 src/screens/setup.js:736
+msgid "Send test"
+msgstr "Test senden"
+
+#: src/screens/dashboard.js:69
+msgid "Not sending yet"
+msgstr "Versendet noch nicht"
+
+#: src/screens/dashboard.js:73
+msgid "Sending is failing"
+msgstr "Der Versand schlägt fehl"
+
+#: src/screens/dashboard.js:77
+msgid "Sending is working"
+msgstr "Der Versand funktioniert"
+
+#: src/screens/dashboard.js:85
+msgid "No provider is configured, so WordPress is still using the server mail function."
+msgstr "Es ist kein Anbieter konfiguriert, WordPress verwendet daher weiterhin die Mail-Funktion des Servers."
+
+#: src/screens/dashboard.js:92
+msgid "%d sends have failed in a row. wp_mail() is returning false, so the code that sent them knows."
+msgstr "%d Sendevorgänge sind nacheinander fehlgeschlagen. wp_mail() gibt false zurück, der sendende Code weiß also Bescheid."
+
+#: src/screens/dashboard.js:101
+msgid "Last message delivered %s."
+msgstr "Letzte Nachricht zugestellt %s."
+
+#: src/screens/dashboard.js:105
+msgid "A provider is configured. Nothing has been sent through it yet."
+msgstr "Ein Anbieter ist konfiguriert. Darüber wurde noch nichts versendet."
+
+#: src/screens/dashboard.js:122
+msgid "Delivery"
+msgstr "Zustellung"
+
+#: src/screens/dashboard.js:156
+msgid "Retried every five minutes."
+msgstr "Wird alle fünf Minuten erneut versucht."
+
+#: src/screens/dashboard.js:159
+msgid "Never delivered"
+msgstr "Nie zugestellt"
+
+#: src/screens/dashboard.js:163
+msgid "Out of attempts. Kept until the discard window passes."
+msgstr "Keine Versuche mehr. Wird aufbewahrt, bis die Verwerfungsfrist abläuft."
+
+#: src/screens/dashboard.js:192
+msgid "Nothing is sending yet"
+msgstr "Es wird noch nichts versendet"
+
+#: src/screens/dashboard.js:195
+msgid "WordPress is still using the server mail function. The wizard connects a mailbox, checks the credentials against the provider and sends one real message, in that order."
+msgstr "WordPress verwendet weiterhin die Mail-Funktion des Servers. Der Assistent verbindet ein Postfach, prüft die Zugangsdaten beim Anbieter und sendet eine echte Nachricht – in dieser Reihenfolge."
+
+#: src/screens/dashboard.js:235
+msgid "Where to look next"
+msgstr "Wo Sie als Nächstes nachsehen"
+
+#: src/screens/dashboard.js:236
+msgid "This plugin keeps no copy of what it sent. A failure is reported the moment it happens, through wp_mail() and the checks below."
+msgstr "Dieses Plugin bewahrt keine Kopie des Versendeten auf. Ein Fehler wird in dem Moment gemeldet, in dem er auftritt – über wp_mail() und die Prüfungen unten."
+
+#: src/screens/dashboard.js:250
+msgid "send a test message and confirm the credentials still work."
+msgstr "senden Sie eine Testnachricht und bestätigen Sie, dass die Zugangsdaten weiterhin funktionieren."
+
+#: src/screens/dashboard.js:258
+msgid "Tools, Site Health"
+msgstr "Werkzeuge, Website-Zustand"
+
+#: src/screens/dashboard.js:261
+msgid "the Email delivery check reports whether sending is working, and names the last error."
+msgstr "die Prüfung „E-Mail-Zustellung“ meldet, ob der Versand funktioniert, und nennt den letzten Fehler."
+
+#: src/screens/dashboard.js:275
+msgid "how many failures in a row count as an outage, and how long the retry queue holds a message."
+msgstr "wie viele Fehler nacheinander als Ausfall gelten und wie lange die Wiederholungswarteschlange eine Nachricht aufbewahrt."
+
+#: src/screens/settings.js:31
+msgid "Settings saved."
+msgstr "Einstellungen gespeichert."
+
+#: src/screens/settings.js:45
+msgid "Reliability"
+msgstr "Zuverlässigkeit"
+
+#: src/screens/settings.js:51
+msgid "Hold on to messages that failed for a temporary reason and retry them"
+msgstr "Nachrichten aufbewahren, die aus einem vorübergehenden Grund fehlgeschlagen sind, und erneut versuchen"
+
+#: src/screens/settings.js:63
+msgid "Discard undelivered messages after (days)"
+msgstr "Nicht zugestellte Nachrichten verwerfen nach (Tagen)"
+
+#: src/screens/settings.js:82
+msgid "Failure detection"
+msgstr "Fehlererkennung"
+
+#: src/screens/settings.js:83
+msgid "Almost nothing in WordPress checks what wp_mail() returned, so this decides when the plugin says so itself."
+msgstr "Fast nichts in WordPress prüft, was wp_mail() zurückgegeben hat – dies entscheidet daher, wann das Plugin es selbst sagt."
+
+#: src/screens/settings.js:91
+msgid "Report broken after N failures"
+msgstr "Als gestört melden nach N Fehlern"
+
+#: src/screens/settings.js:92
+msgid "Consecutive failures, not failures in total. One success resets the count, so a single bad address never triggers it."
+msgstr "Aufeinanderfolgende Fehler, nicht Fehler insgesamt. Ein Erfolg setzt die Zählung zurück – eine einzelne falsche Adresse löst es also nie aus."
+
+#: src/screens/settings.js:115
+msgid "When you actually get told"
+msgstr "Wann Sie es tatsächlich erfahren"
+
+#: src/screens/settings.js:118
+msgid "A failed send is reported immediately, every time, and wp_mail() returns false so the code that sent it knows."
+msgstr "Ein fehlgeschlagener Versand wird sofort gemeldet, jedes Mal, und wp_mail() gibt false zurück, damit der sendende Code Bescheid weiß."
+
+#: src/screens/settings.js:124
+msgid "Once that many sends fail in a row, the plugin reports sending as broken: an admin notice appears and the Email delivery check under Tools, Site Health turns red. One success clears it."
+msgstr "Sobald so viele Sendevorgänge nacheinander fehlschlagen, meldet das Plugin den Versand als gestört: Ein Admin-Hinweis erscheint und die Prüfung „E-Mail-Zustellung“ unter Werkzeuge, Website-Zustand wird rot. Ein Erfolg hebt das wieder auf."
+
+#: src/screens/settings.js:138
+msgid "Privacy"
+msgstr "Datenschutz"
+
+#: src/screens/settings.js:141
+msgid "This plugin keeps no record of what it sent. A queued message is kept in full until it is delivered or discarded, and nothing else. No cookies, no tracking pixels, no IP addresses."
+msgstr "Dieses Plugin führt keine Aufzeichnung über das Versendete. Eine eingereihte Nachricht wird vollständig aufbewahrt, bis sie zugestellt oder verworfen ist – mehr nicht. Keine Cookies, keine Tracking-Pixel, keine IP-Adressen."
+
+#: src/screens/settings.js:152
+msgid "This plugin sends nothing to its own vendor. No registration, no check-in, no usage figures - the only servers it contacts are the mail providers you configure."
+msgstr "Dieses Plugin sendet nichts an seinen eigenen Hersteller. Keine Registrierung, keine Rückmeldung, keine Nutzungszahlen – die einzigen Server, die es kontaktiert, sind die von Ihnen konfigurierten Mail-Anbieter."
+
+#: src/screens/settings.js:163
+msgid "Export personal data"
+msgstr "Personenbezogene Daten exportieren"
+
+#: src/screens/settings.js:169
+msgid "Erase personal data"
+msgstr "Personenbezogene Daten löschen"
+
+#: src/screens/settings.js:175
+msgid "Privacy policy text"
+msgstr "Text der Datenschutzerklärung"
+
+#: src/screens/settings.js:186
+msgid "Setup wizard"
+msgstr "Einrichtungsassistent"
+
+#: src/screens/settings.js:187
+msgid "Walks through choosing a provider, connecting a mailbox, verifying the credentials and sending a test. It edits the primary connection, so nothing already configured is lost by opening it."
+msgstr "Führt durch die Wahl eines Anbieters, das Verbinden eines Postfachs, das Prüfen der Zugangsdaten und einen Testversand. Er bearbeitet die primäre Verbindung – durch das Öffnen geht also nichts bereits Konfiguriertes verloren."
+
+#: src/screens/settings.js:195
+msgid "Open the setup wizard"
+msgstr "Einrichtungsassistenten öffnen"
+
+#: src/screens/settings.js:206
+msgid "Save settings"
+msgstr "Einstellungen speichern"
+
+#: src/screens/setup.js:71 src/screens/setup.js:813
+msgid "Provider"
+msgstr "Anbieter"
+
+#: src/screens/setup.js:74
+msgid "Test"
+msgstr "Test"
+
+#: src/screens/setup.js:75
+msgid "Finish"
+msgstr "Abschließen"
+
+#: src/screens/setup.js:189
+msgid "Back"
+msgstr "Zurück"
+
+#: src/screens/setup.js:209
+msgid "Let us get this site sending properly."
+msgstr "Bringen wir diese Website dazu, richtig zu versenden."
+
+#: src/screens/setup.js:210
+msgid "WordPress is currently handing email to the server’s own mail function, which most inboxes now treat as unsigned post. Four short steps connect a real mailbox instead, and nothing is written until you press Save."
+msgstr "WordPress übergibt E-Mails derzeit an die eigene Mail-Funktion des Servers, die die meisten Postfächer inzwischen wie unsignierte Post behandeln. Vier kurze Schritte verbinden stattdessen ein echtes Postfach, und es wird nichts geschrieben, bis Sie auf Speichern klicken."
+
+#: src/screens/setup.js:220
+msgid "Begin setup"
+msgstr "Einrichtung beginnen"
+
+#: src/screens/setup.js:230
+msgid "Pick a provider"
+msgstr "Anbieter wählen"
+
+#: src/screens/setup.js:231
+msgid "Google signs in with a single click. Everything else takes an API key."
+msgstr "Google meldet sich mit einem einzigen Klick an. Alles andere benötigt einen API-Schlüssel."
+
+#: src/screens/setup.js:238
+msgid "Prove it works"
+msgstr "Nachweisen, dass es funktioniert"
+
+#: src/screens/setup.js:239
+msgid "The credentials are checked against the provider before you leave this screen."
+msgstr "Die Zugangsdaten werden beim Anbieter geprüft, bevor Sie diese Ansicht verlassen."
+
+#: src/screens/setup.js:246
+msgid "Send one message"
+msgstr "Eine Nachricht senden"
+
+#: src/screens/setup.js:247
+msgid "A real email, sent with the safety nets off, so a failure cannot hide behind a retry."
+msgstr "Eine echte E-Mail, ohne Sicherheitsnetze versendet, damit sich ein Fehler nicht hinter einem Wiederholungsversuch verstecken kann."
+
+#: src/screens/setup.js:379
+msgid "Setup finished."
+msgstr "Einrichtung abgeschlossen."
+
+#: src/screens/setup.js:413
+msgid "Fill in %s first."
+msgstr "Füllen Sie zuerst %s aus."
+
+#: src/screens/setup.js:440
+msgid "Finish this later"
+msgstr "Später abschließen"
+
+#: src/screens/setup.js:451 src/screens/setup.js:529 src/screens/setup.js:612 src/screens/setup.js:712
+msgid "Step %1$d of %2$d"
+msgstr "Schritt %1$d von %2$d"
+
+#: src/screens/setup.js:455
+msgid "How should this site send its email?"
+msgstr "Wie soll diese Website ihre E-Mails versenden?"
+
+#: src/screens/setup.js:456
+msgid "Google needs an OAuth client or a service account key from the Google Cloud console. The rest need an API key from the service, which takes a minute to create."
+msgstr "Google benötigt einen OAuth-Client oder einen Dienstkonto-Schlüssel aus der Google-Cloud-Konsole. Alle anderen benötigen einen API-Schlüssel des Dienstes, dessen Erstellung eine Minute dauert."
+
+#: src/screens/setup.js:468 src/screens/setup.js:631 src/screens/setup.js:739
+msgid "Continue"
+msgstr "Weiter"
+
+#: src/screens/setup.js:490
+msgid "Choose one to continue. It can be changed later without losing anything."
+msgstr "Wählen Sie einen aus, um fortzufahren. Er lässt sich später ändern, ohne dass etwas verloren geht."
+
+#: src/screens/setup.js:510
+msgid "No provider chosen yet"
+msgstr "Noch kein Anbieter gewählt"
+
+#: src/screens/setup.js:511
+msgid "This step asks for the credentials the provider needs, and which credentials those are depends on the provider. Go back and pick one."
+msgstr "Dieser Schritt fragt nach den Zugangsdaten, die der Anbieter benötigt – und welche das sind, hängt vom Anbieter ab. Gehen Sie zurück und wählen Sie einen aus."
+
+#: src/screens/setup.js:517
+msgid "Choose a provider"
+msgstr "Einen Anbieter wählen"
+
+#: src/screens/setup.js:535
+msgid "Connect %s"
+msgstr "%s verbinden"
+
+#: src/screens/setup.js:536
+msgid "the provider"
+msgstr "den Anbieter"
+
+#: src/screens/setup.js:547
+msgid "Save and continue"
+msgstr "Speichern und fortfahren"
+
+#: src/screens/setup.js:616
+msgid "Check the credentials reach the mailbox"
+msgstr "Prüfen, ob die Zugangsdaten das Postfach erreichen"
+
+#: src/screens/setup.js:617
+msgid "This asks the provider whether it recognises what was saved, and whether the mailbox is one this connection is allowed to send from. Nothing is emailed yet."
+msgstr "Dies fragt den Anbieter, ob er das Gespeicherte erkennt und ob das Postfach eines ist, von dem diese Verbindung senden darf. Es wird noch nichts per E-Mail versendet."
+
+#: src/screens/setup.js:626
+msgid "Continue anyway"
+msgstr "Trotzdem fortfahren"
+
+#: src/screens/setup.js:643
+msgid "Check again"
+msgstr "Erneut prüfen"
+
+#: src/screens/setup.js:644
+msgid "Verify connection"
+msgstr "Verbindung prüfen"
+
+#: src/screens/setup.js:676
+msgid "Asking the provider…"
+msgstr "Anbieter wird gefragt…"
+
+#: src/screens/setup.js:678
+msgid "The provider accepted it."
+msgstr "Der Anbieter hat es angenommen."
+
+#: src/screens/setup.js:680
+msgid "The provider refused."
+msgstr "Der Anbieter hat abgelehnt."
+
+#: src/screens/setup.js:681
+msgid "Not checked yet."
+msgstr "Noch nicht geprüft."
+
+#: src/screens/setup.js:685
+msgid "Press Verify. Any unsaved edit on the previous step is saved first, because the check runs against what is stored."
+msgstr "Klicken Sie auf Prüfen. Nicht gespeicherte Änderungen aus dem vorherigen Schritt werden zuerst gespeichert, denn die Prüfung läuft gegen das, was gespeichert ist."
+
+#: src/screens/setup.js:697
+msgid "The message above comes from the provider, not from this plugin - it names what is actually wrong. Go back a step to correct it."
+msgstr "Die Meldung oben stammt vom Anbieter, nicht von diesem Plugin – sie benennt, was tatsächlich falsch ist. Gehen Sie einen Schritt zurück, um es zu korrigieren."
+
+#: src/screens/setup.js:716
+msgid "Send one real message"
+msgstr "Eine echte Nachricht senden"
+
+#: src/screens/setup.js:717
+msgid "It goes out over this connection with the retry queue switched off, so a failure here is the connection failing rather than something else quietly covering for it."
+msgstr "Sie geht über diese Verbindung hinaus, mit abgeschalteter Wiederholungswarteschlange – ein Fehler hier ist also ein Fehler der Verbindung und nicht etwas anderes, das ihn still überdeckt."
+
+#: src/screens/setup.js:735
+msgid "Send another"
+msgstr "Weitere senden"
+
+#: src/screens/setup.js:747
+msgid "Send to"
+msgstr "Senden an"
+
+#: src/screens/setup.js:749
+msgid "Your own address is the fastest way to find out. Somewhere outside this domain tells you more."
+msgstr "Ihre eigene Adresse ist der schnellste Weg, es herauszufinden. Eine Adresse außerhalb dieser Domain sagt mehr aus."
+
+#: src/screens/setup.js:780
+msgid "Setup complete"
+msgstr "Einrichtung abgeschlossen"
+
+#: src/screens/setup.js:783
+msgid "WordPress is sending through your provider."
+msgstr "WordPress versendet über Ihren Anbieter."
+
+#: src/screens/setup.js:784
+msgid "Nothing is configured yet."
+msgstr "Es ist noch nichts konfiguriert."
+
+#: src/screens/setup.js:788
+msgid "Every message this site sends now goes out over this connection, and every attempt is recorded with whatever the provider said about it."
+msgstr "Jede Nachricht, die diese Website versendet, geht jetzt über diese Verbindung hinaus, und jeder Versuch wird mit dem festgehalten, was der Anbieter dazu gesagt hat."
+
+#: src/screens/setup.js:792
+msgid "You can leave now and come back to this at any time - the wizard is always available from the dashboard."
+msgstr "Sie können jetzt gehen und jederzeit hierher zurückkehren – der Assistent ist immer über das Dashboard erreichbar."
+
+#: src/screens/setup.js:806
+msgid "Go to the dashboard"
+msgstr "Zum Dashboard"
+
+#: src/screens/setup.js:817
+msgid "Sends as"
+msgstr "Versendet als"
+
+#: src/screens/setup.js:820
+msgid "Not set"
+msgstr "Nicht gesetzt"
+
+#: src/screens/setup.js:823
+msgid "Test message"
+msgstr "Testnachricht"
+
+#: src/screens/setup.js:826
+msgid "Accepted"
+msgstr "Angenommen"
+
+#: src/screens/setup.js:827
+msgid "Refused"
+msgstr "Abgelehnt"
+
+#: src/screens/setup.js:828
+msgid "Not sent"
+msgstr "Nicht versendet"
+
+#: src/screens/setup.js:881
+msgid "Credentials are stored on this site and sent only to the provider they belong to."
+msgstr "Zugangsdaten werden auf dieser Website gespeichert und nur an den Anbieter gesendet, zu dem sie gehören."

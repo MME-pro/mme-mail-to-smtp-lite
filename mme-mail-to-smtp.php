@@ -10,6 +10,7 @@
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       mme-mail-to-smtp
+ * Domain Path:       /languages
  *
  * @package ModernMailer
  */
@@ -72,6 +73,28 @@ spl_autoload_register(
 		if ( is_readable( $path ) ) {
 			require_once $path;
 		}
+	}
+);
+
+/**
+ * Load the bundled translations.
+ *
+ * On `init` rather than at file scope: WordPress settles the locale from the
+ * site setting and the user's own profile preference, and neither is known
+ * before then. Loading earlier hands every administrator the site language
+ * even when they have chosen a different one for themselves.
+ *
+ * The call is what puts `languages/` on the map. Nothing reads the Domain Path
+ * header at runtime - that line is for the translation tooling - so without
+ * this the bundled catalogues are never looked at and the admin screens come
+ * out in English with the .mo file sitting right there. It covers the admin app
+ * too: `wp_set_script_translations()` finds its JSON catalogue through the same
+ * registered path.
+ */
+add_action(
+	'init',
+	static function (): void {
+		load_plugin_textdomain( 'mme-mail-to-smtp', false, dirname( plugin_basename( PLUGIN_FILE ) ) . '/languages' );
 	}
 );
 

@@ -1,3 +1,4 @@
+import { __ } from '@wordpress/i18n';
 import { createContext, useContext, useState, useCallback } from '@wordpress/element';
 import { CircleCheck, CircleX, X } from 'lucide-react';
 import { cn } from '../lib/utils';
@@ -65,7 +66,7 @@ export const ToastProvider = ( { children } ) => {
 							<button
 								type="button"
 								onClick={ () => dismiss( toast.id ) }
-								aria-label="Dismiss"
+								aria-label={ __( 'Dismiss', 'mme-mail-to-smtp' ) }
 								className="shrink-0 rounded-sm text-muted-foreground transition-colors hover:text-foreground cursor-pointer border-0 bg-transparent p-0"
 							>
 								<X className="size-3.5" />

@@ -167,7 +167,7 @@ msgstr ""
 msgid "Open the Plugins screen"
 msgstr ""
 
-#: includes/class-conflicts.php:519
+#: includes/class-conflicts.php:519 src/components/toast.js:69
 msgid "Dismiss"
 msgstr ""
 
@@ -997,7 +997,7 @@ msgstr ""
 msgid "Google's own documentation"
 msgstr ""
 
-#: src/components/google-setup-guide.js:318 src/components/pro-dialog.js:90
+#: src/components/google-setup-guide.js:318 src/components/pro-dialog.js:90 src/components/ui/dialog.js:55
 msgid "Close"
 msgstr ""
 

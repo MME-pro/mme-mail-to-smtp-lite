@@ -1,5 +1,5 @@
 {
-	"translation-revision-date": "2026-10-20T07:36:02.639Z",
+	"translation-revision-date": "2026-10-20T12:27:29.346Z",
 	"generator": "tools/i18n.mjs",
 	"domain": "messages",
 	"locale_data": {
@@ -9,6 +9,9 @@
 				"lang": "de_DE",
 				"plural-forms": "nplurals=2; plural=(n != 1);"
 			},
+			"Dismiss": [
+				"Ausblenden"
+			],
 			"Primary": [
 				"Primär"
 			],

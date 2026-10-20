@@ -1,3 +1,4 @@
+import { __ } from '@wordpress/i18n';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 import { cn } from '../../lib/utils';
@@ -51,7 +52,7 @@ const DialogContent = ( { className, children, ...props } ) => (
 
 			<DialogPrimitive.Close className="absolute right-4 top-4 rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/40">
 				<X className="size-4" />
-				<span className="sr-only">Close</span>
+				<span className="sr-only">{ __( 'Close', 'mme-mail-to-smtp' ) }</span>
 			</DialogPrimitive.Close>
 		</DialogPrimitive.Content>
 	</DialogPrimitive.Portal>

@@ -187,7 +187,7 @@ msgid_plural "%s are installed but switched off."
 msgstr[0] "%s ist installiert, aber ausgeschaltet."
 msgstr[1] "%s sind installiert, aber ausgeschaltet."
 
-#: includes/class-connections.php:34 includes/class-connections.php:64 src/screens/connections.js:377
+#: includes/class-connections.php:34 includes/class-connections.php:64 src/screens/connections.js:394
 msgid "Primary"
 msgstr "Primär"
 
@@ -849,7 +849,7 @@ msgstr "Verbunden. Für diese Verbindung ist ein Refresh-Token gespeichert."
 msgid "This revokes the grant at Google and forgets it here. Sending stops. Continue?"
 msgstr "Damit wird die Berechtigung bei Google widerrufen und hier verworfen. Der Versand endet. Fortfahren?"
 
-#: src/components/google-connect.js:73 src/screens/connections.js:278
+#: src/components/google-connect.js:73 src/screens/connections.js:286
 msgid "Disconnect"
 msgstr "Trennen"
 
@@ -861,7 +861,7 @@ msgstr "Geben Sie oben Client-ID und Secret ein und speichern Sie sie, bevor Sie
 msgid "You have unsaved changes. Signing in leaves this page and they will be lost."
 msgstr "Sie haben ungespeicherte Änderungen. Die Anmeldung verlässt diese Seite und die Änderungen gehen verloren."
 
-#: src/components/google-setup-guide.js:98 src/screens/connections.js:218 src/screens/setup.js:574
+#: src/components/google-setup-guide.js:98 src/screens/connections.js:226 src/screens/setup.js:574
 msgid "Documentation"
 msgstr "Dokumentation"
 
@@ -1157,35 +1157,39 @@ msgstr "Verbindung gespeichert."
 msgid "Fill in %s before verifying."
 msgstr "Füllen Sie %s aus, bevor Sie prüfen."
 
-#: src/screens/connections.js:176
+#: src/screens/connections.js:184
 msgid "Connection"
 msgstr "Verbindung"
 
-#: src/screens/connections.js:248
+#: src/screens/connections.js:256
 msgid "Save connection"
 msgstr "Verbindung speichern"
 
-#: src/screens/connections.js:252 src/screens/setup.js:73
+#: src/screens/connections.js:260 src/screens/setup.js:73
 msgid "Verify"
 msgstr "Prüfen"
 
-#: src/screens/connections.js:267
+#: src/screens/connections.js:275
 msgid "This clears the provider, every credential and the From address on this connection. Mail routed here stops. Continue?"
 msgstr "Damit werden Anbieter, sämtliche Zugangsdaten und die Absenderadresse dieser Verbindung gelöscht. Hierher geleitete E-Mails werden nicht mehr versendet. Fortfahren?"
 
-#: src/screens/connections.js:335
+#: src/screens/connections.js:327
+msgid "Checked at %s"
+msgstr "Geprüft um %s"
+
+#: src/screens/connections.js:352
 msgid "Send a test message"
 msgstr "Testnachricht senden"
 
-#: src/screens/connections.js:336
+#: src/screens/connections.js:353
 msgid "Goes out over the primary connection."
 msgstr "Geht über die primäre Verbindung hinaus."
 
-#: src/screens/connections.js:344
+#: src/screens/connections.js:361
 msgid "Recipient"
 msgstr "Empfänger"
 
-#: src/screens/connections.js:358 src/screens/setup.js:736
+#: src/screens/connections.js:375 src/screens/setup.js:736
 msgid "Send test"
 msgstr "Test senden"
 

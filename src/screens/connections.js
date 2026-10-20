@@ -162,8 +162,16 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 		// The result is kept in the page rather than shown as a toast: a
 		// verification failure names the exact misconfiguration, and that is
 		// the last thing that should vanish after three seconds.
-		onSuccess: ( result ) => setVerifyResult( result ),
-		onError: ( error ) => setVerifyResult( { ok: false, message: error.message } ),
+		//
+		// Cleared the moment the check starts, and stamped when it ends. A
+		// repeated failure returns the very same sentence, so a result left
+		// standing through the request looked like a message that never went
+		// away - and was reported as one, by somebody who had clicked for two
+		// days against what was in fact a fresh failure every time.
+		onMutate: () => setVerifyResult( null ),
+		onSuccess: ( result ) => setVerifyResult( { ...result, at: new Date() } ),
+		onError: ( error ) =>
+			setVerifyResult( { ok: false, message: error.message, at: new Date() } ),
 	} );
 
 	if ( isLoading ) {
@@ -311,7 +319,16 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 									className="shrink-0 mt-0.5 text-danger"
 								/>
 							) }
-							<span className="text-foreground">{ verifyResult.message }</span>
+							<span className="text-foreground flex-1">{ verifyResult.message }</span>
+							{ verifyResult.at && (
+								<span className="shrink-0 text-muted-foreground tabular-nums">
+									{ sprintf(
+										/* translators: %s: time of day the check finished, e.g. 14:32:05. */
+										__( 'Checked at %s', 'mme-mail-to-smtp' ),
+										verifyResult.at.toLocaleTimeString()
+									) }
+								</span>
+							) }
 						</div>
 					) }
 				</Panel>

@@ -27,6 +27,7 @@
   "Used only for messages a routing rule sends here. Set those up under Routing.": "Wird nur für Nachrichten verwendet, die eine Weiterleitungsregel hierher schickt. Diese richten Sie unter „Weiterleitung“ ein.",
   "Connection saved.": "Verbindung gespeichert.",
   "Fill in %s before verifying.": "Füllen Sie %s aus, bevor Sie prüfen.",
+  "Checked at %s": "Geprüft um %s",
   "Documentation": "Dokumentation",
   "Save connection": "Verbindung speichern",
   "Verify": "Prüfen",

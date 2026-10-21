@@ -42,6 +42,11 @@ is `D:\Talha\MME Mail to SMTP` (`trunk/`, `tags/`, `assets/`).
    `tags/<version>/`, adds and removes files in svn, and commits. Only
    committed files ship, which is why git comes first.
 
+   With no `svn` command-line client installed, run it with `--dry-run`: it
+   still writes `trunk/` and `tags/<version>/`, and the user commits them
+   with TortoiseSVN (SVN Commit on the checkout root, tick the unversioned
+   new tag). Tell them that is the step left.
+
 8. **Report** the version, the git commit, and the SVN revision. The
    directory serves it within minutes; sites see it on their next update
    check.

@@ -4,7 +4,7 @@ Tags: smtp, wp_mail, gmail, sendgrid, mailgun
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -143,6 +143,13 @@ Not in this plugin. It records no copy of what it sent - a mail log holding reci
 No. WordPress lets exactly one plugin take over sending, so one of the two would be configured and doing nothing - and which one wins depends on load order rather than on anything you chose. The plugin detects the common ones and says so on screen.
 
 == Changelog ==
+
+= 1.0.2 =
+* Verify now clears its old result the moment it is pressed and shows the
+  time the new one came back, so a check that fails twice no longer looks
+  like a message that never went away.
+* Fixed: the Close and Dismiss buttons were read out in English by screen
+  readers on a translated site.
 
 = 1.0.1 =
 * German translation, complete across all 388 strings.

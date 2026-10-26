@@ -50,6 +50,9 @@ const GoogleButton = ( { href, disabled = false, className, children } ) => {
 	const classes = cn(
 		'inline-flex items-center gap-3 h-10 pl-3 pr-4 rounded-md border no-underline select-none',
 		'bg-white border-[#dadce0] text-[#1f1f1f] shadow-xs',
+		// wp-admin's a:hover outranks a plain colour class, and would turn the
+		// label WordPress blue under the pointer.
+		'hover:text-[#1f1f1f] focus:text-[#1f1f1f] active:text-[#1f1f1f]',
 		'font-medium text-sm tracking-[0.01em]',
 		'transition-[background-color,box-shadow] hover:bg-[#f8f9fa] hover:shadow-sm',
 		'focus-visible:ring-[3px] focus-visible:ring-[#4285F4]/40 outline-none',

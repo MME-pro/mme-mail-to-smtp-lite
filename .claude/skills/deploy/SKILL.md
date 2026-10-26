@@ -29,6 +29,11 @@ is `D:\Talha\MME Mail to SMTP` (`trunk/`, `tags/`, `assets/`).
 
 4. **Build** if anything under `src/` changed since the last release:
    `npm run build`. `build/` is committed and is what ships.
+   Pro's screens are styled by free's stylesheet, so Pro must be checked out
+   at `../mme-mail-to-smtp-pro` when building - without it the build succeeds
+   and silently drops Pro's classes (this shipped in 1.0.2). After building,
+   confirm a Pro-only class from `../mme-mail-to-smtp-pro/src/screens/` is in
+   `build/index.css`.
 
 5. **Tests.** Run `tests/run.sh` (Windows LocalWP invocation in README.md
    § Tests). If they fail, stop. If the environment cannot run them, say so and

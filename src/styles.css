@@ -46,8 +46,13 @@
  * none of its own. Their class names have to be in this build, so Tailwind
  * reads the add-on's sources too when it sits beside this plugin at build
  * time.
+ *
+ * A build without Pro there does not fail - it quietly ships a stylesheet
+ * with Pro's classes missing, and Pro's screens lose their layout on every
+ * site. That is how 1.0.2 went out, after the folder was renamed from
+ * modern-mailer-auth. Build with mme-mail-to-smtp-pro checked out beside this.
  */
-@source "../../modern-mailer-auth/src";
+@source "../../mme-mail-to-smtp-pro/src";
 
 /*
  * Design system.

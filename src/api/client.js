@@ -43,8 +43,8 @@ export const verifyConnection = ( slot ) =>
 export const disconnectConnection = ( slot ) =>
 	request( `/connections/${ slot }/disconnect`, { method: 'POST' } );
 
-export const sendTestEmail = ( to ) =>
-	request( '/test-email', { method: 'POST', data: { to } } );
+export const sendTestEmail = ( to, slot = 'primary' ) =>
+	request( '/test-email', { method: 'POST', data: { to, slot } } );
 
 export const queueAction = ( action ) =>
 	request( `/queue/${ action }`, { method: 'POST' } );

@@ -83,10 +83,21 @@ class Rest_Controller {
 			]
 		);
 
+		// An id that names no connection is refused here rather than falling
+		// back to the primary further in. The fallback meant a save aimed at a
+		// connection that had gone - Pro switched off, a stale tab - wrote its
+		// credentials over the primary's.
+		$slot_arg = [
+			'slot' => [
+				'validate_callback' => fn( $value ) => $this->plugin->connections->exists( (string) $value ),
+			],
+		];
+
 		register_rest_route(
 			self::NAMESPACE,
 			'/connections/(?P<slot>[A-Za-z0-9_-]+)',
 			[
+				'args' => $slot_arg,
 				[
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => [ $this, 'get_connection' ],
@@ -107,6 +118,7 @@ class Rest_Controller {
 				'methods'             => WP_REST_Server::CREATABLE,
 				'callback'            => [ $this, 'disconnect_connection' ],
 				'permission_callback' => $auth,
+				'args'                => $slot_arg,
 			]
 		);
 
@@ -117,6 +129,7 @@ class Rest_Controller {
 				'methods'             => WP_REST_Server::CREATABLE,
 				'callback'            => [ $this, 'verify_connection' ],
 				'permission_callback' => $auth,
+				'args'                => $slot_arg,
 			]
 		);
 
@@ -128,9 +141,13 @@ class Rest_Controller {
 				'callback'            => [ $this, 'send_test' ],
 				'permission_callback' => $auth,
 				'args'                => [
-					'to' => [
+					'to'   => [
 						'required'          => true,
 						'sanitize_callback' => 'sanitize_email',
+					],
+					'slot' => [
+						'default'           => 'primary',
+						'validate_callback' => fn( $value ) => $this->plugin->connections->exists( (string) $value ),
 					],
 				],
 			]
@@ -413,11 +430,10 @@ class Rest_Controller {
 
 		add_action( 'wp_mail_failed', $capture );
 
-		// Sent with the safety nets off: no routing, no backup, no queue. A
-		// test exists to say whether the primary connection works, and every
-		// one of those would let it answer yes when the primary had failed -
-		// which is the very situation somebody presses this button to find out
-		// about.
+		// Sent with the safety nets off: no backup, no queue. A test exists to
+		// say whether this one connection works, and either of those would let
+		// it answer yes when it had failed - which is the very situation
+		// somebody presses this button to find out about.
 		$sent = $this->plugin->dispatcher->without_fallbacks(
 			fn() => wp_mail(
 				$to,
@@ -427,7 +443,8 @@ class Rest_Controller {
 					get_bloginfo( 'name' )
 				),
 				__( "This is a test message.\n\nIf you are reading it, the connection is working.", 'mme-mail-to-smtp' )
-			)
+			),
+			$this->slot( $request )
 		);
 
 		remove_action( 'wp_mail_failed', $capture );

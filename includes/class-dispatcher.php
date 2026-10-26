@@ -16,14 +16,16 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Chooses a connection, sends, and records the outcome.
  *
- * Two things stand between a transient fault and a lost email, in the order
+ * Up to three things stand between a fault and a lost email, in the order
  * they are tried:
  *
  * 1. Http retries the request a few times inside this page load. Good for a
  *    dropped packet or a brief throttle.
- * 2. If the connection still fails and the failure looks transient, the message
- *    goes on the queue and is retried across later requests over the following
- *    hours.
+ * 2. If an add-on names a fallback connection (Pro's backup), it is tried
+ *    next. Separate credentials and a separate endpoint, so it survives
+ *    faults that are permanent for the primary.
+ * 3. If that fails too and the failure looks transient, the message goes on
+ *    the queue and is retried across later requests over the following hours.
  *
  * The escalation only happens when it can help, which is what Failure decides.
  * An oversized attachment is not retried anywhere, because no amount of
@@ -44,6 +46,9 @@ class Dispatcher {
 	 * anything and reports the primary connection's own answer.
 	 */
 	private bool $testing = false;
+
+	/** The connection a test message goes out on. */
+	private string $test_slot = Settings::SLOT_PRIMARY;
 
 	public function __construct(
 		private Settings $settings,
@@ -105,13 +110,15 @@ class Dispatcher {
 	 * @param callable():T $send
 	 * @return T
 	 */
-	public function without_fallbacks( callable $send ) {
-		$this->testing = true;
+	public function without_fallbacks( callable $send, string $slot = Settings::SLOT_PRIMARY ) {
+		$this->testing   = true;
+		$this->test_slot = $slot;
 
 		try {
 			return $send();
 		} finally {
-			$this->testing = false;
+			$this->testing   = false;
+			$this->test_slot = Settings::SLOT_PRIMARY;
 		}
 	}
 
@@ -122,14 +129,21 @@ class Dispatcher {
 	 */
 	public function dispatch( string $raw_mime, PHPMailer $mailer, ?string $forced_slot = null ) {
 		// $forced_slot is set when a message comes off the queue, where the
-		// choice was already made and recorded. Everything else goes out on the
-		// primary connection, and a failure there falls through to the retry
-		// queue.
-		$slot = $forced_slot ?? Settings::SLOT_PRIMARY;
+		// choice was already made and recorded. A test goes out on the
+		// connection being tested. Everything else goes out on the primary
+		// connection, and a failure there falls through to the fallback, if an
+		// add-on named one, and then to the retry queue.
+		$slot = $forced_slot ?? ( $this->testing ? $this->test_slot : Settings::SLOT_PRIMARY );
 
 		$result = $this->attempt( $slot, $raw_mime, $mailer );
 
 		if ( true === $result ) {
+			$this->health->record_success();
+
+			return true;
+		}
+
+		if ( true === $this->fail_over( $slot, $result, $raw_mime, $mailer ) ) {
 			$this->health->record_success();
 
 			return true;
@@ -175,6 +189,69 @@ class Dispatcher {
 				// error for mail that is about to arrive.
 				return true;
 			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Try the fallback connection an add-on names, when there is one.
+	 *
+	 * Free declares no fallback of its own; this asks. Never for a test,
+	 * whose whole point is the tested connection's own answer, and never for
+	 * a failure of the message itself, which a second provider would refuse
+	 * just the same. A message that came off the queue may fail over too: it
+	 * has already waited, and its own connection was tried first.
+	 *
+	 * @param WP_Error $error Why $slot failed.
+	 * @return true|WP_Error|null Null when no fallback was tried.
+	 */
+	private function fail_over( string $slot, WP_Error $error, string $raw_mime, PHPMailer $mailer ) {
+		if ( $this->testing || ! Failure::should_fail_over( $error ) ) {
+			return null;
+		}
+
+		/**
+		 * Filters the connection to try when a send fails.
+		 *
+		 * @param string|null $fallback The slot to try, or null for none.
+		 * @param WP_Error    $error    Why the connection failed.
+		 * @param string      $slot     The connection that failed.
+		 * @param PHPMailer   $mailer   The message.
+		 */
+		$fallback = apply_filters( 'mmoa_fallback_slot', null, $error, $slot, $mailer );
+
+		if ( ! is_string( $fallback ) || $fallback === $slot || null === $this->provider( $fallback ) ) {
+			return null;
+		}
+
+		$result = $this->attempt( $fallback, $raw_mime, $mailer );
+
+		if ( true === $result ) {
+			$failed = $this->provider( $slot );
+
+			/**
+			 * Fires when the fallback connection delivered what the first one
+			 * could not.
+			 *
+			 * Sending is working, but on the fallback path - worth knowing
+			 * before the fallback is the only thing left.
+			 *
+			 * @param WP_Error            $error   Why the first connection failed.
+			 * @param array<string,mixed> $context The message's own details.
+			 */
+			do_action(
+				'mmoa_backup_used',
+				$error,
+				[
+					'recipients'    => implode( ', ', $this->recipients( $mailer ) ),
+					'subject'       => (string) $mailer->Subject,
+					'mailer'        => null !== $failed ? $failed->get_label() : '',
+					'slot'          => $slot,
+					'fallback_slot' => $fallback,
+					'time'          => time(),
+				]
+			);
 		}
 
 		return $result;

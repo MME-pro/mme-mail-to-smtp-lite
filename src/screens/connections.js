@@ -22,15 +22,17 @@ import ConnectorSlot from '../components/connector-slot';
 import { lockedTiles } from '../lib/pro';
 
 /**
- * What the connection is for, said once on the screen.
+ * What the connection is for, said once on the screen. An add-on's connection
+ * brings its own sentence; the primary's is this one.
  */
-const describeSlot = () =>
+const describeSlot = ( description ) =>
+	description ||
 	__(
 		'Every message WordPress sends goes out over this connection.',
 		'mme-mail-to-smtp'
 	);
 
-const ConnectionPanel = ( { slot, categories, title } ) => {
+const ConnectionPanel = ( { slot, categories, title, description } ) => {
 	const toast = useToast();
 	const queryClient = useQueryClient();
 	const [ provider, setProvider ] = useState( '' );
@@ -182,7 +184,7 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 		<div className="grid gap-5">
 			<Panel
 				title={ title || __( 'Connection', 'mme-mail-to-smtp' ) }
-				description={ describeSlot( slot ) }
+				description={ describeSlot( description ) }
 			>
 				<ProviderPicker
 					providers={ data.providers }
@@ -337,12 +339,12 @@ const ConnectionPanel = ( { slot, categories, title } ) => {
 	);
 };
 
-const TestEmail = () => {
+const TestEmail = ( { slot = 'primary', name } ) => {
 	const toast = useToast();
 	const [ to, setTo ] = useState( window.mmoa?.currentUserEmail || '' );
 
 	const send = useMutation( {
-		mutationFn: () => sendTestEmail( to ),
+		mutationFn: () => sendTestEmail( to, slot ),
 		onSuccess: ( result ) => toast( result.message, result.ok ? 'ok' : 'bad' ),
 		onError: ( error ) => toast( error.message, 'bad' ),
 	} );
@@ -350,10 +352,15 @@ const TestEmail = () => {
 	return (
 		<Panel
 			title={ __( 'Send a test message', 'mme-mail-to-smtp' ) }
-			description={ __(
-				'Goes out over the primary connection.',
-				'mme-mail-to-smtp'
-			) }
+			description={
+				name
+					? sprintf(
+							/* translators: %s: connection name, e.g. "Backup". */
+							__( 'Goes out over the %s connection only.', 'mme-mail-to-smtp' ),
+							name
+					  )
+					: __( 'Goes out over the primary connection.', 'mme-mail-to-smtp' )
+			}
 		>
 			<div className="flex flex-wrap gap-3 items-end">
 				<div className="flex-1 min-w-[240px]">
@@ -380,22 +387,105 @@ const TestEmail = () => {
 };
 
 
+/**
+ * A fallback connection only helps if it can still work when the primary
+ * cannot. Said beside the form, because both mistakes look fine until the
+ * day the backup is needed.
+ */
+const FallbackWarning = ( { connection, primary } ) => {
+	let text = '';
+
+	if ( ! primary?.configured ) {
+		text = __(
+			'Set up the primary connection first. The backup is only used when the primary fails, so on its own it sends nothing.',
+			'mme-mail-to-smtp'
+		);
+	} else if ( connection.configured && connection.provider === primary.provider ) {
+		text = __(
+			'This uses the same service as the primary, so an outage there stops both. Choose a different one.',
+			'mme-mail-to-smtp'
+		);
+	}
+
+	if ( ! text ) {
+		return null;
+	}
+
+	return (
+		<p className="flex items-start gap-2 m-0 p-3 rounded-lg bg-warning-subtle text-[13px] text-foreground">
+			<AlertTriangle size={ 16 } className="shrink-0 text-warning" />
+			{ text }
+		</p>
+	);
+};
+
 const Connections = () => {
 	const { data: bootstrap, isLoading } = useQuery( { queryKey: [ 'bootstrap' ] } );
+	const [ selected, setSelected ] = useState( 'primary' );
 
 	if ( isLoading ) {
 		return <Spinner />;
 	}
 
+	// Free has one connection; an add-on can declare more. With one there is
+	// nothing to choose, and the screen looks exactly as it always has.
+	const list = bootstrap?.catalogue?.connections?.length
+		? bootstrap.catalogue.connections
+		: [ { id: 'primary', name: __( 'Primary', 'mme-mail-to-smtp' ) } ];
+	const current = list.find( ( c ) => c.id === selected ) || list[ 0 ];
+	const primary = list.find( ( c ) => c.id === 'primary' );
+
 	return (
 		<div className="grid gap-5 min-w-0">
+			{ list.length > 1 && (
+				<div
+					className="inline-flex p-1 bg-muted rounded-xl justify-self-start"
+					role="tablist"
+					aria-label={ __( 'Connections', 'mme-mail-to-smtp' ) }
+				>
+					{ list.map( ( c ) => (
+						<button
+							key={ c.id }
+							type="button"
+							role="tab"
+							aria-selected={ c.id === current.id }
+							onClick={ () => setSelected( c.id ) }
+							className={ cn(
+								'flex items-center gap-2 px-4 h-9 rounded-lg text-[13px] font-medium border-0 cursor-pointer',
+								c.id === current.id
+									? 'bg-card text-foreground shadow-sm'
+									: 'bg-transparent text-muted-foreground'
+							) }
+						>
+							<span
+								className={ cn(
+									'size-2 rounded-full',
+									c.configured ? 'bg-success' : 'bg-muted-foreground/40'
+								) }
+							/>
+							{ c.name }
+						</button>
+					) ) }
+				</div>
+			) }
+
+			{ 'fallback' === current.role && (
+				<FallbackWarning connection={ current } primary={ primary } />
+			) }
+
 			<ConnectionPanel
-				slot="primary"
-				title={ __( 'Primary', 'mme-mail-to-smtp' ) }
+				key={ current.id }
+				slot={ current.id }
+				title={ current.name }
+				description={ current.description }
 				categories={ bootstrap?.categories || {} }
 			/>
 
-			<TestEmail />
+			<TestEmail
+				key={ `test-${ current.id }` }
+				slot={ current.id }
+				name={ 'primary' === current.id ? '' : current.name }
+			/>
 		</div>
 	);
 };

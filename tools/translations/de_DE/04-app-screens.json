@@ -164,5 +164,9 @@
   "The log keeps recipients and subjects. A queued message is kept in full until it is sent or discarded. No cookies, no tracking, no IP addresses.": "Das Protokoll speichert Empfänger und Betreff. Eine eingereihte Nachricht wird vollständig aufbewahrt, bis sie gesendet oder verworfen wird. Keine Cookies, kein Tracking, keine IP-Adressen.",
   "Export personal data": "Personenbezogene Daten exportieren",
   "Erase personal data": "Personenbezogene Daten löschen",
-  "Privacy policy text": "Text der Datenschutzerklärung"
+  "Privacy policy text": "Text der Datenschutzerklärung",
+  "That connection no longer exists. Reload the page and try again.": "Diese Verbindung existiert nicht mehr. Laden Sie die Seite neu und versuchen Sie es erneut.",
+  "Goes out over the %s connection only.": "Wird nur über die Verbindung „%s“ gesendet.",
+  "Set up the primary connection first. The backup is only used when the primary fails, so on its own it sends nothing.": "Richten Sie zuerst die primäre Verbindung ein. Die Backup-Verbindung wird nur genutzt, wenn die primäre ausfällt – allein sendet sie nichts.",
+  "This uses the same service as the primary, so an outage there stops both. Choose a different one.": "Diese Verbindung nutzt denselben Dienst wie die primäre, sodass ein Ausfall dort beide stoppt. Wählen Sie einen anderen."
 }

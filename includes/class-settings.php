@@ -32,6 +32,13 @@ class Settings {
 	public const SLOT_PRIMARY = '';
 
 	/**
+	 * Reserved for an add-on's fallback connection. Free never sends on it by
+	 * itself: a slot only carries mail once an add-on declares it through
+	 * `mmoa_connections` and names it from `mmoa_fallback_slot`.
+	 */
+	public const SLOT_BACKUP = 'backup';
+
+	/**
 	 * Keys that describe one connection, and so exist once per slot.
 	 *
 	 * Setting key => [ default, constant, sanitizer ]. For the backup slot the
@@ -147,7 +154,7 @@ class Settings {
 	}
 
 	/** Is this key site-wide rather than a connection's? */
-	private static function is_global( string $key ): bool {
+	public static function is_global( string $key ): bool {
 		return isset( self::GLOBAL_SCHEMA[ $key ] ) || isset( self::extra_globals()[ $key ] );
 	}
 

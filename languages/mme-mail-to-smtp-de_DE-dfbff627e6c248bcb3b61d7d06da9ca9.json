@@ -1,5 +1,5 @@
 {
-	"translation-revision-date": "2026-10-20T12:27:29.346Z",
+	"translation-revision-date": "2026-10-26T06:42:45.815Z",
 	"generator": "tools/i18n.mjs",
 	"domain": "messages",
 	"locale_data": {
@@ -318,6 +318,9 @@
 			"Send a test message": [
 				"Testnachricht senden"
 			],
+			"Goes out over the %s connection only.": [
+				"Wird nur über die Verbindung „%s“ gesendet."
+			],
 			"Goes out over the primary connection.": [
 				"Geht über die primäre Verbindung hinaus."
 			],
@@ -326,6 +329,12 @@
 			],
 			"Send test": [
 				"Test senden"
+			],
+			"Set up the primary connection first. The backup is only used when the primary fails, so on its own it sends nothing.": [
+				"Richten Sie zuerst die primäre Verbindung ein. Die Backup-Verbindung wird nur genutzt, wenn die primäre ausfällt – allein sendet sie nichts."
+			],
+			"This uses the same service as the primary, so an outage there stops both. Choose a different one.": [
+				"Diese Verbindung nutzt denselben Dienst wie die primäre, sodass ein Ausfall dort beide stoppt. Wählen Sie einen anderen."
 			],
 			"Not sending yet": [
 				"Versendet noch nicht"

@@ -86,4 +86,30 @@ class Failure {
 
 		return false;
 	}
+
+	/**
+	 * Is this failure one a different connection might survive?
+	 *
+	 * Broader than is_retryable(): a fallback connection has its own
+	 * credentials and its own endpoint, so it can get past things that are
+	 * permanent for the primary. A revoked API key is fatal on the primary
+	 * forever, and says nothing about a backup on another provider.
+	 *
+	 * The exclusions are failures of the *message* rather than of the
+	 * connection. A second provider would refuse those too, and the log would
+	 * carry the same rejection twice.
+	 */
+	public static function should_fail_over( WP_Error $error ): bool {
+		$fatal_for_any_connection = [
+			'mmoa_message_too_large',
+			'mmoa_graph_too_large',
+			'mmoa_gmail_too_large',
+			'mmoa_no_provider',
+			'mmoa_invalid_url',
+			'mmoa_no_recipient',
+			'mmoa_gmail_no_recipient',
+		];
+
+		return ! in_array( $error->get_error_code(), $fatal_for_any_connection, true );
+	}
 }

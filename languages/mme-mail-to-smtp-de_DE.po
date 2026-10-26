@@ -9,47 +9,47 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Domain: mme-mail-to-smtp\n"
 
-#: includes/api/class-rest-controller.php:361
+#: includes/api/class-rest-controller.php:378
 msgid "Disconnected. Every setting and credential for this connection has been deleted, the From address included."
 msgstr "Verbindung getrennt. Sämtliche Einstellungen und Zugangsdaten dieser Verbindung wurden gelöscht, einschließlich der Absenderadresse."
 
-#: includes/api/class-rest-controller.php:374
+#: includes/api/class-rest-controller.php:391
 msgid "Choose a provider for this connection first."
 msgstr "Wählen Sie zuerst einen Anbieter für diese Verbindung."
 
-#: includes/api/class-rest-controller.php:391
+#: includes/api/class-rest-controller.php:408
 msgid "Verified. The credentials are valid and the mailbox is reachable."
 msgstr "Geprüft. Die Zugangsdaten sind gültig und das Postfach ist erreichbar."
 
-#: includes/api/class-rest-controller.php:404
+#: includes/api/class-rest-controller.php:421
 msgid "Enter a valid recipient address."
 msgstr "Geben Sie eine gültige Empfängeradresse ein."
 
-#: includes/api/class-rest-controller.php:426
+#: includes/api/class-rest-controller.php:442
 msgid "MME-Mail to SMTP test from %s"
 msgstr "MME-Mail-to-SMTP-Test von %s"
 
-#: includes/api/class-rest-controller.php:429
+#: includes/api/class-rest-controller.php:445
 msgid "This is a test message.\n\nIf you are reading it, the connection is working."
 msgstr "Dies ist eine Testnachricht.\n\nWenn Sie sie lesen, funktioniert die Verbindung."
 
-#: includes/api/class-rest-controller.php:439
+#: includes/api/class-rest-controller.php:456
 msgid "Accepted for delivery. If it does not arrive, check the spam folder and the sending domain, then send another."
 msgstr "Zur Zustellung angenommen. Falls sie nicht ankommt, prüfen Sie den Spam-Ordner und die Absenderdomain und senden Sie eine weitere."
 
-#: includes/api/class-rest-controller.php:440
+#: includes/api/class-rest-controller.php:457
 msgid "The test message could not be sent."
 msgstr "Die Testnachricht konnte nicht gesendet werden."
 
-#: includes/api/class-rest-controller.php:483
+#: includes/api/class-rest-controller.php:500
 msgid "Attempted %1$d: %2$d delivered, %3$d still queued, %4$d abandoned."
 msgstr "%1$d versucht: %2$d zugestellt, %3$d noch in der Warteschlange, %4$d aufgegeben."
 
-#: includes/api/class-rest-controller.php:512
+#: includes/api/class-rest-controller.php:529
 msgid "Queue emptied. Anything it held is gone."
 msgstr "Warteschlange geleert. Alles, was darin lag, ist verloren."
 
-#: includes/api/class-rest-controller.php:500
+#: includes/api/class-rest-controller.php:517
 msgid "%d abandoned message returned to the queue."
 msgid_plural "%d abandoned messages returned to the queue."
 msgstr[0] "%d aufgegebene Nachricht in die Warteschlange zurückgestellt."
@@ -187,15 +187,15 @@ msgid_plural "%s are installed but switched off."
 msgstr[0] "%s ist installiert, aber ausgeschaltet."
 msgstr[1] "%s sind installiert, aber ausgeschaltet."
 
-#: includes/class-connections.php:34 includes/class-connections.php:64 src/screens/connections.js:394
+#: includes/class-connections.php:35 includes/class-connections.php:68 src/screens/connections.js:434
 msgid "Primary"
 msgstr "Primär"
 
-#: includes/class-dispatcher.php:263
+#: includes/class-dispatcher.php:340
 msgid "No mail provider is configured."
 msgstr "Es ist kein E-Mail-Anbieter konfiguriert."
 
-#: includes/class-dispatcher.php:347
+#: includes/class-dispatcher.php:424
 msgid "The message is %1$s, which is over the %2$s that %3$s accepts in one request. Attachments are encoded twice on this path, so the usable attachment size is roughly half the limit."
 msgstr "Die Nachricht ist %1$s groß und überschreitet damit die %2$s, die %3$s in einer Anfrage annimmt. Anhänge werden auf diesem Weg zweimal kodiert, die nutzbare Anhanggröße beträgt daher etwa die Hälfte des Limits."
 
@@ -689,13 +689,17 @@ msgstr "E-Mail-Einstellungen prüfen"
 msgid "Google account disconnected."
 msgstr "Google-Konto getrennt."
 
-#: admin/class-admin-page.php:114 admin/class-admin-page.php:198
+#: admin/class-admin-page.php:114 admin/class-admin-page.php:204
 msgid "You are not allowed to change these settings."
 msgstr "Sie sind nicht berechtigt, diese Einstellungen zu ändern."
 
 #: admin/class-admin-page.php:134
 msgid "Google account connected to %s. Send a test email to confirm delivery."
 msgstr "Google-Konto mit %s verbunden. Senden Sie eine Test-E-Mail, um die Zustellung zu bestätigen."
+
+#: admin/class-admin-page.php:154
+msgid "That connection no longer exists. Reload the page and try again."
+msgstr "Diese Verbindung existiert nicht mehr. Laden Sie die Seite neu und versuchen Sie es erneut."
 
 #: admin/class-app-page.php:259
 msgid "MME-Mail to SMTP needs JavaScript to show its settings."
@@ -849,7 +853,7 @@ msgstr "Verbunden. Für diese Verbindung ist ein Refresh-Token gespeichert."
 msgid "This revokes the grant at Google and forgets it here. Sending stops. Continue?"
 msgstr "Damit wird die Berechtigung bei Google widerrufen und hier verworfen. Der Versand endet. Fortfahren?"
 
-#: src/components/google-connect.js:73 src/screens/connections.js:286
+#: src/components/google-connect.js:73 src/screens/connections.js:288
 msgid "Disconnect"
 msgstr "Trennen"
 
@@ -861,7 +865,7 @@ msgstr "Geben Sie oben Client-ID und Secret ein und speichern Sie sie, bevor Sie
 msgid "You have unsaved changes. Signing in leaves this page and they will be lost."
 msgstr "Sie haben ungespeicherte Änderungen. Die Anmeldung verlässt diese Seite und die Änderungen gehen verloren."
 
-#: src/components/google-setup-guide.js:98 src/screens/connections.js:226 src/screens/setup.js:574
+#: src/components/google-setup-guide.js:98 src/screens/connections.js:228 src/screens/setup.js:574
 msgid "Documentation"
 msgstr "Dokumentation"
 
@@ -1005,7 +1009,7 @@ msgstr "Schließen"
 msgid "Dashboard"
 msgstr "Übersicht"
 
-#: src/components/nav.js:31 src/screens/dashboard.js:247
+#: src/components/nav.js:31 src/screens/connections.js:444 src/screens/dashboard.js:247
 msgid "Connections"
 msgstr "Verbindungen"
 
@@ -1145,53 +1149,65 @@ msgstr "Zoho Mail"
 msgid "Zoho Mail and Zoho Workplace."
 msgstr "Zoho Mail und Zoho Workplace."
 
-#: src/screens/connections.js:28
+#: src/screens/connections.js:30
 msgid "Every message WordPress sends goes out over this connection."
 msgstr "Jede Nachricht, die WordPress versendet, geht über diese Verbindung hinaus."
 
-#: src/screens/connections.js:111
+#: src/screens/connections.js:113
 msgid "Connection saved."
 msgstr "Verbindung gespeichert."
 
-#: src/screens/connections.js:150
+#: src/screens/connections.js:152
 msgid "Fill in %s before verifying."
 msgstr "Füllen Sie %s aus, bevor Sie prüfen."
 
-#: src/screens/connections.js:184
+#: src/screens/connections.js:186
 msgid "Connection"
 msgstr "Verbindung"
 
-#: src/screens/connections.js:256
+#: src/screens/connections.js:258
 msgid "Save connection"
 msgstr "Verbindung speichern"
 
-#: src/screens/connections.js:260 src/screens/setup.js:73
+#: src/screens/connections.js:262 src/screens/setup.js:73
 msgid "Verify"
 msgstr "Prüfen"
 
-#: src/screens/connections.js:275
+#: src/screens/connections.js:277
 msgid "This clears the provider, every credential and the From address on this connection. Mail routed here stops. Continue?"
 msgstr "Damit werden Anbieter, sämtliche Zugangsdaten und die Absenderadresse dieser Verbindung gelöscht. Hierher geleitete E-Mails werden nicht mehr versendet. Fortfahren?"
 
-#: src/screens/connections.js:327
+#: src/screens/connections.js:329
 msgid "Checked at %s"
 msgstr "Geprüft um %s"
 
-#: src/screens/connections.js:352
+#: src/screens/connections.js:354
 msgid "Send a test message"
 msgstr "Testnachricht senden"
 
-#: src/screens/connections.js:353
+#: src/screens/connections.js:359
+msgid "Goes out over the %s connection only."
+msgstr "Wird nur über die Verbindung „%s“ gesendet."
+
+#: src/screens/connections.js:362
 msgid "Goes out over the primary connection."
 msgstr "Geht über die primäre Verbindung hinaus."
 
-#: src/screens/connections.js:361
+#: src/screens/connections.js:368
 msgid "Recipient"
 msgstr "Empfänger"
 
-#: src/screens/connections.js:375 src/screens/setup.js:736
+#: src/screens/connections.js:382 src/screens/setup.js:736
 msgid "Send test"
 msgstr "Test senden"
+
+#: src/screens/connections.js:399
+msgid "Set up the primary connection first. The backup is only used when the primary fails, so on its own it sends nothing."
+msgstr "Richten Sie zuerst die primäre Verbindung ein. Die Backup-Verbindung wird nur genutzt, wenn die primäre ausfällt – allein sendet sie nichts."
+
+#: src/screens/connections.js:404
+msgid "This uses the same service as the primary, so an outage there stops both. Choose a different one."
+msgstr "Diese Verbindung nutzt denselben Dienst wie die primäre, sodass ein Ausfall dort beide stoppt. Wählen Sie einen anderen."
 
 #: src/screens/dashboard.js:69
 msgid "Not sending yet"

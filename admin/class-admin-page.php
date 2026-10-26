@@ -145,10 +145,16 @@ class Admin_Page {
 	private function posted_slot(): string {
 		$id = sanitize_text_field( (string) ( $_REQUEST['slot'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Recommended -- callers verify a nonce first.
 
-		// Resolved through Connections rather than trusted, so an id that does
-		// not name a connection falls back to the primary instead of addressing
-		// a slot that does not exist - which would silently create one on save.
-		return $this->plugin->connections->slot_for( $id ) ?? Settings::SLOT_PRIMARY;
+		// Resolved through Connections rather than trusted. An id that names no
+		// connection is refused: falling back to the primary would bank a
+		// backup's Google grant on the primary and replace the one it had.
+		$slot = $this->plugin->connections->slot_for( $id );
+
+		if ( null === $slot ) {
+			$this->redirect_to_app( 'error', __( 'That connection no longer exists. Reload the page and try again.', 'mme-mail-to-smtp' ) );
+		}
+
+		return $slot;
 	}
 
 	/**

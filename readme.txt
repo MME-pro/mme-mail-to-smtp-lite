@@ -4,7 +4,7 @@ Tags: smtp, wp_mail, gmail, sendgrid, mailgun
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.0.2
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -143,6 +143,14 @@ Not in this plugin. It records no copy of what it sent - a mail log holding reci
 No. WordPress lets exactly one plugin take over sending, so one of the two would be configured and doing nothing - and which one wins depends on load order rather than on anything you chose. The plugin detects the common ones and says so on screen.
 
 == Changelog ==
+
+= 1.1.0 =
+* Ready for a backup connection: with the Pro add-on, a message the primary
+  connection cannot send goes out on the backup instead. The Connections
+  screen shows a tab for each connection, and each can send its own test.
+* Fixed: a save meant for a connection that no longer exists could overwrite
+  the primary connection's settings. It is now refused.
+* Fixed: 1.0.2 shipped without the styles the Pro add-on's screens rely on.
 
 = 1.0.2 =
 * Verify now clears its old result the moment it is pressed and shows the

@@ -170,9 +170,10 @@ class Dispatcher {
 			]
 		);
 
-		// Last resort: keep the message so a later request can try again. Only
-		// worth doing for a failure that could plausibly resolve on its own.
-		if ( ! $this->draining && ! $this->testing && Failure::is_retryable( $result ) ) {
+		// Last resort: keep the message so a later request can try again - for
+		// a failure that could resolve on its own, and for one that resolves
+		// when somebody fixes the connection (held until they do).
+		if ( ! $this->draining && ! $this->testing && Failure::is_queueable( $result ) ) {
 			$queued = $this->queue->enqueue(
 				$raw_mime,
 				$this->recipients( $mailer ),

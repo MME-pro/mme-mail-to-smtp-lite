@@ -37,6 +37,37 @@ class Failure {
 	 * timeout. A site whose host has flaky outbound DNS produces a long run of
 	 * these while the credentials and configuration are entirely correct.
 	 */
+	/**
+	 * Codes that mean the connection, not the message, is what failed: its
+	 * credentials, its grant, or a setting it cannot send without.
+	 */
+	private const CONNECTION_CODES = [
+		'mmoa_smtp_auth_failed',
+		'mmoa_api_unauthorized',
+		'mmoa_bad_key',
+		'mmoa_provider_incomplete',
+		'mmoa_mailgun_unauthorized',
+		'mmoa_gmail_invalid_grant',
+		'mmoa_gmail_not_connected',
+		'mmoa_gmail_oauth_incomplete',
+		'mmoa_gmail_sa_incomplete',
+		'mmoa_gmail_unauthorized_client',
+		'mmoa_graph_incomplete',
+		'mmoa_graph_unauthorized',
+		'mmoa_graph_access_denied',
+		'mmoa_ms_bad_secret',
+		'mmoa_ms_grant_expired',
+		'mmoa_ms_not_connected',
+		'mmoa_ms_oauth_incomplete',
+		'mmoa_ms_token_failed',
+		'mmoa_ms_send_as_denied',
+		'mmoa_outlook_unauthorized',
+		'mmoa_outlook_forbidden',
+		'mmoa_one_click_not_connected',
+		'mmoa_broker_no_access_token',
+		'mmoa_broker_no_refresh_token',
+	];
+
 	private const TRANSPORT_CODES = [
 		'http_request_failed',
 		'http_request_timeout',
@@ -85,6 +116,49 @@ class Failure {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Did the connection fail, rather than the message or the network?
+	 *
+	 * A rejected password, a revoked API key, an expired sign-in, a connection
+	 * missing a credential. Retrying on a timer does not fix any of these - but
+	 * an administrator does, usually within the hour, and until 1.1.2 every
+	 * email sent in between was thrown away. These are now held in the queue
+	 * and sent the moment the connection is saved, verified or signed in again.
+	 *
+	 * Failures of the message itself - a refused recipient, a body too large -
+	 * are not here: no fix to the connection changes them.
+	 */
+	public static function is_connection_fault( WP_Error $error ): bool {
+		$code = $error->get_error_code();
+
+		$is_fault = in_array( $code, self::CONNECTION_CODES, true )
+			// Entra token-endpoint failures: a wrong, expired or rotated
+			// client secret, a missing consent.
+			|| 0 === strpos( (string) $code, 'mmoa_aad_' )
+			|| 401 === (int) ( ( (array) $error->get_error_data() )['status'] ?? 0 );
+
+		/**
+		 * Filters whether a failure is the connection's, and so held in the
+		 * queue until the connection is fixed.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param bool     $is_fault Whether it is.
+		 * @param WP_Error $error    The failure.
+		 */
+		return (bool) apply_filters( 'mmoa_connection_fault', $is_fault, $error );
+	}
+
+	/**
+	 * Should a failed message be kept in the queue at all?
+	 *
+	 * Yes for a fault that may pass on its own, and for one an administrator
+	 * fixes by repairing the connection.
+	 */
+	public static function is_queueable( WP_Error $error ): bool {
+		return self::is_retryable( $error ) || self::is_connection_fault( $error );
 	}
 
 	/**

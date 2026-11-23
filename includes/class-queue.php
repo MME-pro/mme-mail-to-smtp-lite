@@ -222,7 +222,9 @@ class Queue {
 			}
 
 			$attempts  = (int) $row->attempts + 1;
-			$exhausted = $attempts >= self::MAX_ATTEMPTS || ! Failure::is_retryable( $result );
+			// A connection fault keeps its place: the row waits for the fix
+			// rather than being abandoned on the first refusal.
+			$exhausted = $attempts >= self::MAX_ATTEMPTS || ! Failure::is_queueable( $result );
 
 			$this->record_attempt( (int) $row->id, $attempts, $result, $exhausted );
 
@@ -305,6 +307,28 @@ class Queue {
 			$wpdb->prepare(
 				"UPDATE {$table} SET next_attempt_at = %s, claimed_at = NULL, claim_token = ''
 				 WHERE status = 'pending'",
+				current_time( 'mysql', true )
+			)
+		);
+	}
+
+	/**
+	 * Make every waiting message due now.
+	 *
+	 * Called when a connection has just been put right: whatever it refused
+	 * is worth trying again straight away rather than at its next backoff
+	 * step, which may be hours off.
+	 *
+	 * @return int How many were woken.
+	 */
+	public function wake(): int {
+		global $wpdb;
+
+		$table = self::table();
+
+		return (int) $wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+			$wpdb->prepare(
+				"UPDATE {$table} SET next_attempt_at = %s WHERE status = 'pending' AND claim_token = ''",
 				current_time( 'mysql', true )
 			)
 		);

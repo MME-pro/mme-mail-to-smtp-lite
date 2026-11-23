@@ -74,6 +74,7 @@ class Plugin {
 		add_action( 'plugins_loaded', [ $this, 'install_mailer' ], 20 );
 
 		add_action( Queue::CRON_HOOK, [ $this, 'drain_queue' ] );
+		add_action( 'mmoa_retry_held', [ $this, 'drain_queue' ] );
 
 		add_filter( 'cron_schedules', [ $this, 'register_schedule' ] );
 		add_action( 'admin_init', [ $this, 'maybe_upgrade' ] );
@@ -88,6 +89,9 @@ class Plugin {
 		// A connection was saved, verified, or signed in again. Whatever
 		// failure the health monitor is holding was the old connection's.
 		add_action( 'mmoa_connection_saved', [ $this->health, 'mark_resolved' ] );
+
+		// And whatever it refused while it was broken goes out now.
+		add_action( 'mmoa_connection_saved', [ $this, 'retry_held' ] );
 
 		if ( is_admin() ) {
 			( new App_Page( $this ) )->register();
@@ -320,6 +324,19 @@ class Plugin {
 	/**
 	 * Drain the retry queue. Runs on cron.
 	 */
+	/**
+	 * A connection was fixed: send what the queue holds, on the next request.
+	 *
+	 * Scheduled rather than drained here. This runs inside the save or the
+	 * sign-in, and twenty messages over SMTP would hold that request up for a
+	 * minute; cron runs them on the next page load instead.
+	 */
+	public function retry_held(): void {
+		if ( $this->queue->wake() > 0 && ! wp_next_scheduled( 'mmoa_retry_held' ) ) {
+			wp_schedule_single_event( time(), 'mmoa_retry_held' );
+		}
+	}
+
 	public function drain_queue(): void {
 		if ( ! $this->settings->is_active() ) {
 			return;

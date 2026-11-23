@@ -94,6 +94,16 @@ const Hero = ( { health, queue } ) => {
 			'No provider is configured, so WordPress is still using the server mail function.',
 			'mme-mail-to-smtp'
 		);
+	} else if ( unreadable && 'key' === unreadable.reason ) {
+		summary = sprintf(
+			/* translators: 1: connection name, 2: comma-separated field labels. */
+			__(
+				'The encryption key file wp-content/mmoa-encryption-key.php is missing - deleted, or left behind when the site was moved - so the %2$s saved for the %1$s connection can no longer be decrypted. Restore the file from a backup, or enter it again under Connections. Emails will fail until then.',
+				'mme-mail-to-smtp'
+			),
+			unreadable.connection,
+			unreadable.fields.join( ', ' )
+		);
 	} else if ( unreadable ) {
 		summary = sprintf(
 			/* translators: 1: connection name, 2: comma-separated field labels. */

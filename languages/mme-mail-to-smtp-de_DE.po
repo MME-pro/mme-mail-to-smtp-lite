@@ -207,11 +207,11 @@ msgstr "Interner Fehler: Es wurde versucht, die Mail-API über eine ungültige A
 msgid "The request to the mail API could not be completed."
 msgstr "Die Anfrage an die Mail-API konnte nicht abgeschlossen werden."
 
-#: includes/class-plugin.php:183
+#: includes/class-plugin.php:190
 msgid "Every five minutes (MME-Mail to SMTP retry queue)"
 msgstr "Alle fünf Minuten (MME-Mail-to-SMTP-Wiederholungswarteschlange)"
 
-#: includes/class-privacy.php:71 includes/class-privacy.php:84 includes/class-privacy.php:282 admin/class-app-page.php:52 admin/class-app-page.php:53 admin/class-app-page.php:253 src/components/footer.js:30 src/components/nav.js:251
+#: includes/class-privacy.php:71 includes/class-privacy.php:84 includes/class-privacy.php:282 admin/class-app-page.php:52 admin/class-app-page.php:53 admin/class-app-page.php:253 src/components/footer.js:30 src/components/nav.js:254
 msgid "MME-Mail to SMTP"
 msgstr "MME-Mail to SMTP"
 
@@ -293,7 +293,7 @@ msgstr "MME-Mail to SMTP ist installiert, versendet aber noch nicht."
 msgid "WordPress is still using the server mail function. The setup wizard connects a mailbox in a few steps."
 msgstr "WordPress verwendet weiterhin die Mail-Funktion des Servers. Der Einrichtungsassistent verbindet in wenigen Schritten ein Postfach."
 
-#: includes/class-setup.php:143 src/screens/dashboard.js:222
+#: includes/class-setup.php:143 src/screens/dashboard.js:232
 msgid "Run the setup wizard"
 msgstr "Einrichtungsassistenten starten"
 
@@ -1013,11 +1013,11 @@ msgstr "Schließen"
 msgid "Dashboard"
 msgstr "Übersicht"
 
-#: src/components/nav.js:31 src/screens/connections.js:444 src/screens/dashboard.js:265
+#: src/components/nav.js:31 src/screens/connections.js:444 src/screens/dashboard.js:275
 msgid "Connections"
 msgstr "Verbindungen"
 
-#: src/components/nav.js:37 src/screens/dashboard.js:290
+#: src/components/nav.js:37 src/screens/dashboard.js:300
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -1037,47 +1037,51 @@ msgstr "Passwort nicht mehr lesbar"
 msgid "Enter the %2$s of %1$s again."
 msgstr "%2$s für %1$s erneut eingeben."
 
-#: src/components/nav.js:80
+#: src/components/nav.js:82
+msgid "The encryption key file wp-content/mmoa-encryption-key.php is missing - deleted, or left behind when the site was moved - so the saved password can no longer be decrypted. Restore the file from a backup, or enter the password again under Connections."
+msgstr "Die Schlüsseldatei wp-content/mmoa-encryption-key.php fehlt – gelöscht oder beim Umzug der Website nicht mitgenommen. Deshalb kann das gespeicherte Passwort nicht mehr entschlüsselt werden. Stellen Sie die Datei aus einer Sicherung wieder her oder geben Sie das Passwort unter „Verbindungen“ erneut ein."
+
+#: src/components/nav.js:83
 msgid "The security keys of this WordPress site have changed - which is what logging everybody out or revoking all passwords does - so a password saved before that can no longer be decrypted. Enter it again under Connections."
 msgstr "Die Sicherheitsschlüssel dieser WordPress-Website wurden geändert – genau das passiert, wenn alle abgemeldet oder alle Passwörter widerrufen werden. Ein vorher gespeichertes Passwort kann daher nicht mehr entschlüsselt werden. Geben Sie es unter „Verbindungen“ erneut ein."
 
-#: src/components/nav.js:88
+#: src/components/nav.js:91
 msgid "Not delivering"
 msgstr "Keine Zustellung"
 
-#: src/components/nav.js:97
+#: src/components/nav.js:100
 msgid "Mail was lost"
 msgstr "E-Mails sind verloren gegangen"
 
-#: src/components/nav.js:98
+#: src/components/nav.js:101
 msgid "Some messages exhausted every retry."
 msgstr "Bei einigen Nachrichten sind alle Wiederholungen aufgebraucht."
 
-#: src/components/nav.js:106 src/screens/dashboard.js:170
+#: src/components/nav.js:109 src/screens/dashboard.js:180
 msgid "Queued for retry"
 msgstr "Wartet auf erneuten Versuch"
 
-#: src/components/nav.js:107
+#: src/components/nav.js:110
 msgid "Nothing is lost, but sending is not healthy."
 msgstr "Es ist nichts verloren, aber der Versand ist nicht gesund."
 
-#: src/components/nav.js:114
+#: src/components/nav.js:117
 msgid "Sending normally"
 msgstr "Versand läuft normal"
 
-#: src/components/nav.js:189
+#: src/components/nav.js:192
 msgid "Switch to light"
 msgstr "Zu Hell wechseln"
 
-#: src/components/nav.js:190
+#: src/components/nav.js:193
 msgid "Switch to dark"
 msgstr "Zu Dunkel wechseln"
 
-#: src/components/nav.js:255 src/screens/setup.js:208 src/screens/setup.js:509
+#: src/components/nav.js:258 src/screens/setup.js:208 src/screens/setup.js:509
 msgid "Guided setup"
 msgstr "Geführte Einrichtung"
 
-#: src/components/nav.js:256
+#: src/components/nav.js:259
 msgid "Authenticated delivery"
 msgstr "Authentifizierte Zustellung"
 
@@ -1242,66 +1246,70 @@ msgid "No provider is configured, so WordPress is still using the server mail fu
 msgstr "Es ist kein Anbieter konfiguriert, WordPress verwendet daher weiterhin die Mail-Funktion des Servers."
 
 #: src/screens/dashboard.js:100
+msgid "The encryption key file wp-content/mmoa-encryption-key.php is missing - deleted, or left behind when the site was moved - so the %2$s saved for the %1$s connection can no longer be decrypted. Restore the file from a backup, or enter it again under Connections. Emails will fail until then."
+msgstr "Die Schlüsseldatei wp-content/mmoa-encryption-key.php fehlt – gelöscht oder beim Umzug der Website nicht mitgenommen. Deshalb kann das gespeicherte %2$s der Verbindung %1$s nicht mehr entschlüsselt werden. Stellen Sie die Datei aus einer Sicherung wieder her oder geben Sie es unter „Verbindungen“ erneut ein. Bis dahin schlagen E-Mails fehl."
+
+#: src/screens/dashboard.js:110
 msgid "The security keys of this WordPress site have changed - which is what logging everybody out or revoking all passwords does - so the %2$s saved for the %1$s connection can no longer be decrypted. Emails will fail until you enter it again under Connections."
 msgstr "Die Sicherheitsschlüssel dieser WordPress-Website wurden geändert – genau das passiert, wenn alle abgemeldet oder alle Passwörter widerrufen werden. Deshalb kann das gespeicherte %2$s der Verbindung %1$s nicht mehr entschlüsselt werden. E-Mails schlagen fehl, bis Sie es unter „Verbindungen“ erneut eingeben."
 
-#: src/screens/dashboard.js:110
+#: src/screens/dashboard.js:120
 msgid "%d sends have failed in a row. wp_mail() is returning false, so the code that sent them knows."
 msgstr "%d Sendevorgänge sind nacheinander fehlgeschlagen. wp_mail() gibt false zurück, der sendende Code weiß also Bescheid."
 
-#: src/screens/dashboard.js:119
+#: src/screens/dashboard.js:129
 msgid "Last message delivered %s."
 msgstr "Letzte Nachricht zugestellt %s."
 
-#: src/screens/dashboard.js:123
+#: src/screens/dashboard.js:133
 msgid "A provider is configured. Nothing has been sent through it yet."
 msgstr "Ein Anbieter ist konfiguriert. Darüber wurde noch nichts versendet."
 
-#: src/screens/dashboard.js:140
+#: src/screens/dashboard.js:150
 msgid "Delivery"
 msgstr "Zustellung"
 
-#: src/screens/dashboard.js:174
+#: src/screens/dashboard.js:184
 msgid "Retried every five minutes."
 msgstr "Wird alle fünf Minuten erneut versucht."
 
-#: src/screens/dashboard.js:177
+#: src/screens/dashboard.js:187
 msgid "Never delivered"
 msgstr "Nie zugestellt"
 
-#: src/screens/dashboard.js:181
+#: src/screens/dashboard.js:191
 msgid "Out of attempts. Kept until the discard window passes."
 msgstr "Keine Versuche mehr. Wird aufbewahrt, bis die Verwerfungsfrist abläuft."
 
-#: src/screens/dashboard.js:210
+#: src/screens/dashboard.js:220
 msgid "Nothing is sending yet"
 msgstr "Es wird noch nichts versendet"
 
-#: src/screens/dashboard.js:213
+#: src/screens/dashboard.js:223
 msgid "WordPress is still using the server mail function. The wizard connects a mailbox, checks the credentials against the provider and sends one real message, in that order."
 msgstr "WordPress verwendet weiterhin die Mail-Funktion des Servers. Der Assistent verbindet ein Postfach, prüft die Zugangsdaten beim Anbieter und sendet eine echte Nachricht – in dieser Reihenfolge."
 
-#: src/screens/dashboard.js:253
+#: src/screens/dashboard.js:263
 msgid "Where to look next"
 msgstr "Wo Sie als Nächstes nachsehen"
 
-#: src/screens/dashboard.js:254
+#: src/screens/dashboard.js:264
 msgid "This plugin keeps no copy of what it sent. A failure is reported the moment it happens, through wp_mail() and the checks below."
 msgstr "Dieses Plugin bewahrt keine Kopie des Versendeten auf. Ein Fehler wird in dem Moment gemeldet, in dem er auftritt – über wp_mail() und die Prüfungen unten."
 
-#: src/screens/dashboard.js:268
+#: src/screens/dashboard.js:278
 msgid "send a test message and confirm the credentials still work."
 msgstr "senden Sie eine Testnachricht und bestätigen Sie, dass die Zugangsdaten weiterhin funktionieren."
 
-#: src/screens/dashboard.js:276
+#: src/screens/dashboard.js:286
 msgid "Tools, Site Health"
 msgstr "Werkzeuge, Website-Zustand"
 
-#: src/screens/dashboard.js:279
+#: src/screens/dashboard.js:289
 msgid "the Email delivery check reports whether sending is working, and names the last error."
 msgstr "die Prüfung „E-Mail-Zustellung“ meldet, ob der Versand funktioniert, und nennt den letzten Fehler."
 
-#: src/screens/dashboard.js:293
+#: src/screens/dashboard.js:303
 msgid "how many failures in a row count as an outage, and how long the retry queue holds a message."
 msgstr "wie viele Fehler nacheinander als Ausfall gelten und wie lange die Wiederholungswarteschlange eine Nachricht aufbewahrt."
 

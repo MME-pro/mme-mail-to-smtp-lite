@@ -78,6 +78,13 @@ class Plugin {
 		add_filter( 'cron_schedules', [ $this, 'register_schedule' ] );
 		add_action( 'admin_init', [ $this, 'maybe_upgrade' ] );
 
+		// On every request, not admin_init like the migrations above. The
+		// credentials still on the salts' key are lost the moment the salts
+		// change, and that can happen before anybody next opens an admin
+		// screen - a cron send, a front-end form, a security plugin's
+		// scheduled rotation. Free once it has run: one autoloaded flag.
+		add_action( 'init', [ Secrets::class, 'migrate' ], 1 );
+
 		if ( is_admin() ) {
 			( new App_Page( $this ) )->register();
 			( new Admin_Page( $this ) )->register();

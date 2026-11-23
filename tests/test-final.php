@@ -22,7 +22,8 @@ check( 'round-trips correctly', 'SuperSecretValue123' === $plugin->secrets->get(
 global $wpdb;
 $raw = $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM {$wpdb->options} WHERE option_name = %s", 'mmoa_secrets' ) );
 check( 'ciphertext in the database, not the plaintext', false === strpos( (string) $raw, 'SuperSecretValue123' ), substr( (string) $raw, 0, 60 ) );
-check( 'stored value is versioned', false !== strpos( (string) $raw, 'v1:' ) );
+// v2: the plugin's own key, not the salts. See test-encryption-key.php.
+check( 'stored value is versioned', false !== strpos( (string) $raw, 'v2:' ) );
 
 $plugin->secrets->set( 'google_sa_key', 'Different' );
 check( 'nonce is per-write, so rewriting the same value differs', true );

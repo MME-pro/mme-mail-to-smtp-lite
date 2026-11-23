@@ -28,6 +28,7 @@ foreach (
 		'mmoa_per_connection_from',
 		'mmoa_setup',
 		'mmoa_setup_redirect',
+		'mmoa_secrets_migrated',
 	] as $option
 ) {
 	delete_option( $option );
@@ -47,3 +48,11 @@ $wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.Pre
 );
 
 wp_clear_scheduled_hook( 'mmoa_drain_queue' );
+
+// The key the credentials were encrypted with. The credentials are gone, so
+// it protects nothing now; left behind it would be a key file with no owner.
+// A key defined as MMOA_ENCRYPTION_KEY in wp-config.php is the site's to
+// remove, and is not touched.
+if ( is_file( WP_CONTENT_DIR . '/mmoa-encryption-key.php' ) ) {
+	@unlink( WP_CONTENT_DIR . '/mmoa-encryption-key.php' ); // phpcs:ignore WordPress.WP.AlternativeFunctions, WordPress.PHP.NoSilencedErrors
+}

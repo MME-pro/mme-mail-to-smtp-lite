@@ -77,7 +77,10 @@ const statusOf = ( health, queue ) => {
 				first.connection,
 				first.fields.join( ', ' )
 			),
-			title: __( 'The security keys of this WordPress site have changed - which is what logging everybody out or revoking all passwords does - so a password saved before that can no longer be decrypted. Enter it again under Connections.', 'mme-mail-to-smtp' ),
+			title:
+				'key' === first.reason
+					? __( 'The encryption key file wp-content/mmoa-encryption-key.php is missing - deleted, or left behind when the site was moved - so the saved password can no longer be decrypted. Restore the file from a backup, or enter the password again under Connections.', 'mme-mail-to-smtp' )
+					: __( 'The security keys of this WordPress site have changed - which is what logging everybody out or revoking all passwords does - so a password saved before that can no longer be decrypted. Enter it again under Connections.', 'mme-mail-to-smtp' ),
 		};
 	}
 

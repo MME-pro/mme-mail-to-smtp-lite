@@ -675,12 +675,17 @@ class Rest_Controller {
 				continue;
 			}
 
-			$fields = $this->plugin->settings->for_slot( (string) $connection['slot'] )->unreadable_credentials();
+			$scoped = $this->plugin->settings->for_slot( (string) $connection['slot'] );
+			$fields = $scoped->unreadable_credentials();
 
 			if ( $fields ) {
 				$out[] = [
 					'connection' => (string) $connection['name'],
 					'fields'     => array_values( $fields ),
+
+					// What the screen tells the admin happened: the site's
+					// security keys changed, or the plugin's own key is gone.
+					'reason'     => $scoped->secrets()->unreadable_reason( (string) array_key_first( $fields ) ),
 				];
 			}
 		}

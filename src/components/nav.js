@@ -1,4 +1,4 @@
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
 	LayoutDashboard,
@@ -55,6 +55,29 @@ const statusOf = ( health, queue ) => {
 			icon: TriangleAlert,
 			text: __( 'No provider configured', 'mme-mail-to-smtp' ),
 			detail: __( 'WordPress is using the server mail function.', 'mme-mail-to-smtp' ),
+		};
+	}
+
+	// Before "failing", and before the queue: this is known without a send.
+	// When the site's security keys change - "log everybody out", "revoke all
+	// passwords" - a saved password can no longer be decrypted, and nothing
+	// else on this screen would notice until the next email bounced off it.
+	if ( health.unreadable?.length ) {
+		const first = health.unreadable[ 0 ];
+
+		return {
+			tone: 'danger',
+			icon: TriangleAlert,
+			text: __( 'Password can no longer be read', 'mme-mail-to-smtp' ),
+			// Short, because the line truncates; the whole story is on hover
+			// and on the dashboard.
+			detail: sprintf(
+				/* translators: 1: connection name, 2: comma-separated field labels. */
+				__( 'Enter the %2$s of %1$s again.', 'mme-mail-to-smtp' ),
+				first.connection,
+				first.fields.join( ', ' )
+			),
+			title: __( 'The security keys of this WordPress site have changed - which is what logging everybody out or revoking all passwords does - so a password saved before that can no longer be decrypted. Enter it again under Connections.', 'mme-mail-to-smtp' ),
 		};
 	}
 
@@ -247,7 +270,7 @@ const Nav = ( { health, queue, focused = false } ) => {
 									) }
 									<StatusIcon className={ cn( 'relative size-4', TONE[ status.tone ] ) } />
 								</span>
-								<div className="min-w-0">
+								<div className="min-w-0" title={ status.title || undefined }>
 									<p
 										className={ cn(
 											'm-0 text-[13px] leading-tight font-semibold',

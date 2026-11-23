@@ -168,5 +168,10 @@
   "That connection no longer exists. Reload the page and try again.": "Diese Verbindung existiert nicht mehr. Laden Sie die Seite neu und versuchen Sie es erneut.",
   "Goes out over the %s connection only.": "Wird nur über die Verbindung „%s“ gesendet.",
   "Set up the primary connection first. The backup is only used when the primary fails, so on its own it sends nothing.": "Richten Sie zuerst die primäre Verbindung ein. Die Backup-Verbindung wird nur genutzt, wenn die primäre ausfällt – allein sendet sie nichts.",
-  "This uses the same service as the primary, so an outage there stops both. Choose a different one.": "Diese Verbindung nutzt denselben Dienst wie die primäre, sodass ein Ausfall dort beide stoppt. Wählen Sie einen anderen."
+  "This uses the same service as the primary, so an outage there stops both. Choose a different one.": "Diese Verbindung nutzt denselben Dienst wie die primäre, sodass ein Ausfall dort beide stoppt. Wählen Sie einen anderen.",
+  "The security keys of this WordPress site have changed - which is what logging everybody out or revoking all passwords does - so a password saved before that can no longer be decrypted. Enter it again under Connections.": "Die Sicherheitsschlüssel dieser WordPress-Website wurden geändert – genau das passiert, wenn alle abgemeldet oder alle Passwörter widerrufen werden. Ein vorher gespeichertes Passwort kann daher nicht mehr entschlüsselt werden. Geben Sie es unter „Verbindungen“ erneut ein.",
+  "The security keys of this WordPress site have changed - which is what logging everybody out or revoking all passwords does - so the %2$s saved for the %1$s connection can no longer be decrypted. Emails will fail until you enter it again under Connections.": "Die Sicherheitsschlüssel dieser WordPress-Website wurden geändert – genau das passiert, wenn alle abgemeldet oder alle Passwörter widerrufen werden. Deshalb kann das gespeicherte %2$s der Verbindung %1$s nicht mehr entschlüsselt werden. E-Mails schlagen fehl, bis Sie es unter „Verbindungen“ erneut eingeben.",
+  "Sign-in": "Anmeldung",
+  "Password can no longer be read": "Passwort nicht mehr lesbar",
+  "Enter the %2$s of %1$s again.": "%2$s für %1$s erneut eingeben."
 }

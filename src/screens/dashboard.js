@@ -61,6 +61,10 @@ const Hero = ( { health, queue } ) => {
 		last_success: lastSuccess,
 	} = health;
 
+	// A saved password the site can no longer decrypt. Known without a send,
+	// and it outranks one: the next send is going to fail.
+	const unreadable = health.unreadable?.[ 0 ];
+
 	let headline;
 	let Icon;
 	let tone;
@@ -69,6 +73,10 @@ const Hero = ( { health, queue } ) => {
 		headline = __( 'Not sending yet', 'mme-mail-to-smtp' );
 		Icon = TriangleAlert;
 		tone = 'text-muted-foreground';
+	} else if ( unreadable ) {
+		headline = __( 'Password can no longer be read', 'mme-mail-to-smtp' );
+		Icon = XCircle;
+		tone = 'text-danger';
 	} else if ( failing ) {
 		headline = __( 'Sending is failing', 'mme-mail-to-smtp' );
 		Icon = XCircle;
@@ -85,6 +93,16 @@ const Hero = ( { health, queue } ) => {
 		summary = __(
 			'No provider is configured, so WordPress is still using the server mail function.',
 			'mme-mail-to-smtp'
+		);
+	} else if ( unreadable ) {
+		summary = sprintf(
+			/* translators: 1: connection name, 2: comma-separated field labels. */
+			__(
+				'The security keys of this WordPress site have changed - which is what logging everybody out or revoking all passwords does - so the %2$s saved for the %1$s connection can no longer be decrypted. Emails will fail until you enter it again under Connections.',
+				'mme-mail-to-smtp'
+			),
+			unreadable.connection,
+			unreadable.fields.join( ', ' )
 		);
 	} else if ( failing ) {
 		summary = sprintf(
@@ -124,7 +142,7 @@ const Hero = ( { health, queue } ) => {
 
 					<p className="mt-5 mb-0 flex items-center gap-4">
 						<span className="relative grid size-14 shrink-0 place-items-center">
-							{ active && ! failing && (
+							{ active && ! failing && ! unreadable && (
 								<span className="pulse-ring absolute inset-2 rounded-full bg-success/40" />
 							) }
 							<span className={ cn( 'relative grid size-14 place-items-center rounded-2xl border border-current/20 bg-current/10', tone ) }>

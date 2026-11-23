@@ -465,6 +465,47 @@ class Settings {
 	 * what we want on a fresh install, and locally where Mailpit is catching
 	 * mail. Never intercept a send we cannot actually complete.
 	 */
+	/**
+	 * The credentials of this connection's provider that are saved but can no
+	 * longer be read - keyed by setting, valued by the label the form shows.
+	 *
+	 * Only the provider in use is asked about. A credential left over from a
+	 * provider this connection used before is not what sends mail, and naming
+	 * it would raise an alarm about nothing.
+	 *
+	 * @return array<string,string>
+	 */
+	public function unreadable_credentials(): array {
+		$provider = (string) $this->get( 'provider' );
+
+		if ( self::PROVIDER_NONE === $provider || '' === $provider ) {
+			return [];
+		}
+
+		$candidates = [];
+
+		foreach ( Provider_Registry::fields_for( $provider ) as $field ) {
+			if ( $field->secret ) {
+				$candidates[ $field->key ] = (string) $field->label;
+			}
+		}
+
+		// Credentials a sign-in wrote rather than the form - refresh tokens.
+		// secret_keys() also lists every provider's declared secrets, which
+		// are exactly the ones the "provider in use" rule above leaves out.
+		$declared = array_keys( array_filter( Provider_Registry::all_fields(), static fn( $field ): bool => $field->secret ) );
+
+		foreach ( array_diff( self::secret_keys(), $declared ) as $key ) {
+			$candidates[ $key ] ??= __( 'Sign-in', 'mme-mail-to-smtp' );
+		}
+
+		return array_filter(
+			$candidates,
+			fn( string $label, string $key ): bool => $this->secrets()->is_unreadable( $key ),
+			ARRAY_FILTER_USE_BOTH
+		);
+	}
+
 	public function is_active(): bool {
 		return self::PROVIDER_NONE !== $this->get( 'provider' );
 	}

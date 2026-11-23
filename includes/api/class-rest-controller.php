@@ -656,7 +656,36 @@ class Rest_Controller {
 			'last_error'   => (string) ( $state['last_error']['message'] ?? '' ),
 			'last_success' => (int) $state['last_success'],
 			'active'       => $this->plugin->settings->is_active(),
+
+			// Connections whose saved password no longer decrypts. Health
+			// only learns about a broken credential from a failed send, and
+			// until one happens the header would go on saying all is well.
+			'unreadable'   => $this->unreadable_payload(),
 		];
+	}
+
+	/**
+	 * @return array<int,array{connection:string,fields:array<int,string>}>
+	 */
+	private function unreadable_payload(): array {
+		$out = [];
+
+		foreach ( $this->plugin->connections->all() as $connection ) {
+			if ( empty( $connection['configured'] ) ) {
+				continue;
+			}
+
+			$fields = $this->plugin->settings->for_slot( (string) $connection['slot'] )->unreadable_credentials();
+
+			if ( $fields ) {
+				$out[] = [
+					'connection' => (string) $connection['name'],
+					'fields'     => array_values( $fields ),
+				];
+			}
+		}
+
+		return $out;
 	}
 
 	/**

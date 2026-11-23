@@ -211,7 +211,7 @@ msgstr ""
 msgid "Every five minutes (MME-Mail to SMTP retry queue)"
 msgstr ""
 
-#: includes/class-privacy.php:71 includes/class-privacy.php:84 includes/class-privacy.php:282 admin/class-app-page.php:52 admin/class-app-page.php:53 admin/class-app-page.php:253 src/components/footer.js:30 src/components/nav.js:228
+#: includes/class-privacy.php:71 includes/class-privacy.php:84 includes/class-privacy.php:282 admin/class-app-page.php:52 admin/class-app-page.php:53 admin/class-app-page.php:253 src/components/footer.js:30 src/components/nav.js:251
 msgid "MME-Mail to SMTP"
 msgstr ""
 
@@ -281,6 +281,10 @@ msgstr ""
 msgid "Override what other plugins set"
 msgstr ""
 
+#: includes/class-settings.php:499
+msgid "Sign-in"
+msgstr ""
+
 #: includes/class-setup.php:140
 msgid "MME-Mail to SMTP is installed but not sending yet."
 msgstr ""
@@ -289,7 +293,7 @@ msgstr ""
 msgid "WordPress is still using the server mail function. The setup wizard connects a mailbox in a few steps."
 msgstr ""
 
-#: includes/class-setup.php:143 src/screens/dashboard.js:204
+#: includes/class-setup.php:143 src/screens/dashboard.js:222
 msgid "Run the setup wizard"
 msgstr ""
 
@@ -837,7 +841,7 @@ msgstr ""
 msgid "Built and maintained by <a>MME-pro</a>"
 msgstr ""
 
-#: src/components/google-button.js:63
+#: src/components/google-button.js:66
 msgid "Sign in with Google"
 msgstr ""
 
@@ -1009,11 +1013,11 @@ msgstr ""
 msgid "Dashboard"
 msgstr ""
 
-#: src/components/nav.js:31 src/screens/connections.js:444 src/screens/dashboard.js:247
+#: src/components/nav.js:31 src/screens/connections.js:444 src/screens/dashboard.js:265
 msgid "Connections"
 msgstr ""
 
-#: src/components/nav.js:37 src/screens/dashboard.js:272
+#: src/components/nav.js:37 src/screens/dashboard.js:290
 msgid "Settings"
 msgstr ""
 
@@ -1025,43 +1029,55 @@ msgstr ""
 msgid "WordPress is using the server mail function."
 msgstr ""
 
-#: src/components/nav.js:65
+#: src/components/nav.js:71 src/screens/dashboard.js:77
+msgid "Password can no longer be read"
+msgstr ""
+
+#: src/components/nav.js:76
+msgid "Enter the %2$s of %1$s again."
+msgstr ""
+
+#: src/components/nav.js:80
+msgid "The security keys of this WordPress site have changed - which is what logging everybody out or revoking all passwords does - so a password saved before that can no longer be decrypted. Enter it again under Connections."
+msgstr ""
+
+#: src/components/nav.js:88
 msgid "Not delivering"
 msgstr ""
 
-#: src/components/nav.js:74
+#: src/components/nav.js:97
 msgid "Mail was lost"
 msgstr ""
 
-#: src/components/nav.js:75
+#: src/components/nav.js:98
 msgid "Some messages exhausted every retry."
 msgstr ""
 
-#: src/components/nav.js:83 src/screens/dashboard.js:152
+#: src/components/nav.js:106 src/screens/dashboard.js:170
 msgid "Queued for retry"
 msgstr ""
 
-#: src/components/nav.js:84
+#: src/components/nav.js:107
 msgid "Nothing is lost, but sending is not healthy."
 msgstr ""
 
-#: src/components/nav.js:91
+#: src/components/nav.js:114
 msgid "Sending normally"
 msgstr ""
 
-#: src/components/nav.js:166
+#: src/components/nav.js:189
 msgid "Switch to light"
 msgstr ""
 
-#: src/components/nav.js:167
+#: src/components/nav.js:190
 msgid "Switch to dark"
 msgstr ""
 
-#: src/components/nav.js:232 src/screens/setup.js:208 src/screens/setup.js:509
+#: src/components/nav.js:255 src/screens/setup.js:208 src/screens/setup.js:509
 msgid "Guided setup"
 msgstr ""
 
-#: src/components/nav.js:233
+#: src/components/nav.js:256
 msgid "Authenticated delivery"
 msgstr ""
 
@@ -1209,79 +1225,83 @@ msgstr ""
 msgid "This uses the same service as the primary, so an outage there stops both. Choose a different one."
 msgstr ""
 
-#: src/screens/dashboard.js:69
+#: src/screens/dashboard.js:73
 msgid "Not sending yet"
 msgstr ""
 
-#: src/screens/dashboard.js:73
+#: src/screens/dashboard.js:81
 msgid "Sending is failing"
 msgstr ""
 
-#: src/screens/dashboard.js:77
+#: src/screens/dashboard.js:85
 msgid "Sending is working"
 msgstr ""
 
-#: src/screens/dashboard.js:85
+#: src/screens/dashboard.js:93
 msgid "No provider is configured, so WordPress is still using the server mail function."
 msgstr ""
 
-#: src/screens/dashboard.js:92
+#: src/screens/dashboard.js:100
+msgid "The security keys of this WordPress site have changed - which is what logging everybody out or revoking all passwords does - so the %2$s saved for the %1$s connection can no longer be decrypted. Emails will fail until you enter it again under Connections."
+msgstr ""
+
+#: src/screens/dashboard.js:110
 msgid "%d sends have failed in a row. wp_mail() is returning false, so the code that sent them knows."
 msgstr ""
 
-#: src/screens/dashboard.js:101
+#: src/screens/dashboard.js:119
 msgid "Last message delivered %s."
 msgstr ""
 
-#: src/screens/dashboard.js:105
+#: src/screens/dashboard.js:123
 msgid "A provider is configured. Nothing has been sent through it yet."
 msgstr ""
 
-#: src/screens/dashboard.js:122
+#: src/screens/dashboard.js:140
 msgid "Delivery"
 msgstr ""
 
-#: src/screens/dashboard.js:156
+#: src/screens/dashboard.js:174
 msgid "Retried every five minutes."
 msgstr ""
 
-#: src/screens/dashboard.js:159
+#: src/screens/dashboard.js:177
 msgid "Never delivered"
 msgstr ""
 
-#: src/screens/dashboard.js:163
+#: src/screens/dashboard.js:181
 msgid "Out of attempts. Kept until the discard window passes."
 msgstr ""
 
-#: src/screens/dashboard.js:192
+#: src/screens/dashboard.js:210
 msgid "Nothing is sending yet"
 msgstr ""
 
-#: src/screens/dashboard.js:195
+#: src/screens/dashboard.js:213
 msgid "WordPress is still using the server mail function. The wizard connects a mailbox, checks the credentials against the provider and sends one real message, in that order."
 msgstr ""
 
-#: src/screens/dashboard.js:235
+#: src/screens/dashboard.js:253
 msgid "Where to look next"
 msgstr ""
 
-#: src/screens/dashboard.js:236
+#: src/screens/dashboard.js:254
 msgid "This plugin keeps no copy of what it sent. A failure is reported the moment it happens, through wp_mail() and the checks below."
 msgstr ""
 
-#: src/screens/dashboard.js:250
+#: src/screens/dashboard.js:268
 msgid "send a test message and confirm the credentials still work."
 msgstr ""
 
-#: src/screens/dashboard.js:258
+#: src/screens/dashboard.js:276
 msgid "Tools, Site Health"
 msgstr ""
 
-#: src/screens/dashboard.js:261
+#: src/screens/dashboard.js:279
 msgid "the Email delivery check reports whether sending is working, and names the last error."
 msgstr ""
 
-#: src/screens/dashboard.js:275
+#: src/screens/dashboard.js:293
 msgid "how many failures in a row count as an outage, and how long the retry queue holds a message."
 msgstr ""
 

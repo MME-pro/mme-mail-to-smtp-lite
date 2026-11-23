@@ -114,6 +114,31 @@ class Secrets {
 	}
 
 	/**
+	 * Is this credential saved, but impossible to read?
+	 *
+	 * The case it exists for: the site's AUTH_KEY or SECURE_AUTH_SALT changed -
+	 * which is what "log everybody out" and "revoke all passwords" do - after
+	 * the value was encrypted with a key derived from them. get() then answers
+	 * '' exactly as it does for a credential that was never entered, and the
+	 * connection looks configured and healthy until the next send fails. This
+	 * tells the two apart, so the screen can say so before that send.
+	 */
+	public function is_unreadable( string $key ): bool {
+		if ( $this->is_constant( $key ) ) {
+			return false;
+		}
+
+		$stored  = get_option( self::OPTION, [] );
+		$storage = $this->storage_key( $key );
+
+		if ( ! is_array( $stored ) || '' === (string) ( $stored[ $storage ] ?? '' ) ) {
+			return false;
+		}
+
+		return '' === $this->decrypt( (string) $stored[ $storage ] );
+	}
+
+	/**
 	 * Write a credential. Passing '' removes it.
 	 *
 	 * Silently ignores writes to a key that a constant already pins, so the

@@ -1,5 +1,5 @@
 {
-	"translation-revision-date": "2026-10-26T06:42:45.815Z",
+	"translation-revision-date": "2026-11-23T06:07:04.552Z",
 	"generator": "tools/i18n.mjs",
 	"domain": "messages",
 	"locale_data": {
@@ -198,6 +198,15 @@
 			"WordPress is using the server mail function.": [
 				"WordPress verwendet die Mail-Funktion des Servers."
 			],
+			"Password can no longer be read": [
+				"Passwort nicht mehr lesbar"
+			],
+			"Enter the %2$s of %1$s again.": [
+				"%2$s für %1$s erneut eingeben."
+			],
+			"The security keys of this WordPress site have changed - which is what logging everybody out or revoking all passwords does - so a password saved before that can no longer be decrypted. Enter it again under Connections.": [
+				"Die Sicherheitsschlüssel dieser WordPress-Website wurden geändert – genau das passiert, wenn alle abgemeldet oder alle Passwörter widerrufen werden. Ein vorher gespeichertes Passwort kann daher nicht mehr entschlüsselt werden. Geben Sie es unter „Verbindungen“ erneut ein."
+			],
 			"Not delivering": [
 				"Keine Zustellung"
 			],
@@ -347,6 +356,9 @@
 			],
 			"No provider is configured, so WordPress is still using the server mail function.": [
 				"Es ist kein Anbieter konfiguriert, WordPress verwendet daher weiterhin die Mail-Funktion des Servers."
+			],
+			"The security keys of this WordPress site have changed - which is what logging everybody out or revoking all passwords does - so the %2$s saved for the %1$s connection can no longer be decrypted. Emails will fail until you enter it again under Connections.": [
+				"Die Sicherheitsschlüssel dieser WordPress-Website wurden geändert – genau das passiert, wenn alle abgemeldet oder alle Passwörter widerrufen werden. Deshalb kann das gespeicherte %2$s der Verbindung %1$s nicht mehr entschlüsselt werden. E-Mails schlagen fehl, bis Sie es unter „Verbindungen“ erneut eingeben."
 			],
 			"%d sends have failed in a row. wp_mail() is returning false, so the code that sent them knows.": [
 				"%d Sendevorgänge sind nacheinander fehlgeschlagen. wp_mail() gibt false zurück, der sendende Code weiß also Bescheid."

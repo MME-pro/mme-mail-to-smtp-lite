@@ -4,7 +4,7 @@ Tags: smtp, wp_mail, gmail, sendgrid, mailgun
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -147,6 +147,14 @@ No. WordPress lets exactly one plugin take over sending, so one of the two would
 The key your saved passwords and tokens are encrypted with: 32 random bytes, created the first time one is saved. It is kept out of the database on purpose, so a leaked database backup reveals no credentials - and it does not depend on WordPress's security keys, so logging everybody out or revoking all passwords no longer empties your connections. Keep it with your backups and move it with the site. If it is lost, the plugin says so and asks for the passwords again. To keep the key in wp-config.php instead, add define( 'MMOA_ENCRYPTION_KEY', 'any long random string' ); - passwords saved earlier with the file keep working.
 
 == Changelog ==
+
+= 1.1.3 =
+* Emails refused because the connection itself is broken - a revoked or
+  wrong password, a revoked API key, an expired sign-in - are no longer
+  thrown away. They wait in the retry queue and are sent as soon as the
+  connection is saved, verified or signed in again. A problem with the
+  message itself, such as an invalid recipient, is still reported straight
+  away.
 
 = 1.1.2 =
 * Saved passwords and tokens are now encrypted with the plugin's own key,

@@ -222,6 +222,9 @@ class Google_Consent {
 
 		$scoped->secrets()->set( 'google_refresh', (string) $data['refresh_token'] );
 
+		/** This action is documented in Rest_Controller::update_connection(). */
+		do_action( 'mmoa_connection_saved', $slot );
+
 		return $slot;
 	}
 

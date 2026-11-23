@@ -328,6 +328,18 @@ class Rest_Controller {
 		$this->plugin->tokens->flush();
 		$this->plugin->dispatcher->reset_providers();
 
+		/**
+		 * A connection's settings or credentials were saved.
+		 *
+		 * Also fired when a verification passes and when a sign-in flow
+		 * stores a new grant - every way a broken connection gets put right.
+		 *
+		 * @since 1.1.2
+		 *
+		 * @param string $slot The connection's slot.
+		 */
+		do_action( 'mmoa_connection_saved', $slot );
+
 		return new WP_REST_Response( $this->connection_payload( $slot ) );
 	}
 
@@ -394,6 +406,15 @@ class Rest_Controller {
 		}
 
 		$result = $provider->verify_connection();
+
+		// A pass proves the connection works now; a failure proves it does
+		// not, whatever was saved since the last send.
+		if ( is_wp_error( $result ) ) {
+			$this->plugin->health->clear_resolved();
+		} else {
+			/** This action is documented in update_connection(). */
+			do_action( 'mmoa_connection_saved', $slot );
+		}
 
 		// A string is a pass with a caveat - verified, but some part of the
 		// check needed a permission the transport does not need to send, so it
@@ -655,6 +676,11 @@ class Rest_Controller {
 			'streak'       => (int) $state['streak'],
 			'last_error'   => (string) ( $state['last_error']['message'] ?? '' ),
 			'last_success' => (int) $state['last_success'],
+
+			// The most recent send failed - true even once the connection has
+			// been fixed and `failing` is false again, so the screen can say
+			// "sending normally" and still own up to the email that was lost.
+			'last_failed'  => $this->plugin->health->last_failed(),
 			'active'       => $this->plugin->settings->is_active(),
 
 			// Connections whose saved password no longer decrypts. Health

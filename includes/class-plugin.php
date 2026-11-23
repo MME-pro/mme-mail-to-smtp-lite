@@ -85,6 +85,10 @@ class Plugin {
 		// scheduled rotation. Free once it has run: one autoloaded flag.
 		add_action( 'init', [ Secrets::class, 'migrate' ], 1 );
 
+		// A connection was saved, verified, or signed in again. Whatever
+		// failure the health monitor is holding was the old connection's.
+		add_action( 'mmoa_connection_saved', [ $this->health, 'mark_resolved' ] );
+
 		if ( is_admin() ) {
 			( new App_Page( $this ) )->register();
 			( new Admin_Page( $this ) )->register();

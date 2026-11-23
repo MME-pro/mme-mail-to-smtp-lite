@@ -1,5 +1,5 @@
 {
-	"translation-revision-date": "2026-11-23T06:16:38.052Z",
+	"translation-revision-date": "2026-11-23T06:30:08.738Z",
 	"generator": "tools/i18n.mjs",
 	"domain": "messages",
 	"locale_data": {
@@ -228,6 +228,9 @@
 			"Sending normally": [
 				"Versand läuft normal"
 			],
+			"The last email was not sent.": [
+				"Die letzte E-Mail wurde nicht gesendet."
+			],
 			"Switch to light": [
 				"Zu Hell wechseln"
 			],
@@ -368,6 +371,9 @@
 			],
 			"%d sends have failed in a row. wp_mail() is returning false, so the code that sent them knows.": [
 				"%d Sendevorgänge sind nacheinander fehlgeschlagen. wp_mail() gibt false zurück, der sendende Code weiß also Bescheid."
+			],
+			"The connection has been fixed, so sending works again - but the last email was sent before that and did not go out.": [
+				"Die Verbindung wurde repariert, der Versand funktioniert wieder – die letzte E-Mail wurde aber vorher gesendet und ist nicht angekommen."
 			],
 			"Last message delivered %s.": [
 				"Letzte Nachricht zugestellt %s."

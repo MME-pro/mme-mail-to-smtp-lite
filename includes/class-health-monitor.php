@@ -141,8 +141,65 @@ class Health_Monitor {
 		do_action( 'mmoa_send_failing', $error, (int) $state['streak'] );
 	}
 
+	/**
+	 * Is sending broken right now?
+	 *
+	 * Not simply "did the last sends fail". Once the connection has been put
+	 * right - saved again, verified, signed in again - after the last failure,
+	 * the failure describes a connection that no longer exists, and the header
+	 * went on saying "Not delivering" until somebody happened to send an email.
+	 * A failure after that resolution counts again.
+	 *
+	 * `alerted` itself is left alone by a resolution, so the first successful
+	 * send still fires mmoa_send_recovered for whoever announced the outage.
+	 */
 	public function is_failing(): bool {
-		return (bool) $this->state()['alerted'];
+		$state = $this->state();
+
+		if ( ! $state['alerted'] ) {
+			return false;
+		}
+
+		return (int) ( $state['resolved'] ?? 0 ) < (int) ( $state['last_error']['time'] ?? 0 );
+	}
+
+	/**
+	 * Did the most recent send fail - whether or not the connection has been
+	 * fixed since? What the screen uses to say "the last email was not sent".
+	 */
+	public function last_failed(): bool {
+		$state = $this->state();
+
+		return (int) ( $state['last_error']['time'] ?? 0 ) > (int) $state['last_success'];
+	}
+
+	/**
+	 * The connection was put right: saved, verified, or signed in again.
+	 *
+	 * Hooked to `mmoa_connection_saved`. Nothing is written for a site that is
+	 * not failing - there is nothing to resolve.
+	 */
+	public function mark_resolved(): void {
+		$state = $this->state();
+
+		if ( ! $state['alerted'] ) {
+			return;
+		}
+
+		$state['resolved'] = time();
+		update_option( self::OPTION, $state, false );
+	}
+
+	/** A verification just failed: whatever was resolved, is not. */
+	public function clear_resolved(): void {
+		$state = $this->state();
+
+		if ( empty( $state['resolved'] ) ) {
+			return;
+		}
+
+		unset( $state['resolved'] );
+		update_option( self::OPTION, $state, false );
 	}
 
 	public function reset(): void {

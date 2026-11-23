@@ -59,6 +59,7 @@ const Hero = ( { health, queue } ) => {
 		streak,
 		last_error: lastError,
 		last_success: lastSuccess,
+		last_failed: lastFailed,
 	} = health;
 
 	// A saved password the site can no longer decrypt. Known without a send,
@@ -123,6 +124,13 @@ const Hero = ( { health, queue } ) => {
 			),
 			streak
 		);
+	} else if ( lastFailed ) {
+		// The connection was put right after the last send failed: sending
+		// works, and that one message did not go out.
+		summary = __(
+			'The connection has been fixed, so sending works again - but the last email was sent before that and did not go out.',
+			'mme-mail-to-smtp'
+		);
 	} else if ( lastSuccess > 0 ) {
 		summary = sprintf(
 			/* translators: %s: date and time of the last successful send. */
@@ -168,7 +176,7 @@ const Hero = ( { health, queue } ) => {
 						{ summary }
 					</p>
 
-					{ failing && lastError && (
+					{ ( failing || lastFailed ) && lastError && (
 						<p className="mt-3 mb-0 max-w-[52ch] rounded-md border border-danger/30 bg-danger/5 px-3 py-2 text-[13px] leading-relaxed text-danger">
 							{ lastError }
 						</p>

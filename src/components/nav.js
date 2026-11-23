@@ -111,11 +111,14 @@ const statusOf = ( health, queue ) => {
 		};
 	}
 
+	// Working - but if the connection was fixed after an email failed, that
+	// email is still lost, and "all is well" without a word would hide it.
 	return {
 		tone: 'success',
 		icon: CircleCheck,
 		text: __( 'Sending normally', 'mme-mail-to-smtp' ),
-		detail: '',
+		detail: health.last_failed ? __( 'The last email was not sent.', 'mme-mail-to-smtp' ) : '',
+		title: health.last_failed ? health.last_error || '' : '',
 	};
 };
 

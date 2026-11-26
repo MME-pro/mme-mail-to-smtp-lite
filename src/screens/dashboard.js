@@ -1,7 +1,7 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { Clock, XCircle, CircleCheck, TriangleAlert, ArrowRight, Wand2 } from 'lucide-react';
+import { Clock, XCircle, CircleCheck, TriangleAlert, KeyRound, ArrowRight, Wand2 } from 'lucide-react';
 import { getDashboard } from '../api/client';
 import { Panel, Button, Spinner } from '../components/ui';
 import { cn } from '../lib/utils';
@@ -41,6 +41,7 @@ const Stat = ( { label, value, tone, icon: Icon, help } ) => (
 /* The glow behind the hero, in the colour of the state it reports. */
 const GLOW = {
 	'text-success': 'rgb(71 205 137 / 0.22)',
+	'text-warning': 'rgb(253 176 34 / 0.20)',
 	'text-danger': 'rgb(249 112 102 / 0.22)',
 	'text-muted-foreground': 'rgb(253 176 34 / 0.14)',
 };
@@ -75,9 +76,12 @@ const Hero = ( { health, queue } ) => {
 		Icon = TriangleAlert;
 		tone = 'text-muted-foreground';
 	} else if ( unreadable ) {
-		headline = __( 'Password can no longer be read', 'mme-mail-to-smtp' );
-		Icon = XCircle;
-		tone = 'text-danger';
+		// Amber, not red: nothing is broken and nothing is lost - a password
+		// has to be typed in again. Red is kept for sending that is actually
+		// failing, so the two states stay tellable apart at a glance.
+		headline = __( 'Password needs re-entering', 'mme-mail-to-smtp' );
+		Icon = KeyRound;
+		tone = 'text-warning';
 	} else if ( failing ) {
 		headline = __( 'Sending is failing', 'mme-mail-to-smtp' );
 		Icon = XCircle;
@@ -99,7 +103,7 @@ const Hero = ( { health, queue } ) => {
 		summary = sprintf(
 			/* translators: 1: connection name, 2: comma-separated field labels. */
 			__(
-				'The encryption key file wp-content/mmoa-encryption-key.php is missing - deleted, or left behind when the site was moved - so the %2$s saved for the %1$s connection can no longer be decrypted. Restore the file from a backup, or enter it again under Connections. Emails will fail until then.',
+				'The key file wp-content/mmoa-encryption-key.php is gone - deleted, or left behind when the site was moved - so the %2$s saved for the %1$s connection cannot be unlocked any more. Put the file back from a backup, or just enter the %2$s again under Connections. Emails cannot go out until one of those is done.',
 				'mme-mail-to-smtp'
 			),
 			unreadable.connection,
@@ -109,7 +113,7 @@ const Hero = ( { health, queue } ) => {
 		summary = sprintf(
 			/* translators: 1: connection name, 2: comma-separated field labels. */
 			__(
-				'The security keys of this WordPress site have changed - which is what logging everybody out or revoking all passwords does - so the %2$s saved for the %1$s connection can no longer be decrypted. Emails will fail until you enter it again under Connections.',
+				'The security keys of this site have changed - that is what logging everybody out or revoking all passwords does - so the %2$s saved for the %1$s connection cannot be unlocked any more. Nothing is lost and nothing else is wrong: enter the %2$s once under Connections and sending carries on. Until then, emails cannot go out.',
 				'mme-mail-to-smtp'
 			),
 			unreadable.connection,

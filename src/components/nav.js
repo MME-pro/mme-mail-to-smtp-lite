@@ -8,6 +8,7 @@ import {
 	TriangleAlert,
 	CircleCheck,
 	Clock,
+	KeyRound,
 	Sun,
 	Moon,
 } from 'lucide-react';
@@ -66,9 +67,10 @@ const statusOf = ( health, queue ) => {
 		const first = health.unreadable[ 0 ];
 
 		return {
-			tone: 'danger',
-			icon: TriangleAlert,
-			text: __( 'Password can no longer be read', 'mme-mail-to-smtp' ),
+			// Amber: the site is waiting for a password, not falling over.
+			tone: 'warning',
+			icon: KeyRound,
+			text: __( 'Password needs re-entering', 'mme-mail-to-smtp' ),
 			// Short, because the line truncates; the whole story is on hover
 			// and on the dashboard.
 			detail: sprintf(
@@ -79,8 +81,8 @@ const statusOf = ( health, queue ) => {
 			),
 			title:
 				'key' === first.reason
-					? __( 'The encryption key file wp-content/mmoa-encryption-key.php is missing - deleted, or left behind when the site was moved - so the saved password can no longer be decrypted. Restore the file from a backup, or enter the password again under Connections.', 'mme-mail-to-smtp' )
-					: __( 'The security keys of this WordPress site have changed - which is what logging everybody out or revoking all passwords does - so a password saved before that can no longer be decrypted. Enter it again under Connections.', 'mme-mail-to-smtp' ),
+					? __( 'The key file wp-content/mmoa-encryption-key.php is gone - deleted, or left behind when the site was moved - so the saved password cannot be unlocked any more. Put the file back from a backup, or just enter the password again under Connections.', 'mme-mail-to-smtp' )
+					: __( 'The security keys of this site have changed - that is what logging everybody out or revoking all passwords does - so a password saved before that cannot be unlocked any more. Nothing is lost: enter it once under Connections and sending carries on.', 'mme-mail-to-smtp' ),
 		};
 	}
 
